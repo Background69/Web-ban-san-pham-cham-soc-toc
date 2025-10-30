@@ -1,0 +1,119 @@
+*{
+  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family:"Segoe UI",Tahoma,Verdana,sans-serif;;
+}
+body{
+    background: limegreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.login-wrapper{
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+.login-box{
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.logo{
+    height: 50px;
+    margin-bottom: 30px;
+}
+.login-box h1{
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+.subtitle{
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+
+}
+.login-box form label{
+    display :block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #333;
+
+}
+.login-box form input[type="email"],
+.login-box form input[type="password"]{
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+
+}
+.options{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 20px;
+
+
+}
+.options a.forgot{
+    color: #007bff;
+    text-decoration: none;
+}
+.btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+}
+.primary-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.google-btn{
+    padding-left: 12px;
+    background-color: #dddddd;
+    color: #333;
+    border: 1px solid #ddd;
+}
+.apple-btn{
+    background-color: #000;
+    color: #fff;
+}
+.google-btn img,
+.apple-btn img {
+    margin-right: 18px;
+}
+.or{
+    margin: 20px 0 10px;
+    font-size: 14px;
+    margin-top: 15px;
+}
+.signup-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+
+}
+
+.signup-text {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
