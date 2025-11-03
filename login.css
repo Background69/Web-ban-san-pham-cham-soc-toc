@@ -155,6 +155,26 @@ input[type="email"]:focus,
 input[type="password"]:focus {
     border-color: #007bff;
 }
+.btn-primary{
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.btn-primary:hover{
+    background-color: #0069d9;
+}
+.divider{
+    text-align: center;
+    margin: 15px 0;
+    font-size: 14px;
+    color: #999;
+}
 
 
 .signup-text {
