@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Singup</title>
+    <title>đăng kí</title>
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
@@ -14,15 +14,18 @@
         <h2>Sign Up</h2>
         <p>Tạo tài khoản mới để tiếp tục</p>
         <form action="#" method="post">
-            <label forHtml="Fullname">Full Name</label>
-            <input type="text" id="Fullname" name="Fullname" placeholder="Enter your name" required>
-            <label forHtml="Gmail">Email address</label>
-            <input type="email" id="Email" name="Email" placeholder="Enter your email" required>
-            <label forHtml="Password">Password</label>
-            <input type="password" id="Password" name="Password" placeholder="Enter your password" required>
-            <label forHtml="Confirm password">Confirm password</label>
-            <input type="password" id="Confirm password" name="Confirm password" placeholder="Confirm password" required>
-            <button type="submid" class="btn-primary">Sign Up</button>
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <label for="confirm">Confirm password</label>
+            <input type="password" id="confirm" name="confirm" placeholder="Confirm password" required>
+            <button type="submit" class="btn-primary">Sign Up</button>
 
         </form>
         <div class="driver">or</div>
@@ -38,5 +41,6 @@
         </p>
     </div>
 </div>
+<script src="login.js"></script>
 </body>
 </html>
