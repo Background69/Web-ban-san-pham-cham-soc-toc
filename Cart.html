@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <!--TIẾN TRÌNH THANH TOÁN -->
   <div class="cart-process">
     <div class="cart-checkout-process">
       <i class="fa-solid fa-cart-shopping"></i>
@@ -112,6 +111,11 @@
         <span class="cart-total-amount">0 VNĐ</span>
       </div>
       <button class="checkout-btn">Tiếp theo</button>
+      <script>
+        document.querySelector('.checkout-btn').addEventListener('click', function() {
+          window.location.href = 'Address.html';
+        });
+      </script>
     </div>
   </div> 
 
