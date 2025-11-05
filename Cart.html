@@ -1,87 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh toán</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giỏ hàng</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <section class="cart">
-        <div class="container">
-           <div class="cart-top-wrap">
-             <div class="cart-top">
-                <div class="cart-top-cart cart-top-item">
-                    <i class="fa-solid fa-cart-shopping "></i>
-                </div>
-                <div class="cart-top-cart cart-top-item">
-                    <i class="fa-solid fa-map "></i>
-                </div>
-                <div class="cart-top-cart cart-top-item">
-                    <i class="fa-solid fa-money-bill "></i>
-                </div>
-            </div>    
-           </div>
-        </div>
-        <div class="contain">
-            <div class="cart-content row">
-                <div class="cart-content-left">
-                    <table>
-                        <tr>
-                            <th>Sản phẩm</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Phân loại</th>
-                            <th>Số lượng</th>
-                            <th>Giá thành</th>
-                            <th>Thành tiền</th>
-                            <th>Xóa</th>
-                        </tr>
-                        <tr>
-                            <td><img src="path/to/image.jpg" alt="Hình ảnh dầu gội Elgon Puifying hỗ trợ trị gàu 1000ml" width="80px"></td>
-                            <td><p>Dầu gội Elgon Puifying hỗ trợ trị gàu 1000ml</p></td>
-                            <td>1000ml</td>
-                            <td><input type="number" value="1" min="1"></td>
-                            <td><p>700.000</p><sub>VNĐ</sub></td>
-                            <td>700.000 VNĐ</td>
-                            <td><button>Xóa</button></td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="cart-content-right">
-                    <table>
-                        <tr>
-                            <th colspan="2">TỔNG TIỀN GIỎ HÀNG</th>
-                        </tr>
-                        <tr>
-                            <td>TỔNG SẢN PHẨM</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>TỔNG TIỀN HÀNG</td>
-                            <td><p>700.000</p><sub>VNĐ</sub></td>
-                        </tr>
-                        <tr>
-                            <td>TẠM TÍNH</td>
-                            <td><p style="color: black;font-weight: bold;">700.000</p><sub>VNĐ</sub></td>
-                        </tr>
-                    </table>
-                    <div class="cart-content-right-text"></div>
-                    <p>Miễn phí giao hàng cho đơn hàng có giá trị từ 1.000.000</p>
-                    <p style="color: red; font-weight: bold;">Mua thêm 300.000 để được miễn phí giao hàng</p>
-                </div>
-                <div class="cart-content-right-button">
-                    <button>TIẾP TỤC MUA SẮM</button>
-                    <button>THANH TOÁN</button>
-                </div>
-                <div class="cart-content-right-login">
-                    <p>Bạn đã có tài khoản? <a href="#">Đăng nhập</a></p>
-                </div>
-            </div>
+
+  <!--TIẾN TRÌNH THANH TOÁN -->
+  <div class="cart-process">
+    <div class="cart-checkout-process">
+      <i class="fa-solid fa-cart-shopping"></i>
+    </div>
+    <div class="cart-checkout-process">
+      <i class="fa-solid fa-location-dot"></i>
+    </div>
+    <div class="cart-checkout-process">
+      <i class="fa-solid fa-credit-card"></i>
+    </div>
+  </div>
+
+  <div class="cart-container">
+
+    <!-- BÊN TRÁI -->
+    <div class="cart-left">
+      <h3>Giỏ hàng của bạn</h3>
+
+      <!-- Tiêu đề bảng -->
+      <div class="cart-header-table">
+        <span>Sản phẩm</span>
+        <span>Tên sản phẩm</span>
+        <span>Loại</span>
+        <span>Số lượng</span>
+        <span>Giá tiền</span>
+        <span>Xóa</span>
+      </div>
+
+      <!-- Danh sách sản phẩm -->
+      <div class="cart-product">
+        <!-- Sản phẩm 1 -->
+        <div class="cart-product-item" data-price="700000">
+          <div class="cart-product-image">
+            <img src="image/dau-goi-can-bang-ph-elgon.png" alt="Hình ảnh sản phẩm">
+          </div>
+          <div class="cart-product-name">Dầu gội Elgon Puifying hỗ trợ trị gàu</div>
+          <div class="cart-product-type">1000ml</div>
+          <div class="cart-product-quantity">
+            <button class="minus">-</button>
+            <input type="number" value="1" min="1">
+            <button class="plus">+</button>
+          </div>
+          <div class="cart-product-price">700.000 VNĐ</div>
+          <div class="cart-product-remove">
+            <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
         </div>
 
-    </section>
+        <!-- Sản phẩm 2 -->
+        <div class="cart-product-item" data-price="250000">
+          <div class="cart-product-image">
+            <img src="image/dau-goi-can-bang-ph-elgon.png" alt="Hình ảnh sản phẩm">
+          </div>
+          <div class="cart-product-name">Dầu gội Cehko Vital chống rụng tóc</div>
+          <div class="cart-product-type">250ml</div>
+          <div class="cart-product-quantity">
+            <button class="minus">-</button>
+            <input type="number" value="1" min="1">
+            <button class="plus">+</button>
+          </div>
+          <div class="cart-product-price">250.000 VNĐ</div>
+          <div class="cart-product-remove">
+            <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+        <!-- Sản phẩm 3 -->
+        <div class="cart-product-item" data-price="420000">
+          <div class="cart-product-image">
+            <img src="image/xakho.png" alt="Hình ảnh sản phẩm">
+          </div>
+          <div class="cart-product-name">Xả khô BambooMiracle phục hồi tóc all in one leave</div>
+          <div class="cart-product-type">178ml</div>
+          <div class="cart-product-quantity">
+            <button class="minus">-</button>
+            <input type="number" value="1" min="1">
+            <button class="plus">+</button>
+          </div>
+          <div class="cart-product-price">420.000 VNĐ</div>
+          <div class="cart-product-remove">
+            <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+
+    <!-- BÊN PHẢI -->
+    <div class="cart-right">
+      <h3>Thanh toán</h3>
+      <div class="cart-checkout">
+        <span>Tạm tính:</span>
+        <span class="cart-subtotal">0 VNĐ</span>
+      </div>
+      <div class="cart-summary-item">
+        <span>Phí vận chuyển:</span>
+        <span class="cart-shipping-fee">0 VNĐ</span>
+      </div>
+      <div class="cart-summary-item total">
+        <span>Tổng cộng:</span>
+        <span class="cart-total-amount">0 VNĐ</span>
+      </div>
+      <button class="checkout-btn">Tiếp theo</button>
+    </div>
+  </div> 
+
 </body>
 </html>
