@@ -761,7 +761,7 @@ main {
     left: 0;
     white-space: nowrap;
     overflow: hidden;
-    width: 80%; /* Adjust based on rating */
+    width: 80%;
 }
 
 .review-count {
@@ -829,4 +829,222 @@ main {
 .product .btn.primary:hover {
     background: linear-gradient(135deg, #7d9a5f, #6b8650);
     box-shadow: 0 4px 12px rgba(137, 175, 99, 0.3);
+}
+
+/* Pagination for Product List */
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 40px 0;
+    padding: 20px 0;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pagination a, .pagination span {
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background: #f8faf6;
+    border-color: #89af63;
+    color: #89af63;
+    transform: translateY(-2px);
+}
+
+.pagination .active {
+    background: linear-gradient(135deg, #89af63, #7d9a5f);
+    color: white;
+    border-color: transparent;
+}
+
+.pagination .prev, .pagination .next {
+    padding: 0 16px;
+    font-weight: 600;
+}
+
+.pagination .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination .ellipsis {
+    border: none;
+    background: none;
+    cursor: default;
+}
+
+/* Footer */
+
+footer {
+    background: linear-gradient(180deg, #2c5940, #1f3d2a);
+    color: #fff;
+    margin-top: 60px;
+    position: relative;
+}
+
+.main-footer {
+    padding: 50px 0;
+}
+
+.footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 40px;
+}
+
+.footer-col h4 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #a5c87f;
+    font-weight: 600;
+}
+
+.footer-col p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+}
+
+.footer-col ul li a {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.footer-col ul li a:hover {
+    color: #a5c87f;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.contact-info div {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.contact-info i {
+    color: #a5c87f;
+    margin-top: 6px;
+    min-width: 16px;
+}
+
+.social-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 18px;
+}
+
+.social-links a:hover {
+    background: #a5c87f;
+}
+
+.payment {
+    margin-top: 20px;
+}
+
+.payment-methods {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.payment-methods img {
+    height: 30px;
+    border-radius: 4px;
+    background: white;
+    padding: 4px 8px;
+}
+
+/* Footer Bottom */
+
+.footer-bottom {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-bottom-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.footer-bottom p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-bottom-links a {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.footer-bottom-links a:hover {
+    color: #a5c87f;
 }
