@@ -227,7 +227,7 @@ header {
 }
 
 body {
-    background: limegreen;
+    background: #7ca454;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
