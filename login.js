@@ -40,10 +40,17 @@ if (document.title.includes("Đăng nhập")){
             }
         })
     }
+    document.querySelector(".toggle-password").addEventListener("click", function() {
+        const input = document.getElementById(this.dataset.target);
+        input.type = (input.type === "password") ? "text" : "password";
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
+
 
 }
 //trang đăng kí
-if (document.title.includes("đăng kí")){
+if (document.title.includes("đăng kí")) {
     const form = document.querySelector("form");
     if (form) {
         form.addEventListener("submit", (e) => {
@@ -53,20 +60,30 @@ if (document.title.includes("đăng kí")){
             const password = form.querySelector('#password').value.trim();
             const confirm = form.querySelector('#confirm').value.trim();
 
-            if (!name || !email || !password || !confirm){
+            if (!name || !email || !password || !confirm) {
                 showAlert("Vui lòng điền đầy đủ thông tin ");
                 return;
             }
-            if (password !== confirm){
+            if (password !== confirm) {
                 showAlert("Mật khẩu không khớp");
                 return;
             }
-            localStorage.setItem("user", JSON.stringify({name,email,password}));
+            localStorage.setItem("user", JSON.stringify({name, email, password}));
             showAlert("Đăng kí thành công!")
             redirect("Login.html");
         })
     }
+    document.querySelectorAll(".toggle-password").forEach(function(icon){
+        icon.addEventListener("click", function(){
+            const input = document.getElementById(this.dataset.target);
+            input.type = (input.type === "password") ? "text" : "password";
+            this.classList.toggle("fa-eye");
+            this.classList.toggle("fa-eye-slash");
+        });
+    });
+
 }
+
 //trang quên mật khẩu
 if (document.title.includes("Quên Mật Khẩu")){
     const form = document.querySelector("form");

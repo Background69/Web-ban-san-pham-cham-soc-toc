@@ -312,6 +312,7 @@ body {
     gap: 8px;
 
 }
+
 .primary-btn {
     background-color: #007bff;
     color: #fff;
@@ -406,6 +407,50 @@ input[type="password"]:focus {
     font-size: 14px;
     color: #999;
 }
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+/* password */
+.toggle-password {
+    padding-bottom: 15px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+}
+.password-field {
+    position: relative;
+    width: 100%;
+}
+
+.password-field input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.password-field .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+}
+
+
+.toggle-password:hover {
+    color: #000;
+}
+
 
 
 .signup-text {
