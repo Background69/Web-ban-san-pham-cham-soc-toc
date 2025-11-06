@@ -40,6 +40,7 @@ if (document.title.includes("Đăng nhập")){
             }
         })
     }
+    // Hiện / ẩn mật khẩu trang đăng nhập
     document.querySelector(".toggle-password").addEventListener("click", function() {
         const input = document.getElementById(this.dataset.target);
         input.type = (input.type === "password") ? "text" : "password";
@@ -51,7 +52,7 @@ if (document.title.includes("Đăng nhập")){
 }
 //trang đăng kí
 if (document.title.includes("đăng kí")) {
-    const form = document.querySelector("form");
+    const form = document.querySelector(".login-box form");
     if (form) {
         form.addEventListener("submit", (e) => {
             e.preventDefault();
@@ -73,6 +74,7 @@ if (document.title.includes("đăng kí")) {
             redirect("Login.html");
         })
     }
+    // Hiện / ẩn mật khẩu ở trang đăng ký
     document.querySelectorAll(".toggle-password").forEach(function(icon){
         icon.addEventListener("click", function(){
             const input = document.getElementById(this.dataset.target);
