@@ -4,21 +4,246 @@
     padding: 0;
     font-family:"Segoe UI",Tahoma,Verdana,sans-serif;;
 }
-body{
+/* ===== Header ===== */
+header {
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ===== Left: Logo ===== */
+.left-header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+/* ===== Center: Search bar ===== */
+.center-header {
+    flex: 1;
+    padding: 0 30px;
+}
+
+/* === Bổ sung font và viền tròn cho search bar + nút tài khoản, giỏ hàng === */
+
+.search-form .input {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 25px;
+    font-size: 15px;
+    padding: 8px 14px;
+}
+
+.account, .cart {
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    padding: 8px 12px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.account:hover, .cart:hover {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+    color: #007bff;
+}
+
+.account i, .cart i {
+    margin-right: 6px;
+    font-size: 18px;
+    color: inherit;
+}
+
+.search-form .input {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 25px;
+    font-size: 15px;
+    padding: 8px 14px;
+}
+
+.account, .cart {
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    padding: 8px 12px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.account:hover, .cart:hover {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+    color: #007bff;
+}
+
+.account i, .cart i {
+    margin-right: 6px;
+    font-size: 18px;
+    color: inherit;
+}
+
+
+.search-bar {
+    position: relative;
+    width: 100%;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.search-form:hover {
+    border-color: #007bff;
+}
+
+.search-form .input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.search-form .search-button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-form .search-button:hover {
+    background-color: #0056b3;
+}
+
+/* ===== Search suggestions ===== */
+.search-suggestions {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    z-index: 10;
+}
+
+.suggestion-item {
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.suggestion-item i {
+    margin-right: 10px;
+    color: #007bff;
+}
+
+.suggestion-item:hover {
+    background-color: #f2f2f2;
+}
+
+/* ===== Right: Account + Cart ===== */
+.right-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.account, .cart {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #333;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.account:hover, .cart:hover {
+    color: #007bff;
+}
+
+.account i, .cart i {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.cart {
+    position: relative;
+}
+
+.cart-count {
+    background-color: #ff3b30;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 6px;
+    position: absolute;
+    top: -6px;
+    right: -10px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .center-header {
+        display: none;
+    }
+
+    .right-header {
+        gap: 15px;
+    }
+
+    .left-header .logo {
+        font-size: 1.2rem;
+    }
+}
+
+body {
     background: limegreen;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-wrapper {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-}
-.login-wrapper{
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
+    padding: 40px 0;
 }
 .login-box{
     background: #fff;
     padding: 40px 30px;
+    width: 350px;
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     text-align: center;
@@ -182,3 +407,145 @@ input[type="password"]:focus {
     text-decoration: none;
     font-weight: 600;
 }
+/* ===== FOOTER TOP ===== */
+.main-footer {
+    background-color: #222;
+    color: #fff;
+    padding: 60px 0;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-col h4 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    position: relative;
+    color: #a8ff78;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+    color: #d4ffb2;
+}
+
+/* Contact Info */
+.contact-info div {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 10px;
+}
+
+.contact-info i {
+    color: #a8ff78;
+    font-size: 16px;
+    margin-top: 3px;
+}
+
+/* Social Icons */
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    color: #a8ff78;
+    font-size: 20px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #d4ffb2;
+    transform: translateY(-3px);
+}
+
+/* Payment Icons */
+.payment-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.payment-methods img {
+    width: 50px;
+    height: auto;
+    filter: brightness(0.9);
+}
+
+/* ===== FOOTER BOTTOM ===== */
+.footer-bottom {
+    background: #1c1c1c;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-bottom-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.footer-bottom p {
+    font-size: 15px;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+}
+
+.footer-bottom-links a {
+    color: #a8ff78;
+    font-size: 15px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+    color: #d4ffb2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-bottom-links {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
