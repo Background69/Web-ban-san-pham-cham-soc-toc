@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Giỏ hàng</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cart.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -176,9 +176,34 @@
             <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
           </div>
         </div>
+        <!--Sản phẩm 4-->
+        <div class="cart-product-item" data-price="250000">
+          <div class="cart-product-image">
+            <img src="image/dau-goi-can-bang-ph-elgon.png" alt="Hình ảnh sản phẩm">
+          </div>
+          <div class="cart-product-name">Dầu gội Cehko Vital chống rụng tóc</div>
+          <div class="cart-product-type">250ml</div>
+          <div class="cart-product-quantity">
+            <button class="minus">-</button>
+            <input type="number" value="1" min="1">
+            <button class="plus">+</button>
+          </div>
+          <div class="cart-product-price">250.000 VNĐ</div>
+          <div class="cart-product-remove">
+            <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+         <button class="back">Quay lại</button>
+        <script>
+          document.querySelector('.back').addEventListener('click', function() {
+            window.location.href = 'index.html';
+
+          });
+          </script>
       </div>
+
     </div>
-        
+       
 
     <!-- BÊN PHẢI -->
     <div class="cart-right">

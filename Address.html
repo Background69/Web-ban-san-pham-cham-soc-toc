@@ -77,5 +77,38 @@
         </div>
         <button class="proceed-payment-btn">Tiếp theo</button>
     </div>
+    <script> const provinceSelect =document.querySelector('select[name="province"]');
+            const districtSelect = document.querySelector('select[name="district"]');
+            const wardSelect = document.querySelector('select[name="ward"]');
+
+            fetch('https://provinces.open-api.vn/api/p/')
+            .then(response => response.json())
+            .then(provinces => {
+                provinceSelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
+                provinces.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province.code;
+                    option.textContent = province.name;
+                    provinceSelect.appendChild(option);
+                });
+            });
+            provinceSelect.addEventListener('change', () => {
+                const provinceCode = provinceSelect.value;
+                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+                if (provinceCode) {
+                    fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+                    .then(response => response.json())
+                    .then(province => {
+                        province.districts.forEach(district => {
+                            const option = document.createElement('option');
+                            option.value = district.code;
+                            option.textContent = district.name;
+                            districtSelect.appendChild(option);
+                        });
+                    });
+                }
+            });
+    </script>
 </body>
 </html>
