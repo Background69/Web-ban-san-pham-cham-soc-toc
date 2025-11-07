@@ -204,6 +204,48 @@
         </div>
     </footer>
 
-    <script src="login.js"></script>
+    <script>
+        function showAlert(msg){
+            alert(msg);
+        }
+        function redirect(url){
+            window.location.href = url;
+        }
+        if (document.title.includes("đăng kí")) {
+            const form = document.querySelector(".login-box form");
+            if (form) {
+                form.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    const name = form.querySelector('input[name="name"]').value.trim();
+                    const email = form.querySelector('input[type="email"]').value.trim();
+                    const password = form.querySelector('#password').value.trim();
+                    const confirm = form.querySelector('#confirm').value.trim();
+
+                    if (!name || !email || !password || !confirm) {
+                        showAlert("Vui lòng điền đầy đủ thông tin ");
+                        return;
+                    }
+                    if (password !== confirm) {
+                        showAlert("Mật khẩu không khớp");
+                        return;
+                    }
+                    localStorage.setItem("user", JSON.stringify({name, email, password}));
+                    showAlert("Đăng kí thành công!")
+                    redirect("Login.html");
+                })
+            }
+            // Hiện / ẩn mật khẩu ở trang đăng ký
+            document.querySelectorAll(".toggle-password").forEach(function(icon){
+                icon.addEventListener("click", function(){
+                    const input = document.getElementById(this.dataset.target);
+                    input.type = (input.type === "password") ? "text" : "password";
+                    this.classList.toggle("fa-eye");
+                    this.classList.toggle("fa-eye-slash");
+                });
+            });
+
+        }
+
+    </script>
     </body>
     </html>
