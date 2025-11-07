@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3d98db52-7f33-4b55-9910-309e72af34cf" name="Changes" comment="login" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Background69 &lt;163015310+background69@users.noreply.github.com&gt;" />
+      </list>
+    </option>
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Vanthang19130201&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Background69/Web-ban-san-pham-cham-soc-toc.git&quot;,
+    &quot;accountId&quot;: &quot;2284b16a-6f3a-4c53-9e02-8616a3c8d9a9&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="34rqCpQlLwXppxccz0zMkj4AQSt" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;vthang&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/IdeaProjects/Web-ban-san-pham-cham-soc-toc&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3d98db52-7f33-4b55-9910-309e72af34cf" name="Changes" comment="" />
+      <created>1761981913744</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761981913744</updated>
+      <workItem from="1761985312077" duration="3753000" />
+      <workItem from="1761992462137" duration="102000" />
+      <workItem from="1762007911596" duration="10000" />
+      <workItem from="1762136221733" duration="3764000" />
+      <workItem from="1762165922497" duration="907000" />
+      <workItem from="1762329665842" duration="5739000" />
+      <workItem from="1762407844734" duration="292000" />
+      <workItem from="1762414795527" duration="15252000" />
+      <workItem from="1762491365288" duration="208000" />
+    </task>
+    <task id="LOCAL-00001" summary="page">
+      <option name="closed" value="true" />
+      <created>1761988495638</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761988495638</updated>
+    </task>
+    <task id="LOCAL-00002" summary="page">
+      <option name="closed" value="true" />
+      <created>1761988668338</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761988668338</updated>
+    </task>
+    <task id="LOCAL-00003" summary="page">
+      <option name="closed" value="true" />
+      <created>1762137654073</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762137654073</updated>
+    </task>
+    <task id="LOCAL-00004" summary="forgot password">
+      <option name="closed" value="true" />
+      <created>1762138920158</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762138920158</updated>
+    </task>
+    <task id="LOCAL-00005" summary="forgot password">
+      <option name="closed" value="true" />
+      <created>1762139071803</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762139071803</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Cập nhật và thêm js cho các trang">
+      <option name="closed" value="true" />
+      <created>1762332880698</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762332880698</updated>
+    </task>
+    <task id="LOCAL-00007" summary="thêm header footer từ trang chủ cho các trang">
+      <option name="closed" value="true" />
+      <created>1762417627774</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1762417627774</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Thư vien">
+      <option name="closed" value="true" />
+      <created>1762417644016</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1762417644016</updated>
+    </task>
+    <task id="LOCAL-00009" summary="new logo -vanthang">
+      <option name="closed" value="true" />
+      <created>1762421393168</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1762421393168</updated>
+    </task>
+    <task id="LOCAL-00010" summary="new logo -vanthang">
+      <option name="closed" value="true" />
+      <created>1762421397511</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1762421397511</updated>
+    </task>
+    <task id="LOCAL-00011" summary="new">
+      <option name="closed" value="true" />
+      <created>1762422208099</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1762422208099</updated>
+    </task>
+    <task id="LOCAL-00012" summary="new color">
+      <option name="closed" value="true" />
+      <created>1762424644864</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1762424644864</updated>
+    </task>
+    <task id="LOCAL-00013" summary="new color">
+      <option name="closed" value="true" />
+      <created>1762428833792</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1762428833792</updated>
+    </task>
+    <task id="LOCAL-00014" summary="new color">
+      <option name="closed" value="true" />
+      <created>1762430390374</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1762430390374</updated>
+    </task>
+    <task id="LOCAL-00015" summary="login">
+      <option name="closed" value="true" />
+      <created>1762430983695</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1762430983695</updated>
+    </task>
+    <task id="LOCAL-00016" summary="login">
+      <option name="closed" value="true" />
+      <created>1762432720985</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1762432720985</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Login page" />
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="page" />
+    <MESSAGE value="forgot password" />
+    <MESSAGE value="Cập nhật và thêm js cho các trang" />
+    <MESSAGE value="thêm header footer từ trang chủ cho các trang" />
+    <MESSAGE value="Thư vien" />
+    <MESSAGE value="new logo -vanthang" />
+    <MESSAGE value="new" />
+    <MESSAGE value="new color" />
+    <MESSAGE value="login" />
+    <option name="LAST_COMMIT_MESSAGE" value="login" />
+  </component>
+</project>
