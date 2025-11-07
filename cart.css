@@ -550,8 +550,21 @@ a {
 .checkout-btn:hover {
   background-color: #56732e;
 }
-
-
+.back{
+    background-color: #6a8a3a;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+.back:hover {
+    background-color: #56732e;
+}
 footer {
     background: linear-gradient(180deg, #2c5940, #1f3d2a);
     color: #fff;
