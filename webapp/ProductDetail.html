@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+    <title>Title</title>
+    <link href="css/style_for_product_detail.css" rel="stylesheet">
+
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
+
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="#">LOGO?
+                        <!--img alt="logo" class="logo-image" src="images/logo.png"-->
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <!--div class="search-result" style="display: block"></div-->
+                    </form>
+                    <div class="search-suggestions" style="display: none">
+                        <div class="suggestion-item">
+                            <i class="fas fa-clock-rotate-left"></i>
+                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
+                        </div>
+                        <div class="suggestion-item">
+                            <i class="fas fa-clock-rotate-left"></i>
+                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account and cart and... -->
+            <div class="right-header">
+
+                <div class="account">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="login-in-text">Đăng nhập</span>
+                </div>
+
+                <div class="cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="cart-text">Giỏ hàng</span>
+                    <span class="cart-count">0</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link active" href="#">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="breadcrumb">
+        <a href="index.html">Trang chủ</a>
+        <i class="fas fa-chevron-right"></i>
+        <a href="store.html">Sản phẩm</a>
+        <i class="fas fa-chevron-right"></i>
+        <span>Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</span>
+    </div>
+    <!-- Product detail -->
+    <div class="product-detail-container">
+
+        <div class="product-detail-left">
+            <div class="product-detail-image">
+                <img alt="Product 1" class="product-image" src="images/product-1.png">
+            </div>
+            <div class="thumbnail-images">
+                <img alt="img-11" class="thumbnail active" src="images/product-1-1.jpg">
+                <img alt="img-12" class="thumbnail" src="images/product-1-2.jpg">
+                <img alt="img-13" class="thumbnail" src="images/product-1-3.png">
+                <img alt="img-14" class="thumbnail" src="images/product-1-4.jpg">
+            </div>
+        </div>
+
+        <div class="product-detail-right">
+            <h1 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h1>
+            <div class="product-header-details">
+                <div class="product-rating-section">
+                    <div class="rating-stars">
+                        <a class="stars">★★★★★</a>
+                        <span class="rating-number">4.8</span>
+                    </div>
+                    <p class="rating-count">(423 đánh giá)</p>
+                </div>
+                <div class="product-sold">
+                    <i class="fas fa-shopping-bag"></i>
+                    <p>Đã bán: 1,234</p>
+                </div>
+                <div class="product-code">
+                    <p>Mã SP: <strong>LOR-SRM-001</strong></p>
+                </div>
+            </div>
+
+            <div class="product-section-price">
+                <div class="price-main">
+                    <p class="price-current">220.000₫</p>
+                    <p class="price-old">280.000₫</p>
+                    <p class="discount-percent">-21%</p>
+                </div>
+                <div class="price-note">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Giá đã bao gồm VAT</p>
+                </div>
+            </div>
+
+            <div class="product-section-info">
+                <div class="info-item">
+                    <i class="fas fa-certificate"></i>
+                    <div>
+                        <strong>Thương hiệu:</strong>
+                        <span>L'Oréal Professionnel</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-globe"></i>
+                    <div>
+                        <strong>Xuất xứ:</strong>
+                        <span>Pháp</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-box"></i>
+                    <div>
+                        <strong>Tình trạng:</strong>
+                        <span class="in-stock">Còn hàng</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-truck"></i>
+                    <div>
+                        <strong>Vận chuyển:</strong>
+                        <span>Miễn phí (Đơn từ 300k)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-section-options">
+                <div class="option-group">
+                    <label>Dung tích:</label>
+                    <div class="option-buttons">
+                        <button class="option-btn active" data-old-price="280000" data-price="220000">
+                            30ml
+                        </button>
+                        <button class="option-btn" data-old-price="450000" data-price="380000">
+                            50ml
+                        </button>
+                        <button class="option-btn" data-old-price="750000" data-price="620000">
+                            100ml
+                        </button>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <label>Số lượng:</label>
+                    <div class="quantity-selector">
+                        <button class="qty-btn">-</button>
+                        <input id="quantity" max="99" min="1" type="number" value="1">
+                        <button class="qty-btn">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-section-btn">
+                <button class="btn btn-add-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    Thêm vào giỏ hàng
+                </button>
+                <button class="btn btn-buy-now">
+                    Mua ngay
+                </button>
+                <button class="btn btn-wishlist">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+
+            <div class="product-footer-promotion">
+                <h3><i class="fas fa-gift"></i> Ưu đãi đặc biệt</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Giảm thêm 5% cho đơn hàng từ 500k - Mã:
+                        <strong>SAVE5</strong></li>
+                    <li><i class="fas fa-check-circle"></i> Tặng mẫu dùng thử khi mua từ 2 sản phẩm</li>
+                    <li><i class="fas fa-check-circle"></i> Tích điểm thành viên - Đổi quà hấp dẫn</li>
+                    <li><i class="fas fa-check-circle"></i> Hỗ trợ đổi trả trong 7 ngày nếu có lỗi</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-main-detail-page">
+        <div class="main-detail-header">
+            <button class="detail-page-btn active">Mô tả sản phẩm</button>
+            <button class="detail-page-btn">Thông số kỹ thuật</button>
+            <button class="detail-page-btn">Đánh giá (423)</button>
+            <button class="detail-page-btn">Vận chuyển & Đổi trả</button>
+        </div>
+
+        <!-- Description -->
+        <div class="detail-page-content active" id="description">
+            <h2>Mô tả sản phẩm</h2>
+
+            <div class="description-content">
+                <h3>Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                <p>Serum L'Oreal Professionnel là sản phẩm chăm sóc tóc cao cấp từ thương hiệu nổi tiếng của Pháp.
+                    Với công thức đặc biệt giúp nuôi dưỡng tóc từ sâu bên trong, mang lại mái tóc chắc khỏe, mềm mượt
+                    và óng ả tự nhiên.</p>
+
+                <h4>Công dụng nổi bật:</h4>
+                <ul>
+                    <li><strong>Phục hồi tóc hư tổn:</strong> Công thức chứa Ceramide và Pro-Keratin giúp tái tạo
+                        cấu trúc tóc, phục hồi những tổn thương do hóa chất, nhiệt độ cao.
+                    </li>
+                    <li><strong>Nuôi dưỡng chuyên sâu:</strong> Cung cấp dưỡng chất thiết yếu, giúp tóc mềm mại,
+                        suôn mượt và dễ vào nếp.
+                    </li>
+                    <li><strong>Bảo vệ tóc:</strong> Tạo lớp màng bảo vệ giúp tóc chống chịu tác động từ môi trường,
+                        nhiệt độ và tia UV.
+                    </li>
+                    <li><strong>Tăng độ bóng:</strong> Mang lại độ bóng tự nhiên, giúp tóc óng ả và khỏe khoắn.</li>
+                    <li><strong>Kiểm soát xơ rối:</strong> Giảm thiểu tình trạng xơ rối, giúp tóc mềm mượt suốt cả ngày.
+                    </li>
+                </ul>
+
+                <h4>Thành phần chính:</h4>
+                <ul>
+                    <li><strong>Ceramide:</strong> Tái tạo lớp lipid tự nhiên của tóc, giúp khóa ẩm hiệu quả.</li>
+                    <li><strong>Pro-Keratin:</strong> Protein thủy phân giúp củng cố cấu trúc tóc từ bên trong.</li>
+                    <li><strong>Vitamin E:</strong> Chống산 hóa, bảo vệ tóc khỏi tác động của gốc tự do.</li>
+                    <li><strong>Argan Oil:</strong> Dầu argan thiên nhiên giúp nuôi dưỡng và làm mềm tóc.</li>
+                </ul>
+
+                <h4>Hướng dẫn sử dụng:</h4>
+                <ol>
+                    <li>Gội sạch tóc và để ráo nước.</li>
+                    <li>Lấy 2-3 giọt serum ra lòng bàn tay.</li>
+                    <li>Chà đều serum trên hai bàn tay.</li>
+                    <li>Thoa đều lên phần tóc, tập trung vào đuôi tóc và phần tóc hư tổn.</li>
+                    <li>Không cần xả lại, để tóc khô tự nhiên hoặc sấy khô.</li>
+                    <li>Sử dụng hàng ngày để đạt hiệu quả tốt nhất.</li>
+                </ol>
+
+                <h4>Đối tượng sử dụng:</h4>
+                <p>Sản phẩm phù hợp với mọi loại tóc, đặc biệt là:</p>
+                <ul>
+                    <li>Tóc khô, xơ, hư tổn do nhiệt độ hoặc hóa chất</li>
+                    <li>Tóc nhuộm, uốn cần phục hồi</li>
+                    <li>Tóc thiếu sức sống, không bóng</li>
+                    <li>Tóc dễ gãy rụng, yếu</li>
+                </ul>
+
+                <h4>Cam kết chất lượng:</h4>
+                <ul>
+                    <li>✓ Sản phẩm chính hãng 100% từ L'Oréal Professionnel</li>
+                    <li>✓ Nhập khẩu trực tiếp từ Pháp</li>
+                    <li>✓ Đạt chứng nhận an toàn da liễu</li>
+                    <li>✓ Không chứa paraben, sulfate gây hại</li>
+                    <li>✓ Được các chuyên gia tóc khuyên dùng</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Specifications -->
+        <div class="detail-page-content" id="specifications">
+            <h2>Thông số kỹ thuật</h2>
+            <table class="specifications-table">
+                <tbody>
+                <tr>
+                    <td><strong>Tên sản phẩm</strong></td>
+                    <td>Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám</td>
+                </tr>
+                <tr>
+                    <td><strong>Mã sản phẩm</strong></td>
+                    <td>LOR-SRM-001</td>
+                </tr>
+                <tr>
+                    <td><strong>Thương hiệu</strong></td>
+                    <td>L'Oréal Professionnel</td>
+                </tr>
+                <tr>
+                    <td><strong>Xuất xứ</strong></td>
+                    <td>Pháp</td>
+                </tr>
+                <tr>
+                    <td><strong>Dung tích</strong></td>
+                    <td>30ml / 50ml / 100ml</td>
+                </tr>
+                <tr>
+                    <td><strong>Loại sản phẩm</strong></td>
+                    <td>Serum – Dầu dưỡng tóc</td>
+                </tr>
+                <tr>
+                    <td><strong>Dạng sản phẩm</strong></td>
+                    <td>Dạng lỏng (Serum)</td>
+                </tr>
+                <tr>
+                    <td><strong>Công dụng chính</strong></td>
+                    <td>Phục hồi tóc hư tổn, nuôi dưỡng, tăng độ bóng</td>
+                </tr>
+                <tr>
+                    <td><strong>Thành phần chính</strong></td>
+                    <td>Ceramide, Pro-Keratin, Vitamin E, Argan Oil</td>
+                </tr>
+                <tr>
+                    <td><strong>Đối tượng sử dụng</strong></td>
+                    <td>Mọi loại tóc, đặc biệt tóc hư tổn, khô xơ</td>
+                </tr>
+                <tr>
+                    <td><strong>Tình trạng tóc phù hợp</strong></td>
+                    <td>Hư tổn – Nhuộm, Khô xơ, Tóc yếu</td>
+                </tr>
+                <tr>
+                    <td><strong>Hương thơm</strong></td>
+                    <td>Hương hoa nhẹ nhàng, sang trọng</td>
+                </tr>
+                <tr>
+                    <td><strong>Hạn sử dụng</strong></td>
+                    <td>36 tháng kể từ ngày sản xuất</td>
+                </tr>
+                <tr>
+                    <td><strong>Hướng dẫn bảo quản</strong></td>
+                    <td>Nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp</td>
+                </tr>
+                <tr>
+                    <td><strong>Cảnh báo</strong></td>
+                    <td>Tránh tiếp xúc với mắt. Ngưng sử dụng nếu có dấu hiệu kích ứng.</td>
+                </tr>
+                <tr>
+                    <td><strong>Chứng nhận</strong></td>
+                    <td>FDA, EU Cosmetics Regulation, Kiểm định da liễu</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Reviews -->
+        <div class="detail-page-content" id="reviews">
+            <h2>Đánh giá từ khách hàng</h2>
+
+            <div class="reviews-summary">
+                <div class="overall-rating">
+                    <div class="rating-number-large">4.8</div>
+                    <div class="rating-stars-large">★★★★★</div>
+                    <div class="rating-count-text">423 đánh giá</div>
+                </div>
+
+                <div class="rating-breakdown">
+                    <div class="rating-row">
+                        <span class="star-label">5★</span>
+                        <div class="rating-bar">
+                            <div class="rating-fill" style="width: 78%"></div>
+                        </div>
+                        <span class="rating-percent">78%</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="star-label">4★</span>
+                        <div class="rating-bar">
+                            <div class="rating-fill" style="width: 15%"></div>
+                        </div>
+                        <span class="rating-percent">15%</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="star-label">3★</span>
+                        <div class="rating-bar">
+                            <div class="rating-fill" style="width: 5%"></div>
+                        </div>
+                        <span class="rating-percent">5%</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="star-label">2★</span>
+                        <div class="rating-bar">
+                            <div class="rating-fill" style="width: 1%"></div>
+                        </div>
+                        <span class="rating-percent">1%</span>
+                    </div>
+                    <div class="rating-row">
+                        <span class="star-label">1★</span>
+                        <div class="rating-bar">
+                            <div class="rating-fill" style="width: 1%"></div>
+                        </div>
+                        <span class="rating-percent">1%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews-list">
+                <!-- Review 1 -->
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">N</div>
+                            <div class="reviewer-details">
+                                <div class="reviewer-name">Nguyễn Thị Mai</div>
+                                <div class="review-date">15/10/2024</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                    <div class="review-content">
+                        <p>Sản phẩm rất tuyệt vời! Tóc mình khô và xơ do nhuộm nhiều, sau khi dùng serum này
+                            tóc mềm mượt hơn hẳn. Mùi hương cũng rất thơm và sang trọng. Mình sẽ tiếp tục ủng hộ!</p>
+                    </div>
+                    <div class="review-images">
+                        <img alt="Review 1" src="images/review-1-1.jpg">
+                        <img alt="Review 2" src="images/review-1-2.jpg">
+                    </div>
+                    <div class="review-helpful">
+                        <button><i class="far fa-thumbs-up"></i> Hữu ích (24)</button>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">T</div>
+                            <div class="reviewer-details">
+                                <div class="reviewer-name">Trần Văn Hoàng</div>
+                                <div class="review-date">12/10/2024</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                    <div class="review-content">
+                        <p>Đóng gói cẩn thận, ship nhanh. Sản phẩm chính hãng, dùng thấy hiệu quả sau 1 tuần.
+                            Tóc bớt gãy rụng, mềm hơn nhiều. Giá cả hợp lý so với chất lượng.</p>
+                    </div>
+                    <div class="review-helpful">
+                        <button><i class="far fa-thumbs-up"></i> Hữu ích (18)</button>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">L</div>
+                            <div class="reviewer-details">
+                                <div class="reviewer-name">Lê Thị Hương</div>
+                                <div class="review-date">08/10/2024</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">★★★★☆</div>
+                    </div>
+                    <div class="review-content">
+                        <p>Sản phẩm tốt nhưng mình thấy hơi đắt. Tuy nhiên chất lượng xứng đáng với giá tiền.
+                            Tóc mình bị hư tổn do duỗi, dùng serum này giúp phục hồi khá tốt.</p>
+                    </div>
+                    <div class="review-helpful">
+                        <button><i class="far fa-thumbs-up"></i> Hữu ích (12)</button>
+                    </div>
+                </div>
+
+                <!-- Review 4 -->
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">P</div>
+                            <div class="reviewer-details">
+                                <div class="reviewer-name">Phạm Minh Tuấn</div>
+                                <div class="review-date">05/10/2024</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                    <div class="review-content">
+                        <p>Lần đầu mua hàng ở shop, rất hài lòng! Sản phẩm authentic, date xa, đóng gói kỹ.
+                            Dùng thử thấy tóc mềm hơn ngay lần đầu. Sẽ giới thiệu cho bạn bè!</p>
+                    </div>
+                    <div class="review-helpful">
+                        <button><i class="far fa-thumbs-up"></i> Hữu ích (31)</button>
+                    </div>
+                </div>
+
+                <!-- Review 5 -->
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">H</div>
+                            <div class="reviewer-details">
+                                <div class="reviewer-name">Hoàng Thị Lan</div>
+                                <div class="review-date">01/10/2024</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">★★★★★</div>
+                    </div>
+                    <div class="review-content">
+                        <p>Serum rất thơm, chai đẹp. Dùng ít mà hiệu quả cao, tóc mượt hẳn. Mình hay sử dụng
+                            máy sấy nên tóc khô lắm, nhưng dùng serum này thấy cải thiện rõ rệt.</p>
+                    </div>
+                    <div class="review-images">
+                        <img alt="Review 5" src="images/review-5-1.jpg">
+                    </div>
+                    <div class="review-helpful">
+                        <button><i class="far fa-thumbs-up"></i> Hữu ích (27)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="load-more-reviews">
+                <button class="btn btn-load-more">Xem thêm đánh giá</button>
+            </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="detail-page-content" id="shipping">
+            <h2>Chính sách vận chuyển & Đổi trả</h2>
+
+            <div class="policy-section">
+                <h3><i class="fas fa-truck"></i> Chính sách vận chuyển</h3>
+                <ul>
+                    <li><strong>Miễn phí vận chuyển:</strong> Áp dụng cho đơn hàng từ 300.000₫ trở lên trong nội thành
+                        TP.HCM
+                    </li>
+                    <li><strong>Phí vận chuyển:</strong> 30.000₫ cho đơn hàng dưới 300.000₫</li>
+                    <li><strong>Thời gian giao hàng:</strong>
+                        <ul>
+                            <li>Nội thành TP.HCM: 1-2 ngày</li>
+                            <li>Các tỉnh thành khác: 3-5 ngày</li>
+                        </ul>
+                    </li>
+                    <li><strong>Đơn vị vận chuyển:</strong> Giao Hàng Nhanh, Giao Hàng Tiết Kiệm, VNPost</li>
+                    <li><strong>Kiểm tra hàng:</strong> Khách hàng được quyền kiểm tra sản phẩm trước khi thanh toán
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-exchange-alt"></i> Chính sách đổi trả</h3>
+                <ul>
+                    <li><strong>Thời gian đổi trả:</strong> 7 ngày kể từ ngày nhận hàng</li>
+                    <li><strong>Điều kiện đổi trả:</strong>
+                        <ul>
+                            <li>Sản phẩm chưa qua sử dụng, còn nguyên seal</li>
+                            <li>Còn đầy đủ hộp, nhãn mác, phụ kiện đi kèm</li>
+                            <li>Có hóa đơn mua hàng hoặc đơn đặt hàng</li>
+                        </ul>
+                    </li>
+                    <li><strong>Trường hợp được đổi trả:</strong>
+                        <ul>
+                            <li>Sản phẩm bị lỗi do nhà sản xuất</li>
+                            <li>Giao sai sản phẩm, sai số lượng</li>
+                            <li>Sản phẩm bị hư hỏng trong quá trình vận chuyển</li>
+                            <li>Sản phẩm không đúng mô tả</li>
+                        </ul>
+                    </li>
+                    <li><strong>Phí đổi trả:</strong>
+                        <ul>
+                            <li>Miễn phí nếu lỗi từ nhà bán</li>
+                            <li>Khách hàng chịu phí vận chuyển nếu đổi ý</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-shield-alt"></i> Chính sách bảo hành</h3>
+                <ul>
+                    <li>Cam kết 100% sản phẩm chính hãng</li>
+                    <li>Hoàn tiền 200% nếu phát hiện hàng giả</li>
+                    <li>Hỗ trợ giải đáp mọi thắc mắc về sản phẩm</li>
+                    <li>Tư vấn miễn phí cách sử dụng sản phẩm hiệu quả</li>
+                </ul>
+
+                <h3><i class="fas fa-headset"></i> Liên hệ hỗ trợ</h3>
+                <p>Nếu bạn có bất kỳ thắc mắc nào về chính sách vận chuyển và đổi trả, vui lòng liên hệ:</p>
+                <ul>
+                    <li><strong>Hotline:</strong> (+84) 1234 5678</li>
+                    <li><strong>Email:</strong> support@hairglow.vn</li>
+                    <li><strong>Thời gian hỗ trợ:</strong> Thứ 2 - Thứ 7: 8:00 - 21:00 | Chủ nhật: 9:00 - 18:00</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="related-products-section">
+        <h2>Sản phẩm liên quan</h2>
+        <div class="related-products-grid">
+
+            <div class="product-item">
+                <a class="product-image-link" href="#">
+                    <img alt="Dầu gội Head & Shoulders" src="images/product-2.jpg">
+                    <span class="discount-badge">-15%</span>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">
+                        <a href="#">Dầu gội Head & Shoulders sạch gàu</a>
+                    </h3>
+                    <div class="product-rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-count">(312)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">145.000₫</span>
+                        <span class="price-old">170.000₫</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <a class="product-image-link" href="#">
+                    <img alt="Dầu xả Sunsilk" src="images/product-3.png">
+                    <span class="discount-badge">-20%</span>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">
+                        <a href="#">Dầu xả Sunsilk mềm mượt</a>
+                    </h3>
+                    <div class="product-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-count">(256)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">120.000₫</span>
+                        <span class="price-old">150.000₫</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <a class="product-image-link" href="#">
+                    <img alt="Kem ủ tóc Moroccanoil" src="images/product-4.png">
+                    <span class="discount-badge">-25%</span>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">
+                        <a href="#">Kem ủ tóc Moroccanoil phục hồi</a>
+                    </h3>
+                    <div class="product-rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-count">(189)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">380.000₫</span>
+                        <span class="price-old">500.000₫</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <a class="product-image-link" href="#">
+                    <img alt="Xịt dưỡng tóc TRESemmé" src="images/product-5.png">
+                    <span class="discount-badge">-18%</span>
+                </a>
+                <div class="product-info">
+                    <h3 class="product-name">
+                        <a href="#">Xịt dưỡng tóc TRESemmé chống xơ</a>
+                    </h3>
+                    <div class="product-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-count">(201)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">165.000₫</span>
+                        <span class="price-old">200.000₫</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer>
+    <!--Footer Top-->
+    <div class="main-footer footer-top">
+        <div class="footer-container">
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Liên hệ với chúng tôi</h4>
+                <div class="contact-info">
+                    <div>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Trụ sở: Khu Phố 6, P. Linh Trung, Q. Thủ Đức, TP.HCM</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline tư vấn: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline bán hàng: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: support@hairglow.vn</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 21:00<br>Chủ nhật: 9:00 - 18:00</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt"></i>
+                        <p>GPKD: 123456789, cấp ngày 20/02/2020, TP. HCM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#">Dầu gội</a></li>
+                    <li><a href="#">Dầu xả</a></li>
+                    <li><a href="#">Kem ủ tóc</a></li>
+                    <li><a href="#">Serum dưỡng tóc</a></li>
+                    <li><a href="#">Sáp vuốt tóc</a></li>
+                    <li><a href="#">Khuyến mãi</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Phương thức thanh toán</a></li>
+                    <li><a href="#">Vận chuyển & Giao hàng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <!--About Us-->
+                <div class="about-us">
+                    <h4>Về chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!--Payment methods-->
+                <div class="payment">
+                    <h4>Thanh toán</h4>
+                    <div class="payment-methods">
+                        <a class="logo-tile"><img alt="Visa" src="assets/VisaIcon.svg"></a>
+                        <a class="logo-tile"><img alt="MasterCard" src="assets/MasterCardIcon.svg"></a>
+                        <a class="logo-tile"><img alt="Napas" src="assets/NapasIcon.svg"></a>
+                        <a class="logo-tile"><img alt="VNPay" src="assets/VNPayIcon.png"></a>
+                        <a class="logo-tile"><img alt="MoMo" src="assets/MoMoIcon.svg"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Điều khoản sử dụng</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
