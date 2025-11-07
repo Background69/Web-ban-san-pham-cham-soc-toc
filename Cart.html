@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giỏ hàng</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="cart-process">
+    <div class="cart-checkout-process">
+      <i class="fa-solid fa-cart-shopping"></i>
+    </div>
+    <div class="cart-checkout-process">
+      <i class="fa-solid fa-location-dot"></i>
+    </div>
+    <div class="cart-checkout-process">
+      <i class="fa-solid fa-credit-card"></i>
+    </div>
+  </div>
+
+  <div class="cart-container">
+
+    <!-- BÊN TRÁI -->
+    <div class="cart-left">
+      <h3>Giỏ hàng của bạn</h3>
+
+      <!-- Tiêu đề bảng -->
+      <div class="cart-header-table">
+        <span>Sản phẩm</span>
+        <span>Tên sản phẩm</span>
+        <span>Loại</span>
+        <span>Số lượng</span>
+        <span>Giá tiền</span>
+        <span>Xóa</span>
+      </div>
+
+      <!-- Danh sách sản phẩm -->
+      <div class="cart-product">
+        <!-- Sản phẩm 1 -->
+        <div class="cart-product-item" data-price="700000">
+          <div class="cart-product-image">
+            <img src="image/dau-goi-can-bang-ph-elgon.png" alt="Hình ảnh sản phẩm">
+          </div>
+          <div class="cart-product-name">Dầu gội Elgon Puifying hỗ trợ trị gàu</div>
+          <div class="cart-product-type">1000ml</div>
+          <div class="cart-product-quantity">
+            <button class="minus">-</button>
+            <input type="number" value="1" min="1">
+            <button class="plus">+</button>
+          </div>
+          <div class="cart-product-price">700.000 VNĐ</div>
+          <div class="cart-product-remove">
+            <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+
+        <!-- Sản phẩm 2 -->
+        <div class="cart-product-item" data-price="250000">
+          <div class="cart-product-image">
+            <img src="image/dau-goi-can-bang-ph-elgon.png" alt="Hình ảnh sản phẩm">
+          </div>
+          <div class="cart-product-name">Dầu gội Cehko Vital chống rụng tóc</div>
+          <div class="cart-product-type">250ml</div>
+          <div class="cart-product-quantity">
+            <button class="minus">-</button>
+            <input type="number" value="1" min="1">
+            <button class="plus">+</button>
+          </div>
+          <div class="cart-product-price">250.000 VNĐ</div>
+          <div class="cart-product-remove">
+            <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+        <!-- Sản phẩm 3 -->
+        <div class="cart-product-item" data-price="420000">
+          <div class="cart-product-image">
+            <img src="image/xakho.png" alt="Hình ảnh sản phẩm">
+          </div>
+          <div class="cart-product-name">Xả khô BambooMiracle phục hồi tóc all in one leave</div>
+          <div class="cart-product-type">178ml</div>
+          <div class="cart-product-quantity">
+            <button class="minus">-</button>
+            <input type="number" value="1" min="1">
+            <button class="plus">+</button>
+          </div>
+          <div class="cart-product-price">420.000 VNĐ</div>
+          <div class="cart-product-remove">
+            <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+
+    <!-- BÊN PHẢI -->
+    <div class="cart-right">
+      <h3>Thanh toán</h3>
+      <div class="cart-checkout">
+        <span>Tạm tính:</span>
+        <span class="cart-subtotal">0 VNĐ</span>
+      </div>
+      <div class="cart-summary-item">
+        <span>Phí vận chuyển:</span>
+        <span class="cart-shipping-fee">0 VNĐ</span>
+      </div>
+      <div class="cart-summary-item total">
+        <span>Tổng cộng:</span>
+        <span class="cart-total-amount">0 VNĐ</span>
+      </div>
+      <button class="checkout-btn">Tiếp theo</button>
+      <script>
+        document.querySelector('.checkout-btn').addEventListener('click', function() {
+          window.location.href = 'Address.html';
+        });
+      </script>
+    </div>
+  </div> 
+
+</body>
+</html>
