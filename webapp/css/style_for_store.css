@@ -39,7 +39,7 @@ a {
 .header-top {
     display: flex;
     align-items: center;
-    padding: 20px 30px;
+    padding: 0 30px;
     gap: 30px;
     min-height: 80px;
 }
@@ -117,34 +117,104 @@ a {
     font-size: 18px;
 }
 
-.search-suggestions {
+
+/* Search Result Ads  */
+
+.search-result {
     position: absolute;
-    top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border-radius: 8px;
-    margin-top: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 100;
+    top: calc(100% + 8px);
+    padding: 14px;
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .12);
+    display: none;
+    z-index: 30;
+    transform-origin: top center;
+    animation: sr-fade .18s ease-out;
 }
 
-.suggestion-item {
-    padding: 10px 20px;
+.search-result .ad-grid {
+    display: grid;
+    grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    grid-auto-flow: dense;
+}
+
+.ad-item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff, #fbfdf8);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.ad-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, .10);
+    border-color: var(--primary);
+}
+
+.ad-thumb {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    border-radius: 10px;
+    background: #eef4e8;
     display: flex;
     align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: background 0.2s ease;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--primary);
 }
 
-.suggestion-item:hover {
-    background: #f5f5f5;
+.ad-body {
+    min-width: 0
 }
 
-.suggestion-item i {
-    color: #999;
-    font-size: 12px;
+.ad-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 4px
+}
+
+.ad-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.ad-feature {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #fff7f7, #fff);
+}
+
+.ad-feature .ad-thumb {
+    background: linear-gradient(135deg, #ffe1e1, #ffd3d3);
+    color: #ff4d4d;
+}
+
+.ad-badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff6b6b, #ff4141);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.search-button:hover {
+    background: #f5f5f5
 }
 
 /* Account and Cart Header */
