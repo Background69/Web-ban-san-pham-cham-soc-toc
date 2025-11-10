@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-    <title>Title</title>
+    <title>Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</title>
     <link href="css/style_for_product_detail.css" rel="stylesheet">
 
 </head>
@@ -16,8 +16,8 @@
             <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
-                    <a class="logo" href="#">LOGO?
-                        <!--img alt="logo" class="logo-image" src="images/logo.png"-->
+                    <a class="logo" href="#">
+                        <img alt="logo" class="logo-image" height="150" src="images/LOGO.PNG" width="150">
                     </a>
                 </div>
             </div>
@@ -30,16 +30,39 @@
                         <button aria-label="search button suggest" class="search-button" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
-                        <!--div class="search-result" style="display: block"></div-->
                     </form>
-                    <div class="search-suggestions" style="display: none">
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                        </div>
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
+
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -96,7 +119,7 @@
 </header>
 <main>
     <div class="breadcrumb">
-        <a href="index.html">Trang chủ</a>
+        <a href="MainPage.html">Trang chủ</a>
         <i class="fas fa-chevron-right"></i>
         <a href="store.html">Sản phẩm</a>
         <i class="fas fa-chevron-right"></i>
@@ -799,6 +822,29 @@
         </div>
     </div>
 </footer>
-<script src="assets/js/main.js"></script>
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
 </body>
 </html>
