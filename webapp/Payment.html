@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán</title>
+</head>
+<body>
+    <div class="payment">
+        <h3>Thanh toán</h3>
+        <!--Confirm lại thông tin giao hàng và sản phẩm-->
+        <section id="shipping-information">
+            <h4>Thông tin giao hàng</h4>
+            <div class="info">
+                <p><strong>Họ và tên:</strong> <span id="fullname"></span></p>
+                <p><strong>Địa chỉ:</strong> <span id="address"></span></p>
+                <p><strong>Số điện thoại:</strong> <span id="phone"></span></p>
+                <p><strong>Phương thức giao hàng:</strong> <span id="shipping"></span></p>
+                <button onclick="window.location.href='address.html'">Sửa địa chỉ</button>
+            </div>
+        </section>
+        <section class="order-summery">
+            <h4>Đơn hàng của bạn</h4>
+            <div class="order-details">
+                <div id="order-items">
+                    <!-- Sản phẩm sẽ được hiển thị ở đây -->
+                </div>
+                <div class="total-amount">
+                    <p><strong>Tổng cộng:</strong> <span id="total-amount"></span></p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+
+</body>
+</html>
