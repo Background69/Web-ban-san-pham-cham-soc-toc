@@ -11,13 +11,13 @@
         <!--Confirm lại thông tin giao hàng và sản phẩm-->
         <section id="shipping-information">
             <h4>Thông tin giao hàng</h4>
-            <div class="info">
+            
                 <p><strong>Họ và tên:</strong> <span id="fullname"></span></p>
                 <p><strong>Địa chỉ:</strong> <span id="address"></span></p>
                 <p><strong>Số điện thoại:</strong> <span id="phone"></span></p>
                 <p><strong>Phương thức giao hàng:</strong> <span id="shipping"></span></p>
                 <button onclick="window.location.href='address.html'">Sửa địa chỉ</button>
-            </div>
+           
         </section>
         <section class="order-summery">
             <h4>Đơn hàng của bạn</h4>
@@ -30,8 +30,14 @@
                 </div>
             </div>
         </section>
-    </div>
+        <section class="payment-methods">
+            <label input type="radio" name="payment" value="cod" checked > Thanh toán khi nhận hàng (COD)</label>  
+            <label input type="radio" name="payment" value="bank"  > Thanh toán qua ngân hàng</label> 
+            <label input type="radio" name="payment" value="momo"> Thanh toán qua ứng dụng Momo </label>
+            <div id="payment-detail"></div>
     
-
+        </section>
+        <button id="confirm-order"> Đặt hàng </button>
+    </div>
 </body>
 </html>
