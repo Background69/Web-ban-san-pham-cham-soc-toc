@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+    <title>HairGlow | Sản phẩm chăm sóc tóc</title>
+    <link href="css/style_for_main-page.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
+
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="#">
+                        <img alt="logo" class="logo-image" height="150" src="images/LOGO.PNG" width="150">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account and cart and... -->
+            <div class="right-header">
+
+                <div class="account">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="login-in-text">Đăng nhập</span>
+                </div>
+
+                <div class="cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="cart-text">Giỏ hàng</span>
+                    <span class="cart-count">0</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link active home-page" href="#">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link " href="#">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<section class="banner-section">
+    <div class="banner-container active">
+        <div class="banner-content">
+            <span class="banner-badge">Ưu đãi đặc biệt</span>
+            <h1>Chăm sóc tóc chuyên nghiệp</h1>
+            <h2>Giảm đến <span class="highlight">40%</span></h2>
+            <p>Miễn phí vận chuyển cho đơn hàng từ 300.000₫</p>
+            <a class="banner-btn" href="store.html">Mua ngay</a>
+        </div>
+    </div>
+</section>
+<section class="flash-sale-section">
+    <div class="flash-sale-container">
+        <div class="flash-sale-header">
+            <div class="flash-sale-title-group">
+                <h2><i class="fas fa-bolt"></i> FLASH SALE</h2>
+            </div>
+            <div class="flash-sale-countdown">
+                <div class="countdown-box">
+                    <span class="countdown-number" id="flash-sale-hours">12</span>
+                    <span class="countdown-label">Giờ</span>
+                </div>
+                <div class="countdown-box">
+                    <span class="countdown-number" id="flash-sale-minutes">34</span>
+                    <span class="countdown-label">Phút</span>
+                </div>
+                <div class="countdown-box">
+                    <span class="countdown-number" id="flash-sale-seconds">56</span>
+                    <span class="countdown-label">Giây</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flash-sale-slider-container">
+            <button class="flash-sale-nav-btn flash-nav-prev" id="flash-sale-prev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="flash-sale-slider">
+                <div class="flash-sale-track" id="flash-sale-track">
+                    <!-- Sale 1 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu gội Elgon Puifying hỗ trợ trị gàu 1000ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">350.000₫</p>
+                                <p class="price-old">700.000₫</p>
+                                <p class="badge-discount">-50%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 65%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 65/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 2 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 82%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 82/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 3 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-40%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Xả khô BambooMiracle phục hồi tóc 178ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">252.000₫</p>
+                                <p class="price-old">420.000₫</p>
+                                <p class="badge-discount">-40%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 4 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 5 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 6 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 7 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 8 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 9 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sale 10 -->
+                    <div class="product-item">
+                        <div class="flash-sale-badge">-50%</div>
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Product 1" class="product-image" src="images/">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">280.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="flash-sale-progress">
+                                <div class="flash-sale-progress-bar">
+                                    <div class="flash-sale-progress-fill" style="width: 72%"></div>
+                                </div>
+                                <div class="flash-sale-progress-text">Đã bán 72/100</div>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <button class="flash-sale-nav-btn flash-nav-next" id="flash-sale-next">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="flash-sale-view-all">
+            <a class="flash-sale-view-all-btn" href="#">
+                Xem Tất Cả <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+<main>
+    <!-- Categories Container -->
+    <div class="categories-container" id="categories-container">
+        <h2 class="container-title">Danh Mục Sản Phẩm</h2>
+        <div class="categories-grid">
+            <a class="category-item" href="store.html?category=dau-goi">
+                <div class="category-icon"><i class="fas fa-shower"></i></div>
+                <h3>Dầu Gội</h3>
+                <p>Làm sạch và nuôi dưỡng tóc từ gốc</p>
+            </a>
+
+            <a class="category-item" href="store.html?category=dau-xa">
+                <div class="category-icon"><i class="fas fa-spray-can"></i></div>
+                <h3>Dầu Xả</h3>
+                <p>Mềm mượt, dễ chải</p>
+            </a>
+
+            <a class="category-item" href="store.html?category=kem-u">
+                <div class="category-icon"><i class="fas fa-heart"></i></div>
+                <h3>Kem Ủ Tóc</h3>
+                <p>Phục hồi tóc hư tổn sâu</p>
+            </a>
+
+            <a class="category-item" href="store.html?category=serum">
+                <div class="category-icon"><i class="fas fa-flask"></i></div>
+                <h3>Serum Dưỡng</h3>
+                <p>Dưỡng chất tinh tuý cho tóc</p>
+            </a>
+
+            <a class="category-item" href="store.html?category=tri-gau">
+                <div class="category-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Trị Gàu & Rụng Tóc</h3>
+                <p>Giải pháp toàn diện cho tóc</p>
+            </a>
+
+            <a class="category-item" href="store.html?category=sap-gel">
+                <div class="category-icon"><i class="fas fa-wind"></i></div>
+                <h3>Tạo Kiểu</h3>
+                <p>Sáp, gel, gôm tạo kiểu</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Featured Products Container -->
+    <div class="featured-container" id="featured-container">
+        <h2 class="container-title">Sản Phẩm Nổi Bật</h2>
+        <div class="product-grid" id="featured-products">
+            <div class="product-item">
+                <div class="product-img">
+                    <a href="ProductDetail.html">
+                        <img alt="Serum L'Oreal" class="product-image" src="images/dau-goi-can-bang-ph-elgon.png">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Dầu gội Elgon Puifying hỗ trợ trị gàu</h3>
+                    <div class="product-small-details">
+                        <p><span>Elgon</span> • <span>Dầu gội</span> • Ý</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <span class="stars">★★★★★</span>
+                        </div>
+                        <p class="review-count">(156)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">700.000₫</p>
+                        <p class="price-old">850.000₫</p>
+                        <p class="badge-discount">-18%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-img">
+                    <a href="ProductDetail.html">
+                        <img alt="Xả khô BambooMiracle" class="product-image" src="images/xakho.png">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Xả khô BambooMiracle phục hồi tóc</h3>
+                    <div class="product-small-details">
+                        <p><span>BambooMiracle</span> • <span>Xịt dưỡng</span> • Mỹ</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <span class="stars">★★★★★</span>
+                        </div>
+                        <p class="review-count">(203)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">420.000₫</p>
+                        <p class="price-old">520.000₫</p>
+                        <p class="badge-discount">-19%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-img">
+                    <a href="ProductDetail.html">
+                        <img alt="Serum L'Oreal" class="product-image" src="images/dau-goi-can-bang-ph-elgon.png">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
+                    <div class="product-small-details">
+                        <p><span>L'Oréal Professionnel</span> • <span>Serum</span> • Pháp</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <span class="stars">★★★★★</span>
+                        </div>
+                        <p class="review-count">(423)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">220.000₫</p>
+                        <p class="price-old">280.000₫</p>
+                        <p class="badge-discount">-21%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <div class="product-img">
+                    <a href="ProductDetail.html">
+                        <img alt="Dầu gội Cehko" class="product-image" src="images/dau-goi-can-bang-ph-elgon.png">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Dầu gội Cehko Vital chống rụng tóc</h3>
+                    <div class="product-small-details">
+                        <p><span>Cehko</span> • <span>Dầu gội</span> • Đức</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <span class="stars">★★★★☆</span>
+                        </div>
+                        <p class="review-count">(98)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">250.000₫</p>
+                        <p class="price-old">320.000₫</p>
+                        <p class="badge-discount">-22%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offers Container -->
+    <div class="offers-container" id="offers-container">
+        <div class="offers-grid">
+            <div class="offers-item">
+                <i class="fa-solid fa-truck-fast"></i>
+                <div>
+                    <h4>Freeship từ 300k</h4>
+                    <p>Giao nhanh toàn quốc</p>
+                </div>
+            </div>
+            <div class="offers-item">
+                <i class="fa-solid fa-shield"></i>
+                <div>
+                    <h4>Chính hãng 100%</h4>
+                    <p>Hoàn tiền nếu giả</p>
+                </div>
+            </div>
+            <div class="offers-item">
+                <i class="fa-solid fa-rotate-left"></i>
+                <div>
+                    <h4>Đổi trả 7 ngày</h4>
+                    <p>Nếu có lỗi nhà sản xuất</p>
+                </div>
+            </div>
+            <div class="offers-item">
+                <i class="fa-solid fa-headset"></i>
+                <div>
+                    <h4>Tư vấn 1–1</h4>
+                    <p>Chuyên gia tóc đồng hành</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brands Container -->
+    <div class="brands-container" id="brands-container">
+        <h2 class="container-title">Thương Hiệu Uy Tín</h2>
+        <div class="brands-grid">
+            <div class="brand-item">L'Oréal</div>
+            <div class="brand-item">Kérastase</div>
+            <div class="brand-item">Davines</div>
+            <div class="brand-item">Moroccanoil</div>
+            <div class="brand-item">Head &<br>Shoulders</div>
+            <div class="brand-item">Sunsilk</div>
+            <div class="brand-item">TRESemmé</div>
+            <div class="brand-item">OGX</div>
+        </div>
+    </div>
+
+
+</main>
+
+<footer>
+    <!--Footer Top-->
+    <div class="main-footer footer-top">
+        <div class="footer-container">
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Liên hệ với chúng tôi</h4>
+                <div class="contact-info">
+                    <div>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Trụ sở: Khu Phố 6, P. Linh Trung, Q. Thủ Đức, TP.HCM</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline tư vấn: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline bán hàng: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: support@hairglow.vn</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 21:00<br>Chủ nhật: 9:00 - 18:00</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt"></i>
+                        <p>GPKD: 123456789, cấp ngày 20/02/2020, TP. HCM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#">Dầu gội</a></li>
+                    <li><a href="#">Dầu xả</a></li>
+                    <li><a href="#">Kem ủ tóc</a></li>
+                    <li><a href="#">Serum dưỡng tóc</a></li>
+                    <li><a href="#">Sáp vuốt tóc</a></li>
+                    <li><a href="#">Khuyến mãi</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Phương thức thanh toán</a></li>
+                    <li><a href="#">Vận chuyển & Giao hàng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <!--About Us-->
+                <div class="about-us">
+                    <h4>Về chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!--Payment methods-->
+                <div class="payment">
+                    <h4>Thanh toán</h4>
+                    <div class="payment-methods">
+                        <a class="logo-tile"><img alt="Visa" src="assets/VisaIcon.svg"></a>
+                        <a class="logo-tile"><img alt="MasterCard" src="assets/MasterCardIcon.svg"></a>
+                        <a class="logo-tile"><img alt="Napas" src="assets/NapasIcon.svg"></a>
+                        <a class="logo-tile"><img alt="VNPay" src="assets/VNPayIcon.png"></a>
+                        <a class="logo-tile"><img alt="MoMo" src="assets/MoMoIcon.svg"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Điều khoản sử dụng</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+
+</body>
+</html>
