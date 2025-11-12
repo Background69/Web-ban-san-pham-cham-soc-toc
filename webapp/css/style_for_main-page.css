@@ -126,7 +126,7 @@ a {
     top: calc(100% + 8px);
     padding: 14px;
     background: rgba(255, 255, 255, .92);
-    border: 1px solid var(--border);
+    border: 1px solid;
     border-radius: 14px;
     backdrop-filter: blur(10px);
     box-shadow: 0 16px 40px rgba(0, 0, 0, .12);
@@ -148,7 +148,7 @@ a {
     gap: 12px;
     align-items: center;
     padding: 12px;
-    border: 1px solid var(--border);
+    border: 1px solid;
     border-radius: 12px;
     background: linear-gradient(135deg, #ffffff, #fbfdf8);
     transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
@@ -157,7 +157,6 @@ a {
 .ad-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 22px rgba(0, 0, 0, .10);
-    border-color: var(--primary);
 }
 
 .ad-thumb {
@@ -170,7 +169,6 @@ a {
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    color: var(--primary);
 }
 
 .ad-body {
@@ -185,7 +183,6 @@ a {
 
 .ad-desc {
     font-size: 12.5px;
-    color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis
@@ -435,7 +432,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 60px;
+    margin-bottom: 0px;
     overflow: hidden;
 }
 
@@ -524,7 +521,7 @@ a {
 
 .flash-sale-section {
     padding: 40px 20px;
-    background: #fff;
+    background: #daf3b6;
     position: relative;
 }
 
@@ -920,6 +917,82 @@ a {
     box-shadow: 0 4px 12px rgba(137, 175, 99, 0.3);
 }
 
+/* Categories Section */
+
+.categories-container {
+    padding: 60px 20px;
+    background: #f9fafb;
+}
+
+.container-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: #333;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-item {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    color: #333;
+}
+
+.category-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.category-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: #667eea;
+}
+
+.category-item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.category-item p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Featured Products Section */
+
+.featured-container {
+    padding: 60px 20px;
+    background: #ffffff;
+}
+
+.featured-container .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.featured-container .product-item {
+    flex: 1 1 200px;
+}
+
+.featured-container .product-item {
+}
+
 /* Offers Section */
 
 .offers-grid {
@@ -932,8 +1005,8 @@ a {
     display: flex;
     gap: 12px;
     align-items: center;
-    background: #fff;
-    border: 1px solid var(--border);
+    background: #a7d092;
+    border: 1px solid ;
     border-radius: 12px;
     padding: 14px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, .06)
@@ -941,7 +1014,6 @@ a {
 
 .offers-item i {
     font-size: 22px;
-    color: var(--primary)
 }
 
 .offers-item h4 {
@@ -951,9 +1023,55 @@ a {
 
 .offers-item p {
     font-size: 13px;
-    color: var(--muted)
 }
 
+/* Brands Section */
+
+.brands-container {
+    padding: 60px 20px;
+    background: #ffffff;
+}
+
+.brands-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.brand-item {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-item:hover {
+    transform: scale(1.05);
+}
+
+.brand-logo {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #333;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
 
 /* Footer */
 
@@ -1109,4 +1227,3 @@ footer {
 .footer-bottom-links a:hover {
     color: #a5c87f;
 }
-
