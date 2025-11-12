@@ -245,7 +245,7 @@
                 const user = JSON.parse(localStorage.getItem("user"));
                 if (user && (email === user.email || email === user.phone) && (password === user.password)) {
                     showAlert("đăng nhập thành công!")
-                    redirect("Login.html");
+                    redirect("store.html");
                 } else {
                     showAlert("sai email hoặc mật khẩu")
                 }

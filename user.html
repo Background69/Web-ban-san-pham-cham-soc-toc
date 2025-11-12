@@ -90,6 +90,22 @@
 
 
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+       const editBtn = document.querySelector(".edit-btn");
+       const saveBtn = document.querySelector(".save-btn");
+       const inputs = document.querySelectorAll("input, select");
+       inputs.forEach(el => el.disabled = true);
+       editBtn.addEventListener("click", function () {
+           inputs.forEach(el => el.disabled = false );
+       });
+        saveBtn.addEventListener("click", function () {
+            inputs.forEach(el => el.disabled = true);
+            alert("Thông tin đã được lưu thành công!");
+            window.location.href = "Login.html"; // Chuyển sang trang chủ
+        });
 
+    })
+</script>
 </body>
 </html>
