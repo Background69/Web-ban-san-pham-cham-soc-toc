@@ -1,149 +1,127 @@
-.payment {
-  width: 80%;
-  margin: 40px auto 80px;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  padding: 30px 40px;
-}
-
-.payment h3 {
-  color: #56732e;
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-#shipping-information,
-.order-summery,
-.payment-methods {
-  background-color: #f8f9f3;
-  padding: 20px 25px;
-  border-radius: 12px;
-  margin-bottom: 25px;
-  border: 1px solid #e2e8d5;
-}
-
-#shipping-information h4,
-.order-summery h4 {
-  color: #6a8a3a;
-  margin-bottom: 15px;
-}
-
-#shipping-information p {
-  margin: 8px 0;
-  font-size: 16px;
-}
-
-#shipping-information button {
-  background-color: #6a8a3a;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-#shipping-information button:hover {
-  background-color: #56732e;
-}
-
-.order-details {
-  background-color: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.total-amount {
-  text-align: right;
-  margin-top: 15px;
-  font-weight: bold;
-  color: #333;
-}
-
-.payment-methods label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  color: #333;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: #f8f9f3;
-  border: 1px solid #e2e8d5;
-  transition: all 0.3s ease;
-}
-
-.payment-methods label:hover {
-  background: #eef5e0;
-  transform: translateY(-1px);
-}
-
-#confirm-order {
-  display: block;
-  width: 100%;
-  background-color: #6a8a3a;
-  color: white;
-  border: none;
-  padding: 14px 0;
-  font-size: 17px;
-  font-weight: bold;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 20px;
-}
-
-#confirm-order:hover {
-  background-color: #56732e;
-  transform: translateY(-2px);
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
 }
 
 /* Thanh tiến trình */
 .cart-process {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 120px;
-  padding: 40px 0 50px;
-  position: relative;
-}
-
-.cart-process::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 50%;
-  height: 4px;
-  background: #c6db9d;
-  z-index: 0;
-  transform: translateY(-50%);
+  margin: 30px 0;
+  gap: 20px;
 }
 
 .cart-checkout-process {
   width: 50px;
   height: 50px;
+  background-color: #ddd;
   border-radius: 50%;
-  background-color: #f0f6e4;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #6b8a3b;
+  color: white;
+  font-size: 22px;
+}
+
+.cart-checkout-process.active {
+  background-color: #7ac142;
+}
+
+.cart-checkout-process.current {
+  background-color: #4e8a26;
+}
+
+/* Khung chính */
+.payment {
+  background: #fff;
+  width: 60%;
+  margin: 0 auto 50px;
+  padding: 25px 35px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment h3 {
+  text-align: center;
+  color: #4e8a26;
+  margin-bottom: 25px;
+}
+
+/* Thông tin giao hàng & đơn hàng */
+section {
+  margin-bottom: 30px;
+}
+
+section h4 {
+  margin-bottom: 15px;
+  color: #333;
   font-size: 18px;
-  position: relative;
-  z-index: 1;
-  border: 3px solid #c6db9d;
+}
+
+p {
+  margin: 8px 0;
+  color: #555;
+}
+
+/* Nút sửa địa chỉ */
+.edit-address {
+  margin-top: 10px;
+}
+
+.btn-edit {
+  background-color: #6a8a3a;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-edit:hover {
+  background-color: #56732e;
+  transform: translateY(-2px);
+}
+
+/* Tổng cộng */
+.total-amount {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #222;
+}
+
+/* Phương thức thanh toán */
+.payment-methods label {
+  display: block;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+/* Nút đặt hàng */
+.btn-confirm {
+  display: block;
+  width: 100%;
+  background-color: #7ac142;
+  color: white;
+  font-size: 16px;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.cart-checkout-process i {
-  line-height: 1;
+.btn-confirm i {
+  margin-right: 6px;
 }
 
-.cart-checkout-process:hover {
-  background: #dbeac2;
-  transform: scale(1.05);
+.btn-confirm:hover {
+  background-color: #5f9732;
+  transform: translateY(-2px);
 }
