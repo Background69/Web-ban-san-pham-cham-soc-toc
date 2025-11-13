@@ -15,8 +15,8 @@
             <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
-                    <a class="logo" href="#">
-                        <img alt="logo" class="logo-image" height="150" src="images/LOGO.PNG" width="150">
+                    <a class="logo" href="store.html">
+                        <img src="images/logo.PNG" alt="logo" class="logo-image">
                     </a>
                 </div>
             </div>
@@ -81,8 +81,10 @@
             <div class="right-header">
 
                 <div class="account">
+                    <a href="Login.html">
                     <i class="fas fa-user-circle"></i>
                     <span class="login-in-text">Đăng nhập</span>
+                    </a>
                 </div>
 
                 <div class="cart">
@@ -98,7 +100,7 @@
                 <div>
                     <ul class="side-bar-menu-list side-bar-items">
                         <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-                        <li class="nav-item has-dropdown"><a class="nav-link active" href="#">Sản Phẩm
+                        <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
                             <i class="fa fa-caret-down"></i>
                         </a>
                             <ul class="dropdown-menu">
@@ -134,27 +136,15 @@
             <div class="banner-slides">
                 <!-- Slide 1 -->
                 <div class="item" id="slide-1">
-                    <div class="slide-content">
-                        <span class="badge">18.10 – 31.10</span>
-                        <h3>Tháng của nàng<br><b>Ngàn ưu đãi</b></h3>
-                        <p>Giảm đến <b>40%</b> + miễn phí vận chuyển</p>
-                    </div>
+                    <img src="images/banner1.png" alt="banner 1" class="banner-image">
                 </div>
                 <!-- Slide 2 -->
                 <div class="item" id="slide-2">
-                    <div class="slide-content">
-                        <span class="badge">Deal sốc</span>
-                        <h3>Combo chăm tóc mùa đông</h3>
-                        <p>Mua 2 tặng 1 – Số lượng có hạn</p>
-                    </div>
+                    <img src="images/banner2.png" alt="banner 2" class="banner-image">
                 </div>
                 <!-- Slide 3 -->
                 <div class="item" id="slide-3">
-                    <div class="slide-content">
-                        <span class="badge">Brand week</span>
-                        <h3>Ưu đãi từ Kerastase, L'Oréal, Davines…</h3>
-                        <p>Giảm thêm với mã HOANGNAM</p>
-                    </div>
+                    <img src="images/banner3.png" alt="banner 3" class="banner-image">
                 </div>
             </div>
 
@@ -887,25 +877,73 @@
         </div>
     </div>
 </footer>
-<!-- Search Dropdown Script -->
 <script>
-    (function () {
-        const input = document.getElementById('search');
-        const result = document.getElementById('search-result');
-        if (!input || !result) return;
-        const open = () => {
-            result.style.display = 'block';
-        };
-        const close = (e) => {
-            if (!result.contains(e.target) && e.target !== input) {
-                result.style.display = 'none';
-            }
-        };
-        input.addEventListener('focus', open);
-        input.addEventListener('click', open);
-        document.addEventListener('click', close);
-    })();
+  const slides = document.querySelectorAll('.banner-slides .item');
+  const slideContainer = document.querySelector('.banner-slides');
+  const prevButton = document.querySelector('.nav.prev');
+  const nextButton = document.querySelector('.nav.next');
+  const dotsContainer = document.querySelector('.slider-dots');
 
+  let currentSlide = 0;
+  let autoSlide;
+
+  // 👉 Tạo dots theo số slide
+  slides.forEach((_, index) => {
+    const dot = document.createElement('button');
+    dot.addEventListener('click', () => goToSlide(index));
+    dotsContainer.appendChild(dot);
+  });
+  const dots = dotsContainer.querySelectorAll('button');
+
+  function updateSlide() {
+    const offset = -currentSlide * 100;
+    slideContainer.style.transform = `translateX(${offset}%)`;
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[currentSlide].classList.add('active');
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    updateSlide();
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    updateSlide();
+  }
+
+  function goToSlide(index) {
+    currentSlide = index;
+    updateSlide();
+  }
+
+  function startAutoSlide() {
+    autoSlide = setInterval(nextSlide, 4000);
+  }
+
+  function stopAutoSlide() {
+    clearInterval(autoSlide);
+  }
+
+  // 👉 Event listeners
+  prevButton.addEventListener('click', () => {
+    prevSlide();
+    stopAutoSlide();
+    startAutoSlide();
+  });
+
+  nextButton.addEventListener('click', () => {
+    nextSlide();
+    stopAutoSlide();
+    startAutoSlide();
+  });
+
+  slideContainer.addEventListener('mouseenter', stopAutoSlide);
+  slideContainer.addEventListener('mouseleave', startAutoSlide);
+
+  // 👉 Khởi động
+  updateSlide();
+  startAutoSlide();
 </script>
 
 </body>
