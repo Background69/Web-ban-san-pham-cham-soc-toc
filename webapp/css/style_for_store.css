@@ -244,12 +244,15 @@ a {
     gap: 6px;
     border-radius: 20px;
     color: #333;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: bold;
     transition: all 0.3s ease;
     white-space: nowrap;
     position: relative;
     padding: 10px 14px;
+    text-shadow: 2px 1px 0 #fff; /* viền trắng nhẹ giúp nổi chữ */
+
+    
 }
 
 .nav-link:hover {
