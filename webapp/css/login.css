@@ -2,7 +2,7 @@
   box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family:"Segoe UI",Tahoma,Verdana,sans-serif;;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 /* ===== Header ===== */
 header {
@@ -28,26 +28,111 @@ header {
 }
 
 /* ===== Left: Logo ===== */
-.left-header .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
+.left-header {
+    flex-shrink: 0;
 }
 
-/* ===== Center: Search bar ===== */
-.center-header {
-    flex: 1;
-    padding: 0 30px;
+.left-header .header-logo {
+    min-width: 150px;
 }
+
+.left-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+}
+.logo-image {
+    height: 150px;
+    width: auto;
+}
+
 
 /* === Bổ sung font và viền tròn cho search bar + nút tài khoản, giỏ hàng === */
 
+.center-header {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-bar {
+    width: 100%;
+    position: relative;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+    background: white;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    height: 50px;
+}
+
 .search-form .input {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    border-radius: 25px;
+    flex: 1;
+    padding: 14px 30px;
+    border: none;
+    outline: none;
     font-size: 15px;
-    padding: 8px 14px;
+    min-width: 0;
+}
+
+.search-form .input::placeholder {
+    color: #999;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    padding: 0 25px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.search-button:hover {
+    color: #8cbc5e;
+    background: #f5f5f5;
+}
+
+.search-button i {
+    font-size: 18px;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    margin-top: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.suggestion-item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    
+}
+
+.suggestion-item:hover {
+    background: #f5f5f5;
+}
+
+.suggestion-item i {
+    color: #999;
+    font-size: 12px;
 }
 
 .account, .cart {
@@ -71,12 +156,6 @@ header {
     color: inherit;
 }
 
-.search-form .input {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    border-radius: 25px;
-    font-size: 15px;
-    padding: 8px 14px;
-}
 
 .account, .cart {
     border: 1px solid #ccc;
@@ -107,12 +186,12 @@ header {
 
 .search-form {
     display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 25px;
+    width: 100%;
+    background: white;
+    border-radius: 30px;
     overflow: hidden;
-    background-color: #fff;
-    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    height: 50px;
 }
 
 .search-form:hover {
@@ -121,55 +200,13 @@ header {
 
 .search-form .input {
     flex: 1;
+    padding: 14px 30px;
     border: none;
     outline: none;
-    padding: 10px 15px;
-    font-size: 14px;
+    font-size: 15px;
+    min-width: 0;
 }
 
-.search-form .search-button {
-    background-color: #007bff;
-    border: none;
-    color: #fff;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.search-form .search-button:hover {
-    background-color: #0056b3;
-}
-
-/* ===== Search suggestions ===== */
-.search-suggestions {
-    position: absolute;
-    top: 110%;
-    left: 0;
-    right: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    padding: 10px 0;
-    z-index: 10;
-}
-
-.suggestion-item {
-    padding: 8px 15px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.suggestion-item i {
-    margin-right: 10px;
-    color: #007bff;
-}
-
-.suggestion-item:hover {
-    background-color: #f2f2f2;
-}
 
 /* ===== Right: Account + Cart ===== */
 .right-header {
