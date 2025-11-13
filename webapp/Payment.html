@@ -1,43 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh Toán</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh Toán</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/payment.css">
 </head>
 <body>
-    <div class="payment">
-        <h3>Thanh toán</h3>
-        <!--Confirm lại thông tin giao hàng và sản phẩm-->
-        <section id="shipping-information">
-            <h4>Thông tin giao hàng</h4>
-            
-                <p><strong>Họ và tên:</strong> <span id="fullname"></span></p>
-                <p><strong>Địa chỉ:</strong> <span id="address"></span></p>
-                <p><strong>Số điện thoại:</strong> <span id="phone"></span></p>
-                <p><strong>Phương thức giao hàng:</strong> <span id="shipping"></span></p>
-                <button onclick="window.location.href='address.html'">Sửa địa chỉ</button>
-           
-        </section>
-        <section class="order-summery">
-            <h4>Đơn hàng của bạn</h4>
-            <div class="order-details">
-                <div id="order-items">
-                    <!-- Sản phẩm sẽ được hiển thị ở đây -->
-                </div>
-                <div class="total-amount">
-                    <p><strong>Tổng cộng:</strong> <span id="total-amount"></span></p>
-                </div>
-            </div>
-        </section>
-        <section class="payment-methods">
-            <label input type="radio" name="payment" value="cod" checked > Thanh toán khi nhận hàng (COD)</label>  
-            <label input type="radio" name="payment" value="bank"  > Thanh toán qua ngân hàng</label> 
-            <label input type="radio" name="payment" value="momo"> Thanh toán qua ứng dụng Momo </label>
-            <div id="payment-detail"></div>
-    
-        </section>
-        <button id="confirm-order"> Đặt hàng </button>
+  <!-- Thanh tiến trình -->
+  <div class="cart-process">
+    <div class="cart-checkout-process active">
+      <i class="fa-solid fa-cart-shopping"></i>
     </div>
+    <div class="cart-checkout-process active">
+      <i class="fa-solid fa-location-dot"></i>
+    </div>
+    <div class="cart-checkout-process current">
+      <i class="fa-solid fa-credit-card"></i>
+    </div>
+  </div>
+
+  <!-- Phần thanh toán -->
+  <div class="payment">
+    <h3>Thanh toán</h3>
+
+    <!-- Thông tin giao hàng -->
+    <section id="shipping-information">
+      <h4>Thông tin giao hàng</h4>
+      <p><strong>Họ và tên:</strong> <span id="fullname">Nguyễn Văn A</span></p>
+      <p><strong>Địa chỉ:</strong> <span id="address">123 Nguyễn Trãi, TP.HCM</span></p>
+      <p><strong>Số điện thoại:</strong> <span id="phone">0123456789</span></p>
+      <p><strong>Phương thức giao hàng:</strong> <span id="shipping">Giao nhanh</span></p>
+
+      <div class="edit-address">
+        <button class="btn-edit" onclick="window.location.href='Address.html'">
+          <i class="fa-solid fa-pen-to-square"></i> Sửa địa chỉ
+        </button>
+      </div>
+    </section>
+
+    <!-- Đơn hàng -->
+    <section class="order-summery">
+      <h4>Đơn hàng của bạn</h4>
+      <div class="order-details">
+        <div id="order-items">
+          <!-- Sản phẩm sẽ hiển thị ở đây -->
+          <p>Sản phẩm mẫu 1 x 1</p>
+          <p>Sản phẩm mẫu 2 x 2</p>
+        </div>
+        <div class="total-amount">
+          <p><strong>Tổng cộng:</strong> <span id="total-amount">500.000 VNĐ</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phương thức thanh toán -->
+    <section class="payment-methods">
+      <h4>Phương thức thanh toán</h4>
+      <label><input type="radio" name="payment" value="cod" checked> Thanh toán khi nhận hàng (COD)</label><br>
+      <label><input type="radio" name="payment" value="bank"> Thanh toán qua ngân hàng</label><br>
+      <label><input type="radio" name="payment" value="momo"> Thanh toán qua ứng dụng Momo</label>
+      <div id="payment-detail"></div>
+    </section>
+
+    <!-- Nút đặt hàng -->
+    <button id="confirm-order" class="btn-confirm">
+      <i class="fa-solid fa-check"></i> Đặt hàng
+    </button>
+  </div>
 </body>
 </html>
