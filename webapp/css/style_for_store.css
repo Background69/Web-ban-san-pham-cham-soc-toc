@@ -62,6 +62,10 @@ a {
     font-size: 28px;
     font-weight: bold;
 }
+.logo-image {
+    height: 150px;
+    width: auto;
+}
 
 /* Search Header */
 
@@ -401,17 +405,30 @@ section.banner-section {
     text-align: center;
     padding: 24px;
 }
+.banner-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
 
 #slide-1 {
-    --bg: linear-gradient(135deg, #ffd7e7, #fff1f7);
+    background-image: url("images/banner1.png");
+    background-size: cover;
+    background-position: center;
 }
 
 #slide-2 {
-    --bg: linear-gradient(135deg, #e4f2ff, #f7fbff);
+    background-image: url("images/banner2.png");
+    background-size: cover;
+    background-position: center;
 }
 
 #slide-3 {
-    --bg: linear-gradient(135deg, #e8f3d7, #f3faea);
+    background-image: url("images/banner3.png");
+    background-size: cover;
+    background-position: center;
 }
 
 .slide-content .badge {
