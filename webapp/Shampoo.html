@@ -6,127 +6,119 @@
     <link href="css/style_for_store.css" rel="stylesheet">
     <title>HairGlow || Dầu gội </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
 </head>
 <body>
-<div class="header-container">
-    <div class="header-row header-top">
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
 
-        <!-- Logo -->
-        <div class="left-header">
-            <div class="header-logo">
-                <a class="logo" href="store.html">
-                    <img alt="logo" class="logo-image" src="images/logo.PNG">
-                </a>
-            </div>
-        </div>
-
-        <!-- Search bar -->
-        <div class="center-header">
-            <div class="search-bar">
-                <form action="/search" class="search-form" method="get">
-                    <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
-                    <button aria-label="search button suggest" class="search-button" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-
-                <div class="search-result" id="search-result">
-                    <div class="ad-grid">
-                        <a class="ad-item ad-feature" href="#">
-                            <div class="ad-thumb">-40%</div>
-                            <div class="ad-body">
-                                <p class="ad-title">Combo phục hồi tóc hư tổn</p>
-                                <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
-                                <span class="ad-badge">Sốc</span>
-                            </div>
-                        </a>
-                        <a class="ad-item" href="#">
-                            <div class="ad-thumb">K</div>
-                            <div class="ad-body">
-                                <p class="ad-title">Kérastase Brand Week</p>
-                                <p class="ad-desc">Giảm thêm với mã KERA5</p>
-                            </div>
-                        </a>
-                        <a class="ad-item" href="store.html">
-                            <div class="ad-thumb">HG</div>
-                            <div class="ad-body">
-                                <p class="ad-title">Serum mọc tóc bán chạy</p>
-                                <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
-                            </div>
-                        </a>
-                        <a class="ad-item" href="#">
-                            <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
-                            <div class="ad-body">
-                                <p class="ad-title">Freeship đơn từ 300k</p>
-                                <p class="ad-desc">Áp dụng toàn quốc</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="search-suggestions" style="display: none">
-                    <div class="suggestion-item">
-                        <i class="fas fa-clock-rotate-left"></i>
-                        <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                    </div>
-                    <div class="suggestion-item">
-                        <i class="fas fa-clock-rotate-left"></i>
-                        <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Account and cart and... -->
-        <div class="right-header">
-
-            <div class="account">
-                <a href="Login.html">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="login-in-text">Đăng nhập</span>
-                </a>
-            </div>
-
-            <div class="cart">
-                <i class="fa fa-shopping-cart"></i>
-                <span class="cart-text">Giỏ hàng</span>
-                <span class="cart-count">0</span>
-            </div>
-
-        </div>
-    </div>
-    <div class="header-row header-below nav-container">
-        <nav>
-            <div>
-                <ul class="side-bar-menu-list side-bar-items">
-                    <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-                    <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
-                        <i class="fa fa-caret-down"></i>
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="store.html">
+                        <img alt="logo" class="logo-image" src="images/logo.PNG">
                     </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
-                            <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
-                            <li><a class="dropdown-item" href="MaskHair.html">Kem ủ – Mặt nạ tóc</a></li>
-                            <li><a class="dropdown-item" href="Serum.html">Serum – Dầu dưỡng tóc</a></li>
-                            <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
-                            <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
-                            <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
-                            <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
-                            <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
-                            <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
-                            <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
-                    <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
-                        <i class="fas fa-percent"></i>
-                    </a></li>
-                </ul>
+                </div>
             </div>
-        </nav>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account and cart and... -->
+            <div class="right-header">
+
+                <div class="account">
+                    <a href="Login.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
+                </div>
+
+                <div class="cart">
+                    <a href="Signup.html">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link active product" href="#">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
     </div>
-</div>
 </header>
 <section class="banner-section">
     <div class="banner-container">
@@ -887,6 +879,34 @@
         </div>
     </div>
 </footer>
+
+<!-- Search Result -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+
+<!-- Banner Slider Script -->
 <script>
     const slides = document.querySelectorAll('.banner-slides .item');
     const slideContainer = document.querySelector('.banner-slides');
@@ -956,7 +976,5 @@
     startAutoSlide();
 </script>
 
-</body>
-</html>
 </body>
 </html>
