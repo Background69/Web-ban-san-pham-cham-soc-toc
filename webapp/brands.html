@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+    <title>HairGlow | Thương hiệu</title>
+    <link rel="stylesheet" href="css/style_for_brands.css">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
+
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="#">
+                        <img alt="logo" class="logo-image" height="150" src="images/LOGO.PNG" width="150">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account and cart and... -->
+            <div class="right-header">
+
+                <div class="account">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="login-in-text">Đăng nhập</span>
+                </div>
+
+                <div class="cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="cart-text">Giỏ hàng</span>
+                    <span class="cart-count">0</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link " href="#">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link active" href="#">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<section class="banner-brands-promotion-section">
+    <div class="banner-brands-promotion-container">
+        <h1>Thương Hiệu – Chính hãng 100%</h1>
+        <p>Khám phá các thương hiệu chăm sóc tóc được yêu thích và chọn giải pháp phù hợp cho mái tóc của bạn.</p>
+    </div>
+</section>
+<main>
+    <div class="filter-tags">
+        <button class="filter-tag active" data-origin="all">Tất cả</button>
+        <button class="filter-tag" data-origin="france">Pháp</button>
+        <button class="filter-tag" data-origin="usa">Mỹ</button>
+        <button class="filter-tag" data-origin="italy">Ý</button>
+        <button class="filter-tag" data-origin="korea">Hàn Quốc</button>
+        <button class="filter-tag" data-origin="japan">Nhật Bản</button>
+    </div>
+
+    <div class="brands-grid">
+        <div class="brand-item">
+            <h3 class="brand-logo-text">L'Oréal Professionnel</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Pháp</div>
+            <p class="brand-description">
+                Thương hiệu chăm sóc tóc chuyên nghiệp hàng đầu thế giới với hơn 100 năm kinh nghiệm.
+                Sản phẩm cao cấp được tin dùng bởi các salon tóc.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Kérastase</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Pháp</div>
+            <p class="brand-description">
+                Thương hiệu xa xỉ đến từ L'Oréal Group, chuyên cung cấp các liệu trình chăm sóc tóc
+                cao cấp với công nghệ tiên tiến nhất.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Davines</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Ý</div>
+            <p class="brand-description">
+                Thương hiệu Italy với triết lý bền vững, sử dụng thành phần tự nhiên và thân thiện
+                với môi trường. Được yêu thích bởi giới chuyên gia.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Moroccanoil</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Mỹ</div>
+            <p class="brand-description">
+                Thương hiệu nổi tiếng với dầu argan Morocco nguyên chất. Sản phẩm giúp phục hồi
+                và nuôi dưỡng tóc hiệu quả.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">OGX</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Mỹ</div>
+            <p class="brand-description">
+                Thương hiệu Mỹ với các dòng sản phẩm đa dạng từ thiên nhiên. Không chứa sulfate,
+                an toàn cho mọi loại tóc.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Head & Shoulders</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Mỹ</div>
+            <p class="brand-description">
+                Thương hiệu số 1 thế giới về dầu gội trị gàu. Công thức được kiểm chứng lâm sàng,
+                giúp loại bỏ gàu hiệu quả.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Mise En Scène</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Hàn Quốc</div>
+            <p class="brand-description">
+                Thương hiệu K-Beauty nổi tiếng với dầu dưỡng tóc Perfect Serum. Công thức Hàn Quốc
+                giúp tóc mềm mượt, óng ả.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Innisfree</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Hàn Quốc</div>
+            <p class="brand-description">
+                Thương hiệu thiên nhiên từ đảo Jeju. Sản phẩm chăm sóc tóc với thành phần organic,
+                không hóa chất độc hại.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Kaminomoto</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Nhật Bản</div>
+            <p class="brand-description">
+                Thương hiệu Nhật Bản chuyên về sản phẩm kích thích mọc tóc. Công nghệ tiên tiến
+                giúp ngăn rụng tóc hiệu quả.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">TRESemmé</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Mỹ</div>
+            <p class="brand-description">
+                Chất lượng salon chuyên nghiệp với giá cả phải chăng. Sản phẩm được các nhà tạo
+                mẫu tóc chuyên nghiệp tin dùng.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">Nizoral</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Mỹ</div>
+            <p class="brand-description">
+                Dầu gội trị gàu và nấm da đầu chuyên sâu. Thành phần Ketoconazole giúp điều trị
+                hiệu quả các vấn đề da đầu.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+
+        <div class="brand-item">
+            <h3 class="brand-logo-text">L'Oréal Paris</h3>
+            <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Pháp</div>
+            <p class="brand-description">
+                Dòng sản phẩm chăm sóc tóc đại chúng từ tập đoàn L'Oréal. Chất lượng tốt với
+                mức giá phù hợp cho mọi người.
+            </p>
+            <a class="brand-link" href="store.html">Xem Sản Phẩm</a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <!--Footer Top-->
+    <div class="main-footer footer-top">
+        <div class="footer-container">
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Liên hệ với chúng tôi</h4>
+                <div class="contact-info">
+                    <div>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Trụ sở: Khu Phố 6, P. Linh Trung, Q. Thủ Đức, TP.HCM</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline tư vấn: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline bán hàng: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: support@hairglow.vn</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 21:00<br>Chủ nhật: 9:00 - 18:00</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt"></i>
+                        <p>GPKD: 123456789, cấp ngày 20/02/2020, TP. HCM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#">Dầu gội</a></li>
+                    <li><a href="#">Dầu xả</a></li>
+                    <li><a href="#">Kem ủ tóc</a></li>
+                    <li><a href="#">Serum dưỡng tóc</a></li>
+                    <li><a href="#">Sáp vuốt tóc</a></li>
+                    <li><a href="#">Khuyến mãi</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Phương thức thanh toán</a></li>
+                    <li><a href="#">Vận chuyển & Giao hàng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <!--About Us-->
+                <div class="about-us">
+                    <h4>Về chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!--Payment methods-->
+                <div class="payment">
+                    <h4>Thanh toán</h4>
+                    <div class="payment-methods">
+                        <a class="logo-tile"><img alt="Visa" src="assets/VisaIcon.svg"></a>
+                        <a class="logo-tile"><img alt="MasterCard" src="assets/MasterCardIcon.svg"></a>
+                        <a class="logo-tile"><img alt="Napas" src="assets/NapasIcon.svg"></a>
+                        <a class="logo-tile"><img alt="VNPay" src="assets/VNPayIcon.png"></a>
+                        <a class="logo-tile"><img alt="MoMo" src="assets/MoMoIcon.svg"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Điều khoản sử dụng</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+
+</script>
+
+</body>
+</html>
