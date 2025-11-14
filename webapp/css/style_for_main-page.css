@@ -62,6 +62,10 @@ a {
     font-size: 28px;
     font-weight: bold;
 }
+.logo-image {
+    height: 150px;
+    width: auto;
+}
 
 /* Search Header */
 
@@ -990,8 +994,7 @@ a {
     flex: 1 1 200px;
 }
 
-.featured-container .product-item {
-}
+
 
 /* Offers Section */
 
