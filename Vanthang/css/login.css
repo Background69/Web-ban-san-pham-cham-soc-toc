@@ -1,8 +1,8 @@
 *{
-  box-sizing: border-box;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 /* ===== Header ===== */
 header {
@@ -28,26 +28,111 @@ header {
 }
 
 /* ===== Left: Logo ===== */
-.left-header .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
+.left-header {
+    flex-shrink: 0;
 }
 
-/* ===== Center: Search bar ===== */
-.center-header {
-    flex: 1;
-    padding: 0 30px;
+.left-header .header-logo {
+    min-width: 150px;
 }
+
+.left-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+}
+.logo-image {
+    height: 150px;
+    width: auto;
+}
+
 
 /* === Bổ sung font và viền tròn cho search bar + nút tài khoản, giỏ hàng === */
 
+.center-header {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-bar {
+    width: 100%;
+    position: relative;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+    background: white;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    height: 50px;
+}
+
 .search-form .input {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    border-radius: 25px;
+    flex: 1;
+    padding: 14px 30px;
+    border: none;
+    outline: none;
     font-size: 15px;
-    padding: 8px 14px;
+    min-width: 0;
+}
+
+.search-form .input::placeholder {
+    color: #999;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    padding: 0 25px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.search-button:hover {
+    color: #8cbc5e;
+    background: #f5f5f5;
+}
+
+.search-button i {
+    font-size: 18px;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    margin-top: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.suggestion-item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+}
+
+.suggestion-item:hover {
+    background: #f5f5f5;
+}
+
+.suggestion-item i {
+    color: #999;
+    font-size: 12px;
 }
 
 .account, .cart {
@@ -71,12 +156,6 @@ header {
     color: inherit;
 }
 
-.search-form .input {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    border-radius: 25px;
-    font-size: 15px;
-    padding: 8px 14px;
-}
 
 .account, .cart {
     border: 1px solid #ccc;
@@ -98,7 +177,6 @@ header {
     font-size: 18px;
     color: inherit;
 }
-
 
 .search-bar {
     position: relative;
@@ -107,12 +185,12 @@ header {
 
 .search-form {
     display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 25px;
+    width: 100%;
+    background: white;
+    border-radius: 30px;
     overflow: hidden;
-    background-color: #fff;
-    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    height: 50px;
 }
 
 .search-form:hover {
@@ -121,55 +199,13 @@ header {
 
 .search-form .input {
     flex: 1;
+    padding: 14px 30px;
     border: none;
     outline: none;
-    padding: 10px 15px;
-    font-size: 14px;
+    font-size: 15px;
+    min-width: 0;
 }
 
-.search-form .search-button {
-    background-color: #007bff;
-    border: none;
-    color: #fff;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.search-form .search-button:hover {
-    background-color: #0056b3;
-}
-
-/* ===== Search suggestions ===== */
-.search-suggestions {
-    position: absolute;
-    top: 110%;
-    left: 0;
-    right: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    padding: 10px 0;
-    z-index: 10;
-}
-
-.suggestion-item {
-    padding: 8px 15px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.suggestion-item i {
-    margin-right: 10px;
-    color: #007bff;
-}
-
-.suggestion-item:hover {
-    background-color: #f2f2f2;
-}
 
 /* ===== Right: Account + Cart ===== */
 .right-header {
@@ -459,145 +495,157 @@ input[type="password"]:focus {
     text-decoration: none;
     font-weight: 600;
 }
-/* ===== FOOTER TOP ===== */
-.main-footer {
-    background-color: #222;
+/* Footer */
+
+footer {
+    background: linear-gradient(180deg, #2c5940, #1f3d2a);
     color: #fff;
-    padding: 60px 0;
-    font-family: Arial, sans-serif;
+    margin-top: 60px;
+    position: relative;
+}
+
+.main-footer {
+    padding: 50px 0;
 }
 
 .footer-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 40px;
 }
 
 .footer-col h4 {
     font-size: 18px;
     margin-bottom: 20px;
-    position: relative;
-    color: #a8ff78;
+    color: #a5c87f;
+    font-weight: 600;
+}
+
+.footer-col p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .footer-col ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 .footer-col ul li {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .footer-col ul li a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    transition: color 0.3s ease;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: inline-block;
 }
 
 .footer-col ul li a:hover {
-    color: #d4ffb2;
+    color: #a5c87f;
 }
 
-/* Contact Info */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .contact-info div {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 12px;
     gap: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .contact-info i {
-    color: #a8ff78;
-    font-size: 16px;
-    margin-top: 3px;
+    color: #a5c87f;
+    margin-top: 6px;
+    min-width: 16px;
 }
 
-/* Social Icons */
 .social-links {
     display: flex;
-    gap: 15px;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .social-links a {
-    color: #a8ff78;
-    font-size: 20px;
-    transition: transform 0.3s ease, color 0.3s ease;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 18px;
 }
 
 .social-links a:hover {
-    color: #d4ffb2;
-    transform: translateY(-3px);
+    background: #a5c87f;
 }
 
-/* Payment Icons */
+.payment {
+    margin-top: 20px;
+}
+
 .payment-methods {
     display: flex;
-    flex-wrap: wrap;
     gap: 10px;
-    margin-top: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
 }
 
 .payment-methods img {
-    width: 50px;
-    height: auto;
-    filter: brightness(0.9);
+    height: 30px;
+    border-radius: 4px;
+    background: white;
+    padding: 4px 8px;
 }
 
-/* ===== FOOTER BOTTOM ===== */
+/* Footer Bottom */
+
 .footer-bottom {
-    background: #1c1c1c;
+    background: rgba(0, 0, 0, 0.2);
     padding: 20px 0;
     text-align: center;
 }
 
 .footer-bottom-content {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
 }
 
 .footer-bottom p {
-    font-size: 15px;
-    color: #e0e0e0;
-    margin: 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .footer-bottom-links {
     display: flex;
-    gap: 25px;
-    justify-content: center;
+    gap: 20px;
 }
 
 .footer-bottom-links a {
-    color: #a8ff78;
-    font-size: 15px;
-    text-decoration: none;
-    transition: color 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    transition: color 0.2s ease;
 }
 
 .footer-bottom-links a:hover {
-    color: #d4ffb2;
+    color: #a5c87f;
 }
-
-/* Responsive */
-@media (max-width: 768px) {
-    .footer-bottom-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    .footer-bottom-links {
-        flex-direction: column;
-        gap: 8px;
-    }
-}
-
