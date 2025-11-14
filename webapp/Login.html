@@ -7,7 +7,6 @@
     <link href="css/login.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 </head>
-
 <body>
 <header>
     <div class="header-container">
@@ -16,8 +15,8 @@
             <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
-                    <a class="logo" href="#">
-                        <img alt="logo" class="logo-image" height="130px" src="assets/Logo.jpg" width="130px">
+                    <a class="logo" href="store.html">
+                        <img alt="logo" class="logo-image" src="images/logo.PNG">
                     </a>
                 </div>
             </div>
@@ -30,16 +29,39 @@
                         <button aria-label="search button suggest" class="search-button" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
-                        <!--div class="search-result" style="display: block"></div-->
                     </form>
-                    <div class="search-suggestions" style="display: none">
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                        </div>
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
+
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -49,14 +71,18 @@
             <div class="right-header">
 
                 <div class="account">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="login-in-text">Đăng nhập</span>
+                    <a href="Login.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
                 </div>
 
                 <div class="cart">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="cart-text">Giỏ hàng</span>
-                    <span class="cart-count">0</span>
+                    <a href="Signup.html">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-count">0</span>
+                    </a>
                 </div>
 
             </div>
@@ -67,49 +93,38 @@
 <div class="login-wrapper">
     <div class="login-box">
         <img alt="" class="logo" src="assets/Logo.jpg">
-        <h1>Login</h1>
+        <h1>Đăng nhập</h1>
         <p class="subtitle">Tiếp tục để mua </p>
         <form>
-            <label for="email">Email address</label>
-            <input id="email" placeholder="Email address" required type="email">
-            <label for="password">Password</label>
+            <label for="email">Địa chỉ Email</label>
+            <input id="email" placeholder="Nhập Email" required type="email">
+            <label for="password">Mật khẩu</label>
             <div class="password-field">
-                <input id="password" placeholder="Enter your password" required type="password">
+                <input id="password" placeholder="Nhập Mật khẩu" required type="password">
                 <i class="fa-solid fa-eye toggle-password" data-target="password"></i>
             </div>
             <div class="options">
-                <label><input type="checkbox">Remember me</label>
-                <a class="forgot" href="Forgotpassword.html">Forgot password</a>
+                <label><input type="checkbox">Ghi nhớ đăng nhập</label>
+                <a class="forgot" href="Forgotpassword.html">Quên mật khẩu</a>
             </div>
-            <button class="btn primary-btn" type="submit">Sign In</button>
-            <div class="or">or</div>
+            <button class="btn primary-btn" type="submit">Đăng nhập</button>
+            <div class="or">hoặc</div>
             <button class="btn google-btn" type="button">
-                <img alt="Google Icon" height="30px" src="/webapp/assets/icons8-google-48.png" width="30px"> Continue
-                with Google
+                <img alt="Google Icon" height="30px" src="/webapp/assets/icons8-google-48.png" width="30px">Đăng nhập bằng Google
             </button>
             <button class="btn apple-btn" type="button">
-                <img alt="Apple Icon" height="30px" src="assets/icons8-facebook-48.png" width="30px"> Continue with
-                FaceBook
+                <img alt="Apple Icon" height="30px" src="assets/icons8-facebook-48.png" width="30px">Đăng nhập bằng Facebook
             </button>
 
         </form>
 
         <p class="signup-text">
-            Don't have an account? <a href="Signup.html">Sign up</a>
+            Không có tài khoản? <a href="Signup.html">Đăng ký ngay!</a>
         </p>
     </div>
 </div>
 
 <footer>
-    <div class="footer-bottom">
-        <div class="footer-bottom-content">
-            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
-            <div class="footer-bottom-links">
-                <a href="#">Điều khoản sử dụng</a>
-                <a href="#">Chính sách bảo mật</a>
-            </div>
-        </div>
-    </div>
     <!--Footer Top-->
     <div class="main-footer footer-top">
         <div class="footer-container">
@@ -209,7 +224,32 @@
         </div>
     </div>
 </footer>
-
+<!-- Search Result -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+<!-- Login Script -->
 <script>
     function showAlert(msg) {
         alert(msg);
@@ -261,11 +301,7 @@
             this.classList.toggle("fa-eye");
             this.classList.toggle("fa-eye-slash");
         });
-
-
     }
 </script>
-
-
 </body>
 </html>
