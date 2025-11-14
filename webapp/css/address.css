@@ -573,46 +573,60 @@ a {
 }
 
 /* Thanh tiến trình */
+/* Container thanh tiến trình */
 .cart-process {
     display: flex;
-    justify-content: space-between; /* để các bước đều đều */
+    justify-content: space-between; /* các bước giãn đều */
     align-items: center;
-    gap: 30px; /* khoảng cách giữa các bước */
-    margin: 40px auto;
+    gap: 40px; /* khoảng cách giữa các bước */
+    width: 70%; /* chiều dài thanh */
+    margin: 50px auto; /* tách khỏi các phần khác */
     position: relative;
-    width: 70%; /* tăng chiều dài thanh */
 }
 
+/* Thanh nền ngang */
 .cart-process::before {
     content: "";
     position: absolute;
     top: 50%;
-    left: 0;
-    width: 100%;
+    left: 0;      /* bắt đầu từ trái container */
+    width: 100%;  /* trải hết container, chắc chắn dính icon đầu-cuối */
     height: 4px;
     background: #c6db9d;
     z-index: 1;
+    transform: translateY(-50%);
+    border-radius: 2px;
 }
 
+
+/* Các bước tiến trình */
 .cart-checkout-process {
-    width: 35px;
-    height: 35px;
-    background: #f0f6e4;
-    border: 2px solid #c6db9d;
+    width: 45px;
+    height: 45px;
+    background-color: #f0f6e4;
+    border: 3px solid #c6db9d;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-size: 18px;
     color: #6b8a3b;
-    z-index: 2;
-    transition: .3s;
+    z-index: 2; /* nằm trên thanh nền */
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
+/* Bước active */
 .cart-checkout-process.active {
     background: #6b8a3b;
     color: white;
     border-color: #6b8a3b;
+}
+
+/* Hover effect */
+.cart-checkout-process:hover {
+    background: #dbeac2;
+    transform: scale(1.1);
 }
 
 
