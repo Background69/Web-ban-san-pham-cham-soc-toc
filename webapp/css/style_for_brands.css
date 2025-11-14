@@ -427,13 +427,12 @@ a {
 
 .banner-brands-promotion-section {
     background: linear-gradient(145deg, #f3f7ed, #bcd693);
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid;
     padding: 48px 0 36px;
 }
 
 .banner-brands-promotion-section h1 {
     font-size: 34px;
-    color: var(--ink);
     line-height: 1.2;
     margin-bottom: 6px;
 }
@@ -444,7 +443,6 @@ a {
 }
 
 .banner-brands-promotion-container {
-    max-width: var(--container);
     margin: 0 auto;
     padding: 20px 175px;
 }
@@ -532,7 +530,6 @@ main {
 .brand-link:hover {
     background: #6bb68c;
 }
-
 
 /* Footer */
 
