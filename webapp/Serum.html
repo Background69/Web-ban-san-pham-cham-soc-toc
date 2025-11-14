@@ -66,16 +66,6 @@
                             </a>
                         </div>
                     </div>
-                    <div class="search-suggestions" style="display: none">
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                        </div>
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -396,7 +386,6 @@
             <!-- Product list -->
             <div class="product-list">
                 <div class="product-grid" id="grid-products">
-
 
                     <div class="product-item">
                         <div class="product-img">
@@ -807,7 +796,7 @@
             </div>
         </div>
     </div>
-    </div>
+
 </main>
 <footer>
     <!--Footer Top-->
@@ -909,6 +898,33 @@
         </div>
     </div>
 </footer>
+<!-- Search Result -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+
+<!-- Banner Slider Script -->
 <script>
     const slides = document.querySelectorAll('.banner-slides .item');
     const slideContainer = document.querySelector('.banner-slides');

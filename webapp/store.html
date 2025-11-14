@@ -64,16 +64,6 @@
                             </a>
                         </div>
                     </div>
-                    <div class="search-suggestions" style="display: none">
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                        </div>
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -88,9 +78,11 @@
                 </div>
 
                 <div class="cart">
+                    <a href="Signup.html">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="cart-text">Giỏ hàng</span>
                     <span class="cart-count">0</span>
+                    </a>
                 </div>
 
             </div>
@@ -100,7 +92,7 @@
                 <div>
                     <ul class="side-bar-menu-list side-bar-items">
                         <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-                        <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
+                        <li class="nav-item has-dropdown"><a class="nav-link active product" href="#">Sản Phẩm
                             <i class="fa fa-caret-down"></i>
                         </a>
                             <ul class="dropdown-menu">
@@ -877,6 +869,33 @@
         </div>
     </div>
 </footer>
+<!-- Search Result -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+
+<!-- Banner Slider Script -->
 <script>
     const slides = document.querySelectorAll('.banner-slides .item');
     const slideContainer = document.querySelector('.banner-slides');
@@ -887,7 +906,7 @@
     let currentSlide = 0;
     let autoSlide;
 
-    // 👉 Tạo dots theo số slide
+    // Tạo dots theo số slide
     slides.forEach((_, index) => {
         const dot = document.createElement('button');
         dot.addEventListener('click', () => goToSlide(index));
@@ -925,7 +944,7 @@
         clearInterval(autoSlide);
     }
 
-    // 👉 Event listeners
+    // Event listeners
     prevButton.addEventListener('click', () => {
         prevSlide();
         stopAutoSlide();
@@ -941,7 +960,7 @@
     slideContainer.addEventListener('mouseenter', stopAutoSlide);
     slideContainer.addEventListener('mouseleave', startAutoSlide);
 
-    // 👉 Khởi động
+    // Khởi động
     updateSlide();
     startAutoSlide();
 </script>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -8,7 +7,6 @@
     <title>HairGlow | Sản phẩm chăm sóc tóc</title>
     <link href="css/style_for_store.css" rel="stylesheet">
 </head>
-
 <body>
 <header>
     <div class="header-container">
@@ -66,16 +64,6 @@
                             </a>
                         </div>
                     </div>
-                    <div class="search-suggestions" style="display: none">
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                        </div>
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -90,9 +78,11 @@
                 </div>
 
                 <div class="cart">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="cart-text">Giỏ hàng</span>
-                    <span class="cart-count">0</span>
+                    <a href="Signup.html">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-count">0</span>
+                    </a>
                 </div>
 
             </div>
@@ -102,20 +92,19 @@
                 <div>
                     <ul class="side-bar-menu-list side-bar-items">
                         <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-                        <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
+                        <li class="nav-item has-dropdown"><a class="nav-link active product" href="#">Sản Phẩm
                             <i class="fa fa-caret-down"></i>
                         </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
-                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
-                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Kem ủ – Mặt nạ tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
                                 <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
                                 <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
                                 <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
-                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a>
-                                </li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
                             </ul>
@@ -899,6 +888,33 @@
         </div>
     </div>
 </footer>
+<!-- Search Result -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+
+<!-- Banner Slider Script -->
 <script>
     const slides = document.querySelectorAll('.banner-slides .item');
     const slideContainer = document.querySelector('.banner-slides');

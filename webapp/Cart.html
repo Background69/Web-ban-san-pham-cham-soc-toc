@@ -15,8 +15,8 @@
             <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
-                    <a class="logo" href="#">LOGO?
-                        <!--img alt="logo" class="logo-image" src="images/logo.png"-->
+                    <a class="logo" href="store.html">
+                        <img alt="logo" class="logo-image" src="images/logo.PNG">
                     </a>
                 </div>
             </div>
@@ -29,16 +29,39 @@
                         <button aria-label="search button suggest" class="search-button" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
-                        <!--div class="search-result" style="display: block"></div-->
                     </form>
-                    <div class="search-suggestions" style="display: none">
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                        </div>
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
+
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -48,14 +71,18 @@
             <div class="right-header">
 
                 <div class="account">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="login-in-text">Đăng nhập</span>
+                    <a href="Login.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
                 </div>
 
                 <div class="cart">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="cart-text">Giỏ hàng</span>
-                    <span class="cart-count">0</span>
+                    <a href="Cart.html">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-count">0</span>
+                    </a>
                 </div>
 
             </div>
@@ -65,13 +92,13 @@
                 <div>
                     <ul class="side-bar-menu-list side-bar-items">
                         <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-                        <li class="nav-item has-dropdown"><a class="nav-link-product" href="#">Sản Phẩm
+                        <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
                             <i class="fa fa-caret-down"></i>
                         </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
-                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
-                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Kem ủ – Mặt nạ tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
                                 <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
@@ -328,5 +355,30 @@
         </div>
     </div>
 </footer>
+<!-- Search Result -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
 </body>
 </html>
