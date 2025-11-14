@@ -1,170 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/address.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="css/address.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <title>HairGlow || Địa chỉ</title>
+    <title>HairGlow || Địa chỉ</title>
 </head>
 <body>
-  <header>
+<header>
     <div class="header-container">
-      <div class="header-row header-top">
+        <div class="header-row header-top">
 
-        <!-- Logo -->
+            <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
                     <a class="logo" href="store.html">
-                        <img src="images/logo.PNG" alt="logo" class="logo-image">
+                        <img alt="logo" class="logo-image" src="images/logo.PNG">
                     </a>
                 </div>
             </div>
 
-        <!-- Search bar -->
-        <div class="center-header">
-          <div class="search-bar">
-            <form action="/search" class="search-form" method="get">
-              <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
-              <button aria-label="search button suggest" class="search-button" type="submit">
-                <i class="fas fa-search"></i>
-              </button>
-            </form>
-            <div class="search-suggestions" style="display: none">
-              <div class="suggestion-item">
-                <i class="fas fa-clock-rotate-left"></i>
-                <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-              </div>
-              <div class="suggestion-item">
-                <i class="fas fa-clock-rotate-left"></i>
-                <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
-              </div>
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="search-suggestions" style="display: none">
+                        <div class="suggestion-item">
+                            <i class="fas fa-clock-rotate-left"></i>
+                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
+                        </div>
+                        <div class="suggestion-item">
+                            <i class="fas fa-clock-rotate-left"></i>
+                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <!-- Account and cart -->
+            <div class="right-header">
+                <div class="account">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="login-in-text">Đăng nhập</span>
+                </div>
+
+                <div class="cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="cart-text">Giỏ hàng</span>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Account and cart -->
-        <div class="right-header">
-          <div class="account">
-            <i class="fas fa-user-circle"></i>
-            <span class="login-in-text">Đăng nhập</span>
-          </div>
-
-          <div class="cart">
-            <i class="fa fa-shopping-cart"></i>
-            <span class="cart-text">Giỏ hàng</span>
-            <span class="cart-count">0</span>
-          </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <ul class="side-bar-menu-list side-bar-items">
+                    <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
+                    <li class="nav-item has-dropdown">
+                        <a class="nav-link product" href="#">Sản Phẩm <i class="fa fa-caret-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                            <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                            <li><a class="dropdown-item" href="MaskHair.html">Kem ủ – Mặt nạ tóc</a></li>
+                            <li><a class="dropdown-item" href="Serum.html">Serum – Dầu dưỡng tóc</a></li>
+                            <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                            <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                            <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                            <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                            <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                            <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                            <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                    <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi <i
+                            class="fas fa-percent"></i></a></li>
+                </ul>
+            </nav>
         </div>
-      </div>
-
-      <div class="header-row header-below nav-container">
-        <nav>
-          <ul class="side-bar-menu-list side-bar-items">
-            <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-            <li class="nav-item has-dropdown">
-              <a class="nav-link product" href="#">Sản Phẩm <i class="fa fa-caret-down"></i></a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
-                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
-                <li><a class="dropdown-item" href="MaskHair.html">Kem ủ – Mặt nạ tóc</a></li>
-                <li><a class="dropdown-item" href="Serum.html">Serum – Dầu dưỡng tóc</a></li>
-                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
-                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
-                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
-                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
-                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
-                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
-                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
-              </ul>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
-            <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi <i class="fas fa-percent"></i></a></li>
-          </ul>
-        </nav>
-      </div>
     </div>
-  </header>
+</header>
 <div class="cart-process">
     <div class="cart-checkout-process active">
-      <i class="fa-solid fa-cart-shopping"></i>
+        <i class="fa-solid fa-cart-shopping"></i>
     </div>
     <div class="cart-checkout-process">
-      <i class="fa-solid fa-location-dot"></i>
+        <i class="fa-solid fa-location-dot"></i>
     </div>
     <div class="cart-checkout-process">
-      <i class="fa-solid fa-credit-card"></i>
+        <i class="fa-solid fa-credit-card"></i>
     </div>
 </div>
 
 
-  <div class="address-container">
+<div class="address-container">
     <div class="address-left">
-      <h3>Địa chỉ giao hàng</h3>
-      <form class="address-form">
-        <label>Họ và tên</label>
-        <input type="text" name="fullname" required>
+        <h3>Địa chỉ giao hàng</h3>
+        <form class="address-form">
+            <label>Họ và tên</label>
+            <input name="fullname" required type="text">
 
-        <label id="phonenumber">Số điện thoại</label>
-        <input type="number" name="phonenumber" required>
+            <label id="phonenumber">Số điện thoại</label>
+            <input name="phonenumber" required type="number">
 
-        <label>Email</label>
-        <input type="email" name="email" required>
+            <label>Email</label>
+            <input name="email" required type="email">
 
-        <label>Tỉnh/Thành phố</label>
-        <select name="province"></select>
+            <label>Tỉnh/Thành phố</label>
+            <select name="province"></select>
 
-        <label>Quận/Huyện</label>
-        <select name="district"></select>
+            <label>Quận/Huyện</label>
+            <select name="district"></select>
 
-        <label>Phường/Xã</label>
-        <select name="ward"></select>
+            <label>Phường/Xã</label>
+            <select name="ward"></select>
 
-        <label>Địa chỉ cụ thể (Tên đường, khu phố)</label>
-        <input type="text" name="specificaddress" required>
+            <label>Địa chỉ cụ thể (Tên đường, khu phố)</label>
+            <input name="specificaddress" required type="text">
 
-        <label>Ghi chú</label>
-        <textarea name="note" rows="4"></textarea>
+            <label>Ghi chú</label>
+            <textarea name="note" rows="4"></textarea>
 
-        <h3>Phương thức giao hàng</h3>
+            <h3>Phương thức giao hàng</h3>
 
-        <label class="shipping-option">
-          <input type="radio" name="shipping" value="standard" checked>
-          Giao hàng tiêu chuẩn (30.000 VNĐ) - Dự kiến nhận hàng trong 5-7 ngày
-        </label>
+            <label class="shipping-option">
+                <input checked name="shipping" type="radio" value="standard">
+                Giao hàng tiêu chuẩn (30.000 VNĐ) - Dự kiến nhận hàng trong 5-7 ngày
+            </label>
 
-        <label class="shipping-option">
-          <input type="radio" name="shipping" value="express">
-          Giao hàng nhanh (40.000 VNĐ) - Dự kiến nhận hàng trong 1-3 ngày
-        </label>
-      </form>
+            <label class="shipping-option">
+                <input name="shipping" type="radio" value="express">
+                Giao hàng nhanh (40.000 VNĐ) - Dự kiến nhận hàng trong 1-3 ngày
+            </label>
+        </form>
     </div>
 
     <div class="address-right">
-      <h3>Tóm tắt đơn hàng</h3>
-      <div class="order-summary">
-        <div class="summary-item">
-          <span>Tạm tính:</span>
-          <span class="summary-value" id="subtotal">0 VNĐ</span>
+        <h3>Tóm tắt đơn hàng</h3>
+        <div class="order-summary">
+            <div class="summary-item">
+                <span>Tạm tính:</span>
+                <span class="summary-value" id="subtotal">0 VNĐ</span>
+            </div>
+            <div class="summary-item">
+                <span>Phí vận chuyển:</span>
+                <span class="summary-value" id="shipping-fee">0 VNĐ</span>
+            </div>
+            <div class="summary-item total">
+                <span>Tổng cộng:</span>
+                <span class="summary-value" id="total-amount">0 VNĐ</span>
+            </div>
         </div>
-        <div class="summary-item">
-          <span>Phí vận chuyển:</span>
-          <span class="summary-value" id="shipping-fee">0 VNĐ</span>
-        </div>
-        <div class="summary-item total">
-          <span>Tổng cộng:</span>
-          <span class="summary-value" id="total-amount">0 VNĐ</span>
-        </div>
-      </div>
-      <a href="Payment.html">
-      <button class="proceed-payment-btn">Tiếp theo</button>
-      </a>
+        <a href="Payment.html">
+            <button class="proceed-payment-btn">Tiếp theo</button>
+        </a>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     const provinceSelect = document.querySelector('select[name="province"]');
     const districtSelect = document.querySelector('select[name="district"]');
     const wardSelect = document.querySelector('select[name="ward"]');
@@ -177,69 +178,69 @@
     // Load TỈNH/THÀNH
     // -------------------------
     fetch('https://provinces.open-api.vn/api/p/')
-      .then(response => response.json())
-      .then(provinces => {
-        provinceSelect.innerHTML = '<option value="">-- Chọn Tỉnh/Thành phố --</option>';
-        provinces.forEach(province => {
-          const option = document.createElement('option');
-          option.value = province.code;
-          option.textContent = province.name;
-          provinceSelect.appendChild(option);
-        });
-      })
-      .catch(err => console.error('Lỗi tải danh sách tỉnh:', err));
+        .then(response => response.json())
+        .then(provinces => {
+            provinceSelect.innerHTML = '<option value="">-- Chọn Tỉnh/Thành phố --</option>';
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.code;
+                option.textContent = province.name;
+                provinceSelect.appendChild(option);
+            });
+        })
+        .catch(err => console.error('Lỗi tải danh sách tỉnh:', err));
 
     // -------------------------
     // Khi chọn TỈNH → load HUYỆN
     // -------------------------
     provinceSelect.addEventListener('change', () => {
-      const provinceCode = provinceSelect.value;
-      districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
-      wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-      districtSelect.disabled = true;
-      wardSelect.disabled = true;
+        const provinceCode = provinceSelect.value;
+        districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
+        wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+        districtSelect.disabled = true;
+        wardSelect.disabled = true;
 
-      if (provinceCode) {
-        fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
-          .then(response => response.json())
-          .then(data => {
-            districtSelect.disabled = false;
-            data.districts.forEach(district => {
-              const option = document.createElement('option');
-              option.value = district.code;
-              option.textContent = district.name;
-              districtSelect.appendChild(option);
-            });
-          })
-          .catch(err => console.error('Lỗi tải danh sách quận:', err));
-      }
+        if (provinceCode) {
+            fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+                .then(response => response.json())
+                .then(data => {
+                    districtSelect.disabled = false;
+                    data.districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.code;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                })
+                .catch(err => console.error('Lỗi tải danh sách quận:', err));
+        }
     });
 
     // -------------------------
     // Khi chọn HUYỆN → load XÃ
     // -------------------------
     districtSelect.addEventListener('change', () => {
-      const districtCode = districtSelect.value;
-      wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-      wardSelect.disabled = true;
+        const districtCode = districtSelect.value;
+        wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+        wardSelect.disabled = true;
 
-      if (districtCode) {
-        fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
-          .then(res => res.json())
-          .then(data => {
-            wardSelect.disabled = false;
-            data.wards.forEach(ward => {
-              const opt = document.createElement('option');
-              opt.value = ward.code;
-              opt.textContent = ward.name;
-              wardSelect.appendChild(opt);
-            });
-          })
-          .catch(err => console.error('Lỗi tải danh sách xã:', err));
-      }
+        if (districtCode) {
+            fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+                .then(res => res.json())
+                .then(data => {
+                    wardSelect.disabled = false;
+                    data.wards.forEach(ward => {
+                        const opt = document.createElement('option');
+                        opt.value = ward.code;
+                        opt.textContent = ward.name;
+                        wardSelect.appendChild(opt);
+                    });
+                })
+                .catch(err => console.error('Lỗi tải danh sách xã:', err));
+        }
     });
-  </script>
-  <footer>
+</script>
+<footer>
     <!--Footer Top-->
     <div class="main-footer footer-top">
         <div class="footer-container">

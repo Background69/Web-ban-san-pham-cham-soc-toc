@@ -16,7 +16,7 @@
             <div class="left-header">
                 <div class="header-logo">
                     <a class="logo" href="store.html">
-                        <img src="images/logo.PNG" alt="logo" class="logo-image">
+                        <img alt="logo" class="logo-image" src="images/logo.PNG">
                     </a>
                 </div>
             </div>
@@ -82,8 +82,8 @@
 
                 <div class="account">
                     <a href="Login.html">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="login-in-text">Đăng nhập</span>
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
                     </a>
                 </div>
 
@@ -136,15 +136,15 @@
             <div class="banner-slides">
                 <!-- Slide 1 -->
                 <div class="item" id="slide-1">
-                    <img src="images/banner1.png" alt="banner 1" class="banner-image">
+                    <img alt="banner 1" class="banner-image" src="images/banner1.png">
                 </div>
                 <!-- Slide 2 -->
                 <div class="item" id="slide-2">
-                    <img src="images/banner2.png" alt="banner 2" class="banner-image">
+                    <img alt="banner 2" class="banner-image" src="images/banner2.png">
                 </div>
                 <!-- Slide 3 -->
                 <div class="item" id="slide-3">
-                    <img src="images/banner3.png" alt="banner 3" class="banner-image">
+                    <img alt="banner 3" class="banner-image" src="images/banner3.png">
                 </div>
             </div>
 
@@ -878,72 +878,72 @@
     </div>
 </footer>
 <script>
-  const slides = document.querySelectorAll('.banner-slides .item');
-  const slideContainer = document.querySelector('.banner-slides');
-  const prevButton = document.querySelector('.nav.prev');
-  const nextButton = document.querySelector('.nav.next');
-  const dotsContainer = document.querySelector('.slider-dots');
+    const slides = document.querySelectorAll('.banner-slides .item');
+    const slideContainer = document.querySelector('.banner-slides');
+    const prevButton = document.querySelector('.nav.prev');
+    const nextButton = document.querySelector('.nav.next');
+    const dotsContainer = document.querySelector('.slider-dots');
 
-  let currentSlide = 0;
-  let autoSlide;
+    let currentSlide = 0;
+    let autoSlide;
 
-  // 👉 Tạo dots theo số slide
-  slides.forEach((_, index) => {
-    const dot = document.createElement('button');
-    dot.addEventListener('click', () => goToSlide(index));
-    dotsContainer.appendChild(dot);
-  });
-  const dots = dotsContainer.querySelectorAll('button');
+    // 👉 Tạo dots theo số slide
+    slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+    const dots = dotsContainer.querySelectorAll('button');
 
-  function updateSlide() {
-    const offset = -currentSlide * 100;
-    slideContainer.style.transform = `translateX(${offset}%)`;
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[currentSlide].classList.add('active');
-  }
+    function updateSlide() {
+        const offset = -currentSlide * 100;
+        slideContainer.style.transform = `translateX(${offset}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[currentSlide].classList.add('active');
+    }
 
-  function prevSlide() {
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateSlide();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlide();
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSlide();
+    }
+
+    function startAutoSlide() {
+        autoSlide = setInterval(nextSlide, 4000);
+    }
+
+    function stopAutoSlide() {
+        clearInterval(autoSlide);
+    }
+
+    // 👉 Event listeners
+    prevButton.addEventListener('click', () => {
+        prevSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    nextButton.addEventListener('click', () => {
+        nextSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    slideContainer.addEventListener('mouseenter', stopAutoSlide);
+    slideContainer.addEventListener('mouseleave', startAutoSlide);
+
+    // 👉 Khởi động
     updateSlide();
-  }
-
-  function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length;
-    updateSlide();
-  }
-
-  function goToSlide(index) {
-    currentSlide = index;
-    updateSlide();
-  }
-
-  function startAutoSlide() {
-    autoSlide = setInterval(nextSlide, 4000);
-  }
-
-  function stopAutoSlide() {
-    clearInterval(autoSlide);
-  }
-
-  // 👉 Event listeners
-  prevButton.addEventListener('click', () => {
-    prevSlide();
-    stopAutoSlide();
     startAutoSlide();
-  });
-
-  nextButton.addEventListener('click', () => {
-    nextSlide();
-    stopAutoSlide();
-    startAutoSlide();
-  });
-
-  slideContainer.addEventListener('mouseenter', stopAutoSlide);
-  slideContainer.addEventListener('mouseleave', startAutoSlide);
-
-  // 👉 Khởi động
-  updateSlide();
-  startAutoSlide();
 </script>
 
 </body>

@@ -1,127 +1,127 @@
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
 /* Thanh tiến trình */
 .cart-process {
-  display: flex;
-  justify-content: center;
-  margin: 30px 0;
-  gap: 20px;
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+    gap: 20px;
 }
 
 .cart-checkout-process {
-  width: 50px;
-  height: 50px;
-  background-color: #ddd;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 22px;
+    width: 50px;
+    height: 50px;
+    background-color: #ddd;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 22px;
 }
 
 .cart-checkout-process.active {
-  background-color: #7ac142;
+    background-color: #7ac142;
 }
 
 .cart-checkout-process.current {
-  background-color: #4e8a26;
+    background-color: #4e8a26;
 }
 
 /* Khung chính */
 .payment {
-  background: #fff;
-  width: 60%;
-  margin: 0 auto 50px;
-  padding: 25px 35px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    width: 60%;
+    margin: 0 auto 50px;
+    padding: 25px 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .payment h3 {
-  text-align: center;
-  color: #4e8a26;
-  margin-bottom: 25px;
+    text-align: center;
+    color: #4e8a26;
+    margin-bottom: 25px;
 }
 
 /* Thông tin giao hàng & đơn hàng */
 section {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 section h4 {
-  margin-bottom: 15px;
-  color: #333;
-  font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
 }
 
 p {
-  margin: 8px 0;
-  color: #555;
+    margin: 8px 0;
+    color: #555;
 }
 
 /* Nút sửa địa chỉ */
 .edit-address {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .btn-edit {
-  background-color: #6a8a3a;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    background-color: #6a8a3a;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-edit:hover {
-  background-color: #56732e;
-  transform: translateY(-2px);
+    background-color: #56732e;
+    transform: translateY(-2px);
 }
 
 /* Tổng cộng */
 .total-amount {
-  margin-top: 15px;
-  font-weight: bold;
-  color: #222;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #222;
 }
 
 /* Phương thức thanh toán */
 .payment-methods label {
-  display: block;
-  margin-bottom: 10px;
-  cursor: pointer;
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
 }
 
 /* Nút đặt hàng */
 .btn-confirm {
-  display: block;
-  width: 100%;
-  background-color: #7ac142;
-  color: white;
-  font-size: 16px;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    background-color: #7ac142;
+    color: white;
+    font-size: 16px;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn-confirm i {
-  margin-right: 6px;
+    margin-right: 6px;
 }
 
 .btn-confirm:hover {
-  background-color: #5f9732;
-  transform: translateY(-2px);
+    background-color: #5f9732;
+    transform: translateY(-2px);
 }

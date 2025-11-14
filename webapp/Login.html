@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Đăng nhập</title>
-    <link rel="stylesheet" href="css/login.css">
+    <link href="css/login.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 </head>
 
@@ -17,13 +17,13 @@
             <div class="left-header">
                 <div class="header-logo">
                     <a class="logo" href="#">
-                        <img alt="logo" class="logo-image" width="130px" height="130px" src="assets/Logo.jpg">
+                        <img alt="logo" class="logo-image" height="130px" src="assets/Logo.jpg" width="130px">
                     </a>
                 </div>
             </div>
 
             <!-- Search bar -->
-           <div class="center-header">
+            <div class="center-header">
                 <div class="search-bar">
                     <form action="/search" class="search-form" method="get">
                         <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
@@ -66,28 +66,30 @@
 
 <div class="login-wrapper">
     <div class="login-box">
-        <img src="assets/Logo.jpg" alt="" class="logo">
+        <img alt="" class="logo" src="assets/Logo.jpg">
         <h1>Login</h1>
         <p class="subtitle">Tiếp tục để mua </p>
         <form>
             <label for="email">Email address</label>
-            <input id="email" type="email" placeholder="Email address" required>
+            <input id="email" placeholder="Email address" required type="email">
             <label for="password">Password</label>
-<div class="password-field">
-                <input type="password" id="password" placeholder="Enter your password" required>
+            <div class="password-field">
+                <input id="password" placeholder="Enter your password" required type="password">
                 <i class="fa-solid fa-eye toggle-password" data-target="password"></i>
             </div>
             <div class="options">
                 <label><input type="checkbox">Remember me</label>
-                <a href="Forgotpassword.html" class="forgot">Forgot password</a>
+                <a class="forgot" href="Forgotpassword.html">Forgot password</a>
             </div>
-            <button type="submit" class="btn primary-btn">Sign In</button>
+            <button class="btn primary-btn" type="submit">Sign In</button>
             <div class="or">or</div>
-            <button type="button" class="btn google-btn">
-                <img src="/webapp/assets/icons8-google-48.png" width="30px" height="30px" alt="Google Icon">   Continue with Google
+            <button class="btn google-btn" type="button">
+                <img alt="Google Icon" height="30px" src="/webapp/assets/icons8-google-48.png" width="30px"> Continue
+                with Google
             </button>
-            <button type="button" class="btn apple-btn">
-                <img src="assets/icons8-facebook-48.png" width="30px" height="30px" alt="Apple Icon">   Continue with FaceBook
+            <button class="btn apple-btn" type="button">
+                <img alt="Apple Icon" height="30px" src="assets/icons8-facebook-48.png" width="30px"> Continue with
+                FaceBook
             </button>
 
         </form>
@@ -144,7 +146,7 @@
             </div>
 
             <!-- Categories -->
-             <div class="footer-col">
+            <div class="footer-col">
                 <h4>Danh mục</h4>
                 <ul>
                     <li><a href="#">Dầu gội</a></li>
@@ -209,35 +211,37 @@
 </footer>
 
 <script>
-    function showAlert(msg){
+    function showAlert(msg) {
         alert(msg);
     }
-    function redirect(url){
+
+    function redirect(url) {
         window.location.href = url;
     }
-    if (document.title.includes("Đăng nhập")){
+
+    if (document.title.includes("Đăng nhập")) {
         const form = document.querySelector(".login-box form");
         const passwordInput = form.querySelector('input[type="password"]');
         const eyeIcon = document.querySelector(".eye-icon");
         const closeBtn = document.querySelector(".close-btn");
         const overplay = document.querySelector(".overplay");
-        if( eyeIcon && passwordInput){
+        if (eyeIcon && passwordInput) {
             eyeIcon.addEventListener("click", () => {
                 const type = passwordInput.type === "password" ? "text" : "password";
                 passwordInput.type = type;
             });
         }
-        if (closeBtn && overplay){
+        if (closeBtn && overplay) {
             closeBtn.addEventListener("click", () => {
                 overplay.style.display = "none";
             })
         }
-        if (form){
+        if (form) {
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
                 const email = form.querySelector('input[type="email"]').value.trim();
                 const password = form.querySelector('input[type="password"]').value.trim();
-                if (!email ||!password){
+                if (!email || !password) {
                     showAlert("Vui lòng nhập đầy đủ thông tin")
                     return;
                 }
@@ -245,13 +249,13 @@
                 if (user && (email === user.email || email === user.phone) && (password === user.password)) {
                     showAlert("đăng nhập thành công!")
                     redirect("store.html");
-                }else {
+                } else {
                     showAlert("sai email hoặc mật khẩu")
                 }
             })
         }
         // Hiện / ẩn mật khẩu trang đăng nhập
-        document.querySelector(".toggle-password").addEventListener("click", function() {
+        document.querySelector(".toggle-password").addEventListener("click", function () {
             const input = document.getElementById(this.dataset.target);
             input.type = (input.type === "password") ? "text" : "password";
             this.classList.toggle("fa-eye");
@@ -261,7 +265,6 @@
 
     }
 </script>
-
 
 
 </body>
