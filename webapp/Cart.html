@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Đăng nhập</title>
-    <link href="css/login.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Giỏ hàng</title>
+    <link href="css/cart.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="cart">
-                    <a href="Signup.html">
+                    <a href="Cart.html">
                         <i class="fa fa-shopping-cart"></i>
                         <span class="cart-text">Giỏ hàng</span>
                         <span class="cart-count">0</span>
@@ -87,43 +87,174 @@
 
             </div>
         </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
     </div>
 </header>
 
-<div class="login-wrapper">
-    <div class="login-box">
-        <img alt="" class="logo" src="assets/Logo.jpg">
-        <h1>Đăng nhập</h1>
-        <p class="subtitle">Tiếp tục để mua </p>
-        <form>
-            <label for="email">Địa chỉ Email</label>
-            <input id="email" placeholder="Nhập Email" required type="email">
-            <label for="password">Mật khẩu</label>
-            <div class="password-field">
-                <input id="password" placeholder="Nhập Mật khẩu" required type="password">
-                <i class="fa-solid fa-eye toggle-password" data-target="password"></i>
-            </div>
-            <div class="options">
-                <label><input type="checkbox">Ghi nhớ đăng nhập</label>
-                <a class="forgot" href="Forgotpassword.html">Quên mật khẩu</a>
-            </div>
-            <button class="btn primary-btn" type="submit">Đăng nhập</button>
-            <div class="or">hoặc</div>
-            <button class="btn google-btn" type="button">
-                <img alt="Google Icon" height="30px" src="/webapp/assets/icons8-google-48.png" width="30px">Đăng nhập bằng Google
-            </button>
-            <button class="btn apple-btn" type="button">
-                <img alt="Apple Icon" height="30px" src="assets/icons8-facebook-48.png" width="30px">Đăng nhập bằng Facebook
-            </button>
-
-        </form>
-
-        <p class="signup-text">
-            Không có tài khoản? <a href="Signup.html">Đăng ký ngay!</a>
-        </p>
+<div class="cart-process">
+    <div class="cart-checkout-process">
+        <i class="fa-solid fa-cart-shopping"></i>
+    </div>
+    <div class="cart-checkout-process">
+        <i class="fa-solid fa-location-dot"></i>
+    </div>
+    <div class="cart-checkout-process">
+        <i class="fa-solid fa-credit-card"></i>
     </div>
 </div>
 
+<div class="cart-container">
+
+    <!-- BÊN TRÁI -->
+    <div class="cart-left">
+        <h3>Giỏ hàng của bạn</h3>
+
+        <!-- Tiêu đề bảng -->
+        <div class="cart-header-table">
+            <span>Sản phẩm</span>
+            <span>Tên sản phẩm</span>
+            <span>Loại</span>
+            <span>Số lượng</span>
+            <span>Giá tiền</span>
+            <span>Xóa</span>
+        </div>
+
+        <!-- Danh sách sản phẩm -->
+        <div class="cart-product">
+            <!-- Sản phẩm 1 -->
+            <div class="cart-product-item" data-price="700000">
+                <div class="cart-product-image">
+                    <img alt="Hình ảnh sản phẩm" src="images/dau-goi-can-bang-ph-elgon.png">
+                </div>
+                <div class="cart-product-name">Dầu gội Elgon Puifying hỗ trợ trị gàu</div>
+                <div class="cart-product-type">1000ml</div>
+                <div class="cart-product-quantity">
+                    <button class="minus">-</button>
+                    <input min="1" type="number" value="1">
+                    <button class="plus">+</button>
+                </div>
+                <div class="cart-product-price">700.000 VNĐ</div>
+                <div class="cart-product-remove">
+                    <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <!-- Sản phẩm 2 -->
+            <div class="cart-product-item" data-price="250000">
+                <div class="cart-product-image">
+                    <img alt="Hình ảnh sản phẩm" src="images/dau-goi-can-bang-ph-elgon.png">
+                </div>
+                <div class="cart-product-name">Dầu gội Cehko Vital chống rụng tóc</div>
+                <div class="cart-product-type">250ml</div>
+                <div class="cart-product-quantity">
+                    <button class="minus">-</button>
+                    <input min="1" type="number" value="1">
+                    <button class="plus">+</button>
+                </div>
+                <div class="cart-product-price">250.000 VNĐ</div>
+                <div class="cart-product-remove">
+                    <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+            <!-- Sản phẩm 3 -->
+            <div class="cart-product-item" data-price="420000">
+                <div class="cart-product-image">
+                    <img alt="Hình ảnh sản phẩm" src="images/xakho.png">
+                </div>
+                <div class="cart-product-name">Xả khô BambooMiracle phục hồi tóc all in one leave</div>
+                <div class="cart-product-type">178ml</div>
+                <div class="cart-product-quantity">
+                    <button class="minus">-</button>
+                    <input min="1" type="number" value="1">
+                    <button class="plus">+</button>
+                </div>
+                <div class="cart-product-price">420.000 VNĐ</div>
+                <div class="cart-product-remove">
+                    <button class="remove-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- BÊN PHẢI -->
+    <div class="cart-right">
+        <h3>Thanh toán</h3>
+        <div class="cart-checkout">
+            <span>Tạm tính:</span>
+            <span class="cart-subtotal">0 VNĐ</span>
+        </div>
+        <div class="cart-summary-item">
+            <span>Phí vận chuyển:</span>
+            <span class="cart-shipping-fee">0 VNĐ</span>
+        </div>
+        <div class="cart-summary-item total">
+            <span>Tổng cộng:</span>
+            <span class="cart-total-amount">0 VNĐ</span>
+        </div>
+        <button class="checkout-btn">Tiếp theo</button>
+        <script>
+            document.querySelector('.checkout-btn').addEventListener('click', function () {
+                window.location.href = 'Address.html';
+            });
+        </script>
+    </div>
+</div>
+<!--Có thể bạn sẽ thích-->
+<section class="recommended-section">
+    <h3>Có thể bạn sẽ thích</h3>
+    <div class="recommended-container">
+        <div class="recommended-product-item">
+            <img alt="Hình ảnh sản phẩm" src="image/12345.png"/>
+            <h4>Product Name 1</h4>
+            <p class="Price">500.000 VNĐ</p>
+            <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+        </div>
+        <div class="recommended-product-item">
+            <img alt="Hình ảnh sản phẩm" src="image/12345.png"/>
+            <h4>Product Name 2</h4>
+            <p class="Price">300.000 VNĐ</p>
+            <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+        </div>
+        <div class="recommended-product-item">
+            <img alt="Hình ảnh sản phẩm" src="image/12345.png"/>
+            <h4>Product Name 3</h4>
+            <p class="Price">450.000 VNĐ</p>
+            <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+        </div>
+
+    </div>
+</section>
 <footer>
     <!--Footer Top-->
     <div class="main-footer footer-top">
@@ -248,60 +379,6 @@
             }
         });
     })();
-</script>
-<!-- Login Script -->
-<script>
-    function showAlert(msg) {
-        alert(msg);
-    }
-
-    function redirect(url) {
-        window.location.href = url;
-    }
-
-    if (document.title.includes("Đăng nhập")) {
-        const form = document.querySelector(".login-box form");
-        const passwordInput = form.querySelector('input[type="password"]');
-        const eyeIcon = document.querySelector(".eye-icon");
-        const closeBtn = document.querySelector(".close-btn");
-        const overplay = document.querySelector(".overplay");
-        if (eyeIcon && passwordInput) {
-            eyeIcon.addEventListener("click", () => {
-                const type = passwordInput.type === "password" ? "text" : "password";
-                passwordInput.type = type;
-            });
-        }
-        if (closeBtn && overplay) {
-            closeBtn.addEventListener("click", () => {
-                overplay.style.display = "none";
-            })
-        }
-        if (form) {
-            form.addEventListener("submit", (e) => {
-                e.preventDefault();
-                const email = form.querySelector('input[type="email"]').value.trim();
-                const password = form.querySelector('input[type="password"]').value.trim();
-                if (!email || !password) {
-                    showAlert("Vui lòng nhập đầy đủ thông tin")
-                    return;
-                }
-                const user = JSON.parse(localStorage.getItem("user"));
-                if (user && (email === user.email || email === user.phone) && (password === user.password)) {
-                    showAlert("đăng nhập thành công!")
-                    redirect("store.html");
-                } else {
-                    showAlert("sai email hoặc mật khẩu")
-                }
-            })
-        }
-        // Hiện / ẩn mật khẩu trang đăng nhập
-        document.querySelector(".toggle-password").addEventListener("click", function () {
-            const input = document.getElementById(this.dataset.target);
-            input.type = (input.type === "password") ? "text" : "password";
-            this.classList.toggle("fa-eye");
-            this.classList.toggle("fa-eye-slash");
-        });
-    }
 </script>
 </body>
 </html>

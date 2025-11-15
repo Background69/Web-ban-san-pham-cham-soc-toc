@@ -1,33 +1,35 @@
-function showAlert(msg){
+function showAlert(msg) {
     alert(msg);
 }
-function redirect(url){
+
+function redirect(url) {
     window.location.href = url;
 }
+
 // xử lí trang đăng nhập
-if (document.title.includes("Đăng nhập")){
+if (document.title.includes("Đăng nhập")) {
     const form = document.querySelector("form");
     const passwordInput = form.querySelector('input[type="password"]');
     const eyeIcon = document.querySelector(".eye-icon");
     const closeBtn = document.querySelector(".close-btn");
     const overplay = document.querySelector(".overplay");
-    if( eyeIcon && passwordInput){
+    if (eyeIcon && passwordInput) {
         eyeIcon.addEventListener("click", () => {
             const type = passwordInput.type === "password" ? "text" : "password";
             passwordInput.type = type;
         });
     }
-    if (closeBtn && overplay){
+    if (closeBtn && overplay) {
         closeBtn.addEventListener("click", () => {
             overplay.style.display = "none";
         })
     }
-    if (form){
+    if (form) {
         form.addEventListener("submit", (e) => {
             e.preventDefault();
             const email = form.querySelector('input[type="email"]').value.trim();
             const password = form.querySelector('input[type="password"]').value.trim();
-            if (!email ||!password){
+            if (!email || !password) {
                 showAlert("Vui lòng nhập đầy đủ thông tin")
                 return;
             }
@@ -35,13 +37,13 @@ if (document.title.includes("Đăng nhập")){
             if (user && (email === user.email || email === user.phone) && (password === user.password)) {
                 showAlert("đăng nhập thành công!")
                 redirect("Login.html");
-            }else {
+            } else {
                 showAlert("sai email hoặc mật khẩu")
             }
         })
     }
     // Hiện / ẩn mật khẩu trang đăng nhập
-    document.querySelector(".toggle-password").addEventListener("click", function() {
+    document.querySelector(".toggle-password").addEventListener("click", function () {
         const input = document.getElementById(this.dataset.target);
         input.type = (input.type === "password") ? "text" : "password";
         this.classList.toggle("fa-eye");
@@ -75,8 +77,8 @@ if (document.title.includes("đăng kí")) {
         })
     }
     // Hiện / ẩn mật khẩu ở trang đăng ký
-    document.querySelectorAll(".toggle-password").forEach(function(icon){
-        icon.addEventListener("click", function(){
+    document.querySelectorAll(".toggle-password").forEach(function (icon) {
+        icon.addEventListener("click", function () {
             const input = document.getElementById(this.dataset.target);
             input.type = (input.type === "password") ? "text" : "password";
             this.classList.toggle("fa-eye");
@@ -87,13 +89,13 @@ if (document.title.includes("đăng kí")) {
 }
 
 //trang quên mật khẩu
-if (document.title.includes("Quên Mật Khẩu")){
+if (document.title.includes("Quên Mật Khẩu")) {
     const form = document.querySelector("form");
     if (form) {
         form.addEventListener("submit", (e) => {
             e.preventDefault();
             const email = form.querySelector('input[type="email"]').value.trim();
-            if (!email){
+            if (!email) {
                 showAlert("Vui lòng nhập email để khôi phục mật khẩu");
                 return;
             }
