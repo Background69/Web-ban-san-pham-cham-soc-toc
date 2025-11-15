@@ -15,7 +15,7 @@
             <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
-                    <a class="logo" href="#">
+                    <a class="logo" href="MainPage.html">
                         <img alt="logo" class="logo-image" height="150" src="assets/LOGO.PNG" width="150">
                     </a>
                 </div>
@@ -70,14 +70,18 @@
             <div class="right-header">
 
                 <div class="account">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="login-in-text">Đăng nhập</span>
+                    <a href="Login.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
                 </div>
 
                 <div class="cart">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="cart-text">Giỏ hàng</span>
-                    <span class="cart-count">0</span>
+                    <a href="Signup.html">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-count">0</span>
+                    </a>
                 </div>
 
             </div>
@@ -86,13 +90,13 @@
             <nav>
                 <div>
                     <ul class="side-bar-menu-list side-bar-items">
-                        <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-                        <li class="nav-item has-dropdown"><a class="nav-link " href="#">Sản Phẩm
+                        <li class="nav-item"><a class="nav-link home-page" href="MainPage.html">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link active" href="store.html">Sản Phẩm
                             <i class="fa fa-caret-down"></i>
                         </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
-                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
                                 <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
@@ -169,67 +173,75 @@
                     <div class="deal-timer">
                         <i class="fas fa-clock"></i> Còn 2:15:30
                     </div>
-                    <div class="deal-image">
-                        <img alt="Product" src="images/">
-                    </div>
-                    <h3>Bộ dầu gội xả L'Oréal Serie Expert</h3>
-                    <div class="deal-price">
-                        <span class="old-price">1,200,000₫</span>
-                        <span class="new-price">600,000₫</span>
-                    </div>
-                    <div class="deal-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 75%"></div>
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-1.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Dầu Gội Phục Hồi Hư Tổn Loreal Absolut Repair 300ml – 500ml – 1500ml</h3>
+                        <div class="deal-price">
+                            <span class="old-price">1,200,000₫</span>
+                            <span class="new-price">600,000₫</span>
                         </div>
-                        <span>Đã bán 75/100</span>
+                        <div class="deal-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <span>Đã bán 75/100</span>
+                        </div>
                     </div>
                     <button class="btn-grab-deal">Mua ngay</button>
                 </div>
 
                 <div class="super-deal-item" data-category="combo">
-                    <div class="deal-badge">Mua 2 Tặng 1</div>
-                    <div class="deal-image">
-                        <img alt="Product" src="images/">
-                    </div>
-                    <h3>Combo 3 serum phục hồi Moroccanoil</h3>
-                    <div class="deal-price">
-                        <span class="old-price">2,400,000₫</span>
-                        <span class="new-price">1,600,000₫</span>
-                    </div>
-                    <div class="deal-savings">
-                        <i class="fas fa-piggy-bank"></i> Tiết kiệm 800,000₫
+                    <div class="deal-badge combo-badge">Mua 2 Tặng 1</div>
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-2.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Combo Tinh dầu Moroccanoil dưỡng phục hồi tóc 100ml và gội xả Moroccanoil dưỡng ẩm (phục hồi) 70mlx2</h3>
+                        <div class="deal-price">
+                            <span class="old-price">2,400,000₫</span>
+                            <span class="new-price">1,600,000₫</span>
+                        </div>
+                        <div class="deal-savings">
+                            <i class="fas fa-piggy-bank"></i> Tiết kiệm 800,000₫
+                        </div>
                     </div>
                     <button class="btn-grab-deal">Mua ngay</button>
                 </div>
 
                 <div class="super-deal-item" data-category="new">
                     <div class="deal-badge new-badge">MỚI</div>
-                    <div class="deal-image">
-                        <img alt="Product" src="images/">
-                    </div>
-                    <h3>Kem ủ tóc Keratin Treatment</h3>
-                    <div class="deal-price">
-                        <span class="old-price">450,000₫</span>
-                        <span class="new-price">299,000₫</span>
-                    </div>
-                    <div class="deal-gift">
-                        <i class="fas fa-gift"></i> Tặng lược massage trị giá 100k
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-3.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Kem Ủ Tóc TRESemmé Vào Nếp Mượt Mà Keratin Smooth Salon-Quality Treatment Mask 180ml</h3>
+                        <div class="deal-price">
+                            <span class="old-price">450,000₫</span>
+                            <span class="new-price">299,000₫</span>
+                        </div>
+                        <div class="deal-gift">
+                            <i class="fas fa-gift"></i> Tặng lược massage trị giá 100k
+                        </div>
                     </div>
                     <button class="btn-grab-deal">Mua ngay</button>
                 </div>
 
                 <div class="super-deal-item" data-category="clearance">
-                    <div class="deal-badge">-70%</div>
-                    <div class="deal-image">
-                        <img alt="Product" src="images/">
-                    </div>
-                    <h3>Dầu gội Clear Men Cool Sport</h3>
-                    <div class="deal-price">
-                        <span class="old-price">180,000₫</span>
-                        <span class="new-price">54,000₫</span>
-                    </div>
-                    <div class="deal-quantity">
-                        <i class="fas fa-box"></i> Chỉ còn 15 sản phẩm
+                    <div class="deal-badge clearance-badge">-70%</div>
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-4.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Dầu Gội Clear Men Cool Sport Bạc Hà Sạch Gàu 630g</h3>
+                        <div class="deal-price">
+                            <span class="old-price">180,000₫</span>
+                            <span class="new-price">54,000₫</span>
+                        </div>
+                        <div class="deal-quantity">
+                            <i class="fas fa-box"></i> Chỉ còn 15 sản phẩm
+                        </div>
                     </div>
                     <button class="btn-grab-deal">Mua ngay</button>
                 </div>
