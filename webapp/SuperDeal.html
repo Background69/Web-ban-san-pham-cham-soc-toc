@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+    <title>HairGlow | Siêu khuyến mãi</title>
+    <link href="css/style_for_super-deal.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
+
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="MainPage.html">
+                        <img alt="logo" class="logo-image" height="150" src="assets/LOGO.PNG" width="150">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account and cart and... -->
+            <div class="right-header">
+
+                <div class="account">
+                    <a href="Login.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
+                </div>
+
+                <div class="cart">
+                    <a href="Signup.html">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="MainPage.html">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link active" href="store.html">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<main>
+
+    <!-- Flash Sale Banner -->
+    <div class="flash-sale-banner">
+        <div class="flash-content">
+            <h1>⚡ FLASH SALE SIÊU ƯU ĐÃI ⚡</h1>
+            <p>Giảm đến 70% - Số lượng có hạn</p>
+            <div class="countdown" id="countdown">
+                <div class="time-box">
+                    <span id="hours">02</span>
+                    <small>Giờ</small>
+                </div>
+                <div class="time-box">
+                    <span id="minutes">15</span>
+                    <small>Phút</small>
+                </div>
+                <div class="time-box">
+                    <span id="seconds">30</span>
+                    <small>Giây</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="super-deal-container">
+        <!-- Super Deal Categories -->
+        <div class="super-deal-categories">
+            <button class="super-deal-btn active" data-filter="all">
+                <i class="fas fa-fire"></i> Tất cả
+            </button>
+            <button class="super-deal-btn" data-filter="flash-sale">
+                <i class="fas fa-bolt"></i> Flash Sale
+            </button>
+            <button class="super-deal-btn" data-filter="combo">
+                <i class="fas fa-gift"></i> Combo siêu hời
+            </button>
+            <button class="super-deal-btn" data-filter="new">
+                <i class="fas fa-sparkles"></i> Deal mới
+            </button>
+            <button class="super-deal-btn" data-filter="clearance">
+                <i class="fas fa-percentage"></i> Xả kho
+            </button>
+        </div>
+
+        <!-- Super Deals Section -->
+        <div class="super-deal-section">
+            <h2><i class="fas fa-fire"></i> DEALS ĐANG HOT</h2>
+            <div class="deals-grid">
+
+                <div class="super-deal-item" data-category="flash">
+                    <div class="deal-badge">-50%</div>
+                    <div class="deal-timer">
+                        <i class="fas fa-clock"></i> Còn 2:15:30
+                    </div>
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-1.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Dầu Gội Phục Hồi Hư Tổn Loreal Absolut Repair 300ml – 500ml – 1500ml</h3>
+                        <div class="deal-price">
+                            <span class="old-price">1,200,000₫</span>
+                            <span class="new-price">600,000₫</span>
+                        </div>
+                        <div class="deal-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <span>Đã bán 75/100</span>
+                        </div>
+                    </div>
+                    <button class="btn-grab-deal">Mua ngay</button>
+                </div>
+
+                <div class="super-deal-item" data-category="combo">
+                    <div class="deal-badge combo-badge">Mua 2 Tặng 1</div>
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-2.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Combo Tinh dầu Moroccanoil dưỡng phục hồi tóc 100ml và gội xả Moroccanoil dưỡng ẩm (phục hồi) 70mlx2</h3>
+                        <div class="deal-price">
+                            <span class="old-price">2,400,000₫</span>
+                            <span class="new-price">1,600,000₫</span>
+                        </div>
+                        <div class="deal-savings">
+                            <i class="fas fa-piggy-bank"></i> Tiết kiệm 800,000₫
+                        </div>
+                    </div>
+                    <button class="btn-grab-deal">Mua ngay</button>
+                </div>
+
+                <div class="super-deal-item" data-category="new">
+                    <div class="deal-badge new-badge">MỚI</div>
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-3.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Kem Ủ Tóc TRESemmé Vào Nếp Mượt Mà Keratin Smooth Salon-Quality Treatment Mask 180ml</h3>
+                        <div class="deal-price">
+                            <span class="old-price">450,000₫</span>
+                            <span class="new-price">299,000₫</span>
+                        </div>
+                        <div class="deal-gift">
+                            <i class="fas fa-gift"></i> Tặng lược massage trị giá 100k
+                        </div>
+                    </div>
+                    <button class="btn-grab-deal">Mua ngay</button>
+                </div>
+
+                <div class="super-deal-item" data-category="clearance">
+                    <div class="deal-badge clearance-badge">-70%</div>
+                    <a class="deal-image">
+                        <img alt="Product" src="images/super-deal-product-4.jpg">
+                    </a>
+                    <div class="deal-content">
+                        <h3>Dầu Gội Clear Men Cool Sport Bạc Hà Sạch Gàu 630g</h3>
+                        <div class="deal-price">
+                            <span class="old-price">180,000₫</span>
+                            <span class="new-price">54,000₫</span>
+                        </div>
+                        <div class="deal-quantity">
+                            <i class="fas fa-box"></i> Chỉ còn 15 sản phẩm
+                        </div>
+                    </div>
+                    <button class="btn-grab-deal">Mua ngay</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Voucher Section -->
+        <div class="voucher-section">
+            <h2><i class="fas fa-ticket-alt"></i> MÃ GIẢM GIÁ</h2>
+            <div class="voucher-grid">
+
+                <div class="voucher-item">
+                    <div class="voucher-left">
+                        <div class="voucher-value">50K</div>
+                        <div class="voucher-condition">Đơn từ 300K</div>
+                    </div>
+                    <div class="voucher-right">
+                        <div class="voucher-code">HAIR50K</div>
+                        <div class="voucher-desc">Giảm 50K cho đơn từ 300K</div>
+                        <div class="voucher-expire">HSD: 31/12/2025</div>
+                        <button class="btn-copy" onclick="copyCode('HAIR50K')">Sao chép</button>
+                    </div>
+                </div>
+
+                <div class="voucher-item">
+                    <div class="voucher-left">
+                        <div class="voucher-value">100K</div>
+                        <div class="voucher-condition">Đơn từ 500K</div>
+                    </div>
+                    <div class="voucher-right">
+                        <div class="voucher-code">MEGA100</div>
+                        <div class="voucher-desc">Giảm 100K cho đơn từ 500K</div>
+                        <div class="voucher-expire">HSD: 31/12/2025</div>
+                        <button class="btn-copy" onclick="copyCode('MEGA100')">Sao chép</button>
+                    </div>
+                </div>
+
+                <div class="voucher-item">
+                    <div class="voucher-left">
+                        <div class="voucher-value">15%</div>
+                        <div class="voucher-condition">Tối đa 200K</div>
+                    </div>
+                    <div class="voucher-right">
+                        <div class="voucher-code">SAVE15</div>
+                        <div class="voucher-desc">Giảm 15% tối đa 200K</div>
+                        <div class="voucher-expire">HSD: 31/12/2025</div>
+                        <button class="btn-copy" onclick="copyCode('SAVE15')">Sao chép</button>
+                    </div>
+                </div>
+
+                <div class="voucher-item special">
+                    <div class="voucher-left">
+                        <div class="voucher-value">FREE</div>
+                        <div class="voucher-condition">SHIP</div>
+                    </div>
+                    <div class="voucher-right">
+                        <div class="voucher-code">FREESHIP</div>
+                        <div class="voucher-desc">Miễn phí vận chuyển toàn quốc</div>
+                        <div class="voucher-expire">HSD: 31/12/2025</div>
+                        <button class="btn-copy" onclick="copyCode('FREESHIP')">Sao chép</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Weekly Deals -->
+        <div class="weekly-deals">
+            <h2><i class="fas fa-calendar-week"></i> DEAL TUẦN NÀY</h2>
+            <div class="week-schedule">
+                <div class="day-deal active">
+                    <div class="day-name">Thứ 2</div>
+                    <div class="day-promo">Giảm 20% Dầu gội</div>
+                </div>
+                <div class="day-deal">
+                    <div class="day-name">Thứ 3</div>
+                    <div class="day-promo">Mua 1 tặng 1 Serum</div>
+                </div>
+                <div class="day-deal">
+                    <div class="day-name">Thứ 4</div>
+                    <div class="day-promo">Flash Sale 50%</div>
+                </div>
+                <div class="day-deal">
+                    <div class="day-name">Thứ 5</div>
+                    <div class="day-promo">Combo giá sốc</div>
+                </div>
+                <div class="day-deal">
+                    <div class="day-name">Thứ 6</div>
+                    <div class="day-promo">Freeship toàn đơn</div>
+                </div>
+                <div class="day-deal">
+                    <div class="day-name">Thứ 7</div>
+                    <div class="day-promo">Weekend Sale 30%</div>
+                </div>
+                <div class="day-deal">
+                    <div class="day-name">CN</div>
+                    <div class="day-promo">Deal độc quyền</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Member Benefits -->
+        <div class="member-benefits">
+            <h2><i class="fas fa-crown"></i> ƯU ĐÃI THÀNH VIÊN</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card bronze">
+                    <div class="benefit-icon">🥉</div>
+                    <h3>Thành viên Đồng</h3>
+                    <ul>
+                        <li>Giảm 5% toàn bộ sản phẩm</li>
+                        <li>Tích điểm 1%</li>
+                        <li>Sinh nhật giảm 10%</li>
+                    </ul>
+                </div>
+                <div class="benefit-card silver">
+                    <div class="benefit-icon">🥈</div>
+                    <h3>Thành viên Bạc</h3>
+                    <ul>
+                        <li>Giảm 10% toàn bộ sản phẩm</li>
+                        <li>Tích điểm 2%</li>
+                        <li>Sinh nhật giảm 15%</li>
+                        <li>Freeship 3 lần/tháng</li>
+                    </ul>
+                </div>
+                <div class="benefit-card gold">
+                    <div class="benefit-icon">🥇</div>
+                    <h3>Thành viên Vàng</h3>
+                    <ul>
+                        <li>Giảm 15% toàn bộ sản phẩm</li>
+                        <li>Tích điểm 3%</li>
+                        <li>Sinh nhật giảm 20%</li>
+                        <li>Freeship không giới hạn</li>
+                        <li>Quà tặng độc quyền</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<footer>
+    <!--Footer Top-->
+    <div class="main-footer footer-top">
+        <div class="footer-container">
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Liên hệ với chúng tôi</h4>
+                <div class="contact-info">
+                    <div>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Trụ sở: Khu Phố 6, P. Linh Trung, Q. Thủ Đức, TP.HCM</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline tư vấn: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline bán hàng: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: support@hairglow.vn</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 21:00<br>Chủ nhật: 9:00 - 18:00</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt"></i>
+                        <p>GPKD: 123456789, cấp ngày 20/02/2020, TP. HCM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#">Dầu gội</a></li>
+                    <li><a href="#">Dầu xả</a></li>
+                    <li><a href="#">Kem ủ tóc</a></li>
+                    <li><a href="#">Serum dưỡng tóc</a></li>
+                    <li><a href="#">Sáp vuốt tóc</a></li>
+                    <li><a href="#">Khuyến mãi</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Phương thức thanh toán</a></li>
+                    <li><a href="#">Vận chuyển & Giao hàng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <!--About Us-->
+                <div class="about-us">
+                    <h4>Về chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!--Payment methods-->
+                <div class="payment">
+                    <h4>Thanh toán</h4>
+                    <div class="payment-methods">
+                        <a class="logo-tile"><img alt="Visa" src="assets/VisaIcon.svg"></a>
+                        <a class="logo-tile"><img alt="MasterCard" src="assets/MasterCardIcon.svg"></a>
+                        <a class="logo-tile"><img alt="Napas" src="assets/NapasIcon.svg"></a>
+                        <a class="logo-tile"><img alt="VNPay" src="assets/VNPayIcon.png"></a>
+                        <a class="logo-tile"><img alt="MoMo" src="assets/MoMoIcon.svg"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Điều khoản sử dụng</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Search Result Script -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+<!-- Main Script -->
+<script>
+    // Countdown FLASH SALE
+    (function () {
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        if (!hoursEl || !minutesEl || !secondsEl) return;
+
+        // Set 2 hours when opening the page
+        const endTime = new Date();
+        endTime.setHours(endTime.getHours() + 2);
+
+        function updateCountdown() {
+            const now = new Date();
+            let diff = Math.floor((endTime - now) / 1000);
+
+            if (diff <= 0) {
+                hoursEl.textContent = '00';
+                minutesEl.textContent = '00';
+                secondsEl.textContent = '00';
+                clearInterval(timer);
+                return;
+            }
+
+            const h = Math.floor(diff / 3600);
+            diff %= 3600;
+            const m = Math.floor(diff / 60);
+            const s = diff % 60;
+
+            hoursEl.textContent = String(h).padStart(2, '0');
+            minutesEl.textContent = String(m).padStart(2, '0');
+            secondsEl.textContent = String(s).padStart(2, '0');
+        }
+
+        updateCountdown();
+        const timer = setInterval(updateCountdown, 1000);
+    })();
+
+
+    // Filter DEAL by Categories
+    (function () {
+        const tabs = document.querySelectorAll('.super-deal-btn');
+        const cards = document.querySelectorAll('.super-deal-item');
+        if (!tabs.length || !cards.length) return;
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                cards.forEach(function (card) {
+                    const cat = card.dataset.category;
+
+                    if (filter === 'all') {
+                        card.style.display = '';
+                        return;
+                    }
+
+                    const normalizedFilter = (filter === 'flash-sale') ? 'flash' : filter;
+
+                    if (normalizedFilter === cat) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    })();
+
+    //  Copy voucher code
+    function copyCode(code) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(code).then(
+                function () {
+                    alert('Đã sao chép mã: ' + code);
+                },
+                function () {
+                    alert('Không sao chép được, vui lòng copy thủ công.');
+                }
+            );
+        }
+    }
+
+    // Highlight DEAL weekly
+    (function () {
+        const dayDeals = document.querySelectorAll('.day-deal');
+        if (!dayDeals.length) return;
+
+        // 0: CN, 1: Thứ 2, ... 6: Thứ 7
+        const today = new Date().getDay();
+        let index;
+
+        if (today === 0) {
+            index = 6; // Chủ nhật -> index cuối cùng
+        } else {
+            index = today - 1; // Thứ 2 -> index 0
+        }
+
+        dayDeals.forEach(d => d.classList.remove('active'));
+        if (dayDeals[index]) {
+            dayDeals[index].classList.add('active');
+        }
+
+        // Manually toggle DEAL weekly
+        dayDeals.forEach(function (deal) {
+            deal.addEventListener('click', function () {
+                dayDeals.forEach(d => d.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    })();
+</script>
+</body>
+</html>
