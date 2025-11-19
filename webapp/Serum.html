@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <title>HairGlow | Sản phẩm chăm sóc tóc</title>
+    <link href="css/style_for_store.css" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
+
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="store.html">
+                        <img alt="logo" class="logo-image" src="images/logo.PNG">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account and cart and... -->
+            <div class="right-header">
+
+                <div class="account">
+                    <a href="Login.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
+                </div>
+
+                <div class="cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="cart-text">Giỏ hàng</span>
+                    <span class="cart-count">0</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<section class="banner-section">
+    <div class="banner-container">
+        <!-- Banner / Slider -->
+        <div class="slider" id="banner-slider">
+
+            <div class="banner-slides">
+                <!-- Slide 1 -->
+                <div class="item" id="slide-1">
+                    <img alt="banner 1" class="banner-image" src="images/banner1.png">
+                </div>
+                <!-- Slide 2 -->
+                <div class="item" id="slide-2">
+                    <img alt="banner 2" class="banner-image" src="images/banner2.png">
+                </div>
+                <!-- Slide 3 -->
+                <div class="item" id="slide-3">
+                    <img alt="banner 3" class="banner-image" src="images/banner3.png">
+                </div>
+            </div>
+
+            <button aria-label="Trước" class="nav prev">&lsaquo;</button>
+            <button aria-label="Sau" class="nav next">&rsaquo;</button>
+            <div aria-label="Chuyển slide" class="slider-dots" role="tablist"></div>
+        </div>
+        <!-- News -->
+        <aside aria-label="Tin tức" class="news">
+            <h3>Tin tức mới</h3>
+            <a class="news-item" href="#">
+                <div class="news-thumb"></div>
+                <div class="news-title">Khám phá dầu gội CHI – tinh hoa chăm sóc tóc từ Mỹ</div>
+            </a>
+            <a class="news-item" href="#">
+                <div class="news-thumb"></div>
+                <div class="news-title">Ra mắt dòng thuốc uốn duỗi thuần chay mới</div>
+            </a>
+            <div class="news-banner">
+                <div class="ad">Giảm thêm <b>5%</b> cho tất cả đơn hàng – Mã <b>PHUNU</b></div>
+            </div>
+        </aside>
+    </div>
+</section>
+<main>
+    <div class="main-container">
+        <!-- Filter -->
+        <div class="left-col filter">
+            <aside class="filter-sidebar">
+                <div class="filter-title">
+                    <h3>Bộ lọc tìm kiếm</h3>
+                </div>
+
+                <form action="/search" class="filter-form" method="get">
+
+                    <div class="filter-block">
+                        <!-- Filter price -->
+                        <h4 class="filter-title" id="filter-price-title">Khoảng giá</h4>
+                        <div class="price-inputs" id="filter-price" role="group">
+                            <label class="checkbox" for="price-1">
+                                <input id="price-1" name="price" type="checkbox" value="1"><span>0 -
+                                        100.000₫</span></label>
+                            <label class="checkbox" for="price-2">
+                                <input id="price-2" name="price" type="checkbox" value="2"><span>100.000₫ -
+                                        200.000₫</span></label>
+                            <label class="checkbox" for="price-3">
+                                <input id="price-3" name="price" type="checkbox" value="3"><span>200.000₫ -
+                                        300.000₫</span></label>
+                            <label class="checkbox" for="price-4">
+                                <input id="price-4" name="price" type="checkbox" value="4"><span>300.000₫ -
+                                        400.000₫</span></label>
+                            <label class="checkbox" for="price-5">
+                                <input id="price-5" name="price" type="checkbox" value="5"><span>400.000₫ -
+                                        500.000₫</span></label>
+                            <label class="checkbox" for="price-6">
+                                <input id="price-6" name="price" type="checkbox" value="6"><span>Trên
+                                        500.000₫</span></label>
+                        </div>
+                    </div>
+
+                    <div class="filter-block">
+                        <!-- Filter category -->
+                        <h4 class="filter-title" id="filter-category-title">Danh mục</h4>
+                        <div class="filter-list" id="filter-category" role="group">
+                            <label class="checkbox" for="cat-1">
+                                <input id="cat-1" name="category" type="checkbox" value="Dầu gội"><span>Dầu
+                                        gội</span></label>
+                            <label class="checkbox" for="cat-2">
+                                <input id="cat-2" name="category" type="checkbox" value="Dầu xả"><span>Dầu
+                                        xả</span></label>
+                            <label class="checkbox" for="cat-3">
+                                <input id="cat-3" name="category" type="checkbox"
+                                       value="Kem ủ – Mặt nạ tóc"><span>Kem ủ – Mặt nạ tóc</span></label>
+                            <label class="checkbox" for="cat-4">
+                                <input id="cat-4" name="category" type="checkbox"
+                                       value="Serum – Dầu dưỡng tóc"><span>Serum – Dầu dưỡng tóc</span></label>
+                            <label class="checkbox" for="cat-5">
+                                <input id="cat-5" name="category" type="checkbox"
+                                       value="Xịt dưỡng – Tinh chất dưỡng"><span>Xịt dưỡng – Tinh chất
+                                        dưỡng</span></label>
+                            <label class="checkbox" for="cat-6">
+                                <input id="cat-6" name="category" type="checkbox"
+                                       value="Thuốc uốn – Duỗi – Nhuộm"><span>Thuốc uốn – Duỗi – Nhuộm</span></label>
+                            <label class="checkbox" for="cat-7">
+                                <input id="cat-7" name="category" type="checkbox"
+                                       value="Gôm – Sáp – Gel tạo kiểu"><span>Gôm – Sáp – Gel tạo kiểu</span></label>
+                            <label class="checkbox" for="cat-8">
+                                <input id="cat-8" name="category" type="checkbox" value="Dầu gội khô"><span>Dầu gội
+                                        khô</span></label>
+                            <label class="checkbox" for="cat-9">
+                                <input id="cat-9" name="category" type="checkbox"
+                                       value="Tinh chất mọc tóc – kích thích nang tóc"><span>Tinh chất mọc tóc – kích
+                                        thích nang tóc</span></label>
+                            <label class="checkbox" for="cat-10">
+                                <input id="cat-10" name="category" type="checkbox"
+                                       value="Sản phẩm trị gàu / nấm / rụng tóc"><span>Sản phẩm trị gàu / nấm / rụng
+                                        tóc</span></label>
+                            <label class="checkbox" for="cat-11">
+                                <input id="cat-11" name="category" type="checkbox" value="Dụng cụ tóc"><span>Dụng cụ
+                                        tóc</span></label>
+                        </div>
+                    </div>
+
+                    <div class="filter-block">
+                        <!-- Filter hair condition -->
+                        <h4 class="filter-title" id="filter-hair-condition-title">Tình trạng tóc</h4>
+                        <div class="filter-list" id="filter-hair-condition" role="group">
+                            <label class="checkbox" for="con-1">
+                                <input id="con-1" name="concern" type="checkbox" value="Dầu – Gàu"><span>Dầu –
+                                        Gàu</span></label>
+                            <label class="checkbox" for="con-2">
+                                <input id="con-2" name="concern" type="checkbox" value="Khô xơ"><span>Khô
+                                        xơ</span></label>
+                            <label class="checkbox" for="con-3">
+                                <input id="con-3" name="concern" type="checkbox" value="Hư tổn – Nhuộm"><span>Hư tổn
+                                        – Nhuộm</span></label>
+                            <label class="checkbox" for="con-4">
+                                <input id="con-4" name="concern" type="checkbox" value="Mỏng – Rụng tóc"><span>Mỏng
+                                        – Rụng tóc</span></label>
+                            <label class="checkbox" for="con-5">
+                                <input id="con-5" name="concern" type="checkbox" value="Da đầu nhạy cảm"><span>Da
+                                        đầu nhạy cảm</span></label>
+                            <label class="checkbox" for="con-6">
+                                <input id="con-6" name="concern" type="checkbox" value="Tóc xoăn / uốn"><span>Tóc
+                                        xoăn / uốn</span></label>
+                            <label class="checkbox" for="con-7">
+                                <input id="con-7" name="concern" type="checkbox" value="Xoăn / xù"><span>Xoăn /
+                                        xù</span></label>
+                        </div>
+                    </div>
+
+                    <div class="filter-block">
+                        <!-- Filter brand -->
+                        <h4 class="filter-title" id="filter-brand-title">Thương hiệu</h4>
+                        <div class="filter-list" id="filter-brand" role="group">
+                            <label class="checkbox" for="brand-1">
+                                <input id="brand-1" name="brand" type="checkbox"
+                                       value="Head and Shoulders"><span>Head &amp; Shoulders</span></label>
+                            <label class="checkbox" for="brand-2">
+                                <input id="brand-2" name="brand" type="checkbox"
+                                       value="Sunsilk"><span>Sunsilk</span></label>
+                            <label class="checkbox" for="brand-3">
+                                <input id="brand-3" name="brand" type="checkbox"
+                                       value="Moroccanoil"><span>Moroccanoil</span></label>
+                            <label class="checkbox" for="brand-4">
+                                <input id="brand-4" name="brand" type="checkbox"
+                                       value="Kérastase"><span>Kérastase</span></label>
+                            <label class="checkbox" for="brand-5">
+                                <input id="brand-5" name="brand" type="checkbox"
+                                       value="TRESemmé"><span>TRESemmé</span></label>
+                            <label class="checkbox" for="brand-6">
+                                <input id="brand-6" name="brand" type="checkbox"
+                                       value="L’Oréal Professionnel"><span>L’Oréal Professionnel</span></label>
+                            <label class="checkbox" for="brand-7">
+                                <input id="brand-7" name="brand" type="checkbox"
+                                       value="Davines"><span>Davines</span></label>
+                            <label class="checkbox" for="brand-8">
+                                <input id="brand-8" name="brand" type="checkbox"
+                                       value="OGX"><span>OGX</span></label>
+                            <label class="checkbox" for="brand-9">
+                                <input id="brand-9" name="brand" type="checkbox"
+                                       value="Kaminomoto"><span>Kaminomoto</span></label>
+                            <label class="checkbox" for="brand-10">
+                                <input id="brand-10" name="brand" type="checkbox"
+                                       value="Nizoral"><span>Nizoral</span></label>
+                            <label class="checkbox" for="brand-11">
+                                <input id="brand-11" name="brand" type="checkbox"
+                                       value="Innisfree"><span>Innisfree</span></label>
+                            <label class="checkbox" for="brand-12">
+                                <input id="brand-12" name="brand" type="checkbox" value="Mise En Scène"><span>Mise
+                                        En Scène</span></label>
+                            <label class="checkbox" for="brand-13">
+                                <input id="brand-13" name="brand" type="checkbox"
+                                       value="L’Oréal Paris"><span>L’Oréal Paris</span></label>
+                        </div>
+                    </div>
+
+                    <div class="filter-block">
+                        <!-- Filter origin -->
+                        <h4 class="filter-title" id="filter-origin-title">Xuất xứ</h4>
+                        <div class="filter-list" id="filter-origin" role="group">
+                            <label class="checkbox" for="origin-1">
+                                <input id="origin-1" name="origin" type="checkbox"
+                                       value="Mỹ"><span>Mỹ</span></label>
+                            <label class="checkbox" for="origin-2">
+                                <input id="origin-2" name="origin" type="checkbox" value="Việt Nam"><span>Việt
+                                        Nam</span></label>
+                            <label class="checkbox" for="origin-3">
+                                <input id="origin-3" name="origin" type="checkbox"
+                                       value="Pháp"><span>Pháp</span></label>
+                            <label class="checkbox" for="origin-4">
+                                <input id="origin-4" name="origin" type="checkbox" value="Ý"><span>Ý</span></label>
+                            <label class="checkbox" for="origin-5">
+                                <input id="origin-5" name="origin" type="checkbox"
+                                       value="Nhật"><span>Nhật</span></label>
+                            <label class="checkbox" for="origin-6">
+                                <input id="origin-6" name="origin" type="checkbox" value="Hàn Quốc"><span>Hàn
+                                        Quốc</span></label>
+                        </div>
+                    </div>
+
+                    <div class="filter-block">
+                        <!-- Filter rating -->
+                        <h4 class="filter-title" id="filter-rating-title">Đánh giá</h4>
+                        <div class="filter-list" id="filter-rating" role="group">
+                            <label class="radio" for="rating-1">
+                                <input checked id="rating-1" name="rating" type="radio" value="all"><span>Tất
+                                        cả</span></label>
+                            <label class="radio" for="rating-2">
+                                <input id="rating-2" name="rating" type="radio" value="4"><span>Từ 4★</span></label>
+                            <label class="radio" for="rating-3">
+                                <input id="rating-3" name="rating" type="radio" value="4.5"><span>Từ
+                                        4.5★</span></label>
+                            <label class="radio" for="rating-4">
+                                <input id="rating-4" name="rating" type="radio" value="5"><span>5★</span></label>
+
+                        </div>
+                    </div>
+                </form>
+            </aside>
+        </div>
+
+        <!-- Product place-->
+        <div class="right-col main-content">
+            <!-- Product toolbar -->
+            <div class="product-toolbar">
+                <div class="toolbar-left">
+                    <label class="sort-dropdown" for="sort-by">
+                        <select aria-label="Sắp xếp" id="sort-by">
+                            <option value="popular">Thứ tự mặc định</option>
+                            <option value="price-asc">Giá Thấp đến Cao</option>
+                            <option value="price-desc">Giá Cao đến Thấp</option>
+                            <option value="new-products">Mới nhất</option>
+                            <option value="best-selling">Bán chạy</option>
+                            <option value="price-discount">Ưu đãi sâu</option>
+                            <option value="rating-desc">Đánh giá cao nhất</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="toolbar-right">
+                    <span class="results-summary" id="results">Hiển thị kết quả 0–0 trong số 0</span>
+                </div>
+            </div>
+
+            <!-- Product list -->
+            <div class="product-list">
+                <div class="product-grid" id="grid-products">
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng tóc L'Oréal Elseve Extraordinary Oil" class="product-image"
+                                     src="images/product-1.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng tóc L'Oréal Elseve Extraordinary Oil</h3>
+                            <div class="product-small-details">
+                                <p><span>L'Oréal</span> • <span>Serum tóc – suôn mượt – óng ả – giảm xơ rối</span> •
+                                    Pháp</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(345)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">210.000₫</p>
+                                <p class="price-old">265.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Serum Mise En Scène Perfect (Original)" class="product-image"
+                                     src="images/product-2.2.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum Mise En Scène Perfect (Original)</h3>
+                            <div class="product-small-details">
+                                <p><span>Mise En Scène</span> • <span>Serum tóc – phục hồi hư tổn – tạo độ
+                                            bóng</span> • Hàn Quốc</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(512)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">180.000₫</p>
+                                <p class="price-old">220.000₫</p>
+                                <p class="badge-discount">-18%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng tóc Moroccanoil Treatment" class="product-image"
+                                     src="images/product-3.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng tóc Moroccanoil Treatment</h3>
+                            <div class="product-small-details">
+                                <p><span>Moroccanoil</span> • <span>Serum tóc – dưỡng ẩm sâu – gỡ rối – tăng độ
+                                            bóng</span> • Israel / Canada</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(480)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">850.000₫</p>
+                                <p class="price-old">1.070.000₫</p>
+                                <p class="badge-discount">-21%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng tóc Kérastase Elixir Ultime" class="product-image"
+                                     src="images/product-4.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng tóc Kérastase Elixir Ultime</h3>
+                            <div class="product-small-details">
+                                <p><span>Kérastase</span> • <span>Serum tóc – dưỡng cao cấp – chống nhiệt – bóng
+                                            mượt</span> • Pháp</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(550)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">1.100.000₫</p>
+                                <p class="price-old">1.350.000₫</p>
+                                <p class="badge-discount">-19%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng tóc OGX Argan Oil of Morocco" class="product-image"
+                                     src="images/product-5.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng tóc OGX Argan Oil of Morocco</h3>
+                            <div class="product-small-details">
+                                <p><span>OGX</span> • <span>Serum tóc – thấm nhanh – phục hồi tóc – chắc khỏe</span>
+                                    • Mỹ</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(421)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">250.000₫</p>
+                                <p class="price-old">300.000₫</p>
+                                <p class="badge-discount">-17%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng tóc Tsubaki Premium Repair" class="product-image"
+                                     src="images/product-6.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng tóc Tsubaki Premium Repair</h3>
+                            <div class="product-small-details">
+                                <p><span>Tsubaki</span> • <span>Serum tóc – phục hồi hư tổn – giữ ẩm – chống
+                                            nhiệt/UV</span> • Nhật Bản</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(315)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">230.000₫</p>
+                                <p class="price-old">295.000₫</p>
+                                <p class="badge-discount">-22%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng Davines OI Oil" class="product-image"
+                                     src="images/product-7.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng Davines OI Oil</h3>
+                            <div class="product-small-details">
+                                <p><span>Davines</span> • <span>Serum tóc – đa năng – gỡ rối – chống xơ rối</span> •
+                                    Ý</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(490)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">650.000₫</p>
+                                <p class="price-old">815.000₫</p>
+                                <p class="badge-discount">-20%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng Olaplex No. 7 Bonding Oil" class="product-image"
+                                     src="images/product-8.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng Olaplex No. 7 Bonding Oil</h3>
+                            <div class="product-small-details">
+                                <p><span>Olaplex</span> • <span>Serum tóc – hàn gắn liên kết – bảo vệ nhiệt – tăng
+                                            độ bóng</span> • Mỹ</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(600)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">800.000₫</p>
+                                <p class="price-old">950.000₫</p>
+                                <p class="badge-discount">-16%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Dầu dưỡng tóc Nashi Argan Oil" class="product-image"
+                                     src="images/product-9.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Dầu dưỡng tóc Nashi Argan Oil</h3>
+                            <div class="product-small-details">
+                                <p><span>Nashi</span> • <span>Serum tóc – phục hồi hư tổn – dưỡng ẩm – gỡ rối</span>
+                                    • Ý</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(288)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">350.000₫</p>
+                                <p class="price-old">440.000₫</p>
+                                <p class="badge-discount">-20%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Vitamin dưỡng tóc Ellips (Hũ Vàng)" class="product-image"
+                                     src="images/product-10.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Vitamin dưỡng tóc Ellips (Hũ Vàng)</h3>
+                            <div class="product-small-details">
+                                <p><span>Ellips</span> • <span>Vitamin viên – mềm mượt – óng ả</span> • Indonesia
+                                </p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(453)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">180.000₫</p>
+                                <p class="price-old">225.000₫</p>
+                                <p class="badge-discount">-20%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Serum Innisfree Camellia Essential Hair Oil" class="product-image"
+                                     src="images/product-11.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum Innisfree Camellia Essential Hair Oil</h3>
+                            <div class="product-small-details">
+                                <p><span>Innisfree</span> • <span>Serum tóc – dưỡng ẩm tóc khô – tạo độ bóng</span>
+                                    • Hàn Quốc</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(377)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">220.000₫</p>
+                                <p class="price-old">275.000₫</p>
+                                <p class="badge-discount">-20%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="#">
+                                <img alt="Serum Tresemmé Keratin Smooth Shine" class="product-image"
+                                     src="images/product-12.jpg">
+                            </a>
+                        </div>
+                        <div class="product-body">
+                            <h3 class="product-title">Serum Tresemmé Keratin Smooth Shine</h3>
+                            <div class="product-small-details">
+                                <p><span>Tresemmé</span> • <span>Serum tóc – vào nếp – suôn mượt – giảm xơ
+                                            rối</span> • Mỹ</p>
+                            </div>
+                            <div class="product-rating">
+                                <div class="rating-stars">
+                                    <a class="background-stars" href="#">★★★★★</a>
+                                    <a class="foreground-stars" href="#">★★★★★</a>
+                                </div>
+                                <p class="review-count">(410)</p>
+                            </div>
+                            <div class="product-price">
+                                <p class="price-current">160.000₫</p>
+                                <p class="price-old">210.000₫</p>
+                                <p class="badge-discount">-24%</p>
+                            </div>
+                            <div class="product">
+                                <a class="btn" href="#">Xem thêm</a>
+                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <nav class="pagination">
+                    <a class="prev disabled" href="#">
+                        <i class="fas fa-chevron-left"></i> Trước
+                    </a>
+                    <span class="active">1</span>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <span class="ellipsis">...</span>
+                    <a href="#">13</a>
+                    <a class="next" href="#">
+                        Sau <i class="fas fa-chevron-right"></i>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+</main>
+<footer>
+    <!--Footer Top-->
+    <div class="main-footer footer-top">
+        <div class="footer-container">
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Liên hệ với chúng tôi</h4>
+                <div class="contact-info">
+                    <div>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Trụ sở: Khu Phố 6, P. Linh Trung, Q. Thủ Đức, TP.HCM</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline tư vấn: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline bán hàng: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: support@hairglow.vn</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 21:00<br>Chủ nhật: 9:00 - 18:00</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt"></i>
+                        <p>GPKD: 123456789, cấp ngày 20/02/2020, TP. HCM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#">Dầu gội</a></li>
+                    <li><a href="#">Dầu xả</a></li>
+                    <li><a href="#">Kem ủ tóc</a></li>
+                    <li><a href="#">Serum dưỡng tóc</a></li>
+                    <li><a href="#">Sáp vuốt tóc</a></li>
+                    <li><a href="#">Khuyến mãi</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Phương thức thanh toán</a></li>
+                    <li><a href="#">Vận chuyển & Giao hàng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <!--About Us-->
+                <div class="about-us">
+                    <h4>Về chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!--Payment methods-->
+                <div class="payment">
+                    <h4>Thanh toán</h4>
+                    <div class="payment-methods">
+                        <a class="logo-tile"><img alt="Visa" src="assets/VisaIcon.svg"></a>
+                        <a class="logo-tile"><img alt="MasterCard" src="assets/MasterCardIcon.svg"></a>
+                        <a class="logo-tile"><img alt="Napas" src="assets/NapasIcon.svg"></a>
+                        <a class="logo-tile"><img alt="VNPay" src="assets/VNPayIcon.png"></a>
+                        <a class="logo-tile"><img alt="MoMo" src="assets/MoMoIcon.svg"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Điều khoản sử dụng</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Search Result -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+
+<!-- Banner Slider Script -->
+<script>
+    const slides = document.querySelectorAll('.banner-slides .item');
+    const slideContainer = document.querySelector('.banner-slides');
+    const prevButton = document.querySelector('.nav.prev');
+    const nextButton = document.querySelector('.nav.next');
+    const dotsContainer = document.querySelector('.slider-dots');
+
+    let currentSlide = 0;
+    let autoSlide;
+
+    // 👉 Tạo dots theo số slide
+    slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+    const dots = dotsContainer.querySelectorAll('button');
+
+    function updateSlide() {
+        const offset = -currentSlide * 100;
+        slideContainer.style.transform = `translateX(${offset}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[currentSlide].classList.add('active');
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateSlide();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlide();
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSlide();
+    }
+
+    function startAutoSlide() {
+        autoSlide = setInterval(nextSlide, 4000);
+    }
+
+    function stopAutoSlide() {
+        clearInterval(autoSlide);
+    }
+
+    // 👉 Event listeners
+    prevButton.addEventListener('click', () => {
+        prevSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    nextButton.addEventListener('click', () => {
+        nextSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    slideContainer.addEventListener('mouseenter', stopAutoSlide);
+    slideContainer.addEventListener('mouseleave', startAutoSlide);
+
+    // 👉 Khởi động
+    updateSlide();
+    startAutoSlide();
+
+
+    //tùy chỉnh đánh giá sao
+    const products = document.querySelectorAll('.product-item');
+
+    products.forEach(item => {
+        // Tìm phần tử .foreground-stars trong item
+        const stars = item.querySelector('.foreground-stars');
+        if (stars) {
+            const starCount = stars.textContent.trim().length; // số lượng "★"
+
+            // Xác định phần trăm chiều rộng dựa theo số sao
+            let widthPercent = (starCount / 5) * 100;
+
+            // Gán lại style width
+            stars.style.width = widthPercent + '%';
+        }
+    });
+</script>
+
+</body>
+
+</html>
