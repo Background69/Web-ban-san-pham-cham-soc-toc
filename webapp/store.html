@@ -16,7 +16,7 @@
             <div class="left-header">
                 <div class="header-logo">
                     <a class="logo" href="store.html">
-                        <img src="images/logo.PNG" alt="logo" class="logo-image">
+                        <img alt="logo" class="logo-image" src="images/logo.PNG">
                     </a>
                 </div>
             </div>
@@ -64,16 +64,6 @@
                             </a>
                         </div>
                     </div>
-                    <div class="search-suggestions" style="display: none">
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu gội sạch gàu từ Head & Shoulders</span>
-                        </div>
-                        <div class="suggestion-item">
-                            <i class="fas fa-clock-rotate-left"></i>
-                            <span>Dầu xả Sunsilk mềm mượt diệu kỳ</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -82,15 +72,17 @@
 
                 <div class="account">
                     <a href="Login.html">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="login-in-text">Đăng nhập</span>
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
                     </a>
                 </div>
 
                 <div class="cart">
+                    <a href="Signup.html">
                     <i class="fa fa-shopping-cart"></i>
                     <span class="cart-text">Giỏ hàng</span>
                     <span class="cart-count">0</span>
+                    </a>
                 </div>
 
             </div>
@@ -100,13 +92,13 @@
                 <div>
                     <ul class="side-bar-menu-list side-bar-items">
                         <li class="nav-item"><a class="nav-link home-page" href="#">Trang Chủ</a></li>
-                        <li class="nav-item has-dropdown"><a class="nav-link product" href="#">Sản Phẩm
+                        <li class="nav-item has-dropdown"><a class="nav-link active product" href="#">Sản Phẩm
                             <i class="fa fa-caret-down"></i>
                         </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
-                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
-                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Kem ủ – Mặt nạ tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
                                 <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
                                 <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
@@ -136,15 +128,15 @@
             <div class="banner-slides">
                 <!-- Slide 1 -->
                 <div class="item" id="slide-1">
-                    <img src="images/banner1.png" alt="banner 1" class="banner-image">
+                    <img alt="banner 1" class="banner-image" src="images/banner1.png">
                 </div>
                 <!-- Slide 2 -->
                 <div class="item" id="slide-2">
-                    <img src="images/banner2.png" alt="banner 2" class="banner-image">
+                    <img alt="banner 2" class="banner-image" src="images/banner2.png">
                 </div>
                 <!-- Slide 3 -->
                 <div class="item" id="slide-3">
-                    <img src="images/banner3.png" alt="banner 3" class="banner-image">
+                    <img alt="banner 3" class="banner-image" src="images/banner3.png">
                 </div>
             </div>
 
@@ -397,7 +389,7 @@
                     <div class="product-item">
                         <div class="product-img">
                             <a href="#">
-                                <img alt="Product 1" class="product-image" src="images/">
+                                <img alt="Product 1" class="product-image" src="images/daugoilaroche.jpg">
                             </a>
                         </div>
                         <div class="product-body">
@@ -427,7 +419,7 @@
                     <div class="product-item">
                         <div class="product-img">
                             <a href="#">
-                                <img alt="Product 1" class="product-image" src="images/">
+                                <img alt="Product 1" class="product-image" src="images/dauxatreseme.jpg">
                             </a>
                         </div>
                         <div class="product-body">
@@ -457,7 +449,7 @@
                     <div class="product-item">
                         <div class="product-img">
                             <a href="#">
-                                <img alt="Product 1" class="product-image" src="images/">
+                                <img alt="Product 1" class="product-image" src="images/pantenedaugoi.jpg">
                             </a>
                         </div>
                         <div class="product-body">
@@ -487,7 +479,7 @@
                     <div class="product-item">
                         <div class="product-img">
                             <a href="#">
-                                <img alt="Product 1" class="product-image" src="images/">
+                                <img alt="Product 1" class="product-image" src="images/dxclear.jpg">
                             </a>
                         </div>
                         <div class="product-body">
@@ -877,73 +869,100 @@
         </div>
     </div>
 </footer>
+<!-- Search Result -->
 <script>
-  const slides = document.querySelectorAll('.banner-slides .item');
-  const slideContainer = document.querySelector('.banner-slides');
-  const prevButton = document.querySelector('.nav.prev');
-  const nextButton = document.querySelector('.nav.next');
-  const dotsContainer = document.querySelector('.slider-dots');
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
 
-  let currentSlide = 0;
-  let autoSlide;
+<!-- Banner Slider Script -->
+<script>
+    const slides = document.querySelectorAll('.banner-slides .item');
+    const slideContainer = document.querySelector('.banner-slides');
+    const prevButton = document.querySelector('.nav.prev');
+    const nextButton = document.querySelector('.nav.next');
+    const dotsContainer = document.querySelector('.slider-dots');
 
-  // 👉 Tạo dots theo số slide
-  slides.forEach((_, index) => {
-    const dot = document.createElement('button');
-    dot.addEventListener('click', () => goToSlide(index));
-    dotsContainer.appendChild(dot);
-  });
-  const dots = dotsContainer.querySelectorAll('button');
+    let currentSlide = 0;
+    let autoSlide;
 
-  function updateSlide() {
-    const offset = -currentSlide * 100;
-    slideContainer.style.transform = `translateX(${offset}%)`;
-    dots.forEach(dot => dot.classList.remove('active'));
-    dots[currentSlide].classList.add('active');
-  }
+    // Tạo dots theo số slide
+    slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+    const dots = dotsContainer.querySelectorAll('button');
 
-  function prevSlide() {
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    function updateSlide() {
+        const offset = -currentSlide * 100;
+        slideContainer.style.transform = `translateX(${offset}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[currentSlide].classList.add('active');
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updateSlide();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlide();
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSlide();
+    }
+
+    function startAutoSlide() {
+        autoSlide = setInterval(nextSlide, 4000);
+    }
+
+    function stopAutoSlide() {
+        clearInterval(autoSlide);
+    }
+
+    // Event listeners
+    prevButton.addEventListener('click', () => {
+        prevSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    nextButton.addEventListener('click', () => {
+        nextSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    slideContainer.addEventListener('mouseenter', stopAutoSlide);
+    slideContainer.addEventListener('mouseleave', startAutoSlide);
+
+    // Khởi động
     updateSlide();
-  }
-
-  function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length;
-    updateSlide();
-  }
-
-  function goToSlide(index) {
-    currentSlide = index;
-    updateSlide();
-  }
-
-  function startAutoSlide() {
-    autoSlide = setInterval(nextSlide, 4000);
-  }
-
-  function stopAutoSlide() {
-    clearInterval(autoSlide);
-  }
-
-  // 👉 Event listeners
-  prevButton.addEventListener('click', () => {
-    prevSlide();
-    stopAutoSlide();
     startAutoSlide();
-  });
-
-  nextButton.addEventListener('click', () => {
-    nextSlide();
-    stopAutoSlide();
-    startAutoSlide();
-  });
-
-  slideContainer.addEventListener('mouseenter', stopAutoSlide);
-  slideContainer.addEventListener('mouseleave', startAutoSlide);
-
-  // 👉 Khởi động
-  updateSlide();
-  startAutoSlide();
 </script>
 
 </body>
