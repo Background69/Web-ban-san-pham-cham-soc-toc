@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <title>HairGlow | L'Oréal Professionnel</title>
+    <link href="css/style_for_brand-detail.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
+
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="index.html">
+                        <img alt="HairGlow Logo" class="logo-image" height="150" src="images/LOGO.PNG" width="150">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="search-result" id="search-result">
+                        <div class="ad-grid">
+                            <a class="ad-item ad-feature" href="#">
+                                <div class="ad-thumb">-40%</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Combo phục hồi tóc hư tổn</p>
+                                    <p class="ad-desc">Mua 2 tặng 1 • Số lượng có hạn</p>
+                                    <span class="ad-badge">Sốc</span>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb">K</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Kérastase Brand Week</p>
+                                    <p class="ad-desc">Giảm thêm với mã KERA5</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="store.html">
+                                <div class="ad-thumb">HG</div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Serum mọc tóc bán chạy</p>
+                                    <p class="ad-desc">Đánh giá 4.8★ | Từ 199.000₫</p>
+                                </div>
+                            </a>
+                            <a class="ad-item" href="#">
+                                <div class="ad-thumb"><i class="fa-solid fa-truck"></i></div>
+                                <div class="ad-body">
+                                    <p class="ad-title">Freeship đơn từ 300k</p>
+                                    <p class="ad-desc">Áp dụng toàn quốc</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account and cart -->
+            <div class="right-header">
+                <div class="account">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="login-in-text">Đăng nhập</span>
+                </div>
+
+                <div class="cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="cart-text">Giỏ hàng</span>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nav -->
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="index.html">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link" href="store.html">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="#">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Xịt dưỡng – Tinh chất dưỡng</a></li>
+                                <li><a class="dropdown-item" href="#">Thuốc uốn – Duỗi – Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="#">Gôm – Sáp – Gel tạo kiểu</a></li>
+                                <li><a class="dropdown-item" href="#">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="#">Tinh chất mọc tóc – kích thích nang tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Sản phẩm trị gàu / nấm / rụng tóc</a></li>
+                                <li><a class="dropdown-item" href="#">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link active" href="brands.html">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="#">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<section class="banner-brands-promotion-section">
+    <div class="banner-brands-promotion-container">
+        <p style="font-size: 14px; margin-bottom: 8px;">
+            <a href="MainPage.html">Trang chủ</a> ›
+            <a href="brands.html">Thương hiệu</a> ›
+            <span>L'Oréal Professionnel</span>
+        </p>
+        <h1>L'Oréal Professionnel – Chăm sóc tóc chuẩn salon</h1>
+        <p>BST sản phẩm chuyên nghiệp giúp phục hồi, bảo vệ và tạo kiểu tóc như tại salon.</p>
+    </div>
+</section>
+
+<main>
+    <div class="brand">
+        <div class="brand-inner">
+            <div class="brand-logo">
+                <img alt="Logo L'Oréal Professionnel" src="images/brands/loreal-professionnel.svg">
+            </div>
+            <div class="brand-content">
+                <h2>L'Oréal Professionnel</h2>
+                <p>
+                    Thương hiệu chăm sóc tóc chuyên nghiệp từ Pháp, được các salon trên toàn thế giới tin dùng.
+                    Dòng sản phẩm đa dạng cho từng vấn đề: tóc hư tổn, khô xơ, gãy rụng, tóc nhuộm, tóc xoăn...
+                </p>
+                <ul class="brand-tags">
+                    <li><i class="fa-solid fa-star"></i> Chuẩn salon chuyên nghiệp</li>
+                    <li><i class="fa-solid fa-flask"></i> Công nghệ phục hồi tiên tiến</li>
+                    <li><i class="fa-solid fa-shield-halved"></i> Bảo vệ màu nhuộm, chống xơ rối</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <section class="brand-products-section">
+        <div class="brand-products-header">
+            <h2>Sản phẩm nổi bật của L'Oréal Professionnel</h2>
+            <div class="product-filter-tags">
+                <button class="product-filter-tag active" data-category="all">Tất cả</button>
+                <button class="product-filter-tag" data-category="shampoo">Dầu gội</button>
+                <button class="product-filter-tag" data-category="conditioner">Dầu xả</button>
+                <button class="product-filter-tag" data-category="mask">Kem ủ / Mặt nạ tóc</button>
+                <button class="product-filter-tag" data-category="serum">Serum / Dầu dưỡng</button>
+                <button class="product-filter-tag" data-category="styling">Xịt dưỡng / Tạo kiểu</button>
+            </div>
+        </div>
+
+        <div class="brand-products-grid">
+
+            <div class="product-item" data-category="shampoo">
+                <div class="product-img">
+                    <a href="#">
+                        <img alt="Dầu gội phục hồi Absolut Repair" class="product-image"
+                             src="images/brand_products/product-1.png">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Dầu gội phục hồi L'Oréal Professionnel Absolut Repair 300ml</h3>
+                    <div class="product-small-details">
+                        <p><span>L’Oréal Professionnel</span> • <span>Dầu gội phục hồi tóc hư tổn</span> • Pháp</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <a class="background-stars" href="#">★★★★★</a>
+                            <a class="foreground-stars" href="#">★★★★★</a>
+                        </div>
+                        <p class="review-count">(325)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">320.000₫</p>
+                        <p class="price-old">380.000₫</p>
+                        <p class="badge-discount">-16%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="#">Xem thêm</a>
+                        <a class="btn primary" href="#">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item" data-category="conditioner">
+                <div class="product-img">
+                    <a href="#">
+                        <img alt="Dầu xả phục hồi Absolut Repair"
+                             class="product-image"
+                             src="images/brand_products/product-2.jpg">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Dầu xả L'Oréal Professionnel Absolut Repair 250ml</h3>
+                    <div class="product-small-details">
+                        <p><span>L’Oréal Professionnel</span> • <span>Dầu xả phục hồi, giảm gãy rụng</span> • Pháp</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <a class="background-stars" href="#">★★★★★</a>
+                            <a class="foreground-stars" href="#">★★★★★</a>
+                        </div>
+                        <p class="review-count">(198)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">340.000₫</p>
+                        <p class="price-old">399.000₫</p>
+                        <p class="badge-discount">-15%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="#">Xem thêm</a>
+                        <a class="btn primary" href="#">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item" data-category="mask">
+                <div class="product-img">
+                    <a href="#">
+                        <img alt="Mặt nạ phục hồi Absolut Repair Mask"
+                             class="product-image"
+                             src="images/brand_products/product-3.png">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Mặt nạ tóc L'Oréal Professionnel Absolut Repair Mask 250ml</h3>
+                    <div class="product-small-details">
+                        <p><span>L’Oréal Professionnel</span> • <span>Kem ủ / mặt nạ phục hồi sâu</span> • Pháp</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <a class="background-stars" href="#">★★★★★</a>
+                            <a class="foreground-stars" href="#">★★★★★</a>
+                        </div>
+                        <p class="review-count">(157)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">520.000₫</p>
+                        <p class="price-old">590.000₫</p>
+                        <p class="badge-discount">-12%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="#">Xem thêm</a>
+                        <a class="btn primary" href="#">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item" data-category="shampoo">
+                <div class="product-img">
+                    <a href="#">
+                        <img alt="Dầu gội bảo vệ màu nhuộm Vitamino Color"
+                             class="product-image"
+                             src="images/brand_products/product-4.jpg">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Dầu gội L'Oréal Professionnel Vitamino Color 300ml</h3>
+                    <div class="product-small-details">
+                        <p><span>L’Oréal Professionnel</span> • <span>Dầu gội bảo vệ màu nhuộm</span> • Pháp</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <a class="background-stars" href="#">★★★★★</a>
+                            <a class="foreground-stars" href="#">★★★★★</a>
+                        </div>
+                        <p class="review-count">(210)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">330.000₫</p>
+                        <p class="price-old">390.000₫</p>
+                        <p class="badge-discount">-15%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="#">Xem thêm</a>
+                        <a class="btn primary" href="#">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item" data-category="styling">
+                <div class="product-img">
+                    <a href="#">
+                        <img alt="Xịt dưỡng bảo vệ nhiệt Tecni.Art"
+                             class="product-image"
+                             src="images/brand_products/product-5.jpg">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Xịt dưỡng bảo vệ nhiệt L'Oréal Professionnel Tecni.Art 190ml</h3>
+                    <div class="product-small-details">
+                        <p><span>L’Oréal Professionnel</span> • <span>Xịt dưỡng & tạo kiểu, chống cháy tóc</span> • Pháp
+                        </p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <a class="background-stars" href="#">★★★★★</a>
+                            <a class="foreground-stars" href="#">★★★★★</a>
+                        </div>
+                        <p class="review-count">(112)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">290.000₫</p>
+                        <p class="price-old">340.000₫</p>
+                        <p class="badge-discount">-15%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="#">Xem thêm</a>
+                        <a class="btn primary" href="#">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item" data-category="serum">
+                <div class="product-img">
+                    <a href="#">
+                        <img alt="Serum dưỡng ngọn tóc Pro Longer"
+                             class="product-image"
+                             src="images/brand_products/product-6.jpg">
+                    </a>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Serum dưỡng ngọn tóc L'Oréal Professionnel Pro Longer 150ml</h3>
+                    <div class="product-small-details">
+                        <p><span>L’Oréal Professionnel</span> • <span>Serum dưỡng, chống chẻ ngọn</span> • Pháp</p>
+                    </div>
+                    <div class="product-rating">
+                        <div class="rating-stars">
+                            <a class="background-stars" href="#">★★★★★</a>
+                            <a class="foreground-stars" href="#">★★★★★</a>
+                        </div>
+                        <p class="review-count">(89)</p>
+                    </div>
+                    <div class="product-price">
+                        <p class="price-current">450.000₫</p>
+                        <p class="price-old">510.000₫</p>
+                        <p class="badge-discount">-12%</p>
+                    </div>
+                    <div class="product">
+                        <a class="btn" href="#">Xem thêm</a>
+                        <a class="btn primary" href="#">Thêm vào giỏ</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<footer>
+    <!--Footer Top-->
+    <div class="main-footer footer-top">
+        <div class="footer-container">
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Liên hệ với chúng tôi</h4>
+                <div class="contact-info">
+                    <div>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Trụ sở: Khu Phố 6, P. Linh Trung, Q. Thủ Đức, TP.HCM</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline tư vấn: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline bán hàng: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: support@hairglow.vn</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 21:00<br>Chủ nhật: 9:00 - 18:00</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt"></i>
+                        <p>GPKD: 123456789, cấp ngày 20/02/2020, TP. HCM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#">Dầu gội</a></li>
+                    <li><a href="#">Dầu xả</a></li>
+                    <li><a href="#">Kem ủ tóc</a></li>
+                    <li><a href="#">Serum dưỡng tóc</a></li>
+                    <li><a href="#">Sáp vuốt tóc</a></li>
+                    <li><a href="#">Khuyến mãi</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Phương thức thanh toán</a></li>
+                    <li><a href="#">Vận chuyển &amp; Giao hàng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <!--About Us-->
+                <div class="about-us">
+                    <h4>Về chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!--Payment methods-->
+                <div class="payment">
+                    <h4>Thanh toán</h4>
+                    <div class="payment-methods">
+                        <a class="logo-tile"><img alt="Visa" src="assets/VisaIcon.svg"></a>
+                        <a class="logo-tile"><img alt="MasterCard" src="assets/MasterCardIcon.svg"></a>
+                        <a class="logo-tile"><img alt="Napas" src="assets/NapasIcon.svg"></a>
+                        <a class="logo-tile"><img alt="VNPay" src="assets/VNPayIcon.png"></a>
+                        <a class="logo-tile"><img alt="MoMo" src="assets/MoMoIcon.svg"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Điều khoản sử dụng</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Search result Script (giữ nguyên như brands.html) -->
+<script>
+    (function () {
+        const input = document.getElementById('search');
+        const result = document.getElementById('search-result');
+        if (!input || !result) return;
+        const open = () => {
+            result.style.display = 'block';
+        };
+        const maybeClose = (e) => {
+            if (!result.contains(e.target) && e.target !== input) {
+                result.style.display = 'none';
+            }
+        };
+        input.addEventListener('focus', open);
+        input.addEventListener('click', open);
+        document.addEventListener('click', maybeClose);
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape') {
+                result.style.display = 'none';
+                input.blur();
+            }
+        });
+    })();
+</script>
+
+<!-- Script filter sản phẩm theo loại -->
+<script>
+    document.querySelectorAll('.product-filter-tag').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.product-filter-tag').forEach(function (b) {
+                b.classList.remove('active');
+            });
+            this.classList.add('active');
+
+            const cate = this.dataset.category;
+            document.querySelectorAll('.product-item').forEach(function (card) {
+                if (cate === 'all' || card.dataset.category === cate) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
