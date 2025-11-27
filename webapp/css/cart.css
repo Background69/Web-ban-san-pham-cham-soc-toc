@@ -23,6 +23,7 @@ a {
 }
 
 /* Header */
+
 .main-header {
     background: #326e51;
     position: sticky;
@@ -44,6 +45,7 @@ a {
 }
 
 /* Logo Header */
+
 .left-header {
     flex-shrink: 0;
 }
@@ -67,6 +69,7 @@ a {
 }
 
 /* Search Header */
+
 .center-header {
     flex: 1;
     min-width: 0;
@@ -119,7 +122,9 @@ a {
     font-size: 18px;
 }
 
+
 /* Account and Cart Header */
+
 .right-header {
     display: flex;
     align-items: center;
@@ -140,6 +145,7 @@ a {
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
+
 }
 
 .account:hover, .cart:hover {
@@ -170,6 +176,7 @@ a {
 }
 
 /* Navigation Menu Header*/
+
 .nav-container {
     background: #a5c87f;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
@@ -195,8 +202,10 @@ a {
 }
 
 .header-below.nav-container {
+
     background: #a5c87f;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
+
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
 }
@@ -213,6 +222,8 @@ a {
     white-space: nowrap;
     position: relative;
     padding: 10px 14px;
+
+
 }
 
 .nav-link:hover {
@@ -275,6 +286,7 @@ a {
 }
 
 /* Dropdown Menu for Sản Phẩm*/
+
 .dropdown-menu {
     display: none;
     position: absolute;

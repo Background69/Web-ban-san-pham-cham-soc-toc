@@ -95,7 +95,7 @@
     <div class="cart-checkout-process">
         <i class="fa-solid fa-location-dot"></i>
     </div>
-    <div class="cart-checkout-process">
+    <div class="cart-checkout-process active">
         <i class="fa-solid fa-credit-card"></i>
     </div>
 </div>
@@ -255,6 +255,18 @@
         </div>
     </div>
 </footer>
+<script>
+    document.getElementById("confirm-order").addEventListener("click", function () {
+        // Hiển thị thông báo
+        alert("🎉 Đặt hàng thành công! Cảm ơn bạn đã mua hàng.");
+
+        // Chuyển về trang chủ sau 2 giây
+        setTimeout(function () {
+            window.location.href = "MainPage.html";
+        }, 2000);
+    });
+</script>
+
 </body>
 
 </html>
