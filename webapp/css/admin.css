@@ -150,6 +150,7 @@ body {
     color: #e74c3c;
     cursor: pointer;
 }
+
 /* Thẻ */
 .cards {
     display: flex;
@@ -162,7 +163,7 @@ body {
     background: white;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
     border-left: 6px solid #8BAE60;
 }
 
@@ -177,12 +178,13 @@ body {
     margin-top: 10px;
     color: #1c2b16;
 }
+
 /* ===== RECENT ORDERS ===== */
 .recent-orders {
     background: white;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
 }
 
 .recent-orders table {
@@ -205,9 +207,18 @@ body {
     font-size: 14px;
 }
 
-.status.success { background: #7ebb52; }
-.status.pending { background: #e9b94b; }
-.status.cancel { background: #d9534f; }
+.status.success {
+    background: #7ebb52;
+}
+
+.status.pending {
+    background: #e9b94b;
+}
+
+.status.cancel {
+    background: #d9534f;
+}
+
 /* ===== Orders Table ===== */
 .orders-table {
     width: 100%;
@@ -216,7 +227,7 @@ body {
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .orders-table th,
