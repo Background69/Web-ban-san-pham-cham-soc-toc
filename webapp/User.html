@@ -19,12 +19,18 @@
             <button><i class="fa fa-search"></i></button>
         </div>
         <img src="images/avatar.jpg" alt="avatar" class="avatar-small">
+        <div class="user-menu" id="userMenu">
+            <div class="menu-arrow"></div>
+            <div class="menu-item" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+            </div>
+        </div>
     </div>
 </header>
 <div class="profile-card">
     <div class="profile-header">
         <h2>Xin Chào vanthang</h2>
-        <button class="edit-btn">Edit</button>
+        <button class="edit-btn">Chỉnh sửa</button>
     </div>
     <div class="profile-info">
         <div class="profile-left">
@@ -69,7 +75,7 @@
             </select>
         </div>
 
-        <button class="save-btn">SAVE</button>
+        <button class="save-btn">Lưu</button>
     </div>
 
 
@@ -92,10 +98,30 @@
         saveBtn.addEventListener("click", function () {
             inputs.forEach(el => el.disabled = true);
             alert("Thông tin đã được lưu thành công!");
-            window.location.href = "Login.html"; // Chuyển sang trang chủ
+            window.location.href = ""; // Chuyển sang trang chủ
         });
 
     })
+    const avatar = document.querySelector(".avatar-small");
+    const userMenu = document.getElementById("userMenu");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    avatar.addEventListener("click", function () {
+        userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+    });
+
+    // Ẩn menu nếu click ra ngoài
+    document.addEventListener("click", function (e) {
+        if (!avatar.contains(e.target) && !userMenu.contains(e.target)) {
+            userMenu.style.display = "none";
+        }
+    });
+
+    // Xử lý nút đăng xuất
+    logoutBtn.addEventListener("click", function () {
+        alert("Bạn đã đăng xuất!");
+        window.location.href = ""; // đổi theo trang của bạn
+    });
 </script>
 </body>
 </html>
