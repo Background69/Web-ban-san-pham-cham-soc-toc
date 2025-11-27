@@ -759,3 +759,44 @@ footer {
 .footer-bottom-links a:hover {
     color: #a5c87f;
 }
+/* Container label */
+.shipping-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    background-color: #fff;
+}
+
+.shipping-option:hover {
+    background-color: #f0f7f0;
+}
+
+/* Radio button */
+.shipping-option input[type="radio"] {
+    margin: 0 12px 0 0;
+    width: 20px;
+    height: 20px;
+    accent-color: #82b74b; /* màu xanh lá */
+}
+
+/* Text span */
+.shipping-option span {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #333;
+}
+
+/* Khi chọn */
+.shipping-option input[type="radio"]:checked + span {
+    background-color: #e6f4ea;
+    padding: 6px 12px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
