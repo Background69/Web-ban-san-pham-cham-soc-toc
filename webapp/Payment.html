@@ -111,7 +111,7 @@
             <p><strong>Họ và tên:</strong> <span id="fullname">Nguyễn Văn A</span></p>
             <p><strong>Địa chỉ:</strong> <span id="address">123 Nguyễn Trãi, TP.HCM</span></p>
             <p><strong>Số điện thoại:</strong> <span id="phone">0123456789</span></p>
-            <p><strong>Phương thức giao hàng:</strong> <span id="shipping">Giao nhanh</span></p>
+            <p><strong>Phương thức giao hàng:</strong> <span id="shipping">Giao hàng nhanh</span></p>
 
             <div class="edit-address">
                 <button class="btn-edit" onclick="window.location.href='Address.html'">
@@ -125,27 +125,32 @@
             <h4>Đơn hàng của bạn</h4>
             <div id="order-items">
                 <div class="order-item">
-                    <span class="item-name">Sản phẩm mẫu 1</span>
-                    <span class="item-quantity">x1</span>
-                    <span class="item-price">100.000 VNĐ</span>
+                    <span class="item-name">Dầu gội Head & Shoulders Ngăn Gàu Dưỡng Ẩm 625ml</span>
+                    <span class="item-quantity">1</span>
+                    <span class="item-price">147.000₫</span>
                 </div>
                 <div class="order-item">
-                    <span class="item-name">Sản phẩm mẫu 2</span>
-                    <span class="item-quantity">x2</span>
-                    <span class="item-price">400.000 VNĐ</span>
+                    <span class="item-name">Dầu xả Love Beauty & Planet Murumuru Butter 400ml</span>
+                    <span class="item-quantity">1</span>
+                    <span class="item-price">220.000₫</span>
+                </div>
+                <div class="order-item">
+                    <span class="item-name">Kéo cắt tóc</span>
+                    <span class="item-quantity">1</span>
+                    <span class="item-price">300.000₫</span>
                 </div>
             </div>
             <div class="total-amount">
-                <p><strong>Tổng cộng:</strong> <span id="total-amount">500.000 VNĐ</span></p>
+                <p><strong>Tổng cộng:</strong> <span id="total-amount">697.000đ</span></p>
             </div>
         </section>
 
         <!-- Phương thức thanh toán -->
         <section class="payment-methods">
             <h4>Phương thức thanh toán</h4>
-            <label><input checked name="payment" type="radio" value="cod"> Thanh toán khi nhận hàng (COD)</label>
-            <label><input name="payment" type="radio" value="bank"> Thanh toán qua ngân hàng</label>
-            <label><input name="payment" type="radio" value="momo"> Thanh toán qua ứng dụng Momo</label>
+            <label><input checked name="payment" type="radio" value="cod"> Thanh toán khi nhận hàng (COD)</label> <br>
+            <label><input name="payment" type="radio" value="bank"> Thanh toán qua ngân hàng</label><br>
+            <label><input name="payment" type="radio" value="momo"> Thanh toán qua ứng dụng Momo</label><br>
             <div id="payment-detail"></div>
         </section>
 

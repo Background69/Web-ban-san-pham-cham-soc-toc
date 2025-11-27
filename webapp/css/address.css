@@ -328,7 +328,7 @@ a {
 
 /* Address Page Styles */
 .address-container {
-    max-width: 1280px;
+    max-width: 800px;
     margin: 40px auto;
     display: flex;
     justify-content: space-between;
@@ -349,6 +349,8 @@ a {
 .address-left h3 {
     color: #56732e;
     margin-bottom: 20px;
+    margin-top: 20px;
+    gap: 5px;
 }
 
 .address-form {
@@ -711,3 +713,75 @@ footer {
     height: 150px;
     width: auto;
 }
+.back-to-cart-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 10px 14px;
+    background: #56732e;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 15px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-family: 'Times New Roman', Times, serif;
+    margin-right: auto;
+    font-weight: bold;
+}
+
+.back-to-cart-btn:hover {
+    background: #ddd;
+}
+.address-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* Nút quay về */
+.btn-back {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    background: #e0e0e0;
+    color: #333;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.btn-back i {
+    margin-right: 5px;
+}
+
+.btn-back:hover {
+    background: #d5d5d5;
+}
+
+/* Nút tiếp theo */
+.btn-next {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    background: #6a8a3a;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-next i {
+    margin-left: 5px;
+}
+
+.btn-next:hover {
+    background: #56732e;
+}
+

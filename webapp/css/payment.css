@@ -403,20 +403,27 @@ a {
 
 /* ===== PAYMENT KHUNG CHÍNH ===== */
 .payment {
-    background: #fff;
+    background: linear-gradient(145deg, #ffffff, #f4f8f4);
     width: 60%;
-    max-width: 700px;
-    margin: 0 auto 50px;
-    padding: 30px 40px;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    max-width: 720px;
+    margin: 40px auto 60px;
+    padding: 35px 45px;
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.payment:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 38px rgba(0,0,0,0.16);
 }
 
 .payment h3 {
     text-align: center;
     color: #4e8a26;
     margin-bottom: 30px;
-    font-size: 24px;
+    font-size: 26px;
+    font-weight: 700;
 }
 
 /* ===== SECTION ===== */
@@ -425,10 +432,12 @@ section {
 }
 
 section h4 {
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 18px;
-    font-weight: 600;
+    margin-bottom: 18px;
+    color: #3f5d2a;
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid #e2efd9;
+    padding-bottom: 6px;
 }
 
 p {
@@ -443,11 +452,11 @@ p {
 }
 
 .btn-edit {
-    background-color: #6a8a3a;
+    background-color: #89af63;
     color: white;
     border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: 500;
     display: inline-flex;
@@ -457,7 +466,7 @@ p {
 }
 
 .btn-edit:hover {
-    background-color: #56732e;
+    background-color: #6b8a3b;
     transform: translateY(-2px);
 }
 
@@ -465,8 +474,15 @@ p {
 #order-items .order-item {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e4e9e5;
+    font-size: 16px;
+    transition: background 0.2s ease;
+}
+
+#order-items .order-item:hover {
+    background: #f0f4f0;
 }
 
 #order-items .order-item:last-child {
@@ -474,25 +490,48 @@ p {
 }
 
 .total-amount {
-    margin-top: 18px;
+    margin-top: 20px;
     font-weight: 700;
-    color: #222;
-    font-size: 18px;
+    color: #2e4e1f;
+    font-size: 19px;
     text-align: right;
 }
 
 /* ===== PAYMENT METHODS ===== */
+.payment-methods {
+    display: flex;
+    flex-direction: column; /* thêm dòng này */
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
 .payment-methods label {
-    display: block;
-    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
     font-weight: 500;
     color: #444;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.payment-methods label:hover {
+    background: #f0f4f0;
 }
 
 .payment-methods input[type="radio"] {
-    margin-right: 10px;
-    accent-color: #6a8a3a;
+    accent-color: #6b8a3b;
+}
+
+.payment-methods img {
+    height: 32px;
+    border-radius: 6px;
+    background: #fff;
+    padding: 4px 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 /* ===== BUTTON ĐẶT HÀNG ===== */
@@ -501,30 +540,39 @@ p {
     width: 100%;
     background-color: #7ac142;
     color: white;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 600;
     border: none;
     padding: 14px;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 20px;
 }
 
-.btn-confirm i {
-    margin-right: 6px;
-}
-
 .btn-confirm:hover {
     background-color: #5f9732;
     transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(95,151,50,0.5);
 }
 
 /* ===== RESPONSIVE ===== */
+@media screen and (max-width: 992px) {
+    .payment {
+        width: 80%;
+        padding: 30px;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .payment {
         width: 90%;
         padding: 25px;
+    }
+    #order-items .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     }
 }
 
@@ -532,6 +580,13 @@ p {
     .payment {
         width: 95%;
         padding: 20px;
+    }
+    .btn-confirm {
+        font-size: 16px;
+        padding: 12px;
+    }
+    section h4 {
+        font-size: 18px;
     }
 }
 
@@ -632,18 +687,18 @@ footer {
     background: #a5c87f;
 }
 
-.payment-footer {
+.payment {
     margin-top: 20px;
 }
 
-.payment-footer-methods {
+.payment-methods {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     margin-top: 15px;
 }
 
-.payment-footer-methods img {
+.payment-methods img {
     height: 30px;
     border-radius: 4px;
     background: white;
@@ -687,4 +742,3 @@ footer {
 .footer-bottom-links a:hover {
     color: #a5c87f;
 }
-
