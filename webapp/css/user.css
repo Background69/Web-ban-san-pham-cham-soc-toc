@@ -26,8 +26,9 @@ body {
     z-index: 100;
     border-radius: 0 0 20px 20px;
 }
+
 .logo {
-    width: 80px;   /* Bạn có thể chỉnh kích thước */
+    width: 80px; /* Bạn có thể chỉnh kích thước */
     height: 80px;
     object-fit: contain;
     border-radius: 10px; /* Tùy chọn, nếu muốn logo bo góc */
@@ -37,6 +38,7 @@ body {
     color: #222;
     font-weight: 600;
 }
+
 .header-left {
     display: flex;
     align-items: center;
@@ -117,9 +119,10 @@ body {
 .edit-btn:hover {
     background: #2563eb;
 }
+
 .save-btn {
     grid-column: span 2; /* nút chiếm toàn hàng trong grid */
-    justify-self: end;   /* đẩy sang bên phải */
+    justify-self: end; /* đẩy sang bên phải */
     background: #3b82f6;
     color: #fff;
     border: none;
