@@ -46,6 +46,7 @@ a {
 
 /* Logo Header */
 
+
 .left-header {
     flex-shrink: 0;
 }
@@ -61,6 +62,11 @@ a {
     color: #333;
     font-size: 28px;
     font-weight: bold;
+}
+
+.logo-image {
+    height: 150px;
+    width: auto;
 }
 
 /* Search Header */
@@ -335,33 +341,6 @@ main {
     padding: 20px;
 }
 
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 30px;
-    padding: 10px 0;
-}
-
-.breadcrumb a {
-    color: #0066cc;
-    text-decoration: none;
-}
-
-.breadcrumb a:hover {
-    text-decoration: underline;
-}
-
-.breadcrumb i {
-    font-size: 10px;
-    color: #999;
-}
-
-.breadcrumb span {
-    color: #333;
-}
 
 .product-detail-container {
     display: grid;
