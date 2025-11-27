@@ -393,8 +393,8 @@ a {
     content: "";
     position: absolute;
     top: 50%;
-    left: 0;      /* bắt đầu từ trái container */
-    width: 100%;  /* trải hết container, chắc chắn dính icon đầu-cuối */
+    left: 0; /* bắt đầu từ trái container */
+    width: 100%; /* trải hết container, chắc chắn dính icon đầu-cuối */
     height: 4px;
     background: #c6db9d;
     z-index: 1;
