@@ -1,15 +1,17 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
-body{
+
+body {
     background: #f6f8fb;
-    color:#333;
+    color: #333;
 }
+
 /* --- HEADER --- */
-.header{
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,20 +21,23 @@ body{
     border-bottom: 1px solid #eee;
 }
 
-.logo{
+.logo {
     display: flex;
     align-items: center;
-    gap:12px;
+    gap: 12px;
 }
-.logo img{
+
+.logo img {
     height: 100px;
 }
-.logo span{
+
+.logo span {
     font-size: 20px;
     color: #006b5c;
     font-weight: 600;
     padding-left: 400px;
 }
+
 .header-links {
     display: flex;
     align-items: center;
@@ -49,6 +54,7 @@ body{
 .header-links a:hover {
     text-decoration: underline;
 }
+
 .support-banner {
     position: relative;
     background-image: url('../images/banner.jpg');
@@ -111,22 +117,26 @@ body{
 .search-box button:hover {
     background: #009b7c;
 }
-.search-box{
-    color:#006b5c;
+
+.search-box {
+    color: #006b5c;
     font-size: 18px;
 }
-.banner-contact{
+
+.banner-contact {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap:20px;
+    gap: 20px;
     flex-wrap: wrap;
 }
-.banner-contact p{
+
+.banner-contact p {
     color: white;
     font-size: 14px;
 }
-.chat-btn{
+
+.chat-btn {
     background: white;
     color: #006b5c;
     padding: 6px 16px;
@@ -135,35 +145,39 @@ body{
     font-weight: 600;
     transition: all 0.2s ease;
 }
-.chat-btn:hover{
+
+.chat-btn:hover {
     background: #f1f1f1;
 
 }
-.support-categories{
+
+.support-categories {
     background: white;
-    margin:20px auto;
+    margin: 20px auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    gap:15px;
+    gap: 15px;
     padding: 25px 15px;
     border-radius: 10px;
     max-width: 1000px;
     text-align: center;
 
 }
-.category{
+
+.category {
     display: flex;
     align-items: center;
     flex-direction: column;
     transition: all 0.2s ease;
 }
+
 .category i {
     font-size: 28px;
-    color:#006b5c;
+    color: #006b5c;
     margin-bottom: 8px;
     background: #e8f5f2;
     border-radius: 50%;
-    padding :15px;
+    padding: 15px;
 }
 
 .category:hover {
@@ -171,6 +185,7 @@ body{
     box-shadow: 0 4px 10px rgba(0, 123, 94, 0.2);
     transform: translateY(-5px);
 }
+
 .category p {
     font-size: 14px;
     color: #333;
@@ -179,33 +194,38 @@ body{
 .category:hover i {
     color: #00a572;
 }
+
 .faq {
     background: white;
-    margin :20px auto;
-    padding : 25px;
+    margin: 20px auto;
+    padding: 25px;
     border-radius: 10px;
     max-width: 1000px;
 }
-.faq h3{
+
+.faq h3 {
     font-size: 18px;
     margin-bottom: 15px;
 
 }
-.faq ul{
+
+.faq ul {
     list-style-type: square;
     padding-left: 20px;
     columns: 2;
 }
-.faq li{
+
+.faq li {
     list-style: none;
     margin-bottom: 8px;
     font-size: 14px;
 
 }
-.support-info{
+
+.support-info {
     background: white;
-    margin:20px auto 40px;
-    padding : 25px;
+    margin: 20px auto 40px;
+    padding: 25px;
     border-radius: 10px;
     max-width: 1000px;
     font-size: 15px;

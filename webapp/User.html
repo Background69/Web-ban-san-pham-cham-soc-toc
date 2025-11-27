@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <title>Quản lí người dùng</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="css/user.css">
+    <link href="css/user.css" rel="stylesheet">
 </head>
 <body>
 <header class="header">
     <div class="header-left">
-        <img src="assets/LOGO.PNG" alt="Logo" class="logo">
+        <img alt="Logo" class="logo" src="assets/LOGO.PNG">
         <h2>Hồ sơ người dùng</h2>
     </div>
 
     <div class="header-right">
         <div class="search-box">
-            <input type="text" placeholder="Search user...">
+            <input placeholder="Search user..." type="text">
             <button><i class="fa fa-search"></i></button>
         </div>
-        <img src="images/avatar.jpg" alt="avatar" class="avatar-small">
+        <img alt="avatar" class="avatar-small" src="images/avatar.jpg">
     </div>
 </header>
 <div class="profile-card">
@@ -28,7 +28,7 @@
     </div>
     <div class="profile-info">
         <div class="profile-left">
-            <img src="images/avatar.jpg" alt="avt">
+            <img alt="avt" src="images/avatar.jpg">
             <h3>Vanthang</h3>
             <p>My email address</p>
             <div class="email-box">
@@ -79,7 +79,6 @@
 </div>
 
 
-</div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const editBtn = document.querySelector(".edit-btn");
@@ -87,7 +86,7 @@
         const inputs = document.querySelectorAll("input, select");
         inputs.forEach(el => el.disabled = true);
         editBtn.addEventListener("click", function () {
-            inputs.forEach(el => el.disabled = false );
+            inputs.forEach(el => el.disabled = false);
         });
         saveBtn.addEventListener("click", function () {
             inputs.forEach(el => el.disabled = true);
