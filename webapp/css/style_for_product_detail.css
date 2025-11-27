@@ -63,6 +63,10 @@ a {
     font-size: 28px;
     font-weight: bold;
 }
+.logo-image {
+    height: 150px;
+    width: auto;
+}
 
 .logo-image {
     height: 150px;

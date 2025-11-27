@@ -86,9 +86,9 @@ body {
 
 /* ===== PROFILE CARD ===== */
 .profile-card {
-    max-width: 1100px;
+    max-width: 900px;
     background: #fff;
-    margin: 50px auto;
+    margin: 80px auto;
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -224,6 +224,7 @@ body {
     gap: 6px;
     transition: 0.2s ease;
 }
+
 
 .add-email:hover {
     color: #0056d2;
