@@ -500,7 +500,7 @@ p {
 /* ===== PAYMENT METHODS ===== */
 .payment-methods {
     display: flex;
-    flex-direction: column; /* thêm dòng này */
+    flex-direction: column; 
     gap: 10px;
     margin-top: 15px;
 }
