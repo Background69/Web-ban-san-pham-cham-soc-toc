@@ -4,31 +4,37 @@
     <meta charset="UTF-8">
     <title>Quản lí người dùng</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="css/user.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/user.css">
 </head>
 <body>
 <header class="header">
     <div class="header-left">
-        <img alt="Logo" class="logo" src="assets/LOGO.PNG">
+        <img src="assets/LOGO.PNG" alt="Logo" class="logo">
         <h2>Hồ sơ người dùng</h2>
     </div>
 
     <div class="header-right">
         <div class="search-box">
-            <input placeholder="Search user..." type="text">
+            <input type="text" placeholder="Search user...">
             <button><i class="fa fa-search"></i></button>
         </div>
-        <img alt="avatar" class="avatar-small" src="images/avatar.jpg">
+        <img src="images/avatar.jpg" alt="avatar" class="avatar-small">
+        <div class="user-menu" id="userMenu">
+            <div class="menu-arrow"></div>
+            <div class="menu-item" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+            </div>
+        </div>
     </div>
 </header>
 <div class="profile-card">
     <div class="profile-header">
         <h2>Xin Chào vanthang</h2>
-        <button class="edit-btn">Edit</button>
+        <button class="edit-btn">Chỉnh sửa</button>
     </div>
     <div class="profile-info">
         <div class="profile-left">
-            <img alt="avt" src="images/avatar.jpg">
+            <img src="images/avatar.jpg" alt="avt">
             <h3>Vanthang</h3>
             <p>My email address</p>
             <div class="email-box">
@@ -69,7 +75,7 @@
             </select>
         </div>
 
-        <button class="save-btn">SAVE</button>
+        <button class="save-btn">Lưu</button>
     </div>
 
 
@@ -79,6 +85,7 @@
 </div>
 
 
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const editBtn = document.querySelector(".edit-btn");
@@ -86,15 +93,35 @@
         const inputs = document.querySelectorAll("input, select");
         inputs.forEach(el => el.disabled = true);
         editBtn.addEventListener("click", function () {
-            inputs.forEach(el => el.disabled = false);
+            inputs.forEach(el => el.disabled = false );
         });
         saveBtn.addEventListener("click", function () {
             inputs.forEach(el => el.disabled = true);
             alert("Thông tin đã được lưu thành công!");
-            window.location.href = "Login.html"; // Chuyển sang trang chủ
+            window.location.href = ""; // Chuyển sang trang chủ
         });
 
     })
+    const avatar = document.querySelector(".avatar-small");
+    const userMenu = document.getElementById("userMenu");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    avatar.addEventListener("click", function () {
+        userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+    });
+
+    // Ẩn menu nếu click ra ngoài
+    document.addEventListener("click", function (e) {
+        if (!avatar.contains(e.target) && !userMenu.contains(e.target)) {
+            userMenu.style.display = "none";
+        }
+    });
+
+    // Xử lý nút đăng xuất
+    logoutBtn.addEventListener("click", function () {
+        alert("Bạn đã đăng xuất!");
+        window.location.href = ""; // đổi theo trang của bạn
+    });
 </script>
 </body>
 </html>
