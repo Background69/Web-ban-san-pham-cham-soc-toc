@@ -185,31 +185,7 @@
 </footer>
 <!-- Search Result -->
 <script>
-    (function () {
-        const input = document.getElementById('search');
-        const result = document.getElementById('search-result');
-        if (!input || !result) return;
-        const open = () => {
-            result.style.display = 'block';
-        };
-        const maybeClose = (e) => {
-            if (!result.contains(e.target) && e.target !== input) {
-                result.style.display = 'none';
-            }
-        };
-        input.addEventListener('focus', open);
-        input.addEventListener('click', open);
-        document.addEventListener('click', maybeClose);
-        document.addEventListener('keydown', function (ev) {
-            if (ev.key === 'Escape') {
-                result.style.display = 'none';
-                input.blur();
-            }
-        });
-    })();
-</script>
-<!-- Login Script -->
-<script>
+    const emailInput = document.getElementById("email");
     function showAlert(msg) {
         alert(msg);
     }
@@ -220,40 +196,60 @@
 
     if (document.title.includes("Đăng nhập")) {
         const form = document.querySelector(".login-box form");
+        const emailInput = form.querySelector('input[type="email"]');
         const passwordInput = form.querySelector('input[type="password"]');
-        const eyeIcon = document.querySelector(".eye-icon");
-        const closeBtn = document.querySelector(".close-btn");
-        const overplay = document.querySelector(".overplay");
-        if (eyeIcon && passwordInput) {
-            eyeIcon.addEventListener("click", () => {
-                const type = passwordInput.type === "password" ? "text" : "password";
-                passwordInput.type = type;
-            });
-        }
-        if (closeBtn && overplay) {
-            closeBtn.addEventListener("click", () => {
-                overplay.style.display = "none";
-            })
-        }
+
         if (form) {
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
-                const email = form.querySelector('input[type="email"]').value.trim();
-                const password = form.querySelector('input[type="password"]').value.trim();
+                let email = emailInput.value.trim();
+                let password = passwordInput.value.trim();
+
                 if (!email || !password) {
-                    showAlert("Vui lòng nhập đầy đủ thông tin")
+                    showAlert("Vui lòng nhập đầy đủ thông tin");
                     return;
                 }
+
+                if (email === "admin") {
+
+                    emailInput.setAttribute("type", "text");
+
+                    if (password === "admin") {
+                        showAlert("Đăng nhập Admin thành công!");
+                        redirect("Dashboard.html"); //
+                        return;
+                    } else {
+                        showAlert("Sai mật khẩu admin");
+                        return;
+                    }
+                }
+
+                emailInput.setAttribute("type", "email");
+
+                // ===========================
+                // 🎯 KIỂM TRA USER THƯỜNG
+                // ===========================
                 const user = JSON.parse(localStorage.getItem("user"));
                 if (user && (email === user.email || email === user.phone) && (password === user.password)) {
-                    showAlert("đăng nhập thành công!")
-                    redirect("store.html");
+                    showAlert("Đăng nhập thành công!");
+                    redirect("MainPage2.html");
                 } else {
-                    showAlert("sai email hoặc mật khẩu")
+                    showAlert("Sai email hoặc mật khẩu");
                 }
-            })
+            });
         }
-        // Hiện / ẩn mật khẩu trang đăng nhập
+        emailInput.addEventListener("input", function () {
+            const value = emailInput.value.trim();
+
+
+            if (value === "admin") {
+                emailInput.setAttribute("type", "text");
+            }
+            else if (value.includes("@")) {
+                emailInput.setAttribute("type", "email");
+            }
+        });
+
         document.querySelector(".toggle-password").addEventListener("click", function () {
             const input = document.getElementById(this.dataset.target);
             input.type = (input.type === "password") ? "text" : "password";
@@ -262,5 +258,6 @@
         });
     }
 </script>
+
 </body>
 </html>
