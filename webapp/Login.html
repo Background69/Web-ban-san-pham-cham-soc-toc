@@ -183,7 +183,6 @@
         </div>
     </div>
 </footer>
-<!-- Search Result -->
 <script>
     const emailInput = document.getElementById("email");
     function showAlert(msg) {
@@ -226,9 +225,6 @@
 
                 emailInput.setAttribute("type", "email");
 
-                // ===========================
-                // 🎯 KIỂM TRA USER THƯỜNG
-                // ===========================
                 const user = JSON.parse(localStorage.getItem("user"));
                 if (user && (email === user.email || email === user.phone) && (password === user.password)) {
                     showAlert("Đăng nhập thành công!");
