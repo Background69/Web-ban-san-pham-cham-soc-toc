@@ -105,6 +105,7 @@ body {
     font-weight: 600;
     color: #333;
 }
+
 /* MENU ĐĂNG XUẤT */
 .user-menu {
     position: absolute;
@@ -114,7 +115,7 @@ body {
     width: 160px;
     padding: 12px 0;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
     display: none;
     animation: fadeIn 0.2s ease-in-out;
     z-index: 200;
@@ -156,10 +157,15 @@ body {
 
 /* hiệu ứng fade-in */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-
 
 
 .edit-btn {
