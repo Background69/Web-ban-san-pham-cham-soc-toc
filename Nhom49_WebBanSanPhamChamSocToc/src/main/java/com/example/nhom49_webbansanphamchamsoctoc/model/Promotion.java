@@ -1,0 +1,108 @@
+package com.example.nhom49_webbansanphamchamsoctoc.model;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+/**
+ * Model Promotion - Bảng promotions trong database
+ * Quản lý chương trình khuyến mãi (Flash Sale, Combo, Xả kho...)
+ */
+public class Promotion {
+    private int promotionId;
+    private String promotionName;
+    private String promotionType; // 'flash-sale', 'combo', 'new', 'clearance', 'percent', 'fixed'
+    private BigDecimal discountValue;
+    private Integer discountPercent;
+    private String badgeText;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private boolean isActive;
+    private Timestamp createdAt;
+
+    // Constructors
+    public Promotion() {
+    }
+
+    // Getters and Setters
+    public int getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        this.promotionId = promotionId;
+    }
+
+    public String getPromotionName() {
+        return promotionName;
+    }
+
+    public void setPromotionName(String promotionName) {
+        this.promotionName = promotionName;
+    }
+
+    public String getPromotionType() {
+        return promotionType;
+    }
+
+    public void setPromotionType(String promotionType) {
+        this.promotionType = promotionType;
+    }
+
+    public BigDecimal getDiscountValue() {
+        return discountValue;
+    }
+
+    public void setDiscountValue(BigDecimal discountValue) {
+        this.discountValue = discountValue;
+    }
+
+    public Integer getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(Integer discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public String getBadgeText() {
+        return badgeText;
+    }
+
+    public void setBadgeText(String badgeText) {
+        this.badgeText = badgeText;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+}
