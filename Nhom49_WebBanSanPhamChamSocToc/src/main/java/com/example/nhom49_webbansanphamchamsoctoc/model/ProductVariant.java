@@ -1,0 +1,88 @@
+package com.example.nhom49_webbansanphamchamsoctoc.model;
+
+import java.math.BigDecimal;
+
+/**
+ * Model ProductVariant - Bảng product_variants trong database
+ * Quản lý các biến thể sản phẩm (dung tích: 30ml, 50ml, 100ml...)
+ */
+public class ProductVariant {
+    private int variantId;
+    private int productId;
+    private String variantName;
+    private BigDecimal originalPrice;
+    private BigDecimal salePrice;
+    private int discountPercent;
+    private int stockQuantity;
+    private boolean isDefault;
+
+    // Constructors
+    public ProductVariant() {
+    }
+
+    // Getters and Setters
+    public int getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(int variantId) {
+        this.variantId = variantId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public String getVariantName() {
+        return variantName;
+    }
+
+    public void setVariantName(String variantName) {
+        this.variantName = variantName;
+    }
+
+    public BigDecimal getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public int getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(int discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
+    }
+
+}
