@@ -185,6 +185,7 @@
 </footer>
 <script>
     const emailInput = document.getElementById("email");
+
     function showAlert(msg) {
         alert(msg);
     }
@@ -240,8 +241,7 @@
 
             if (value === "admin") {
                 emailInput.setAttribute("type", "text");
-            }
-            else if (value.includes("@")) {
+            } else if (value.includes("@")) {
                 emailInput.setAttribute("type", "email");
             }
         });

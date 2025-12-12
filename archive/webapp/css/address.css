@@ -713,6 +713,7 @@ footer {
     height: 150px;
     width: auto;
 }
+
 .back-to-cart-btn {
     display: inline-flex;
     align-items: center;
@@ -733,6 +734,7 @@ footer {
 .back-to-cart-btn:hover {
     background: #ddd;
 }
+
 .address-buttons {
     display: flex;
     justify-content: space-between;
