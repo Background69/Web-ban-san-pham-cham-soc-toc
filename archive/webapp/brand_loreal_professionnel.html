@@ -92,35 +92,80 @@
     </div>
 </header>
 
-<section class="banner-brands-promotion-section">
-    <div class="banner-brands-promotion-container">
-        <p style="font-size: 14px; margin-bottom: 8px;">
-            <a href="MainPage.html">Trang chủ</a> ›
-            <a href="brands.html">Thương hiệu</a> ›
-            <span>L'Oréal Professionnel</span>
-        </p>
-        <h1>L'Oréal Professionnel – Chăm sóc tóc chuẩn salon</h1>
-        <p>BST sản phẩm chuyên nghiệp giúp phục hồi, bảo vệ và tạo kiểu tóc như tại salon.</p>
+<!-- Brand Banner Full Width -->
+<section class="brand-banner">
+    <div class="brand-banner-overlay"></div>
+    <div class="brand-banner-content">
+        <nav class="breadcrumb">
+            <a href="MainPage.html">Trang chủ</a>
+            <span class="separator">›</span>
+            <a href="brands.html">Thương hiệu</a>
+            <span class="separator">›</span>
+            <span class="current">L'Oréal Professionnel</span>
+        </nav>
+        <div class="brand-banner-info">
+            <div class="brand-logo-wrapper">
+                <img alt="Logo L'Oréal Professionnel" src="images/brands/loreal-professionnel.svg">
+            </div>
+            <div class="brand-text">
+                <h1>L'Oréal Professionnel</h1>
+                <p class="brand-tagline">Chăm sóc tóc chuẩn Salon chuyên nghiệp</p>
+                <div class="brand-meta">
+                    <span class="meta-item"><i class="fas fa-globe"></i> Pháp</span>
+                    <span class="meta-item"><i class="fas fa-star"></i> 4.8/5 (2.5k đánh giá)</span>
+                    <span class="meta-item"><i class="fas fa-box"></i> 45+ sản phẩm</span>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 <main>
-    <div class="brand">
-        <div class="brand-inner">
-            <div class="brand-logo">
-                <img alt="Logo L'Oréal Professionnel" src="images/brands/loreal-professionnel.svg">
-            </div>
-            <div class="brand-content">
-                <h2>L'Oréal Professionnel</h2>
-                <p>
-                    Thương hiệu chăm sóc tóc chuyên nghiệp từ Pháp, được các salon trên toàn thế giới tin dùng.
-                    Dòng sản phẩm đa dạng cho từng vấn đề: tóc hư tổn, khô xơ, gãy rụng, tóc nhuộm, tóc xoăn...
-                </p>
-                <ul class="brand-tags">
-                    <li><i class="fa-solid fa-star"></i> Chuẩn salon chuyên nghiệp</li>
-                    <li><i class="fa-solid fa-flask"></i> Công nghệ phục hồi tiên tiến</li>
-                    <li><i class="fa-solid fa-shield-halved"></i> Bảo vệ màu nhuộm, chống xơ rối</li>
-                </ul>
+    <!-- Brand Info Section -->
+    <div class="brand-info-section">
+        <!-- Giới thiệu thương hiệu - từ brands.full_description -->
+        <div class="brand-description-card">
+            <h2><i class="fas fa-info-circle"></i> Giới thiệu thương hiệu</h2>
+            <p>
+                <!-- Dữ liệu từ: brands.full_description -->
+                <strong>L'Oréal Professionnel</strong> là thương hiệu chăm sóc tóc chuyên nghiệp hàng đầu thế giới từ Pháp,
+                được các salon và chuyên gia tóc trên toàn cầu tin dùng. Với hơn 100 năm kinh nghiệm, L'Oréal Professionnel
+                mang đến các giải pháp toàn diện cho mọi vấn đề về tóc: phục hồi tóc hư tổn, dưỡng ẩm tóc khô xơ,
+                bảo vệ màu nhuộm, và tạo kiểu chuyên nghiệp.
+            </p>
+        </div>
+
+        <!-- Thống kê sản phẩm theo danh mục - từ COUNT(products) GROUP BY category -->
+        <div class="brand-stats">
+            <h3><i class="fas fa-chart-pie"></i> Danh mục sản phẩm</h3>
+            <div class="stats-grid">
+                <!-- Dữ liệu từ: SELECT c.category_name, COUNT(p.product_id)
+                     FROM products p JOIN categories c ON p.category_id = c.category_id
+                     WHERE p.brand_id = ? GROUP BY c.category_id -->
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">Dầu gội</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Dầu xả</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Kem ủ tóc</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10</span>
+                    <span class="stat-label">Serum</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Xịt dưỡng</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Tạo kiểu</span>
+                </div>
             </div>
         </div>
     </div>
