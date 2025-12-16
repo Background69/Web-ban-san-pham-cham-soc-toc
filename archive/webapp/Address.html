@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="css/address.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <title>HairGlow || Địa chỉ</title>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="header-row header-top">
+
+            <!-- Logo -->
+            <div class="left-header">
+                <div class="header-logo">
+                    <a class="logo" href="MainPage.html">
+                        <img alt="logo" class="logo-image" src="images/logo.png">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="center-header">
+                <div class="search-bar">
+                    <form action="/search" class="search-form" method="get">
+                        <input class="input" id="search" placeholder="Bạn muốn tìm sản phẩm nào" type="text">
+                        <button aria-label="search button suggest" class="search-button" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account and cart and... -->
+            <div class="right-header">
+
+                <div class="account">
+                    <a href="Login.html">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
+                </div>
+
+                <div class="cart">
+                    <a href="Cart.html">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Giỏ hàng</span>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="header-row header-below nav-container">
+            <nav>
+                <div>
+                    <ul class="side-bar-menu-list side-bar-items">
+                        <li class="nav-item"><a class="nav-link home-page" href="MainPage.html">Trang Chủ</a></li>
+                        <li class="nav-item has-dropdown"><a class="nav-link product" href="store.html">Sản Phẩm
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="Shampoo.html">Dầu gội</a></li>
+                                <li><a class="dropdown-item" href="Conditioner.html">Dầu xả</a></li>
+                                <li><a class="dropdown-item" href="MaskHair.html">Kem ủ – Mặt nạ tóc</a></li>
+                                <li><a class="dropdown-item" href="Serum.html">Serum – Dầu dưỡng tóc</a></li>
+                                <li><a class="dropdown-item" href="HairCareProducts.html">Xịt dưỡng – Tinh chất
+                                    dưỡng</a></li>
+                                <li><a class="dropdown-item" href="HairChemicalProduct.html">Thuốc uốn – Duỗi –
+                                    Nhuộm</a></li>
+                                <li><a class="dropdown-item" href="HairStylingProducts.html">Gôm – Sáp – Gel tạo
+                                    kiểu</a></li>
+                                <li><a class="dropdown-item" href="DryShampoo.html">Dầu gội khô</a></li>
+                                <li><a class="dropdown-item" href="HairSerum.html">Tinh chất mọc tóc – kích thích nang
+                                    tóc</a></li>
+                                <li><a class="dropdown-item" href="HairLoss.html">Sản phẩm trị gàu / nấm / rụng tóc</a>
+                                </li>
+                                <li><a class="dropdown-item" href="HairTools.html">Dụng cụ tóc</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="brands.html">Thương Hiệu</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Support.html">Hỗ Trợ Khách Hàng</a></li>
+                        <li class="nav-item"><a class="nav-link special-button" href="SuperDeal.html">Siêu Khuyến Mãi
+                            <i class="fas fa-percent"></i>
+                        </a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<div class="cart-process">
+    <div class="cart-checkout-process ">
+        <i class="fa-solid fa-cart-shopping"></i>
+    </div>
+    <div class="cart-checkout-process active">
+        <i class="fa-solid fa-location-dot"></i>
+    </div>
+    <div class="cart-checkout-process">
+        <i class="fa-solid fa-credit-card"></i>
+    </div>
+</div>
+
+
+<div class="address-container">
+    <div class="address-left">
+        <h3>Địa chỉ giao hàng</h3>
+        <form class="address-form">
+            <label>Họ và tên</label>
+            <input name="fullname" required type="text">
+
+            <label id="phonenumber">Số điện thoại</label>
+            <input name="phonenumber" required type="number">
+
+            <label>Email</label>
+            <input name="email" required type="email">
+
+            <label>Tỉnh/Thành phố</label>
+            <select name="province"></select>
+
+            <label>Quận/Huyện</label>
+            <select name="district"></select>
+
+            <label>Phường/Xã</label>
+            <select name="ward"></select>
+
+            <label>Địa chỉ cụ thể (Tên đường, khu phố)</label>
+            <input name="specificaddress" required type="text">
+
+            <label>Ghi chú</label>
+            <textarea name="note" rows="4"></textarea>
+
+            <div id="save-address" style="display: flex; gap: 5px;">
+                <input name="save-address" type="checkbox">
+                <p>Lưu thông tin địa chỉ cho lần sau</p>
+            </div>
+        </form>
+        <div class="address-buttons">
+            <a class="btn-back" href="Cart.html">
+                <i class="fa-solid fa-arrow-left"></i> Quay về giỏ hàng
+            </a>
+
+            <a class="btn-next" href="Payment.html">
+                Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+
+    </div>
+</div>
+</div>
+
+<script>
+    const provinceSelect = document.querySelector('select[name="province"]');
+    const districtSelect = document.querySelector('select[name="district"]');
+    const wardSelect = document.querySelector('select[name="ward"]');
+
+    // Disable mặc định
+    districtSelect.disabled = true;
+    wardSelect.disabled = true;
+
+    // -------------------------
+    // Load TỈNH/THÀNH
+    // -------------------------
+    fetch('https://provinces.open-api.vn/api/p/')
+        .then(response => response.json())
+        .then(provinces => {
+            provinceSelect.innerHTML = '<option value="">-- Chọn Tỉnh/Thành phố --</option>';
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.code;
+                option.textContent = province.name;
+                provinceSelect.appendChild(option);
+            });
+        })
+        .catch(err => console.error('Lỗi tải danh sách tỉnh:', err));
+
+    // -------------------------
+    // Khi chọn TỈNH → load HUYỆN
+    // -------------------------
+    provinceSelect.addEventListener('change', () => {
+        const provinceCode = provinceSelect.value;
+        districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
+        wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+        districtSelect.disabled = true;
+        wardSelect.disabled = true;
+
+        if (provinceCode) {
+            fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+                .then(response => response.json())
+                .then(data => {
+                    districtSelect.disabled = false;
+                    data.districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.code;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                })
+                .catch(err => console.error('Lỗi tải danh sách quận:', err));
+        }
+    });
+
+    // -------------------------
+    // Khi chọn HUYỆN → load XÃ
+    // -------------------------
+    districtSelect.addEventListener('change', () => {
+        const districtCode = districtSelect.value;
+        wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
+        wardSelect.disabled = true;
+
+        if (districtCode) {
+            fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+                .then(res => res.json())
+                .then(data => {
+                    wardSelect.disabled = false;
+                    data.wards.forEach(ward => {
+                        const opt = document.createElement('option');
+                        opt.value = ward.code;
+                        opt.textContent = ward.name;
+                        wardSelect.appendChild(opt);
+                    });
+                })
+                .catch(err => console.error('Lỗi tải danh sách xã:', err));
+        }
+    });
+</script>
+<footer>
+    <!--Footer Top-->
+    <div class="main-footer footer-top">
+        <div class="footer-container">
+
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Liên hệ với chúng tôi</h4>
+                <div class="contact-info">
+                    <div>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Trụ sở: Khu Phố 6, P. Linh Trung, Q. Thủ Đức, TP.HCM</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline tư vấn: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-phone"></i>
+                        <p>Hotline bán hàng: (+84) 1234 5678</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: support@hairglow.vn</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 21:00<br>Chủ nhật: 9:00 - 18:00</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt"></i>
+                        <p>GPKD: 123456789, cấp ngày 20/02/2020, TP. HCM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="Shampoo.html">Dầu gội</a></li>
+                    <li><a href="Conditioner.html">Dầu xả</a></li>
+                    <li><a href="MaskHair.html">Kem ủ tóc</a></li>
+                    <li><a href="Serum.html">Serum dưỡng tóc</a></li>
+                    <li><a href="HairStylingProducts.html">Sáp vuốt tóc</a></li>
+                    <li><a href="SuperDeal.html">Khuyến mãi</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li><a href="Support.html">Hướng dẫn mua hàng</a></li>
+                    <li><a href="Support.html">Chính sách đổi trả</a></li>
+                    <li><a href="Support.html">Chính sách bảo hành</a></li>
+                    <li><a href="Support.html">Phương thức thanh toán</a></li>
+                    <li><a href="Support.html">Vận chuyển & Giao hàng</a></li>
+                    <li><a href="Support.html">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <!--About Us-->
+                <div class="about-us">
+                    <h4>Về chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!--Payment methods-->
+                <div class="payment">
+                    <h4>Thanh toán</h4>
+                    <div class="payment-methods">
+                        <a class="logo-tile"><img alt="Visa" src="assets/VisaIcon.svg"></a>
+                        <a class="logo-tile"><img alt="MasterCard" src="assets/MasterCardIcon.svg"></a>
+                        <a class="logo-tile"><img alt="Napas" src="assets/NapasIcon.svg"></a>
+                        <a class="logo-tile"><img alt="VNPay" src="assets/VNPayIcon.png"></a>
+                        <a class="logo-tile"><img alt="MoMo" src="assets/MoMoIcon.svg"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer Bottom-->
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Điều khoản sử dụng</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
