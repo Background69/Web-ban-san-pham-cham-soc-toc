@@ -362,67 +362,289 @@ main {
     padding: 0 20px;
 }
 
-/* Banner breadcrumb */
+/* Breadcrumb */
 
-.brand-detail-banner {
-    padding-bottom: 24px;
+.breadcrumb-container {
+    margin-bottom: 20px;
 }
 
-.brand-detail-main {
-    max-width: 1200px;
-    margin: 40px auto 60px;
-    padding: 0 20px;
-}
-
-.brand {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 25px 25px 20px;
-    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.06);
-    margin-bottom: 30px;
-}
-
-.brand-inner {
+.breadcrumb {
     display: flex;
-    gap: 24px;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+    color: #666;
 }
 
-.brand-logo img {
-    max-width: 180px;
-    max-height: 80px;
+.breadcrumb a {
+    color: #89af63;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb a:hover {
+    color: #2c5940;
+    text-decoration: underline;
+}
+
+.breadcrumb .separator {
+    color: #999;
+}
+
+.breadcrumb .current {
+    color: #333;
+    font-weight: 500;
+}
+
+/* ========== BRAND BANNER FULL WIDTH ========== */
+
+.brand-banner {
+    position: relative;
+    background: linear-gradient(135deg, #1a3d2e 0%, #2c5940 50%, #3d7a5a 100%);
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.brand-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></svg>') repeat;
+    background-size: 60px 60px;
+}
+
+.brand-banner-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(137, 175, 99, 0.15));
+}
+
+.brand-banner-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    width: 100%;
+}
+
+.brand-banner .breadcrumb {
+    margin-bottom: 24px;
+}
+
+.brand-banner .breadcrumb a,
+.brand-banner .breadcrumb .separator {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.brand-banner .breadcrumb a:hover {
+    color: #a5c87f;
+}
+
+.brand-banner .breadcrumb .current {
+    color: #fff;
+}
+
+.brand-banner-info {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.brand-logo-wrapper {
+    width: 140px;
+    height: 140px;
+    background: #fff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.brand-logo-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
 }
 
-.brand-content h2 {
-    font-size: 26px;
-    margin-bottom: 10px;
-    color: #2c5940;
+.brand-text h1 {
+    font-size: 36px;
+    color: #fff;
+    margin-bottom: 8px;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.brand-content p {
-    font-size: 15px;
-    color: #444;
-    margin-bottom: 14px;
+.brand-tagline {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 16px;
 }
 
-.brand-tags {
+.brand-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    list-style: none;
+    gap: 20px;
 }
 
-.brand-tags li {
-    font-size: 13px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: #f0f6ea;
-    color: #2c5940;
+.meta-item {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    font-size: 14px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.meta-item i {
+    color: #a5c87f;
+}
+
+/* ========== BRAND INFO SECTION ========== */
+
+.brand-info-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.brand-description-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.brand-description-card h2 {
+    font-size: 18px;
+    color: #2c5940;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-description-card h2 i {
+    color: #89af63;
+}
+
+.brand-description-card p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+}
+
+/* Brand Stats - Thống kê sản phẩm theo danh mục */
+
+.brand-stats {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.brand-stats h3 {
+    font-size: 18px;
+    color: #2c5940;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-stats h3 i {
+    color: #89af63;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.stat-item {
+    background: linear-gradient(135deg, #f8faf5, #eef5e6);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #e8f0e0;
+}
+
+.stat-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(44, 89, 64, 0.12);
+    border-color: #89af63;
+}
+
+.stat-number {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c5940;
+    margin-bottom: 6px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Responsive Brand Banner */
+
+@media (max-width: 768px) {
+    .brand-banner {
+        min-height: auto;
+    }
+
+    .brand-banner-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .brand-logo-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+
+    .brand-text h1 {
+        font-size: 26px;
+    }
+
+    .brand-meta {
+        justify-content: center;
+    }
+
+    .brand-info-section {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-highlights {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Filter Section */

@@ -345,22 +345,17 @@ section.banner-section {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 15px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 16px;
-    align-items: stretch;
 }
-
 
 .slider {
     position: relative;
-    height: clamp(240px, 30vw, 400px);
+    height: clamp(300px, 35vw, 450px);
     background: #fff;
     border: 1px solid #eaecef;
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 8px 18px rgba(0, 0, 0, .05);
-
+    width: 100%;
 }
 
 .banner-slides {
