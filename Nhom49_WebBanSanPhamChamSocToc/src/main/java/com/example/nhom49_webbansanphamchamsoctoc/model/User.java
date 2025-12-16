@@ -1,27 +1,33 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
+/**
+ * Model User - Bảng users trong database
+ * Quản lý thông tin người dùng (Admin/Khách hàng)
+ */
 public class User {
-    private int id;
+    private int userId;
     private String email;
     private String username;
     private String password;
-    private String fullName;
-    private String role;
-    private String phoneNum;
+    private String phone;
     private String avatar;
+    private String role; // 'Admin' hoặc 'Khách hàng'
+    private boolean isActive;
     private Timestamp createdAt;
+
+    // Constructors
     public User() {
-
     }
 
-    public int getId() {
-        return id;
+    // Getters and Setters
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -48,28 +54,12 @@ public class User {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
-    }
-
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAvatar() {
@@ -80,6 +70,22 @@ public class User {
         this.avatar = avatar;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -88,18 +94,4 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", role='" + role + '\'' +
-                ", phoneNum='" + phoneNum + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
