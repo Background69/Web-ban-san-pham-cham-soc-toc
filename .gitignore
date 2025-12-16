@@ -1,0 +1,110 @@
+# ===========================
+# IntelliJ IDEA
+# ===========================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# ===========================
+# Maven
+# ===========================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ===========================
+# Java
+# ===========================
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+# ===========================
+# Tomcat / Server
+# ===========================
+.catalina.base/
+.catalina.home/
+catalina.out
+tomcat.*/
+*.log
+
+# ===========================
+# Database
+# ===========================
+*.db
+*.sqlite
+*.sql.backup
+
+# ===========================
+# Environment & Config
+# ===========================
+.env
+.env.local
+.env.*.local
+application-local.properties
+database.properties
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ===========================
+# Editors
+# ===========================
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ===========================
+# Node (nếu có frontend)
+# ===========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ===========================
+# Build & Temp
+# ===========================
+/dist/
+/build/
+*.tmp
+*.temp
+*.bak
+*.cache
+
+/Nhom49_WebBanSanPhamChamSocToc/.mvn/
+/Nhom49_WebBanSanPhamChamSocToc/src/test/
+/Nhom49_WebBanSanPhamChamSocToc/mvnw
+/Nhom49_WebBanSanPhamChamSocToc/mvnw.cmd
+/Nhom49_WebBanSanPhamChamSocToc/Nhom49_WebBanSanPhamChamSocToc.iml
