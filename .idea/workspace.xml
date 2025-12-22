@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d98db52-7f33-4b55-9910-309e72af34cf" name="Changes" comment="vanthnag/newproduct">
-      <change beforePath="$PROJECT_DIR$/Vanthang/css/style_for_store.css" beforeDir="false" afterPath="$PROJECT_DIR$/Vanthang/css/style_for_store.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/static/css/login.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/static/js/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/authentication/forgot_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/authentication/forgot_password.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/authentication/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/authentication/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/authentication/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/authentication/register.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,27 +73,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "vthang",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Admin/IdeaProjects/Web-ban-san-pham-cham-soc-toc/images",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;vthang&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/IdeaProjects/Web-ban-san-pham-cham-soc-toc/images&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Admin\IdeaProjects\Web-ban-san-pham-cham-soc-toc\images" />
@@ -104,19 +109,6 @@
       <recent name="C:\Users\Admin\IdeaProjects\Web-ban-san-pham-cham-soc-toc\webapp\images" />
       <recent name="C:\Users\Admin\IdeaProjects\Web-ban-san-pham-cham-soc-toc\Vanthang\image" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="Web-ban-san-pham-cham-soc-toc" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="Web-ban-san-pham-cham-soc-toc" />
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
