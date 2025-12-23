@@ -17,4 +17,13 @@ public class User extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
+
+    public void setName(String name) {
+    }
+
+    public void setPhone(String phone) {
+    }
+
+    public void setGender(String gender) {
+    }
 }
