@@ -9,7 +9,7 @@ import java.util.List;
 public class UserDAO implements IDAO<User> {
     private final Jdbi jdbi;
 
-    public UserDAO(Jdbi jdbi) {
+    public UserDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
