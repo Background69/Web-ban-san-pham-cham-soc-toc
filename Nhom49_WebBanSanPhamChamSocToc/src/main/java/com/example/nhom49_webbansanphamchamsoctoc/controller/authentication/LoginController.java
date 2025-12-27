@@ -1,4 +1,4 @@
-package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
+package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -6,8 +6,8 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "User", value = "/User")
-public class User extends HttpServlet {
+@WebServlet(name = "Login", value = "/Login")
+public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -16,14 +16,5 @@ public class User extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    }
-
-    public void setName(String name) {
-    }
-
-    public void setPhone(String phone) {
-    }
-
-    public void setGender(String gender) {
     }
 }
