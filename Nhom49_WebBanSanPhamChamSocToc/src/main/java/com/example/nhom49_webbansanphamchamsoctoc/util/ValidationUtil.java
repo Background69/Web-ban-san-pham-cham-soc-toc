@@ -1,0 +1,147 @@
+package com.example.nhom49_webbansanphamchamsoctoc.util;
+
+
+import java.util.regex.Pattern;
+
+/**
+ * Utility class cho validation dữ liệu
+ */
+
+public class ValidationUtil {
+    // Regex patterns
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    );
+
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{10,11}$");
+
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9_]{3,50}$");
+
+    /**
+     * Kiểm tra string có null hoặc empty không
+     */
+    public static boolean isEmpty(String str) {
+        return str == null || str.trim().isEmpty();
+    }
+
+    /**
+     * Kiểm tra string không null và không empty
+     */
+    public static boolean isNotEmpty(String str) {
+        return !isEmpty(str);
+    }
+
+    /**
+     * Sanitize string - loại bỏ khoảng trắng thừa
+     */
+    public static String sanitize(String str) {
+        return str != null ? str.trim() : null;
+    }
+
+    /**
+     * Validate độ dài string
+     */
+    public static boolean isValidLength(String str, int minLength, int maxLength) {
+        if (str == null) return false;
+        int length = str.trim().length();
+        return length >= minLength && length <= maxLength;
+    }
+
+    /**
+     * Validate email format
+     */
+    public static boolean isValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email.trim()).matches();
+    }
+
+    /**
+     * Validate email với message lỗi
+     */
+    public static String validateEmail(String email) {
+        if (isEmpty(email)) {
+            return "Email không được để trống";
+        }
+        if (!isValidEmail(email)) {
+            return "Email không hợp lệ";
+        }
+        return null; // Hợp lệ
+    }
+
+    /**
+     * Validate số điện thoại (10-11 chữ số)
+     */
+    public static boolean isValidPhone(String phone) {
+        return phone != null && PHONE_PATTERN.matcher(phone.trim()).matches();
+    }
+
+    /**
+     * Validate phone với message lỗi (nếu có ghi nhưng ghi sai thì hiện)
+     */
+    public static String validatePhone(String phone) {
+        if (isNotEmpty(phone) && !isValidPhone(phone)) {
+            return "Số điện thoại không hợp lệ (10-11 chữ số)";
+        }
+        return null; // Hợp lệ hoặc để trống
+    }
+
+    /**
+     * Validate username (3-50 ký tự, chỉ chữ cái, số và _)
+     */
+    public static boolean isValidUsername(String username) {
+        return username != null && USERNAME_PATTERN.matcher(username.trim()).matches();
+    }
+
+    /**
+     * Validate username với message lỗi
+     */
+    public static String validateUsername(String username) {
+        if (isEmpty(username)) {
+            return "Tên đăng nhập không được để trống";
+        }
+        if (!isValidLength(username, 3, 50)) {
+            return "Tên đăng nhập phải từ 3-50 ký tự";
+        }
+        if (!isValidUsername(username)) {
+            return "Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới";
+        }
+        return null; // Hợp lệ
+    }
+    /**
+     * Validate số nguyên dương
+     */
+    public static boolean isPositiveInteger(Integer number) {
+        return number != null && number > 0;
+    }
+
+    /**
+     * Validate số thực dương
+     */
+    public static boolean isPositiveDouble(Double number) {
+        return number != null && number > 0;
+    }
+
+    /**
+     * Parse integer an toàn
+     */
+    public static Integer parseIntSafe(String str) {
+        if (isEmpty(str)) return null;
+        try {
+            return Integer.parseInt(str.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Parse double an toàn
+     */
+    public static Double parseDoubleSafe(String str) {
+        if (isEmpty(str)) return null;
+        try {
+            return Double.parseDouble(str.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+}
