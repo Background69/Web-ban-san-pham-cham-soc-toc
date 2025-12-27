@@ -3,6 +3,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.UserService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -109,5 +110,50 @@ public class UserController extends HttpServlet {
     private void changePassword(HttpServletRequest request, HttpServletResponse response, User currentUser)
             throws ServletException, IOException {
 
+        // Hỗ trợ nhiều tên field (tùy template đang đặt)
+        String currentPassword = firstNonEmpty(
+                request.getParameter("currentPassword"),
+                request.getParameter("oldPassword"),
+                request.getParameter("password")
+        );
+        String newPassword = firstNonEmpty(
+                request.getParameter("newPassword"),
+                request.getParameter("passwordNew")
+        );
+        String confirmPassword = firstNonEmpty(
+                request.getParameter("confirmPassword"),
+                request.getParameter("passwordConfirm"),
+                request.getParameter("rePassword")
+        );
+
+        try {
+            if (ValidationUtil.isEmpty(newPassword) || ValidationUtil.isEmpty(confirmPassword)) {
+                throw new IllegalArgumentException("Vui lòng nhập đầy đủ mật khẩu mới và xác nhận mật khẩu.");
+            }
+            if (!newPassword.equals(confirmPassword)) {
+                throw new IllegalArgumentException("Mật khẩu xác nhận không khớp.");
+            }
+
+            userService.changePassword(currentUser, currentPassword, newPassword);
+            request.setAttribute("success", "Đổi mật khẩu thành công.");
+        } catch (IllegalArgumentException ex) {
+            request.setAttribute("error", ex.getMessage());
+        } catch (Exception ex) {
+            request.setAttribute("error", "Có lỗi xảy ra khi đổi mật khẩu. Vui lòng thử lại.");
+        }
+
+        RequestDispatcher dispatcher =
+                this.getServletContext().getRequestDispatcher("/webapp/user/change-password.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private String firstNonEmpty(String... values) {
+        if (values == null) return null;
+        for (String v : values) {
+            if (ValidationUtil.isNotEmpty(v)) {
+                return v;
+            }
+        }
+        return null;
     }
 }

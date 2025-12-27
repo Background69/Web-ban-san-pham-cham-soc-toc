@@ -3,6 +3,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.services;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Service chuyên xử lý các thao tác liên quan đến profile user
@@ -10,8 +11,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 public class UserService {
 
     private final UserDAO userDAO;
-    private ValidationUtil validationUtil;
-
     public UserService() {
         this.userDAO = new UserDAO();
     }
@@ -32,7 +31,6 @@ public class UserService {
      * @throws IllegalArgumentException nếu dữ liệu không hợp lệ
      * @throws RuntimeException nếu cập nhật DB thất bại
      */
-
 
     public void updateUserProfile(User user, String newUsername, String newPhone) {
         // Validate user
@@ -76,6 +74,47 @@ public class UserService {
         boolean success = userDAO.update(dbUser);
         if (!success) {
             throw new RuntimeException("Cập nhật profile thất bại. Vui lòng thử lại.");
+        }
+    }
+
+    /**
+     * Đổi mật khẩu.
+     *
+     * @throws IllegalArgumentException nếu dữ liệu không hợp lệ hoặc mật khẩu hiện tại sai
+     * @throws RuntimeException nếu cập nhật DB thất bại
+     */
+    public void changePassword(User sessionUser, String currentPassword, String newPassword) {
+        if (sessionUser == null || !ValidationUtil.isPositiveInteger(sessionUser.getUserId())) {
+            throw new IllegalArgumentException("Tài khoản không hợp lệ.");
+        }
+        if (ValidationUtil.isEmpty(currentPassword)) {
+            throw new IllegalArgumentException("Vui lòng nhập mật khẩu hiện tại.");
+        }
+        if (ValidationUtil.isEmpty(newPassword)) {
+            throw new IllegalArgumentException("Vui lòng nhập mật khẩu mới.");
+        }
+        if (!ValidationUtil.isValidLength(newPassword, 6, 255)) {
+            throw new IllegalArgumentException("Mật khẩu mới phải từ 6 ký tự trở lên.");
+        }
+
+        User dbUser = userDAO.findById(sessionUser.getUserId());
+        if (dbUser == null) {
+            throw new IllegalArgumentException("Không tìm thấy tài khoản.");
+        }
+        if (dbUser.getPassword() == null) {
+            throw new IllegalArgumentException("Tài khoản chưa có mật khẩu.");
+        }
+
+        // Verify mật khẩu hiện tại
+        boolean ok = BCrypt.checkpw(currentPassword, dbUser.getPassword());
+        if (!ok) {
+            throw new IllegalArgumentException("Mật khẩu hiện tại không đúng.");
+        }
+
+        String hashed = BCrypt.hashpw(newPassword, BCrypt.gensalt(12));
+        boolean updated = userDAO.updatePassword(dbUser.getUserId(), hashed);
+        if (!updated) {
+            throw new RuntimeException("Đổi mật khẩu thất bại. Vui lòng thử lại.");
         }
     }
 }
