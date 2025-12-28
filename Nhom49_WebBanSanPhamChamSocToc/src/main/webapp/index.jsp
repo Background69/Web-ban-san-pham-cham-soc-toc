@@ -1,34 +1,41 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HairGlow | Sản phẩm chăm sóc tóc</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style_for_main-page.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style_for_main-page.css">
 </head>
 <body>
 <!-- Header -->
 <%@ include file="layout/header.jsp" %>
+
 <section class="banner-section">
     <div class="banner-container">
         <!-- Banner / Slider -->
         <div class="slider" id="banner-slider">
-
             <div class="banner-slides">
                 <!-- Slide 1 -->
                 <div class="item" id="slide-1">
-                    <img alt="banner 1" class="banner-image" src="images/banner1.png">
+                    <img alt="banner 1" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner1.png">
                 </div>
                 <!-- Slide 2 -->
                 <div class="item" id="slide-2">
-                    <img alt="banner 2" class="banner-image" src="images/banner2.png">
+                    <img alt="banner 2" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
                 </div>
                 <!-- Slide 3 -->
                 <div class="item" id="slide-3">
-                    <img alt="banner 3" class="banner-image" src="images/banner3.png">
+                    <img alt="banner 3" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner3.png">
                 </div>
             </div>
 
@@ -38,6 +45,7 @@
         </div>
     </div>
 </section>
+
 <section class="flash-sale-section">
     <div class="flash-sale-container">
         <div class="flash-sale-header">
@@ -61,16 +69,15 @@
         </div>
 
         <div class="flash-sale-slider-container">
-
             <div class="flash-sale-slider">
                 <div class="flash-sale-track" id="flash-sale-track">
                     <!-- Sale 1 -->
                     <div class="product-item">
                         <div class="flash-sale-badge">-50%</div>
                         <div class="product-img">
-                            <a href="#">
+                            <a href="${pageContext.request.contextPath}/product/1">
                                 <img alt="Product 1" class="product-image"
-                                     src="images/dau-goi-can-bang-ph-elgon.png">
+                                     src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
                             </a>
                         </div>
                         <div class="product-body">
@@ -81,17 +88,18 @@
                                 <p class="badge-discount">-50%</p>
                             </div>
                             <div class="product">
-                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn" href="${pageContext.request.contextPath}/product/1">Xem thêm</a>
                                 <a class="btn primary" href="#">Thêm vào giỏ</a>
                             </div>
                         </div>
                     </div>
                     <!-- Sale 2 -->
                     <div class="product-item">
-                        <div class="flash-sale-badge">-50%</div>
+                        <div class="flash-sale-badge">-21%</div>
                         <div class="product-img">
-                            <a href="#">
-                                <img alt="Product 1" class="product-image" src="images/super-deal-product-1.jpg">
+                            <a href="${pageContext.request.contextPath}/product/2">
+                                <img alt="Product 2" class="product-image"
+                                     src="${pageContext.request.contextPath}/static/assets/images/super-deal-product-1.jpg">
                             </a>
                         </div>
                         <div class="product-body">
@@ -102,7 +110,7 @@
                                 <p class="badge-discount">-21%</p>
                             </div>
                             <div class="product">
-                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn" href="${pageContext.request.contextPath}/product/2">Xem thêm</a>
                                 <a class="btn primary" href="#">Thêm vào giỏ</a>
                             </div>
                         </div>
@@ -111,8 +119,9 @@
                     <div class="product-item">
                         <div class="flash-sale-badge">-40%</div>
                         <div class="product-img">
-                            <a href="#">
-                                <img alt="Product 1" class="product-image" src="images/xakho.png">
+                            <a href="${pageContext.request.contextPath}/product/3">
+                                <img alt="Product 3" class="product-image"
+                                     src="${pageContext.request.contextPath}/static/assets/images/xakho.png">
                             </a>
                         </div>
                         <div class="product-body">
@@ -123,17 +132,18 @@
                                 <p class="badge-discount">-40%</p>
                             </div>
                             <div class="product">
-                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn" href="${pageContext.request.contextPath}/product/3">Xem thêm</a>
                                 <a class="btn primary" href="#">Thêm vào giỏ</a>
                             </div>
                         </div>
                     </div>
                     <!-- Sale 4 -->
                     <div class="product-item">
-                        <div class="flash-sale-badge">-50%</div>
+                        <div class="flash-sale-badge">-21%</div>
                         <div class="product-img">
-                            <a href="#">
-                                <img alt="Product 1" class="product-image" src="images/Collagen.webp">
+                            <a href="${pageContext.request.contextPath}/product/4">
+                                <img alt="Product 4" class="product-image"
+                                     src="${pageContext.request.contextPath}/static/assets/images/Collagen.webp">
                             </a>
                         </div>
                         <div class="product-body">
@@ -144,7 +154,7 @@
                                 <p class="badge-discount">-21%</p>
                             </div>
                             <div class="product">
-                                <a class="btn" href="ProductDetail.html">Xem thêm</a>
+                                <a class="btn" href="${pageContext.request.contextPath}/product/4">Xem thêm</a>
                                 <a class="btn primary" href="#">Thêm vào giỏ</a>
                             </div>
                         </div>
@@ -154,42 +164,43 @@
         </div>
     </div>
 </section>
+
 <main>
     <!-- Categories Container -->
     <div class="categories-container" id="categories-container">
         <h2 class="container-title">Danh Mục Sản Phẩm</h2>
         <div class="categories-grid">
-            <a class="category-item" href="store.html?category=dau-goi">
+            <a class="category-item" href="${pageContext.request.contextPath}/store?category=dau-goi">
                 <div class="category-icon"><i class="fas fa-shower"></i></div>
                 <h3>Dầu Gội</h3>
                 <p>Làm sạch và nuôi dưỡng tóc từ gốc</p>
             </a>
 
-            <a class="category-item" href="store.html?category=dau-xa">
+            <a class="category-item" href="${pageContext.request.contextPath}/store?category=dau-xa">
                 <div class="category-icon"><i class="fas fa-spray-can"></i></div>
                 <h3>Dầu Xả</h3>
                 <p>Mềm mượt, dễ chải</p>
             </a>
 
-            <a class="category-item" href="store.html?category=kem-u">
+            <a class="category-item" href="${pageContext.request.contextPath}/store?category=kem-u">
                 <div class="category-icon"><i class="fas fa-heart"></i></div>
                 <h3>Kem Ủ Tóc</h3>
                 <p>Phục hồi tóc hư tổn sâu</p>
             </a>
 
-            <a class="category-item" href="store.html?category=serum">
+            <a class="category-item" href="${pageContext.request.contextPath}/store?category=serum">
                 <div class="category-icon"><i class="fas fa-flask"></i></div>
                 <h3>Serum Dưỡng</h3>
                 <p>Dưỡng chất tinh tuý cho tóc</p>
             </a>
 
-            <a class="category-item" href="store.html?category=tri-gau">
+            <a class="category-item" href="${pageContext.request.contextPath}/store?category=tri-gau">
                 <div class="category-icon"><i class="fas fa-shield-alt"></i></div>
                 <h3>Trị Gàu & Rụng Tóc</h3>
                 <p>Giải pháp toàn diện cho tóc</p>
             </a>
 
-            <a class="category-item" href="store.html?category=sap-gel">
+            <a class="category-item" href="${pageContext.request.contextPath}/store?category=tao-kieu">
                 <div class="category-icon"><i class="fas fa-wind"></i></div>
                 <h3>Tạo Kiểu</h3>
                 <p>Sáp, gel, gôm tạo kiểu</p>
@@ -203,8 +214,9 @@
         <div class="product-grid" id="featured-products">
             <div class="product-item">
                 <div class="product-img">
-                    <a href="ProductDetail.html">
-                        <img alt="Serum L'Oreal" class="product-image" src="images/dau-goi-can-bang-ph-elgon.png">
+                    <a href="${pageContext.request.contextPath}/product/1">
+                        <img alt="Dầu gội Elgon" class="product-image"
+                             src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
                     </a>
                 </div>
                 <div class="product-body">
@@ -224,16 +236,17 @@
                         <p class="badge-discount">-18%</p>
                     </div>
                     <div class="product">
-                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
-                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                        <a class="btn" href="${pageContext.request.contextPath}/product/1">Xem thêm</a>
+                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
                     </div>
                 </div>
             </div>
 
             <div class="product-item">
                 <div class="product-img">
-                    <a href="ProductDetail.html">
-                        <img alt="Xả khô BambooMiracle" class="product-image" src="images/xakho.png">
+                    <a href="${pageContext.request.contextPath}/product/2">
+                        <img alt="Xả khô BambooMiracle" class="product-image"
+                             src="${pageContext.request.contextPath}/static/assets/images/xakho.png">
                     </a>
                 </div>
                 <div class="product-body">
@@ -253,16 +266,17 @@
                         <p class="badge-discount">-19%</p>
                     </div>
                     <div class="product">
-                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
-                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                        <a class="btn" href="${pageContext.request.contextPath}/product/2">Xem thêm</a>
+                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
                     </div>
                 </div>
             </div>
 
             <div class="product-item">
                 <div class="product-img">
-                    <a href="ProductDetail.html">
-                        <img alt="Serum L'Oreal" class="product-image" src="images/dau-goi-can-bang-ph-elgon.png">
+                    <a href="${pageContext.request.contextPath}/product/3">
+                        <img alt="Serum L'Oreal" class="product-image"
+                             src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
                     </a>
                 </div>
                 <div class="product-body">
@@ -282,16 +296,17 @@
                         <p class="badge-discount">-21%</p>
                     </div>
                     <div class="product">
-                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
-                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                        <a class="btn" href="${pageContext.request.contextPath}/product/3">Xem thêm</a>
+                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
                     </div>
                 </div>
             </div>
 
             <div class="product-item">
                 <div class="product-img">
-                    <a href="ProductDetail.html">
-                        <img alt="Dầu gội Cehko" class="product-image" src="images/dau-goi-can-bang-ph-elgon.png">
+                    <a href="${pageContext.request.contextPath}/product/4">
+                        <img alt="Dầu gội Cehko" class="product-image"
+                             src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
                     </a>
                 </div>
                 <div class="product-body">
@@ -311,8 +326,8 @@
                         <p class="badge-discount">-22%</p>
                     </div>
                     <div class="product">
-                        <a class="btn" href="ProductDetail.html">Xem thêm</a>
-                        <a class="btn primary" href="Cart.html">Thêm vào giỏ</a>
+                        <a class="btn" href="${pageContext.request.contextPath}/product/4">Xem thêm</a>
+                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
                     </div>
                 </div>
             </div>
@@ -334,9 +349,11 @@
         </div>
     </div>
 </main>
-<--!- Footer -->
+
+<!-- Footer -->
 <%@ include file="layout/footer.jsp" %>
 
-
+<!-- Custom JS -->
+<script src="${pageContext.request.contextPath}/static/js/main.js"></script>
 </body>
 </html>
