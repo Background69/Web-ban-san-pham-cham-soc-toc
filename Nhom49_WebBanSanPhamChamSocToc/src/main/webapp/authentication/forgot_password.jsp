@@ -10,6 +10,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+
     <meta charset="UTF-8">
     <title>Quên mật khẩu</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/login.css">
@@ -27,7 +28,7 @@
         <p>Nhập địa chỉ Email đã liên kết</p>
 
         <!-- Form gửi sang Servlet -->
-        <form action="forgot-password" method="post">
+        <form action="${pageContext.request.contextPath}/ForgotPassword" method="post">
             <input type="email" name="email" placeholder="Nhập email" required>
             <button type="submit" class="btn-primary">
                 Gửi link đặt lại mật khẩu
