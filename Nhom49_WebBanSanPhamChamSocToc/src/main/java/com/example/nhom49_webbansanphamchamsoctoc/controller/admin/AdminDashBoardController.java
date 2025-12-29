@@ -1,7 +1,5 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
-import com.example.nhom49_webbansanphamchamsoctoc.dao.IDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -9,7 +7,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 
 @WebServlet("/admin")
-public class AdminDashBoard extends HttpServlet {
+public class AdminDashBoardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             HttpSession session = request.getSession(false);
@@ -24,9 +22,9 @@ public class AdminDashBoard extends HttpServlet {
                 return;
             }
             request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
-            UserDAO userDAO= new UserDAOImpl();
-            int userCount = userDAO.countUsers();
-            request.setAttribute("userCount", userCount);
+//            UserDAO userDAO= new UserDAOImpl();
+//            int userCount = userDAO.countUsers();
+//            request.setAttribute("userCount", userCount);
 
 
     }
