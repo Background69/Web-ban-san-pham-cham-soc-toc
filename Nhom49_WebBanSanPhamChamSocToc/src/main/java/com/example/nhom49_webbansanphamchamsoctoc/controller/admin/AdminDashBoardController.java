@@ -24,9 +24,9 @@ public class AdminDashBoardController extends HttpServlet {
                 return;
             }
             request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
-            UserDAO userDAO= new UserDAOImpl();
-            boolean userCount = userDAO.countUsers();
-            request.setAttribute("userCount", userCount);
+//            UserDAO userDAO= new UserDAOImpl();
+//            int userCount = userDAO.countUsers();
+//            request.setAttribute("userCount", userCount);
 
 
     }
