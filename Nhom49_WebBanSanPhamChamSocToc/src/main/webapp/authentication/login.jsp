@@ -25,8 +25,10 @@
         <p class="subtitle">Tiếp tục để mua</p>
 
         <!-- Form gửi sang Servlet -->
-        <form action="${pageContext.request.contextPath}login" method="post">
-            <label>Email</label>
+        <form action="${pageContext.request.contextPath}/Login" method="post">
+
+
+        <label>Email</label>
             <input type="text" name="email" placeholder="Nhập Email" required>
 
             <label>Mật khẩu</label>
