@@ -27,15 +27,15 @@
       <div class="banner-slides">
         <div class="item">
           <img class="banner-image"
-               src="${pageContext.request.contextPath}/images/banner1.png" alt="">
+               src="${pageContext.request.contextPath}static/assets/images/banner1.png" alt="">
         </div>
         <div class="item">
           <img class="banner-image"
-               src="${pageContext.request.contextPath}/images/banner2.png" alt="">
+               src="${pageContext.request.contextPath}static/assets/images/banner1.png" alt="">
         </div>
         <div class="item">
           <img class="banner-image"
-               src="${pageContext.request.contextPath}/images/banner3.png" alt="">
+               src="${pageContext.request.contextPath}static/assets/images/banner1.png" alt="">
         </div>
       </div>
 
