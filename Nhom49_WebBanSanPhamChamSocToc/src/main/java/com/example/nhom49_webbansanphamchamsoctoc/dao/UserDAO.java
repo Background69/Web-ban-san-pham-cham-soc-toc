@@ -85,6 +85,11 @@ public class UserDAO implements IDAO<User> {
         return rowsAffected > 0;
     }
 
+    @Override
+    public boolean countUsers() {
+        return false;
+    }
+
     // Authentication methods
 
     public User findByEmail(String email) {
@@ -205,4 +210,5 @@ public class UserDAO implements IDAO<User> {
         user.setCreatedAt(rs.getTimestamp("created_at"));
         return user;
     }
+
 }
