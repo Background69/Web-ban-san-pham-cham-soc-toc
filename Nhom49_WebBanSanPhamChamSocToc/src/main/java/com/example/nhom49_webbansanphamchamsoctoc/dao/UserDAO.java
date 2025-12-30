@@ -85,10 +85,6 @@ public class UserDAO implements IDAO<User> {
         return rowsAffected > 0;
     }
 
-    @Override
-    public boolean countUsers() {
-        return false;
-    }
 
     // Authentication methods
 
