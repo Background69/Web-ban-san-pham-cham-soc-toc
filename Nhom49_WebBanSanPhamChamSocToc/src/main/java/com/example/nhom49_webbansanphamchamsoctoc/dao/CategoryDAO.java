@@ -85,7 +85,10 @@ public class  CategoryDAO implements IDAO<Category> {
         return rowsAffected > 0;
     }
 
-
+    @Override
+    public boolean countUsers() {
+        return false;
+    }
 
     private Category mapCategory(java.sql.ResultSet rs) throws java.sql.SQLException {
         Category category = new Category();
