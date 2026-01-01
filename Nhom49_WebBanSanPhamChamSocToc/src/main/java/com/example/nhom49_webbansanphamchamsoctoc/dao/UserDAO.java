@@ -85,12 +85,6 @@ public class UserDAO implements IDAO<User> {
         return rowsAffected > 0;
     }
 
-    @Override
-    public boolean countUsers() {
-        return false;
-    }
-
-    // Authentication methods
 
     public User findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
