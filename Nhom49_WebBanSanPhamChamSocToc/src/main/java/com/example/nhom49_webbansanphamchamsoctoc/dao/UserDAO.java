@@ -85,12 +85,6 @@ public class UserDAO implements IDAO<User> {
         return rowsAffected > 0;
     }
 
-    @Override
-    public boolean countUsers() {
-        return false;
-    }
-
-    // Authentication methods
 
     public User findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
@@ -211,4 +205,35 @@ public class UserDAO implements IDAO<User> {
         return user;
     }
 
+    public User authenticate(String email, String password) {
+
+        String sql = """
+        SELECT *
+        FROM users
+        WHERE email = :email
+          AND password = :password
+          AND is_active = 1
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("email", email)
+                        .bind("password", password)
+                        .map((rs, ctx) -> {
+                            User user = new User();
+                            user.setUserId(rs.getInt("user_id"));
+                            user.setEmail(rs.getString("email"));
+                            user.setUsername(rs.getString("username"));
+                            user.setPassword(rs.getString("password"));
+                            user.setPhone(rs.getString("phone"));
+                            user.setAvatar(rs.getString("avatar"));
+                            user.setRole(rs.getString("role"));
+                            user.setActive(rs.getBoolean("is_active"));
+                            user.setCreatedAt(rs.getTimestamp("created_at"));
+                            return user;
+                        })
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
 }
