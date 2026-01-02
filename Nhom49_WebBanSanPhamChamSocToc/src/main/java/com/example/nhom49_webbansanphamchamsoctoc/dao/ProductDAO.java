@@ -292,4 +292,5 @@ public class ProductDAO implements IDAO<Product> {
         product.setUpdatedAt(rs.getTimestamp("updated_at"));
         return product;
     }
+
 }
