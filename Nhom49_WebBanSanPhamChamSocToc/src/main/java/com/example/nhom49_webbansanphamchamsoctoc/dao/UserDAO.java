@@ -123,7 +123,6 @@ public class UserDAO implements IDAO<User> {
 //        } chua xong utkl xu ly pass
 //        return null;
 //    }
-
     public boolean existsByEmail(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
         return jdbi.withHandle(handle ->
