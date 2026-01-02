@@ -46,3 +46,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+// trang đăng kí
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".login-box form");
+    if (!form) return;
+
+    form.addEventListener("submit", function (e) {
+        const passwordInput = form.querySelector('input[name="password"]');
+        const confirmInput = form.querySelector('input[name="confirm"]');
+
+        if (!passwordInput || !confirmInput) return;
+
+        const password = passwordInput.value.trim();
+        const confirm = confirmInput.value.trim();
+
+        if (password !== confirm) {
+            e.preventDefault(); // ⛔ chặn submit
+            alert("Mật khẩu xác nhận không khớp");
+        }
+    });
+});
+
+
+
