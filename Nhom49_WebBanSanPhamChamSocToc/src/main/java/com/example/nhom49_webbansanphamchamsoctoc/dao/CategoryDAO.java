@@ -7,7 +7,7 @@ import org.jdbi.v3.core.Jdbi;
 import java.sql.ResultSet;
 import java.util.List;
 
-public class  CategoryDAO implements IDAO<Category> {
+public class CategoryDAO implements IDAO<Category> {
     private final Jdbi jdbi;
 
     public CategoryDAO(Jdbi jdbi) {
