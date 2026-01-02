@@ -86,8 +86,6 @@ public class UserDAO implements IDAO<User> {
     }
 
 
-    // Authentication methods
-
     public User findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
         return jdbi.withHandle(handle ->

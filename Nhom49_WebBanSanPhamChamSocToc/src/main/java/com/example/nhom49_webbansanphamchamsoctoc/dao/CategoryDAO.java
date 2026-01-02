@@ -85,8 +85,6 @@ public class CategoryDAO implements IDAO<Category> {
         return rowsAffected > 0;
     }
 
-
-
     private Category mapCategory(java.sql.ResultSet rs) throws java.sql.SQLException {
         Category category = new Category();
         category.setCategoryId(rs.getInt("category_id"));
