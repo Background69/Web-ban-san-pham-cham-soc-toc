@@ -12,25 +12,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Đăng ký</title>
-    <script src="<%= request.getContextPath() %>/static/js/register.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/login.css">
     <script src="<%= request.getContextPath() %>/static/js/login.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 </head>
 <body>
 
+
 <div class="login-wrapper">
     <div class="login-box">
         <div class="logo-container">
-            <img src="images/logo.png" class="logo" alt="logo">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="logo">
         </div>
 
         <h2>Đăng ký</h2>
         <p>Tạo tài khoản mới để tiếp tục</p>
 
         <!-- Form gửi sang Servlet -->
-        <form action="signup" method="post">
-
-            <label>Email</label>
+        <form action="${pageContext.request.contextPath}/Signup" method="post">
+        <label>Email</label>
             <input type="email" name="email" placeholder="Nhập Email" required>
 
             <label>Mật khẩu</label>

@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -204,4 +205,40 @@ public class UserDAO implements IDAO<User> {
         return user;
     }
 
+    public User authenticate(String email, String password) {
+
+        String sql = """
+                    SELECT *
+                    FROM users
+                    WHERE email = :email
+                      AND is_active = 1
+                """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("email", email)
+                        .map((rs, ctx) -> {
+                            String hashedPassword = rs.getString("password");
+
+                            // ❌ Sai mật khẩu
+                            if (!PasswordUtil.verifyPassword(password, hashedPassword)) {
+                                return null;
+                            }
+
+                            User user = new User();
+                            user.setUserId(rs.getInt("user_id"));
+                            user.setEmail(rs.getString("email"));
+                            user.setUsername(rs.getString("username"));
+                            user.setPassword(hashedPassword);
+                            user.setPhone(rs.getString("phone"));
+                            user.setAvatar(rs.getString("avatar"));
+                            user.setRole(rs.getString("role"));
+                            user.setActive(rs.getBoolean("is_active"));
+                            user.setCreatedAt(rs.getTimestamp("created_at"));
+                            return user;
+                        })
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
 }
