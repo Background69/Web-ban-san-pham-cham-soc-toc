@@ -8,7 +8,7 @@ public interface IDAO<T> {
     //tìm tất cả danh sách
     List<T> findAll();
     // Nhập thêm mới
-    int insert(T entity);
+    int insert(T order);
     // Cập nhật
     boolean update(T entity);
     // Xóa theo id
