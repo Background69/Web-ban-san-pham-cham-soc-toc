@@ -5,7 +5,9 @@
   Time: 10:01 SA
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -21,19 +23,19 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
-            <img alt="" src="images/logo.PNG">
+            <img src="${pageContext.request.contextPath}/static/assets/images/LOGO.png" alt="logo">
         </div>
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li class="active"><a href="DashBoard.html">Dashboard</a></li>
-            <li><a href="UsersManagements.html">Quản lý người dùng</a></li>
-            <li><a href="ProductsManagement.html">Quản lý sản phẩm</a></li>
-            <li><a href="OrdersManagement.html">Quản lý đơn hàng</a></li>
-            <li><a href="BannersManagement.html">Quản lý banner</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin">Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/banners">Quản lý banner</a></li>
         </ul>
 
-        <a class="view-site" href="MainPage.html">Quay lại Website</a>
+        <a class="view-site" href="${pageContext.request.contextPath}/index">Quay lại Website</a>
     </aside>
 
     <!-- Main content -->
@@ -51,7 +53,7 @@
             </div>
             <div class="card">
                 <h3>Tổng Người Dùng</h3>
-                <p class="number">1200</p>
+                <p class="number" >${userCount}</p>
             </div>
             <div class="card">
                 <h3>Tổng Đơn Hàng</h3>
