@@ -189,6 +189,19 @@ public class UserDAO implements IDAO<User> {
         );
         return rowsAffected > 0;
     }
+    public int countUsers() {
+        String sql = "SELECT COUNT(*) FROM users";
+        return jdbi.withHandle(handle -> {
+            return handle.createQuery(sql)
+                    .map((rs, ctx) -> rs.getInt(1))
+                    .iterator()
+                    .next();
+        });
+    }
+
+
+
+
 
     // Helper method de map ResultSet toi User
     private User mapUser(java.sql.ResultSet rs) throws java.sql.SQLException {
