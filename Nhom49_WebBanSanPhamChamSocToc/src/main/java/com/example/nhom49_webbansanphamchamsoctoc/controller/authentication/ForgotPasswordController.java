@@ -15,18 +15,23 @@ public class ForgotPasswordController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/authentication/forgot-password.jsp")
+                .forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         String email = request.getParameter("email");
 
         if (email == null || email.trim().isEmpty()) {
             request.setAttribute("error", "Vui lòng nhập email.");
-            request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/authentication/forgot-password.jsp")
+                    .forward(request, response);
             return;
         }
 
@@ -35,14 +40,15 @@ public class ForgotPasswordController extends HttpServlet {
         if (!emailExists) {
             request.setAttribute("error", "Email không tồn tại trong hệ thống.");
         } else {
-
             request.setAttribute("message", "Link đặt lại mật khẩu đã được gửi về email.");
         }
 
-        request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/authentication/forgot-password.jsp")
+                .forward(request, response);
     }
 
     private boolean checkEmailExists(String email) {
         return email.equalsIgnoreCase("test@gmail.com");
     }
 }
+

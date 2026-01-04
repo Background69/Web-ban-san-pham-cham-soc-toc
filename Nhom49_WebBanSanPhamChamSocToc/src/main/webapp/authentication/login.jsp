@@ -20,20 +20,22 @@
 
 <div class="login-wrapper">
     <div class="login-box">
-        <img src="images/logo.png" class="logo" alt="logo">
+        <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="logo">
         <h1>Đăng nhập</h1>
         <p class="subtitle">Tiếp tục để mua</p>
 
         <!-- Form gửi sang Servlet -->
-        <form action="login" method="post">
-            <label>Email</label>
+        <form action="${pageContext.request.contextPath}/Login" method="post">
+
+
+        <label>Email</label>
             <input type="text" name="email" placeholder="Nhập Email" required>
 
             <label>Mật khẩu</label>
             <input type="password" name="password" placeholder="Nhập mật khẩu" required>
 
             <div class="options">
-                <a href="Forgotpassword.jsp">Quên mật khẩu</a>
+                <a href="forgot_password.jsp">Quên mật khẩu</a>
             </div>
 
             <button type="submit" class="btn primary-btn">Đăng nhập</button>
@@ -50,7 +52,7 @@
         %>
 
         <p class="signup-text">
-            Không có tài khoản? <a href="Signup.jsp">Đăng ký ngay!</a>
+            Không có tài khoản? <a href="register.jsp">Đăng ký ngay!</a>
         </p>
     </div>
 </div>
