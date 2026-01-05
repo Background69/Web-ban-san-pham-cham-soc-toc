@@ -17,9 +17,9 @@ public class BrandDAO implements IDAO<Brand> {
     @Override
     public Brand findById(int id) {
         String sql = """
-            SELECT * FROM brands
-            WHERE brand_id = :id
-        """;
+                    SELECT * FROM brands
+                    WHERE brand_id = :id
+                """;
 
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
@@ -44,10 +44,10 @@ public class BrandDAO implements IDAO<Brand> {
     @Override
     public int insert(Brand brand) {
         String sql = """
-            INSERT INTO brands
-            (brand_name, brand_slug, logo_url, origin, short_description, full_description)
-            VALUES (:brandName, :brandSlug, :logoUrl, :origin, :shortDescription, :fullDescription)
-        """;
+                    INSERT INTO brands
+                    (brand_name, brand_slug, logo_url, origin, short_description, full_description)
+                    VALUES (:brandName, :brandSlug, :logoUrl, :origin, :shortDescription, :fullDescription)
+                """;
 
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
@@ -59,15 +59,15 @@ public class BrandDAO implements IDAO<Brand> {
     @Override
     public boolean update(Brand brand) {
         String sql = """
-            UPDATE brands
-            SET brand_name = :brandName,
-                brand_slug = :brandSlug,
-                logo_url = :logoUrl,
-                origin = :origin,
-                short_description = :shortDescription,
-                full_description = :fullDescription
-            WHERE brand_id = :brandId
-        """;
+                    UPDATE brands
+                    SET brand_name = :brandName,
+                        brand_slug = :brandSlug,
+                        logo_url = :logoUrl,
+                        origin = :origin,
+                        short_description = :shortDescription,
+                        full_description = :fullDescription
+                    WHERE brand_id = :brandId
+                """;
 
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
