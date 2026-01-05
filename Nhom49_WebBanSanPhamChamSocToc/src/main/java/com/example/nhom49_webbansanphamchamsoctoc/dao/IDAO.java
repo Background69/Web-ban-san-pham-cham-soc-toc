@@ -17,5 +17,4 @@ public interface IDAO<T> {
 
     // Xóa theo id
     boolean delete(int id);
-
 }

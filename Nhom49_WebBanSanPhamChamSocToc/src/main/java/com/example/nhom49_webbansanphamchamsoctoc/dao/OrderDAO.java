@@ -6,11 +6,13 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-public class OrderDAO implements IDAO<Order>{
+public class OrderDAO implements IDAO<Order> {
     private final Jdbi jdbi;
+
     public OrderDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
+
     @Override
     public Order findById(int id) {
         return null;
