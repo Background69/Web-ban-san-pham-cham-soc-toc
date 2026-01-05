@@ -6,8 +6,9 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-public class ShippingAddressDAO implements IDAO<ShippingAddress>{
+public class ShippingAddressDAO implements IDAO<ShippingAddress> {
     private final Jdbi jdbi;
+
     public ShippingAddressDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
