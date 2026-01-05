@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ProductImgDAO implements IDAO<ProductImage> {
     private final Jdbi jdbi;
+
     public ProductImgDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }

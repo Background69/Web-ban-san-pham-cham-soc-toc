@@ -190,6 +190,7 @@ public class UserDAO implements IDAO<User> {
         return rowsAffected > 0;
     }
 
+
     // Helper method de map ResultSet toi User
     private User mapUser(java.sql.ResultSet rs) throws java.sql.SQLException {
         User user = new User();
