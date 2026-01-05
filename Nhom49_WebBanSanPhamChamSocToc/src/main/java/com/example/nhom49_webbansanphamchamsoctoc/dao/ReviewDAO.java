@@ -6,8 +6,9 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-public class ReviewDAO implements IDAO<Review>{
+public class ReviewDAO implements IDAO<Review> {
     private final Jdbi jdbi;
+
     public ReviewDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
