@@ -1,32 +1,29 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
-import com.example.nhom49_webbansanphamchamsoctoc.dao.IDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
-
-@WebServlet("/admin")
+/**
+ * Servlet hiển thị Admin Dashboard
+ * GET /admin: Dashboard với thống kê
+ */
+@WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin", "/admin/"})
 public class AdminDashBoardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            HttpSession session = request.getSession(false);
-            if (session==null||session.getAttribute("currentUser")==null)
-            {
-                response.sendRedirect(request.getContextPath()+"/login");
-                return;
-            }
-            String role = (String) session.getAttribute("role");
-            if (!"admin".equals(role)){
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền truy cập");
-                return;
-            }
-            request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
-//            UserDAO userDAO= new UserDAOImpl();
-//            int userCount = userDAO.countUsers();
-//            request.setAttribute("userCount", userCount);
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("currentUser") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+        String role = (String) session.getAttribute("role");
+        if (!"admin".equals(role)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền truy cập");
+            return;
+        }
+        request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
 
 
     }

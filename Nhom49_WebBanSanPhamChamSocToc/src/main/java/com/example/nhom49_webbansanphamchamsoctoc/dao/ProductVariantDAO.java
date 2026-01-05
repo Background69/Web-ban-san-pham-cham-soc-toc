@@ -6,8 +6,9 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-public class ProductVariantDAO implements IDAO<ProductVariant>{
+public class ProductVariantDAO implements IDAO<ProductVariant> {
     private final Jdbi jdbi;
+
     public ProductVariantDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
