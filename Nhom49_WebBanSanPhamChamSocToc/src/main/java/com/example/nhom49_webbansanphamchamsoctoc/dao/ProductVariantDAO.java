@@ -59,11 +59,14 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
     @Override
     public int insert(ProductVariant variant) {
         String sql = """
-            INSERT INTO product_variants
-            (product_id, variant_name, original_price, sale_price,
-             discount_percent, stock_quantity, is_default)
-            VALUES (:productId, :variantName, :originalPrice, :salePrice,
-                    :discountPercent, :stockQuantity, :default)
+            UPDATE product_variants
+                    SET variant_name = :variantName,
+                        original_price = :originalPrice,
+                        sale_price = :salePrice,
+                        discount_percent = :discountPercent,
+                        stock_quantity = :stockQuantity,
+                        is_default = :isDefault
+                    WHERE variant_id = :variantId
         """;
 
         return jdbi.withHandle(handle ->
