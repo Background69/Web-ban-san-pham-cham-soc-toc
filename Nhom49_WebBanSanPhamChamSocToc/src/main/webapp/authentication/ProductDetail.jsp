@@ -1,20 +1,17 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 22/12/2025
-  Time: 2:40 CH
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<meta charset="UTF-8">
+
+
 <!DOCTYPE html>
+
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Chi tiết sản phẩm</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style_for_product_detail.css">
-  <script src="<%= request.getContextPath() %>/static/js/login.js"></script>
+  <script src="<%= request.getContextPath() %>/static/js/ProductDetail.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+  <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 </head>
 <body>
 
@@ -22,110 +19,100 @@
 
   <div class="product-detail-container">
 
-    <!-- Hình ảnh sản phẩm -->
+    ```
+    <!-- LEFT: IMAGE -->
     <div class="product-detail-left">
       <div class="product-detail-image">
-        <img src="images/product-1-1.jpg" alt="Product image" class="product-image">
-      </div>
-
-      <div class="thumbnail-images">
-        <img src="images/product-1-1.jpg" class="thumbnail active">
-        <img src="images/product-1-2.jpg" class="thumbnail">
-        <img src="images/product-1-3.png" class="thumbnail">
-        <img src="images/product-1-4.jpg" class="thumbnail">
+        <img src="${pageContext.request.contextPath}/static/images/product-default.jpg" class="product-image">
       </div>
     </div>
 
-    <!-- Thông tin sản phẩm -->
+    <!-- RIGHT: INFO -->
     <div class="product-detail-right">
 
       <h1 class="product-title">
-        Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml
+        Sản phẩm #${productId}
       </h1>
 
-      <div class="product-rating-section">
-        <span class="stars">★★★★★</span>
-        <span>4.8 (423 đánh giá)</span>
-      </div>
+      <!-- PRICE (variant mặc định) -->
+      <c:forEach var="v" items="${variants}" varStatus="st">
+        <c:if test="${v.default}">
+          <div class="product-section-price">
+            <p class="price-current">${v.salePrice} ₫</p>
+            <p class="price-old">${v.originalPrice} ₫</p>
+            <p class="discount-percent">-${v.discountPercent}%</p>
+          </div>
+        </c:if>
+      </c:forEach>
 
-      <div class="product-section-price">
-        <p class="price-current">220.000₫</p>
-        <p class="price-old">280.000₫</p>
-        <p class="discount-percent">-21%</p>
-      </div>
-
-      <div class="product-section-info">
-        <p><strong>Thương hiệu:</strong> L'Oréal Professionnel</p>
-        <p><strong>Xuất xứ:</strong> Pháp</p>
-        <p><strong>Tình trạng:</strong> <span class="in-stock">Còn hàng</span></p>
-      </div>
-
-      <!-- Dung tích -->
+      <!-- VARIANTS -->
       <div class="product-section-options">
         <div class="option-group">
           <label>Dung tích:</label>
           <div class="option-buttons">
-            <button class="option-btn active">30ml</button>
-            <button class="option-btn">50ml</button>
-            <button class="option-btn">100ml</button>
+            <c:forEach var="variant" items="${variants}">
+              <button class="option-btn ${variant.default ? 'active' : ''}">
+                  ${variant.variantName}
+              </button>
+            </c:forEach>
           </div>
         </div>
 
         <div class="option-group">
           <label>Số lượng:</label>
-          <input type="number" value="1" min="1" max="99">
+          <input type="number" name="quantity" value="1" min="1" max="99">
         </div>
       </div>
 
-      <!-- Nút -->
+      <!-- BUTTON -->
       <div class="product-section-btn">
         <button class="btn btn-add-cart">
-          <i class="fas fa-shopping-cart"></i>
-          Thêm vào giỏ hàng
+          <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
         </button>
-
-        <a href="cart.jsp" class="btn btn-buy-now">
-          Mua ngay
-        </a>
       </div>
 
     </div>
+    ```
+
   </div>
 
-  <!-- Chi tiết & đánh giá -->
+  <!-- DETAIL & REVIEW -->
+
   <div class="product-main-detail-page">
 
+    ```
     <div class="main-detail-header">
-      <button class="detail-page-btn active">Mô tả sản phẩm</button>
+      <button class="detail-page-btn active">Mô tả</button>
       <button class="detail-page-btn">Đánh giá</button>
     </div>
 
     <div class="detail-page-content active">
       <h2>Mô tả sản phẩm</h2>
-      <p>
-        Serum dưỡng tóc L'Oreal Professionnel giúp phục hồi tóc hư tổn,
-        khô xơ, mang lại mái tóc mềm mượt và chắc khỏe.
-      </p>
+      <p>Thông tin mô tả sản phẩm sẽ được cập nhật từ database.</p>
     </div>
 
     <div class="detail-page-content">
       <h2>Đánh giá từ khách hàng</h2>
 
-      <div class="review-item">
-        <strong>Nguyễn Thị Mai</strong> ★★★★★
-        <p>Tóc mềm mượt rõ rệt sau khi dùng.</p>
-      </div>
+      <c:if test="${empty reviews}">
+        <p>Chưa có đánh giá nào.</p>
+      </c:if>
 
-      <div class="review-item">
-        <strong>Trần Văn Hoàng</strong> ★★★★★
-        <p>Sản phẩm chính hãng, rất hài lòng.</p>
-      </div>
-
+      <c:forEach var="review" items="${reviews}">
+        <div class="review-item">
+          <strong>${review.reviewerName}</strong>
+          <span>
+                <c:forEach begin="1" end="${review.rating}">★</c:forEach>
+            </span>
+          <p>${review.content}</p>
+        </div>
+      </c:forEach>
     </div>
+    ```
+
   </div>
 
 </main>
 
 </body>
 </html>
-
