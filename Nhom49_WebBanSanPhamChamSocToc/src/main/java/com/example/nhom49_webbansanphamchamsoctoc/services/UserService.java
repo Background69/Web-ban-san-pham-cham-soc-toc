@@ -11,6 +11,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class UserService {
 
     private final UserDAO userDAO;
+
     public UserService() {
         this.userDAO = new UserDAO();
     }
@@ -29,7 +30,7 @@ public class UserService {
      * Cập nhật thông tin profile cơ bản.
      *
      * @throws IllegalArgumentException nếu dữ liệu không hợp lệ
-     * @throws RuntimeException nếu cập nhật DB thất bại
+     * @throws RuntimeException         nếu cập nhật DB thất bại
      */
 
     public void updateUserProfile(User user, String newUsername, String newPhone) {
@@ -81,7 +82,7 @@ public class UserService {
      * Đổi mật khẩu.
      *
      * @throws IllegalArgumentException nếu dữ liệu không hợp lệ hoặc mật khẩu hiện tại sai
-     * @throws RuntimeException nếu cập nhật DB thất bại
+     * @throws RuntimeException         nếu cập nhật DB thất bại
      */
     public void changePassword(User sessionUser, String currentPassword, String newPassword) {
         if (sessionUser == null || !ValidationUtil.isPositiveInteger(sessionUser.getUserId())) {
