@@ -10,7 +10,7 @@ import java.util.List;
 public class CategoryDAO implements IDAO<Category> {
     private final Jdbi jdbi;
 
-    public CategoryDAO(Jdbi jdbi) {
+    public CategoryDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
