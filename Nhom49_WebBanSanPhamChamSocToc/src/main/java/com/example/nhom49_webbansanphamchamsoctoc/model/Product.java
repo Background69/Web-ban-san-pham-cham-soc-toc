@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Model Product - Bảng products trong database
@@ -24,8 +25,43 @@ public class Product {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    // Các đối tượng liên kết
+    private Brand brand;
+    private Category category;
+    private List<ProductVariant> variants;
+    private List<ProductImage> images;
+    private List<HairCondition> hairConditions;
+    private List<Promotion> promotions;
+
+    // Transient fields for display
+    private String categoryName;
+    private String brandName;
+    private String primaryImageUrl;
+    private ProductVariant defaultVariant;
+
     // Constructors
     public Product() {
+    }
+
+    public Product(int productId, String productName, String productSlug, Integer brandId, Integer categoryId,
+                   String origin, String shortDescription, String fullDescription, int stockQuantity,
+                   boolean isFeatured, boolean isOnSale, BigDecimal averageRating, int reviewCount,
+                   Timestamp createdAt, Timestamp updatedAt) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productSlug = productSlug;
+        this.brandId = brandId;
+        this.categoryId = categoryId;
+        this.origin = origin;
+        this.shortDescription = shortDescription;
+        this.fullDescription = fullDescription;
+        this.stockQuantity = stockQuantity;
+        this.isFeatured = isFeatured;
+        this.isOnSale = isOnSale;
+        this.averageRating = averageRating;
+        this.reviewCount = reviewCount;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     // Getters and Setters
@@ -149,4 +185,130 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<ProductVariant> getVariants() {
+        return variants;
+    }
+
+    public void setVariants(List<ProductVariant> variants) {
+        this.variants = variants;
+    }
+
+    public List<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
+    }
+
+    public List<HairCondition> getHairConditions() {
+        return hairConditions;
+    }
+
+    public void setHairConditions(List<HairCondition> hairConditions) {
+        this.hairConditions = hairConditions;
+    }
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
+    }
+
+    // Transient field getters and setters
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getPrimaryImageUrl() {
+        return primaryImageUrl;
+    }
+
+    public void setPrimaryImageUrl(String primaryImageUrl) {
+        this.primaryImageUrl = primaryImageUrl;
+    }
+
+    public void setDefaultVariant(ProductVariant defaultVariant) {
+        this.defaultVariant = defaultVariant;
+    }
+
+    // Helper methods
+    public ProductImage getPrimaryImage() {
+        if (images != null) {
+            for (ProductImage img : images) {
+                if (img.isPrimary()) {
+                    return img;
+                }
+            }
+            if (!images.isEmpty()) {
+                return images.get(0);
+            }
+        }
+        return null;
+    }
+
+    public ProductVariant getDefaultVariant() {
+        // Return cached default variant if set
+        if (defaultVariant != null) {
+            return defaultVariant;
+        }
+        // Otherwise find from variants list
+        if (variants != null) {
+            for (ProductVariant v : variants) {
+                if (v.isDefault()) {
+                    return v;
+                }
+            }
+            if (!variants.isEmpty()) {
+                return variants.get(0);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", productName='" + productName + '\'' +
+                ", productSlug='" + productSlug + '\'' +
+                ", brandId=" + brandId +
+                ", categoryId=" + categoryId +
+                ", origin='" + origin + '\'' +
+                ", isFeatured=" + isFeatured +
+                ", isOnSale=" + isOnSale +
+                ", averageRating=" + averageRating +
+                ", reviewCount=" + reviewCount +
+                '}';
+    }
 }
