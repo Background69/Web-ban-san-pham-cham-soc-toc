@@ -18,13 +18,24 @@ public class BrandDAO implements IDAO<Brand> {
     public Brand findById(int id) {
         String sql = """
                     SELECT * FROM brands
-                    WHERE brand_id = :id
+                    WHERE brand_id = :brandId
                 """;
 
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .bind("id", id)
-                        .mapToBean(Brand.class)
+                        .bind(0, id)
+                        .map((rs, ctx) -> mapBrand(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+    public Brand findBySlug(String slug) {
+        String sql = "SELECT * FROM brands WHERE brand_slug = :brandSlug";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind(0, slug)
+                        .map((rs, ctx) -> mapBrand(rs))
                         .findFirst()
                         .orElse(null)
         );
@@ -36,7 +47,7 @@ public class BrandDAO implements IDAO<Brand> {
 
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .mapToBean(Brand.class)
+                        .map((rs, ctx) -> mapBrand(rs))
                         .list()
         );
     }
@@ -52,7 +63,10 @@ public class BrandDAO implements IDAO<Brand> {
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
                         .bindBean(brand)
-                        .execute()
+                        .executeAndReturnGeneratedKeys("brand_id")
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(-1)
         );
     }
 
@@ -80,14 +94,39 @@ public class BrandDAO implements IDAO<Brand> {
 
     @Override
     public boolean delete(int id) {
-        String sql = "DELETE FROM brands WHERE brand_id = :id";
+        String sql = "DELETE FROM brands WHERE brand_id = :brandId";
 
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind("id", id)
+                        .bind("brandId", id)
                         .execute()
         );
 
         return rows > 0;
+    }
+
+    private Brand mapBrand(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Brand brand = new Brand();
+        brand.setBrandId(rs.getInt("brand_id"));
+        brand.setBrandName(rs.getString("brand_name"));
+        brand.setBrandSlug(rs.getString("brand_slug"));
+        brand.setLogoUrl(rs.getString("logo_url"));
+        brand.setOrigin(rs.getString("origin"));
+        brand.setShortDescription(rs.getString("short_description"));
+        brand.setFullDescription(rs.getString("full_description"));
+        brand.setCreatedAt(rs.getTimestamp("created_at"));
+        return brand;
+    }
+
+    /**
+     * Lấy danh sách xuất xứ unique
+     */
+    public List<String> findAllOrigins() {
+        String sql = "SELECT DISTINCT origin FROM brands WHERE origin IS NOT NULL AND origin != '' ORDER BY origin";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .mapTo(String.class)
+                        .list()
+        );
     }
 }
