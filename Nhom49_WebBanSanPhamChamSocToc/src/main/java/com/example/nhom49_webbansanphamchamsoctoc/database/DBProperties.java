@@ -8,7 +8,6 @@ import java.util.Properties;
 
 public class DBProperties {
     private static Properties properties = new Properties();
-    Connection connection = null;
 
     //Load connection
     static {
@@ -19,27 +18,7 @@ public class DBProperties {
         }
     }
 
-    //Singleton
-    public Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                createConnection();
-            }
-            return connection;
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
-    private void createConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + DBProperties.getHost() + ":" + DBProperties.getPort() + "/" + DBProperties.getDbName() + "?" + DBProperties.getOption(),
-                    DBProperties.getUsername(), DBProperties.getPassword());
-        } catch (ClassNotFoundException e) {
-            return;
-        }
-    }
+    Connection connection = null;
 
     public static String getHost() {
         return properties.getProperty("db.host");
@@ -63,5 +42,27 @@ public class DBProperties {
 
     public static String getOption() {
         return properties.getProperty("db.options");
+    }
+
+    //Singleton
+    public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                createConnection();
+            }
+            return connection;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    private void createConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://" + DBProperties.getHost() + ":" + DBProperties.getPort() + "/" + DBProperties.getDbName() + "?" + DBProperties.getOption(),
+                    DBProperties.getUsername(), DBProperties.getPassword());
+        } catch (ClassNotFoundException e) {
+            return;
+        }
     }
 }

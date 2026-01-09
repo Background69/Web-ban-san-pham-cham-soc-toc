@@ -9,6 +9,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+
 /**
  * Servlet xử lý profile user
  */
@@ -77,7 +78,7 @@ public class UserController extends HttpServlet {
     }
 
     private void profileUpdate(HttpServletRequest request, HttpServletResponse response, User currentUser)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
 
         String username = request.getParameter("username");
         String phone = request.getParameter("phone");
