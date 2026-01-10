@@ -1,21 +1,27 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
+import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "ForgotPassword", value = "/ForgotPassword")
+@WebServlet("/ForgotPassword")
 public class ForgotPasswordController extends HttpServlet {
+
+    private UserDAO userDAO;
+
+    @Override
+    public void init() {
+        userDAO = new UserDAO();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/views/authentication/forgot-password.jsp")
+        request.getRequestDispatcher("/authentication/forgot-password.jsp")
                 .forward(request, response);
     }
 
@@ -35,20 +41,16 @@ public class ForgotPasswordController extends HttpServlet {
             return;
         }
 
-        boolean emailExists = checkEmailExists(email);
+        boolean emailExists = userDAO.existsByEmail(email);
 
         if (!emailExists) {
             request.setAttribute("error", "Email không tồn tại trong hệ thống.");
         } else {
+            // Tạm thời chỉ thông báo – sau này mới gửi mail thật
             request.setAttribute("message", "Link đặt lại mật khẩu đã được gửi về email.");
         }
 
-        request.getRequestDispatcher("/views/authentication/forgot-password.jsp")
+        request.getRequestDispatcher("/authentication/forgot-password.jsp")
                 .forward(request, response);
     }
-
-    private boolean checkEmailExists(String email) {
-        return email.equalsIgnoreCase("test@gmail.com");
-    }
 }
-

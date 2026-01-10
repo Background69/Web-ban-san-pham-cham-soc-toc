@@ -6,34 +6,164 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-public class ShippingAddressDAO implements IDAO<ShippingAddress>{
+/**
+ * DAO class cho ShippingAddress entity
+ */
+public class ShippingAddressDAO implements IDAO<ShippingAddress> {
     private final Jdbi jdbi;
+
     public ShippingAddressDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
     @Override
     public ShippingAddress findById(int id) {
-        return null;
+        String sql = "SELECT * FROM shipping_addresses WHERE address_id = :addressId";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("addressId", id)
+                        .map((rs, ctx) -> mapAddress(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
     }
 
     @Override
     public List<ShippingAddress> findAll() {
-        return List.of();
+        String sql = "SELECT * FROM shipping_addresses ORDER BY created_at DESC";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs, ctx) -> mapAddress(rs))
+                        .list()
+        );
+    }
+
+    public List<ShippingAddress> findByUserId(int userId) {
+        String sql = "SELECT * FROM shipping_addresses WHERE user_id = :userId ORDER BY is_default DESC, created_at DESC";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .map((rs, ctx) -> mapAddress(rs))
+                        .list()
+        );
+    }
+
+    public ShippingAddress findDefaultByUserId(int userId) {
+        String sql = "SELECT * FROM shipping_addresses WHERE user_id = :userId AND is_default = true LIMIT 1";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .map((rs, ctx) -> mapAddress(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
     }
 
     @Override
-    public int insert(ShippingAddress entity) {
-        return 0;
+    public int insert(ShippingAddress address) {
+        String sql = "INSERT INTO shipping_addresses (user_id, full_name, phone, email, province_code, " +
+                "province_name, district_code, district_name, ward_code, ward_name, specific_address, " +
+                "note, is_default) VALUES (:userId, :fullName, :phone, :email, :provinceCode, :provinceName, " +
+                ":districtCode, :districtName, :wardCode, :wardName, :specificAddress, :note, :isDefault)";
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("userId", address.getUserId())
+                        .bind("fullName", address.getFullName())
+                        .bind("phone", address.getPhone())
+                        .bind("email", address.getEmail())
+                        .bind("provinceCode", address.getProvinceCode())
+                        .bind("provinceName", address.getProvinceName())
+                        .bind("districtCode", address.getDistrictCode())
+                        .bind("districtName", address.getDistrictName())
+                        .bind("wardCode", address.getWardCode())
+                        .bind("wardName", address.getWardName())
+                        .bind("specificAddress", address.getSpecificAddress())
+                        .bind("note", address.getNote())
+                        .bind("isDefault", address.isDefault())
+                        .executeAndReturnGeneratedKeys("address_id")
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(-1)
+        );
     }
 
     @Override
-    public boolean update(ShippingAddress entity) {
-        return false;
+    public boolean update(ShippingAddress address) {
+        String sql = "UPDATE shipping_addresses SET full_name = :fullName, phone = :phone, email = :email, " +
+                "province_code = :provinceCode, province_name = :provinceName, district_code = :districtCode, " +
+                "district_name = :districtName, ward_code = :wardCode, ward_name = :wardName, " +
+                "specific_address = :specificAddress, note = :note, is_default = :isDefault WHERE address_id = :addressId";
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("fullName", address.getFullName())
+                        .bind("phone", address.getPhone())
+                        .bind("email", address.getEmail())
+                        .bind("provinceCode", address.getProvinceCode())
+                        .bind("provinceName", address.getProvinceName())
+                        .bind("districtCode", address.getDistrictCode())
+                        .bind("districtName", address.getDistrictName())
+                        .bind("wardCode", address.getWardCode())
+                        .bind("wardName", address.getWardName())
+                        .bind("specificAddress", address.getSpecificAddress())
+                        .bind("note", address.getNote())
+                        .bind("isDefault", address.isDefault())
+                        .bind("addressId", address.getAddressId())
+                        .execute()
+        );
+        return rowsAffected > 0;
     }
 
     @Override
     public boolean delete(int id) {
-        return false;
+        String sql = "DELETE FROM shipping_addresses WHERE address_id = :addressId";
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("addressId", id)
+                        .execute()
+        );
+        return rowsAffected > 0;
+    }
+
+    /**
+     * Đặt địa chỉ mặc định cho user
+     *
+     * @param userId ID của user
+     * @param addressId ID của địa chỉ cần đặt làm mặc định
+     * @return true nếu thành công
+     */
+    public boolean setDefault(int userId, int addressId) {
+        // First, unset all defaults for this user
+        String unsetSql = "UPDATE shipping_addresses SET is_default = false WHERE user_id = :userId";
+        jdbi.withHandle(handle -> handle.createUpdate(unsetSql).bind("userId", userId).execute());
+
+        // Then set the new default
+        String setSql = "UPDATE shipping_addresses SET is_default = true WHERE address_id = :addressId AND user_id = :userId";
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(setSql)
+                        .bind("addressId", addressId)
+                        .bind("userId", userId)
+                        .execute()
+        );
+        return rowsAffected > 0;
+    }
+
+    private ShippingAddress mapAddress(java.sql.ResultSet rs) throws java.sql.SQLException {
+        ShippingAddress address = new ShippingAddress();
+        address.setAddressId(rs.getInt("address_id"));
+        address.setUserId(rs.getInt("user_id"));
+        address.setFullName(rs.getString("full_name"));
+        address.setPhone(rs.getString("phone"));
+        address.setEmail(rs.getString("email"));
+        address.setProvinceCode(rs.getString("province_code"));
+        address.setProvinceName(rs.getString("province_name"));
+        address.setDistrictCode(rs.getString("district_code"));
+        address.setDistrictName(rs.getString("district_name"));
+        address.setWardCode(rs.getString("ward_code"));
+        address.setWardName(rs.getString("ward_name"));
+        address.setSpecificAddress(rs.getString("specific_address"));
+        address.setNote(rs.getString("note"));
+        address.setDefault(rs.getBoolean("is_default"));
+        address.setCreatedAt(rs.getTimestamp("created_at"));
+        return address;
     }
 }

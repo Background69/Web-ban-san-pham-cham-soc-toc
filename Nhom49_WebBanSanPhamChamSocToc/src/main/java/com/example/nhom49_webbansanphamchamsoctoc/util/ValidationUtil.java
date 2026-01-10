@@ -1,13 +1,13 @@
 package com.example.nhom49_webbansanphamchamsoctoc.util;
 
-
 import java.util.regex.Pattern;
 
 /**
  * Utility class cho validation dữ liệu
+ * Tập trung tất cả logic validation vào một nơi
  */
-
 public class ValidationUtil {
+
     // Regex patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
             "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
@@ -16,6 +16,8 @@ public class ValidationUtil {
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{10,11}$");
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9_]{3,50}$");
+
+    // String Validation
 
     /**
      * Kiểm tra string có null hoặc empty không
@@ -47,6 +49,8 @@ public class ValidationUtil {
         return length >= minLength && length <= maxLength;
     }
 
+    //  Email Validation
+
     /**
      * Validate email format
      */
@@ -67,6 +71,8 @@ public class ValidationUtil {
         return null; // Hợp lệ
     }
 
+    // Phone Validation
+
     /**
      * Validate số điện thoại (10-11 chữ số)
      */
@@ -75,14 +81,16 @@ public class ValidationUtil {
     }
 
     /**
-     * Validate phone với message lỗi (nếu có ghi nhưng ghi sai thì hiện)
+     * Validate phone với message lỗi (optional field)
      */
     public static String validatePhone(String phone) {
         if (isNotEmpty(phone) && !isValidPhone(phone)) {
             return "Số điện thoại không hợp lệ (10-11 chữ số)";
         }
-        return null; // Hợp lệ hoặc để trống
+        return null; // Hợp lệ hoặc empty
     }
+
+    // Username Validation
 
     /**
      * Validate username (3-50 ký tự, chỉ chữ cái, số và _)
@@ -106,6 +114,44 @@ public class ValidationUtil {
         }
         return null; // Hợp lệ
     }
+
+    // Password Validation
+
+    /**
+     * Validate password (ít nhất 6 ký tự)
+     */
+    public static boolean isValidPassword(String password) {
+        return password != null && password.length() >= 6 && password.length() <= 100;
+    }
+
+    /**
+     * Validate password với message lỗi
+     */
+    public static String validatePassword(String password) {
+        if (isEmpty(password)) {
+            return "Mật khẩu không được để trống";
+        }
+        if (password.length() < 6) {
+            return "Mật khẩu phải có ít nhất 6 ký tự";
+        }
+        if (password.length() > 100) {
+            return "Mật khẩu không được quá 100 ký tự";
+        }
+        return null; // Hợp lệ
+    }
+
+    /**
+     * Validate confirm password
+     */
+    public static String validateConfirmPassword(String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            return "Mật khẩu xác nhận không khớp";
+        }
+        return null; // Hợp lệ
+    }
+
+    // Number Validation
+
     /**
      * Validate số nguyên dương
      */
@@ -144,4 +190,24 @@ public class ValidationUtil {
         }
     }
 
+    // Address Validation
+
+    /**
+     * Validate địa chỉ giao hàng
+     */
+    public static String validateShippingAddress(String fullName, String phone, String specificAddress) {
+        if (isEmpty(fullName)) {
+            return "Họ tên không được để trống";
+        }
+        if (isEmpty(phone)) {
+            return "Số điện thoại không được để trống";
+        }
+        if (!isValidPhone(phone)) {
+            return "Số điện thoại không hợp lệ";
+        }
+        if (isEmpty(specificAddress)) {
+            return "Địa chỉ cụ thể không được để trống";
+        }
+        return null; // Hợp lệ
+    }
 }

@@ -4,22 +4,21 @@ import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import org.jdbi.v3.core.Jdbi;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 public class CategoryDAO implements IDAO<Category> {
     private final Jdbi jdbi;
 
-    public CategoryDAO(Jdbi jdbi) {
+    public CategoryDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
     @Override
     public Category findById(int id) {
-        String sql = "SELECT * FROM categories WHERE category_id = ?";
+        String sql = "SELECT * FROM categories WHERE category_id = :categoryId";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .bind(0, id)
+                        .bind("categoryId", id)
                         .map((rs, ctx) -> mapCategory(rs))
                         .findFirst()
                         .orElse(null)
@@ -27,10 +26,10 @@ public class CategoryDAO implements IDAO<Category> {
     }
 
     public Category findBySlug(String slug) {
-        String sql = "SELECT * FROM categories WHERE category_slug = ?";
+        String sql = "SELECT * FROM categories WHERE category_slug = :categorySlug";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .bind(0, slug)
+                        .bind("categorySlug", slug)
                         .map((rs, ctx) -> mapCategory(rs))
                         .findFirst()
                         .orElse(null)
@@ -49,11 +48,11 @@ public class CategoryDAO implements IDAO<Category> {
 
     @Override
     public int insert(Category category) {
-        String sql = "INSERT INTO categories (category_name, category_slug) VALUES (?, ?)";
+        String sql = "INSERT INTO categories (category_name, category_slug) VALUES (:categoryName, :categorySlug)";
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind(0, category.getCategoryName())
-                        .bind(1, category.getCategorySlug())
+                        .bind("categoryName", category.getCategoryName())
+                        .bind("categorySlug", category.getCategorySlug())
                         .executeAndReturnGeneratedKeys("category_id")
                         .mapTo(Integer.class)
                         .findFirst()
@@ -63,12 +62,13 @@ public class CategoryDAO implements IDAO<Category> {
 
     @Override
     public boolean update(Category category) {
-        String sql = "UPDATE categories SET category_name = ?, category_slug = ?, updated_at = CURRENT_TIMESTAMP WHERE category_id = ?";
+        String sql = "UPDATE categories SET category_name = :categoryName, category_slug = :categorySlug, " +
+                "updated_at = CURRENT_TIMESTAMP WHERE category_id = :categoryId";
         int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind(0, category.getCategoryName())
-                        .bind(1, category.getCategorySlug())
-                        .bind(2, category.getCategoryId())
+                        .bind("categoryName", category.getCategoryName())
+                        .bind("categorySlug", category.getCategorySlug())
+                        .bind("categoryId", category.getCategoryId())
                         .execute()
         );
         return rowsAffected > 0;
@@ -76,15 +76,14 @@ public class CategoryDAO implements IDAO<Category> {
 
     @Override
     public boolean delete(int id) {
-        String sql = "DELETE FROM categories WHERE category_id = ?";
+        String sql = "DELETE FROM categories WHERE category_id = :categoryId";
         int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind(0, id)
+                        .bind("categoryId", id)
                         .execute()
         );
         return rowsAffected > 0;
     }
-
 
     private Category mapCategory(java.sql.ResultSet rs) throws java.sql.SQLException {
         Category category = new Category();
