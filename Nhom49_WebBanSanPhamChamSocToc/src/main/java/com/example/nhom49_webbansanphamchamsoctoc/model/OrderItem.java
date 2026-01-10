@@ -17,6 +17,10 @@ public class OrderItem {
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
 
+    // Đối tượng liên kết
+    private Product product;
+    private ProductVariant variant;
+
     // Constructors
     public OrderItem() {
     }
@@ -94,4 +98,40 @@ public class OrderItem {
         this.totalPrice = totalPrice;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public ProductVariant getVariant() {
+        return variant;
+    }
+
+    public void setVariant(ProductVariant variant) {
+        this.variant = variant;
+    }
+
+    // Helper method - Lấy tên đầy đủ (tên sản phẩm + biến thể)
+    public String getFullProductName() {
+        if (variantName != null && !variantName.isEmpty()) {
+            return productName + " - " + variantName;
+        }
+        return productName;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "orderItemId=" + orderItemId +
+                ", orderId=" + orderId +
+                ", productName='" + productName + '\'' +
+                ", variantName='" + variantName + '\'' +
+                ", quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }
