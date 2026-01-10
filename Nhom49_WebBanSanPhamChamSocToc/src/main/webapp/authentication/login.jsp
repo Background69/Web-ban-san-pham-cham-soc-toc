@@ -52,7 +52,7 @@
         %>
 
         <p class="signup-text">
-            Không có tài khoản? <a href="register.jsp">Đăng ký ngay!</a>
+            Không có tài khoản? <a href="Register.jsp">Đăng ký ngay!</a>
         </p>
     </div>
 </div>
