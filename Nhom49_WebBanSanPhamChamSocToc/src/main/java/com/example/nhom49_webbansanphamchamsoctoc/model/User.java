@@ -15,8 +15,13 @@ public class User {
     private String avatar;
     private String role; // 'Admin' hoặc 'Khách hàng'
     private boolean isActive;
+    private boolean isVerified;
+    private String authProvider; // LOCAL, GOOGLE
+    private String verificationToken;
+    private String resetToken;
+    private java.sql.Timestamp resetTokenExpiry;
     private Timestamp createdAt;
-    private String fullName;
+    private String googleId; // Google OAuth ID
 
     // Constructors
     public User() {
@@ -87,6 +92,30 @@ public class User {
         isActive = active;
     }
 
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public String getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(String authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
+    }
+
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -95,9 +124,54 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public void setFullName(String name) {
-    }
-    public String getFullName() { return fullName;
+    public String getGoogleId() {
+        return googleId;
     }
 
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public Timestamp getResetTokenExpiry() {
+        return resetTokenExpiry;
+    }
+
+    public void setResetTokenExpiry(Timestamp resetTokenExpiry) {
+        this.resetTokenExpiry = resetTokenExpiry;
+    }
+
+    /**
+     * Kiểm tra tài khoản đã liên kết với Google chưa
+     */
+    public boolean isGoogleLinked() {
+        return googleId != null && !googleId.isEmpty();
+    }
+
+    // Helper methods
+    public boolean isAdmin() {
+        return "Admin".equals(this.role);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", role='" + role + '\'' +
+                ", isActive=" + isActive +
+                ", createdAt=" + createdAt +
+                ", googleId='" + googleId + '\'' +
+                '}';
+    }
 }
