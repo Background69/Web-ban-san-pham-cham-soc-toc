@@ -5,7 +5,6 @@
   Time: 10:04 SA
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -18,44 +17,62 @@
 </head>
 <body>
 
+<jsp:include page="/layout/header.jsp"/>
+
 <div class="login-wrapper">
     <div class="login-box">
-        <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="logo">
+        <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo">
+
         <h1>Đăng nhập</h1>
         <p class="subtitle">Tiếp tục để mua</p>
 
-        <!-- Form gửi sang Servlet -->
-        <form action="${pageContext.request.contextPath}/Login" method="post">
-
-
-        <label>Email</label>
-            <input type="text" name="email" placeholder="Nhập Email" required>
-
-            <label>Mật khẩu</label>
-            <input type="password" name="password" placeholder="Nhập mật khẩu" required>
-
-            <div class="options">
-                <a href="forgot_password.jsp">Quên mật khẩu</a>
-            </div>
-
-            <button type="submit" class="btn primary-btn">Đăng nhập</button>
-        </form>
-
-        <!-- Hiển thị lỗi từ Servlet -->
+        <!-- Hiển thị lỗi từ servlet -->
         <%
             String error = (String) request.getAttribute("error");
             if (error != null) {
         %>
-        <p style="color:red; margin-top:10px;"><%= error %></p>
-        <%
-            }
-        %>
+        <div class="error-msg"><%= error %></div>
+        <% } %>
+
+        <form action="${pageContext.request.contextPath}/Login" method="post">
+
+
+        <label>Email</label>
+            <label>
+                <input type="email" name="email" required>
+            </label>
+
+            <label>Mật khẩu</label>
+            <div class="password-field">
+                <label for="password"></label><input type="password" name="password" id="password" required>
+                <i class="fa-solid fa-eye toggle-password" data-target="password"></i>
+            </div>
+
+            <div class="options">
+                <a class="forgot" href="forgot_password.jsp">Quên mật khẩu</a>
+            </div>
+
+            <button class="btn primary-btn" type="submit">Đăng nhập</button>
+
+            <div class="or-divider">
+                <span>Hoặc</span>
+            </div>
+
+            <div class="social-login">
+                <a class="google-btn" href="google-login">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="">
+                    Đăng nhập với Google
+                </a>
+            </div>
+
+        </form>
 
         <p class="signup-text">
-            Không có tài khoản? <a href="Register.jsp">Đăng ký ngay!</a>
+            Không có tài khoản? <a href="Register.jsp">Đăng ký ngay</a>
         </p>
     </div>
 </div>
+<jsp:include page="/layout/footer.jsp"/>
 
 </body>
 </html>
