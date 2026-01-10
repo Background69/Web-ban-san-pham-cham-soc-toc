@@ -5,6 +5,10 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import org.jdbi.v3.core.Jdbi;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDAO implements IDAO<User> {
@@ -189,22 +193,10 @@ public class UserDAO implements IDAO<User> {
         );
         return rowsAffected > 0;
     }
-    public int countUsers() {
-        String sql = "SELECT COUNT(*) FROM users";
-        return jdbi.withHandle(handle -> {
-            return handle.createQuery(sql)
-                    .map((rs, ctx) -> rs.getInt(1))
-                    .iterator()
-                    .next();
-        });
-    }
-
-
-
 
 
     // Helper method de map ResultSet toi User
-    private User mapUser(java.sql.ResultSet rs) throws java.sql.SQLException {
+    private User mapUser(ResultSet rs) throws SQLException {
         User user = new User();
         user.setUserId(rs.getInt("user_id"));
         user.setEmail(rs.getString("email"));
@@ -254,4 +246,14 @@ public class UserDAO implements IDAO<User> {
                         .orElse(null)
         );
     }
+
+    public boolean isEmailExist(String email) throws Exception {
+        String sql = "SELECT user_id FROM users WHERE email = ?";
+        Connection conn = null;
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, email);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+    }
+
 }

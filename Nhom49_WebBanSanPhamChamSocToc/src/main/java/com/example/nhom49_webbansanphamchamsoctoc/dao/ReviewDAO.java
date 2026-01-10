@@ -6,34 +6,133 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-public class ReviewDAO implements IDAO<Review>{
+/**
+ * DAO class cho Review entity
+ */
+public class ReviewDAO implements IDAO<Review> {
     private final Jdbi jdbi;
+
     public ReviewDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
     @Override
     public Review findById(int id) {
-        return null;
+        String sql = "SELECT * FROM reviews WHERE review_id = :reviewId";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("reviewId", id)
+                        .map((rs, ctx) -> mapReview(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
     }
 
     @Override
     public List<Review> findAll() {
-        return List.of();
+        String sql = "SELECT * FROM reviews ORDER BY created_at DESC";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs, ctx) -> mapReview(rs))
+                        .list()
+        );
+    }
+
+    public List<Review> findByProductId(int productId) {
+        String sql = "SELECT * FROM reviews WHERE product_id = :productId ORDER BY created_at DESC";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .map((rs, ctx) -> mapReview(rs))
+                        .list()
+        );
+    }
+
+    public List<Review> findByUserId(int userId) {
+        String sql = "SELECT * FROM reviews WHERE user_id = :userId ORDER BY created_at DESC";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .map((rs, ctx) -> mapReview(rs))
+                        .list()
+        );
     }
 
     @Override
-    public int insert(Review entity) {
-        return 0;
+    public int insert(Review review) {
+        String sql = "INSERT INTO reviews (product_id, user_id, reviewer_name, rating, content) " +
+                "VALUES (:productId, :userId, :reviewerName, :rating, :content)";
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("productId", review.getProductId())
+                        .bind("userId", review.getUserId())
+                        .bind("reviewerName", review.getReviewerName())
+                        .bind("rating", review.getRating())
+                        .bind("content", review.getContent())
+                        .executeAndReturnGeneratedKeys("review_id")
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(-1)
+        );
     }
 
     @Override
-    public boolean update(Review entity) {
-        return false;
+    public boolean update(Review review) {
+        String sql = "UPDATE reviews SET rating = :rating, content = :content WHERE review_id = :reviewId";
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("rating", review.getRating())
+                        .bind("content", review.getContent())
+                        .bind("reviewId", review.getReviewId())
+                        .execute()
+        );
+        return rowsAffected > 0;
     }
 
     @Override
     public boolean delete(int id) {
-        return false;
+        String sql = "DELETE FROM reviews WHERE review_id = :reviewId";
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("reviewId", id)
+                        .execute()
+        );
+        return rowsAffected > 0;
+    }
+
+    // Rating calculation methods
+    public double calculateAverageRating(int productId) {
+        String sql = "SELECT AVG(rating) FROM reviews WHERE product_id = :productId";
+        Double avg = jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapTo(Double.class)
+                        .findFirst()
+                        .orElse(0.0)
+        );
+        return avg != null ? Math.round(avg * 10.0) / 10.0 : 0.0;
+    }
+
+    public int countByProductId(int productId) {
+        String sql = "SELECT COUNT(*) FROM reviews WHERE product_id = :productId";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(0)
+        );
+    }
+
+    private Review mapReview(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Review review = new Review();
+        review.setReviewId(rs.getInt("review_id"));
+        review.setProductId(rs.getInt("product_id"));
+        review.setUserId(rs.getObject("user_id") != null ? rs.getInt("user_id") : null);
+        review.setReviewerName(rs.getString("reviewer_name"));
+        review.setRating(rs.getInt("rating"));
+        review.setContent(rs.getString("content"));
+        review.setCreatedAt(rs.getTimestamp("created_at"));
+        return review;
     }
 }
