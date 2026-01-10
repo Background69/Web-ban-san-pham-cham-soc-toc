@@ -49,7 +49,7 @@
         <div class="cards">
             <div class="card">
                 <h3>Tổng Sản Phẩm</h3>
-                <p class="number">150</p>
+                <p class="number">${productCount}</p>
             </div>
             <div class="card">
                 <h3>Tổng Người Dùng</h3>
@@ -57,11 +57,11 @@
             </div>
             <div class="card">
                 <h3>Tổng Đơn Hàng</h3>
-                <p class="number">300</p>
+                <p class="number">${orderCount}</p>
             </div>
             <div class="card">
                 <h3>Doanh Thu</h3>
-                <p class="number">75,000,000₫</p>
+                <p class="number">${totalRevenue}</p>
             </div>
         </div>
 
