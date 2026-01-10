@@ -29,6 +29,7 @@ public class AuthenticationService {
 
     /**
      * Đăng nhập user
+     *
      * @return User nếu thành công, null nếu thất bại (lấy lỗi qua getLastError())
      */
     public User login(String emailOrUsername, String password) {
@@ -53,15 +54,20 @@ public class AuthenticationService {
             lastError = "Tài khoản đã bị khóa. Vui lòng liên hệ admin.";
             return null;
         }
+        if ("LOCAL".equalsIgnoreCase(user.getAuthProvider()) && !user.isVerified()) {
+            lastError = "Tài khoản chưa được xác minh email.";
+            return null;
+        }
 
         return user;
     }
 
     /**
      * Đăng ký user mới
+     *
      * @return User nếu thành công, null nếu thất bại (lấy lỗi qua getLastError())
      */
-    public User register(String email, String username, String password, String confirmPassword) {
+    public User register(String email, String username, String phone, String password, String confirmPassword) {
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             lastError = emailError;
@@ -77,6 +83,12 @@ public class AuthenticationService {
         String passwordError = ValidationUtil.validatePassword(password);
         if (passwordError != null) {
             lastError = passwordError;
+            return null;
+        }
+
+        String phoneError = ValidationUtil.validatePhone(phone);
+        if (phoneError != null) {
+            lastError = phoneError;
             return null;
         }
 
@@ -102,6 +114,11 @@ public class AuthenticationService {
         user.setPassword(PasswordUtil.hashPassword(password));
         user.setRole("Khách hàng");
         user.setActive(true);
+        user.setPhone(ValidationUtil.sanitize(phone));
+        user.setAuthProvider("LOCAL");
+        user.setVerified(false);
+        String token = java.util.UUID.randomUUID().toString();
+        user.setVerificationToken(token);
 
         int userId = userDAO.insert(user);
         if (userId > 0) {
@@ -147,8 +164,11 @@ public class AuthenticationService {
             sessionUser.setAvatar(user.getAvatar());
             sessionUser.setRole(user.getRole());
             sessionUser.setActive(user.isActive());
+            sessionUser.setVerified(user.isVerified());
+            sessionUser.setAuthProvider(user.getAuthProvider());
+            sessionUser.setVerificationToken(user.getVerificationToken());
             sessionUser.setCreatedAt(user.getCreatedAt());
-//            sessionUser.setGoogleId(user.getGoogleId());
+            sessionUser.setGoogleId(user.getGoogleId());
             session.setAttribute("user", sessionUser);
         }
     }
