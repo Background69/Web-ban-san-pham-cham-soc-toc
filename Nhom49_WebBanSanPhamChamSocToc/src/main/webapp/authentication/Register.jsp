@@ -29,7 +29,8 @@
         <p>Tạo tài khoản mới để tiếp tục</p>
 
         <!-- Form gửi sang Servlet -->
-        <form action="${pageContext.request.contextPath}/Signup" method="post">
+        <form action="${pageContext.request.contextPath}/Register" method="post">
+
         <label>Email</label>
             <input type="email" name="email" placeholder="Nhập Email" required>
 
