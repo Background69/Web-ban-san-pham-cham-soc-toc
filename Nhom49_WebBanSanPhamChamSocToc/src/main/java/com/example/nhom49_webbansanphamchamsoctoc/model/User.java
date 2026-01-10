@@ -16,6 +16,7 @@ public class User {
     private String role; // 'Admin' hoặc 'Khách hàng'
     private boolean isActive;
     private Timestamp createdAt;
+    private String fullName;
 
     // Constructors
     public User() {
@@ -92,6 +93,11 @@ public class User {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void setFullName(String name) {
+    }
+    public String getFullName() { return fullName;
     }
 
 }
