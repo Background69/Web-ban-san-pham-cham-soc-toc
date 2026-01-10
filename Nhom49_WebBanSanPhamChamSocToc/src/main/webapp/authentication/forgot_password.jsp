@@ -21,7 +21,7 @@
 <div class="login-wrapper">
     <div class="login-box">
         <div class="logo-container">
-            <img src="images/logo.png" class="logo" alt="logo">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="logo">
         </div>
 
         <h2>Quên mật khẩu</h2>
