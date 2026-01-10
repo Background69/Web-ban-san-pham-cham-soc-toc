@@ -15,7 +15,7 @@ public class ForgotPasswordController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/views/authentication/forgot-password.jsp")
+        request.getRequestDispatcher("/authentication/forgot-password.jsp")
                 .forward(request, response);
     }
 
@@ -43,7 +43,7 @@ public class ForgotPasswordController extends HttpServlet {
             request.setAttribute("message", "Link đặt lại mật khẩu đã được gửi về email.");
         }
 
-        request.getRequestDispatcher("/views/authentication/forgot-password.jsp")
+        request.getRequestDispatcher("/authentication/forgot-password.jsp")
                 .forward(request, response);
     }
 
