@@ -21,8 +21,13 @@ public class Order {
     private String paymentMethod; // 'cod', 'bank', 'momo'
     private BigDecimal subtotal;
     private BigDecimal totalAmount;
-    private String orderStatus; // 'pending', 'confirmed', 'shipping', 'completed', 'canceled'
+    private String orderStatus; // 'pending', 'confirmed', 'shipping', 'completed', 'cancelled'
     private Timestamp createdAt;
+
+    // Đối tượng liên kết
+    private User user;
+    private ShippingAddress address;
+    private List<OrderItem> orderItems;
 
     // Constructors
     public Order() {
@@ -139,5 +144,83 @@ public class Order {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ShippingAddress getAddress() {
+        return address;
+    }
+
+    public void setAddress(ShippingAddress address) {
+        this.address = address;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    // Helper methods
+    public String getStatusDisplayName() {
+        switch (orderStatus) {
+            case "pending":
+                return "Chờ xác nhận";
+            case "confirmed":
+                return "Đã xác nhận";
+            case "shipping":
+                return "Đang giao hàng";
+            case "completed":
+                return "Hoàn thành";
+            case "cancelled":
+                return "Đã hủy";
+            default:
+                return orderStatus;
+        }
+    }
+
+    public String getPaymentMethodDisplayName() {
+        switch (paymentMethod) {
+            case "cod":
+                return "Thanh toán khi nhận hàng";
+            case "bank":
+                return "Chuyển khoản ngân hàng";
+            case "momo":
+                return "Ví MoMo";
+            default:
+                return paymentMethod;
+        }
+    }
+
+    public String getShippingMethodDisplayName() {
+        switch (shippingMethod) {
+            case "standard":
+                return "Giao hàng tiêu chuẩn";
+            case "express":
+                return "Giao hàng nhanh";
+            default:
+                return shippingMethod;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", orderCode='" + orderCode + '\'' +
+                ", userId=" + userId +
+                ", totalAmount=" + totalAmount +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
