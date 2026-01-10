@@ -85,4 +85,27 @@ public class ProductVariant {
         isDefault = aDefault;
     }
 
+    // Helper method - Lấy giá hiện tại (sale price nếu có, không thì original price)
+    public BigDecimal getCurrentPrice() {
+        return (salePrice != null && salePrice.compareTo(BigDecimal.ZERO) > 0) ? salePrice : originalPrice;
+    }
+
+    // Helper method - Kiểm tra còn hàng
+    public boolean isInStock() {
+        return stockQuantity > 0;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductVariant{" +
+                "variantId=" + variantId +
+                ", productId=" + productId +
+                ", variantName='" + variantName + '\'' +
+                ", originalPrice=" + originalPrice +
+                ", salePrice=" + salePrice +
+                ", discountPercent=" + discountPercent +
+                ", stockQuantity=" + stockQuantity +
+                ", isDefault=" + isDefault +
+                '}';
+    }
 }
