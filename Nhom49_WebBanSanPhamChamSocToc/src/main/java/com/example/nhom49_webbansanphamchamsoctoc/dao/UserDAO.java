@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import org.jdbi.v3.core.Jdbi;
 
 import java.sql.ResultSet;
@@ -43,9 +44,9 @@ public class UserDAO implements IDAO<User> {
     @Override
     public int insert(User user) {
         String sql = """
-            INSERT INTO users (email, username, password, phone, avatar, role, is_active)
-            VALUES (:email, :username, :password, :phone, :avatar, :role, :isActive)
-        """;
+                    INSERT INTO users (email, username, password, phone, avatar, role, is_active)
+                    VALUES (:email, :username, :password, :phone, :avatar, :role, :isActive)
+                """;
 
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
@@ -66,15 +67,15 @@ public class UserDAO implements IDAO<User> {
     @Override
     public boolean update(User user) {
         String sql = """
-            UPDATE users
-            SET email = :email,
-                username = :username,
-                phone = :phone,
-                avatar = :avatar,
-                role = :role,
-                is_active = :isActive
-            WHERE user_id = :id
-        """;
+                    UPDATE users
+                    SET email = :email,
+                        username = :username,
+                        phone = :phone,
+                        avatar = :avatar,
+                        role = :role,
+                        is_active = :isActive
+                    WHERE user_id = :id
+                """;
 
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
@@ -109,9 +110,9 @@ public class UserDAO implements IDAO<User> {
      */
     public User findByEmailOrUsername(String value) {
         String sql = """
-            SELECT * FROM users
-            WHERE email = :v OR username = :v
-        """;
+                    SELECT * FROM users
+                    WHERE email = :v OR username = :v
+                """;
 
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
@@ -221,4 +222,44 @@ public class UserDAO implements IDAO<User> {
         user.setCreatedAt(rs.getTimestamp("created_at"));
         return user;
     }
+
+    public User authenticate(String emailOrUsername, String rawPassword) {
+
+        String sql = """
+                    SELECT *
+                    FROM users
+                    WHERE (email = :v OR username = :v)
+                      AND is_active = 1
+                """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("v", emailOrUsername)
+                        .map((rs, ctx) -> {
+
+                            String storedHash = rs.getString("password");
+
+                            // ❌ Sai mật khẩu
+                            if (!PasswordUtil.verifyPassword(rawPassword, storedHash)) {
+                                return null;
+                            }
+
+                            // ✅ Đúng mật khẩu → map User
+                            User user = new User();
+                            user.setUserId(rs.getInt("user_id"));
+                            user.setEmail(rs.getString("email"));
+                            user.setUsername(rs.getString("username"));
+                            user.setPassword(storedHash); // giữ hash
+                            user.setPhone(rs.getString("phone"));
+                            user.setAvatar(rs.getString("avatar"));
+                            user.setRole(rs.getString("role"));
+                            user.setActive(rs.getBoolean("is_active"));
+                            user.setCreatedAt(rs.getTimestamp("created_at"));
+                            return user;
+                        })
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
 }
