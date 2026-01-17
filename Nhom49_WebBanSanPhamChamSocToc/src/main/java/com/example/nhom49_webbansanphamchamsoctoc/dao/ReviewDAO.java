@@ -7,27 +7,25 @@ import org.jdbi.v3.core.Jdbi;
 import java.util.List;
 
 /**
- * DAO class cho Review entity
+ * Lớp ReviewDao.
  */
 public class ReviewDAO implements IDAO<Review> {
+
     private final Jdbi jdbi;
 
+    /**
+     * Thực hiện review dao.
+     */
     public ReviewDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    @Override
-    public Review findById(int id) {
-        String sql = "SELECT * FROM reviews WHERE review_id = :reviewId";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("reviewId", id)
-                        .map((rs, ctx) -> mapReview(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
-    }
 
+    /**
+     * Tim all.
+     *
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public List<Review> findAll() {
         String sql = "SELECT * FROM reviews ORDER BY created_at DESC";
@@ -38,6 +36,12 @@ public class ReviewDAO implements IDAO<Review> {
         );
     }
 
+    /**
+     * Tim by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public List<Review> findByProductId(int productId) {
         String sql = "SELECT * FROM reviews WHERE product_id = :productId ORDER BY created_at DESC";
         return jdbi.withHandle(handle ->
@@ -48,6 +52,12 @@ public class ReviewDAO implements IDAO<Review> {
         );
     }
 
+    /**
+     * Tim by user id.
+     *
+     * @param userId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public List<Review> findByUserId(int userId) {
         String sql = "SELECT * FROM reviews WHERE user_id = :userId ORDER BY created_at DESC";
         return jdbi.withHandle(handle ->
@@ -58,6 +68,31 @@ public class ReviewDAO implements IDAO<Review> {
         );
     }
 
+    /**
+     * Tim by id.
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public Review findById(int id) {
+        String sql = "SELECT * FROM reviews WHERE review_id = :id";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("id", id)
+                        .map((rs, ctx) -> mapReview(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+
+    /**
+     * Them .
+     *
+     * @param review Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public int insert(Review review) {
         String sql = "INSERT INTO reviews (product_id, user_id, reviewer_name, rating, content) " +
@@ -76,6 +111,12 @@ public class ReviewDAO implements IDAO<Review> {
         );
     }
 
+    /**
+     * Cập nhật .
+     *
+     * @param review Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public boolean update(Review review) {
         String sql = "UPDATE reviews SET rating = :rating, content = :content WHERE review_id = :reviewId";
@@ -89,6 +130,12 @@ public class ReviewDAO implements IDAO<Review> {
         return rowsAffected > 0;
     }
 
+    /**
+     * Xóa .
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM reviews WHERE review_id = :reviewId";
@@ -101,6 +148,13 @@ public class ReviewDAO implements IDAO<Review> {
     }
 
     // Rating calculation methods
+
+    /**
+     * Thực hiện calculate average rating.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public double calculateAverageRating(int productId) {
         String sql = "SELECT AVG(rating) FROM reviews WHERE product_id = :productId";
         Double avg = jdbi.withHandle(handle ->
@@ -113,6 +167,12 @@ public class ReviewDAO implements IDAO<Review> {
         return avg != null ? Math.round(avg * 10.0) / 10.0 : 0.0;
     }
 
+    /**
+     * Dem by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public int countByProductId(int productId) {
         String sql = "SELECT COUNT(*) FROM reviews WHERE product_id = :productId";
         return jdbi.withHandle(handle ->
@@ -124,6 +184,12 @@ public class ReviewDAO implements IDAO<Review> {
         );
     }
 
+    /**
+     * Thực hiện map review.
+     *
+     * @param rs Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     private Review mapReview(java.sql.ResultSet rs) throws java.sql.SQLException {
         Review review = new Review();
         review.setReviewId(rs.getInt("review_id"));
