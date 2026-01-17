@@ -58,7 +58,7 @@ public class UserProfileController extends HttpServlet {
             ShippingAddress defaultAddress = shippingService.getDefaultAddress(currentUser.getUserId());
             request.setAttribute("defaultAddress", defaultAddress);
             request.setAttribute("activeTab", "info");
-            request.getRequestDispatcher("/WEB-INF/views/user/profile.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/profile.jsp").forward(request, response);
 
         } else if (pathInfo.equals("/edit")) {
             request.setAttribute("activeTab", "info");
@@ -69,7 +69,7 @@ public class UserProfileController extends HttpServlet {
             List<ShippingAddress> addresses = shippingService.getAddressesByUser(currentUser.getUserId());
             request.setAttribute("addresses", addresses);
             request.setAttribute("activeTab", "address");
-            request.getRequestDispatcher("/WEB-INF/views/user/address.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/address.jsp").forward(request, response);
 
         } else if (pathInfo.startsWith("/addresses/") && !pathInfo.equals("/addresses/save")
                 && !pathInfo.equals("/addresses/delete") && !pathInfo.equals("/addresses/set-default")) {
@@ -110,16 +110,16 @@ public class UserProfileController extends HttpServlet {
             request.setAttribute("deliveredCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "DELIVERED"));
             request.setAttribute("cancelledCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "CANCELLED"));
             request.setAttribute("activeTab", "orders");
-            request.getRequestDispatcher("/WEB-INF/views/user/orders.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/orders.jsp").forward(request, response);
 
         } else if (pathInfo.equals("/security")) {
             // Trang bảo mật
             request.setAttribute("activeTab", "security");
-            request.getRequestDispatcher("/WEB-INF/views/user/security.jsp").forward(request, response);
+            request.getRequestDispatcher("user/security.jsp").forward(request, response);
 
         } else if (pathInfo.equals("/change-password")) {
             request.setAttribute("activeTab", "security");
-            request.getRequestDispatcher("/WEB-INF/views/user/change-password.jsp").forward(request, response);
+            request.getRequestDispatcher("user/change-password.jsp").forward(request, response);
 
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -194,9 +194,9 @@ public class UserProfileController extends HttpServlet {
         String referer = request.getHeader("Referer");
         if (referer != null && referer.contains("/security")) {
             request.setAttribute("activeTab", "security");
-            request.getRequestDispatcher("/WEB-INF/views/user/security.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/security.jsp").forward(request, response);
         } else {
-            request.getRequestDispatcher("/WEB-INF/views/user/change-password.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/change-password.jsp").forward(request, response);
         }
     }
 
