@@ -246,6 +246,12 @@ public class UserDAO implements IDAO<User> {
                         .orElse(null)
         );
     }
+    public int countUsers(){
+        String sql = "SELECT COUNT(*) FROM users";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .mapTo(Integer.class)
+                .one());
+    }
 
     public boolean isEmailExist(String email) throws Exception {
         String sql = "SELECT user_id FROM users WHERE email = ?";

@@ -7,6 +7,8 @@ import org.jdbi.v3.core.Jdbi;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.sun.tools.attach.VirtualMachine.list;
+
 /**
  * DAO class cho Order entity
  */
@@ -137,7 +139,15 @@ public class OrderDAO implements IDAO<Order> {
                         .orElse(null)
         );
     }
-
+    public List<Order> findRecentOrder(int limit){
+        String sql= "SELECT * FROM orders ORDER BY created_at DESC LIMIT ?";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind(0,limit)
+                        .map((rs,ctx)->mapOrder(rs))
+                        .list()
+        );
+    }
     public List<Order> findByStatus(String status) {
         String sql = "SELECT * FROM orders WHERE order_status = :orderStatus ORDER BY created_at DESC";
         return jdbi.withHandle(handle ->
@@ -285,8 +295,26 @@ public class OrderDAO implements IDAO<Order> {
                         .list()
         );
     }
+    public int countOrders() {
+        String sql = "SELECT COUNT(*) FROM orders";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .mapTo(Integer.class)
+                        .one()
+        );
+    }
+    public long totalRevenue(){
+        String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE status='Hoàn thành'";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .mapTo(Long.class)
+                        .one()
+        );
+    }
 
-    // Helper method
+
+    // Helper method;
+
     private Order mapOrder(java.sql.ResultSet rs) throws java.sql.SQLException {
         Order order = new Order();
         order.setOrderId(rs.getInt("order_id"));
@@ -306,3 +334,4 @@ public class OrderDAO implements IDAO<Order> {
         return order;
     }
 }
+

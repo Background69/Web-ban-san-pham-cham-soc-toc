@@ -270,6 +270,8 @@ public class ProductDAO implements IDAO<Product> {
         return rowsAffected > 0;
     }
 
+
+
     /**
      * Hàm hỗ trợ map dữ liệu từ ResultSet (SQL) sang Object Product (Java).
      */
