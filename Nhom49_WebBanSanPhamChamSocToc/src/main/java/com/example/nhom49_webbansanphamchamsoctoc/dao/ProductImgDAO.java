@@ -6,30 +6,25 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
+/**
+ * Lớp ProductImageDao.
+ */
 public class ProductImgDAO implements IDAO<ProductImage> {
+
     private final Jdbi jdbi;
 
+    /**
+     * Thực hiện product image dao.
+     */
     public ProductImgDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    /**
-     * Tìm kiếm một hình ảnh cụ thể theo ID
-     */
-    @Override
-    public ProductImage findById(int id) {
-        String sql = "SELECT * FROM product_images WHERE image_id = ?";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind(0, id)
-                        .map((rs, ctx) -> mapImage(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
-    }
 
     /**
-     * Lấy danh sách tất cả hình ảnh có trong database
+     * Tim all.
+     *
+     * @return Kết quả xử lý của phương thức.
      */
     @Override
     public List<ProductImage> findAll() {
@@ -42,27 +37,32 @@ public class ProductImgDAO implements IDAO<ProductImage> {
     }
 
     /**
-     * Lấy danh sách toàn bộ hình ảnh của một sản phẩm dựa trên product_id
+     * Tim by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     public List<ProductImage> findByProductId(int productId) {
-        String sql = "SELECT * FROM product_images WHERE product_id = ? ORDER BY is_primary DESC";
+        String sql = "SELECT * FROM product_images WHERE product_id = :productId ORDER BY is_primary DESC";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .bind(0, productId)
+                        .bind("productId", productId)
                         .map((rs, ctx) -> mapImage(rs))
                         .list()
         );
     }
 
     /**
-     * Chỉ lấy duy nhất hình ảnh chính (Thumbnail) của sản phẩm
-     * Dùng cho trang Danh sách sản phẩm (Shop/Home page) để hiển thị ảnh đại diện
+     * Tim primary by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     public ProductImage findPrimaryByProductId(int productId) {
-        String sql = "SELECT * FROM product_images WHERE product_id = ? AND is_primary = true LIMIT 1";
+        String sql = "SELECT * FROM product_images WHERE product_id = :productId AND is_primary = true LIMIT 1";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .bind(0, productId)
+                        .bind("productId", productId)
                         .map((rs, ctx) -> mapImage(rs))
                         .findFirst()
                         .orElse(null)
@@ -70,16 +70,38 @@ public class ProductImgDAO implements IDAO<ProductImage> {
     }
 
     /**
-     * Thêm mới một hình ảnh vào database
+     * Tim by id.
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public ProductImage findById(int id) {
+        String sql = "SELECT * FROM product_images WHERE image_id = :id";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("id", id)
+                        .map((rs, ctx) -> mapImage(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+
+    /**
+     * Them .
+     *
+     * @param image Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     @Override
     public int insert(ProductImage image) {
-        String sql = "INSERT INTO product_images (product_id, image_url, is_primary) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO product_images (product_id, image_url, is_primary) VALUES (:productId, :imageUrl, :isPrimary)";
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind(0, image.getProductId())
-                        .bind(1, image.getImageUrl())
-                        .bind(2, image.isPrimary())
+                        .bind("productId", image.getProductId())
+                        .bind("imageUrl", image.getImageUrl())
+                        .bind("isPrimary", image.isPrimary())
                         .executeAndReturnGeneratedKeys("image_id")
                         .mapTo(Integer.class)
                         .findFirst()
@@ -88,52 +110,62 @@ public class ProductImgDAO implements IDAO<ProductImage> {
     }
 
     /**
-     * Cập nhật thông tin hình ảnh (đường dẫn URL, trạng thái ảnh chính/phụ)
+     * Cập nhật .
+     *
+     * @param image Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     @Override
     public boolean update(ProductImage image) {
-        String sql = "UPDATE product_images SET image_url = ?, is_primary = ? WHERE image_id = ?";
+        String sql = "UPDATE product_images SET image_url = :imageUrl, is_primary = :isPrimary WHERE image_id = :imageId";
         int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind(0, image.getImageUrl())
-                        .bind(1, image.isPrimary())
-                        .bind(2, image.getImageId())
+                        .bind("imageUrl", image.getImageUrl())
+                        .bind("isPrimary", image.isPrimary())
+                        .bind("imageId", image.getImageId())
                         .execute()
         );
         return rowsAffected > 0;
     }
 
     /**
-     * Xóa một hình ảnh cụ thể theo ID
-     * Dùng trong trang quản lý (Admin) khi muốn xóa bớt ảnh của sản phẩm
+     * Xóa .
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     @Override
     public boolean delete(int id) {
-        String sql = "DELETE FROM product_images WHERE image_id = ?";
+        String sql = "DELETE FROM product_images WHERE image_id = :imageId";
         int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind(0, id)
+                        .bind("imageId", id)
                         .execute()
         );
         return rowsAffected > 0;
     }
 
     /**
-     * Xóa tất cả hình ảnh thuộc về một sản phẩm
-     * Thường được gọi khi thực hiện xóa hoàn toàn một sản phẩm khỏi hệ thống
+     * Xóa by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     public boolean deleteByProductId(int productId) {
-        String sql = "DELETE FROM product_images WHERE product_id = ?";
+        String sql = "DELETE FROM product_images WHERE product_id = :productId";
         int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind(0, productId)
+                        .bind("productId", productId)
                         .execute()
         );
         return rowsAffected > 0;
     }
 
     /**
-     * Helper method để ánh xạ dữ liệu từ ResultSet sang đối tượng ProductImage
+     * Thực hiện map image.
+     *
+     * @param rs Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     private ProductImage mapImage(java.sql.ResultSet rs) throws java.sql.SQLException {
         ProductImage image = new ProductImage();

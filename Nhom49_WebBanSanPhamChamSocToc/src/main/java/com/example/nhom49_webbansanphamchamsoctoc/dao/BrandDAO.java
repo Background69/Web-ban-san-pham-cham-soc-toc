@@ -6,63 +6,38 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
+/**
+ * Lớp BrandDAO.
+ */
 public class BrandDAO implements IDAO<Brand> {
 
     private final Jdbi jdbi;
 
+    /**
+     * Thực hiện brand dao.
+     */
     public BrandDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    @Override
-    public Brand findById(int id) {
-        String sql = """
-                    SELECT * FROM brands
-                    WHERE brand_id = :brandId
-                """;
-
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind(0, id)
-                        .map((rs, ctx) -> mapBrand(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
-    }
-
-    public Brand findBySlug(String slug) {
-        String sql = "SELECT * FROM brands WHERE brand_slug = :brandSlug";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind(0, slug)
-                        .map((rs, ctx) -> mapBrand(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
-    }
-
-    @Override
-    public List<Brand> findAll() {
-        String sql = "SELECT * FROM brands ORDER BY brand_name";
-
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .map((rs, ctx) -> mapBrand(rs))
-                        .list()
-        );
-    }
-
+    /**
+     * Them .
+     *
+     * @param brand Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public int insert(Brand brand) {
-        String sql = """
-                    INSERT INTO brands
-                    (brand_name, brand_slug, logo_url, origin, short_description, full_description)
-                    VALUES (:brandName, :brandSlug, :logoUrl, :origin, :shortDescription, :fullDescription)
-                """;
-
+        String sql = "INSERT INTO brands (brand_name, brand_slug, logo_url, origin, short_description, full_description) " +
+                "VALUES (:brandName, :brandSlug, :logoUrl, :origin, :shortDescription, :fullDescription)";
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bindBean(brand)
+                        .bind("brandName", brand.getBrandName())
+                        .bind("brandSlug", brand.getBrandSlug())
+                        .bind("logoUrl", brand.getLogoUrl())
+                        .bind("origin", brand.getOrigin())
+                        .bind("shortDescription", brand.getShortDescription())
+                        .bind("fullDescription", brand.getFullDescription())
                         .executeAndReturnGeneratedKeys("brand_id")
                         .mapTo(Integer.class)
                         .findFirst()
@@ -70,41 +45,103 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
+    /**
+     * Cập nhật .
+     *
+     * @param brand Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public boolean update(Brand brand) {
-        String sql = """
-                    UPDATE brands
-                    SET brand_name = :brandName,
-                        brand_slug = :brandSlug,
-                        logo_url = :logoUrl,
-                        origin = :origin,
-                        short_description = :shortDescription,
-                        full_description = :fullDescription
-                    WHERE brand_id = :brandId
-                """;
-
-        int rows = jdbi.withHandle(handle ->
+        String sql = "UPDATE brands SET brand_name = :brandName, brand_slug = :brandSlug, logo_url = :logoUrl, origin = :origin, " +
+                "short_description = :shortDescription, full_description = :fullDescription WHERE brand_id = :brandId";
+        int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bindBean(brand)
+                        .bind("brandName", brand.getBrandName())
+                        .bind("brandSlug", brand.getBrandSlug())
+                        .bind("logoUrl", brand.getLogoUrl())
+                        .bind("origin", brand.getOrigin())
+                        .bind("shortDescription", brand.getShortDescription())
+                        .bind("fullDescription", brand.getFullDescription())
+                        .bind("brandId", brand.getBrandId())
                         .execute()
         );
-
-        return rows > 0;
+        return rowsAffected > 0;
     }
 
+    /**
+     * Xóa .
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM brands WHERE brand_id = :brandId";
-
-        int rows = jdbi.withHandle(handle ->
+        int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
                         .bind("brandId", id)
                         .execute()
         );
-
-        return rows > 0;
+        return rowsAffected > 0;
     }
 
+    /**
+     * Tim all.
+     *
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public List<Brand> findAll() {
+        String sql = "SELECT * FROM brands ORDER BY created_at DESC";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs, ctx) -> mapBrand(rs))
+                        .list()
+        );
+    }
+
+    /**
+     * Tim by id.
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public Brand findById(int id) {
+        String sql = "SELECT * FROM brands WHERE brand_id = :id";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("id", id)
+                        .map((rs, ctx) -> mapBrand(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+    /**
+     * Tim by slug.
+     *
+     * @param slug Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    public Brand findBySlug(String slug) {
+        String sql = "SELECT * FROM brands WHERE brand_slug = :slug";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("slug", slug)
+                        .map((rs, ctx) -> mapBrand(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+    /**
+     * Thực hiện map brand.
+     *
+     * @param rs Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     private Brand mapBrand(java.sql.ResultSet rs) throws java.sql.SQLException {
         Brand brand = new Brand();
         brand.setBrandId(rs.getInt("brand_id"));
@@ -119,7 +156,9 @@ public class BrandDAO implements IDAO<Brand> {
     }
 
     /**
-     * Lấy danh sách xuất xứ unique
+     * Tim all origins.
+     *
+     * @return Kết quả xử lý của phương thức.
      */
     public List<String> findAllOrigins() {
         String sql = "SELECT DISTINCT origin FROM brands WHERE origin IS NOT NULL AND origin != '' ORDER BY origin";
