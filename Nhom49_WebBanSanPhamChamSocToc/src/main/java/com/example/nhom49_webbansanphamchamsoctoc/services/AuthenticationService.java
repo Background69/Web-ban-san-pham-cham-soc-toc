@@ -4,8 +4,14 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.TokenUtil;
 
 import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 
 /**
  * Service chuyên xử lý authentication (đăng nhập, đăng ký, session)
@@ -13,24 +19,38 @@ import jakarta.servlet.http.HttpSession;
  */
 public class AuthenticationService {
 
+    private static final int VERIFICATION_TOKEN_EXPIRY_HOURS = 24;
     private final UserDAO userDAO;
     private String lastError;
 
+    /**
+     * Thực hiện registration result.
+     *
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     *
+     * @param user Tham số đầu vào.
+     * @param rawVerificationToken Tham số đầu vào.
+     */
+    public record RegistrationResult(User user, String rawVerificationToken) {
+    }
+
+    /**
+     * Thực hiện auth service.
+     *
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     */
     public AuthenticationService() {
         this.userDAO = new UserDAO();
     }
 
     /**
-     * Lấy thông báo lỗi cuối cùng
-     */
-    public String getLastError() {
-        return lastError;
-    }
-
-    /**
-     * Đăng nhập user
+     * Đăng nhập bằng email hoặc username.
      *
-     * @return User nếu thành công, null nếu thất bại (lấy lỗi qua getLastError())
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     *
+     * @param emailOrUsername Tham số đầu vào.
+     * @param password Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     public User login(String emailOrUsername, String password) {
         if (ValidationUtil.isEmpty(emailOrUsername)) {
@@ -43,7 +63,10 @@ public class AuthenticationService {
             return null;
         }
 
-        User user = userDAO.authenticate(emailOrUsername.trim(), password);
+        User user = userDAO.findByEmail(emailOrUsername.trim());
+        if (user == null) {
+            user = userDAO.findByUsername(emailOrUsername.trim());
+        }
 
         if (user == null) {
             lastError = "Email/tên đăng nhập hoặc mật khẩu không đúng";
@@ -54,7 +77,11 @@ public class AuthenticationService {
             lastError = "Tài khoản đã bị khóa. Vui lòng liên hệ admin.";
             return null;
         }
-        if ("LOCAL".equalsIgnoreCase(user.getAuthProvider()) && !user.isVerified()) {
+        if (!PasswordUtil.verifyPassword(password, user.getPassword())) {
+            lastError = "Tài khoản chưa được xác minh email.";
+            return null;
+        }
+        if (!user.isVerified()) {
             lastError = "Tài khoản chưa được xác minh email.";
             return null;
         }
@@ -63,11 +90,18 @@ public class AuthenticationService {
     }
 
     /**
-     * Đăng ký user mới
+     * Thực hiện register.
      *
-     * @return User nếu thành công, null nếu thất bại (lấy lỗi qua getLastError())
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     *
+     * @param email Tham số đầu vào.
+     * @param username Tham số đầu vào.
+     * @param phone Tham số đầu vào.
+     * @param password Tham số đầu vào.
+     * @param confirmPassword Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
-    public User register(String email, String username, String phone, String password, String confirmPassword) {
+    public RegistrationResult register(String email, String username, String phone, String password, String confirmPassword) {
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             lastError = emailError;
@@ -117,13 +151,16 @@ public class AuthenticationService {
         user.setPhone(ValidationUtil.sanitize(phone));
         user.setAuthProvider("LOCAL");
         user.setVerified(false);
-        String token = java.util.UUID.randomUUID().toString();
-        user.setVerificationToken(token);
+
+        String rawToken = UUID.randomUUID().toString();
+        String hashedToken = TokenUtil.hashToken(rawToken);
+        user.setVerificationToken(hashedToken);
+        user.setResetTokenExpiry(Timestamp.valueOf(LocalDateTime.now().plusHours(VERIFICATION_TOKEN_EXPIRY_HOURS)));
 
         int userId = userDAO.insert(user);
         if (userId > 0) {
             user.setUserId(userId);
-            return user;
+            return new RegistrationResult(user, rawToken);
         }
 
         lastError = "Đăng ký thất bại. Vui lòng thử lại.";
@@ -131,7 +168,25 @@ public class AuthenticationService {
     }
 
     /**
-     * Đăng xuất user - hủy session
+     * Thiết lập current user vao session.
+     *
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     *
+     * @param session Tham số đầu vào.
+     * @param user Tham số đầu vào.
+     * @return Không trả về giá trị.
+     */
+    public void setCurrentUser(HttpSession session, User user) {
+        SessionUtil.setCurrentUser(session, user);
+    }
+
+    /**
+     * Thực hiện đăng xuất.
+     *
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     *
+     * @param session Tham số đầu vào.
+     * @return Không trả về giá trị.
      */
     public void logout(HttpSession session) {
         if (session != null) {
@@ -142,69 +197,46 @@ public class AuthenticationService {
     }
 
     /**
-     * Lấy user hiện tại từ session
+     * Lấy current user.
+     *
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     *
+     * @param session Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     public User getCurrentUser(HttpSession session) {
-        if (session != null) {
-            return (User) session.getAttribute("user");
-        }
-        return null;
+        return SessionUtil.getCurrentUser(session);
     }
 
     /**
-     * Lưu user vào session (không bao gồm password)
-     */
-    public void setCurrentUser(HttpSession session, User user) {
-        if (session != null && user != null) {
-            User sessionUser = new User();
-            sessionUser.setUserId(user.getUserId());
-            sessionUser.setEmail(user.getEmail());
-            sessionUser.setUsername(user.getUsername());
-            sessionUser.setPhone(user.getPhone());
-            sessionUser.setAvatar(user.getAvatar());
-            sessionUser.setRole(user.getRole());
-            sessionUser.setActive(user.isActive());
-            sessionUser.setVerified(user.isVerified());
-            sessionUser.setAuthProvider(user.getAuthProvider());
-            sessionUser.setVerificationToken(user.getVerificationToken());
-            sessionUser.setCreatedAt(user.getCreatedAt());
-            sessionUser.setGoogleId(user.getGoogleId());
-            session.setAttribute("user", sessionUser);
-        }
-    }
-
-    /**
-     * Kiểm tra email đã tồn tại chưa
+     * Kiểm tra email exists.
+     *
+     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
+     *
+     * @param email Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     public boolean isEmailExists(String email) {
         return userDAO.existsByEmail(email);
     }
 
     /**
-     * Kiểm tra username đã tồn tại chưa
-     */
-    public boolean isUsernameExists(String username) {
-        return userDAO.existsByUsername(username);
-    }
-
-    /**
-     * Kiểm tra user có phải admin không
-     */
-    public boolean isAdmin(User user) {
-        return user != null && "Admin".equals(user.getRole()) && user.isActive();
-    }
-
-    /**
-     * Kiểm tra user có active không
+     * Kiểm tra user active.
+     *
+     * @param user Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
     public boolean isActiveUser(User user) {
         return user != null && user.isActive();
     }
 
     /**
-     * Kiểm tra user đã đăng nhập chưa
+     * Kiểm tra user admin.
+     *
+     * @param user Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
      */
-    public boolean isLoggedIn(HttpSession session) {
-        return getCurrentUser(session) != null;
+    public boolean isAdmin(User user) {
+        return user != null && user.isAdmin();
     }
 }
