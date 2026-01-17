@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -75,24 +77,21 @@
                     <th>Tổng tiền</th>
                     <th>Trạng thái</th>
                 </tr>
-                <tr>
-                    <td>#HD101</td>
-                    <td>Nguyễn Lan</td>
-                    <td>₫320,000</td>
-                    <td><span class="status success">Hoàn thành</span></td>
-                </tr>
-                <tr>
-                    <td>#HD102</td>
-                    <td>Phạm Minh</td>
-                    <td>₫150,000</td>
-                    <td><span class="status pending">Đang xử lý</span></td>
-                </tr>
-                <tr>
-                    <td>#HD103</td>
-                    <td>Hoàng Hà</td>
-                    <td>₫540,000</td>
-                    <td><span class="status cancel">Đã hủy</span></td>
-                </tr>
+                <c:forEach var="order" items="${recentOrders}">
+                    <tr>
+                        <td>#HD${order.orderId}</td>
+                        <td>${order.customerName}</td>
+                        <td> <fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/></td>
+                        <td> <span class="status ${order.status}">
+                                ${order.status}
+                        </span></td>
+                    </tr>
+                </c:forEach>
+                <c:if test="${empty recentOrders}">
+                    <tr>
+                        <td colspan="4">Chưa có đơn hàng nào</td>
+                    </tr>
+                </c:if>
             </table>
         </div>
 
