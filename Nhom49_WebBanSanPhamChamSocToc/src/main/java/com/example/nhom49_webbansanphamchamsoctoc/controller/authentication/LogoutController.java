@@ -1,28 +1,31 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
-import com.example.nhom49_webbansanphamchamsoctoc.util.AuthUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "LogoutController", value = "/Logout")
 public class LogoutController extends HttpServlet {
 
+    private AuthenticationService authService;
+
+    @Override
+    public void init() throws ServletException {
+        authService = new AuthenticationService();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        // Nếu đã login thì mới logout
-        if (AuthUtil.isLoggedIn(request)) {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
-            }
-        }
-
-        response.sendRedirect(request.getContextPath() + "/Login");
+        HttpSession session = request.getSession(false);
+        authService.logout(session);
+        response.sendRedirect(request.getContextPath() + "/");
     }
 
     @Override
