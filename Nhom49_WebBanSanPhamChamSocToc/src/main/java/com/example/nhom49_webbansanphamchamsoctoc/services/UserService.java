@@ -178,6 +178,11 @@ public class UserService {
         return userDAO.updatePassword(userId, hashedNewPassword);
     }
 
+    public User findByGoogleId(String googleId) {
+        return userDAO.findByGoogleId(googleId);
+    }
+
+
 
     /**
      * Tìm hoặc tạo user từ thông tin Google OAuth

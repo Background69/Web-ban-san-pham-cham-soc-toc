@@ -34,7 +34,7 @@
         <div class="error-msg"><%= error %></div>
         <% } %>
 
-        <form action="${pageContext.request.contextPath}/Login" method="post">
+        <form action="${pageContext.request.contextPath}/authentication/login.jsp" method="post">
 
 
         <label>Email</label>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="options">
-                <a class="forgot" href="forgot_password.jsp">Quên mật khẩu</a>
+                <a class="forgot" href="${pageContext.request.contextPath}/authentication/forgot_password.jsp">Quên mật khẩu</a>
             </div>
 
             <button class="btn primary-btn" type="submit">Đăng nhập</button>
@@ -59,8 +59,8 @@
             </div>
 
             <div class="social-login">
-                <a class="google-btn" href="google-login">
-                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="">
+                <a class="google-btn" href="${pageContext.request.contextPath}/auth/google">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="">
                     Đăng nhập với Google
                 </a>
             </div>
@@ -68,7 +68,7 @@
         </form>
 
         <p class="signup-text">
-            Không có tài khoản? <a href="Register.jsp">Đăng ký ngay</a>
+            Không có tài khoản? <a href="${pageContext.request.contextPath}/authentication/register.jsp">Đăng ký ngay</a>
         </p>
     </div>
 </div>
