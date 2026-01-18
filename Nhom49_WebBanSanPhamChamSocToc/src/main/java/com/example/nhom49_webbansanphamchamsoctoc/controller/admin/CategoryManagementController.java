@@ -1,15 +1,37 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
+import com.example.nhom49_webbansanphamchamsoctoc.dao.CategoryDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
+import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "CategoryManagementController", value = "/CategoryManagementController")
 public class CategoryManagementController extends HttpServlet {
-    @Override
+    private CategoryDAO categoryDAO;
+    public void init(){
+        categoryDAO = new CategoryDAO();
+    }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+
+        //Nếu chưa đăng nhập chuyển sang trang Login
+        if (session==null|| session.getAttribute("currentUser")==null){
+            response.sendRedirect(request.getContextPath()+"/login");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("currentUser");
+        //Check có phải role Admin hay không
+        if (!"Admin".equalsIgnoreCase(currentUser.getRole())){
+            response.sendError(HttpServletResponse.SC_FORBIDDEN,"Không có quyeefn truy cập");
+            return;
+        }
 
     }
 
