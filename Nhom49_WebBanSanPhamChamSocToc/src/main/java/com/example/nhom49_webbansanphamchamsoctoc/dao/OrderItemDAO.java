@@ -7,27 +7,25 @@ import org.jdbi.v3.core.Jdbi;
 import java.util.List;
 
 /**
- * DAO class cho OrderItem entity
+ * Lớp OrderItemDAO.
  */
 public class OrderItemDAO implements IDAO<OrderItem> {
+
     private final Jdbi jdbi;
 
+    /**
+     * Thực hiện order item dao.
+     */
     public OrderItemDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    @Override
-    public OrderItem findById(int id) {
-        String sql = "SELECT * FROM order_items WHERE order_item_id = :orderItemId";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("orderItemId", id)
-                        .map((rs, ctx) -> mapOrderItem(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
-    }
 
+    /**
+     * Tim all.
+     *
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public List<OrderItem> findAll() {
         String sql = "SELECT * FROM order_items";
@@ -38,6 +36,12 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         );
     }
 
+    /**
+     * Tim by order id.
+     *
+     * @param orderId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public List<OrderItem> findByOrderId(int orderId) {
         String sql = "SELECT * FROM order_items WHERE order_id = :orderId";
         return jdbi.withHandle(handle ->
@@ -48,11 +52,34 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         );
     }
 
+    /**
+     * Tim by id.
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public OrderItem findById(int id) {
+        String sql = "SELECT * FROM order_items WHERE order_item_id = :id";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("id", id)
+                        .map((rs, ctx) -> mapOrderItem(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+    /**
+     * Them .
+     *
+     * @param item Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public int insert(OrderItem item) {
         String sql = "INSERT INTO order_items (order_id, product_id, variant_id, product_name, " +
-                "variant_name, quantity, unit_price, total_price) VALUES (:orderId, :productId, :variantId, " +
-                ":productName, :variantName, :quantity, :unitPrice, :totalPrice)";
+                "variant_name, quantity, unit_price, total_price) VALUES (:orderId, :productId, :variantId, :productName, :variantName, :quantity, :unitPrice, :totalPrice)";
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
                         .bind("orderId", item.getOrderId())
@@ -70,14 +97,21 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         );
     }
 
+
+    /**
+     * Them batch.
+     *
+     * @param items Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public boolean insertBatch(List<OrderItem> items) {
         if (items == null || items.isEmpty()) {
             return false;
         }
 
         String sql = "INSERT INTO order_items (order_id, product_id, variant_id, product_name, " +
-                "variant_name, quantity, unit_price, total_price) VALUES (:orderId, :productId, :variantId, " +
-                ":productName, :variantName, :quantity, :unitPrice, :totalPrice)";
+                "variant_name, quantity, unit_price, total_price) VALUES (:orderId, :productId, :variantId, :productName, :variantName, :quantity, :unitPrice, :totalPrice)";
+
         return jdbi.withHandle(handle -> {
             var batch = handle.prepareBatch(sql);
             for (OrderItem item : items) {
@@ -96,10 +130,15 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         });
     }
 
+    /**
+     * Cập nhật .
+     *
+     * @param item Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public boolean update(OrderItem item) {
-        String sql = "UPDATE order_items SET quantity = :quantity, unit_price = :unitPrice, " +
-                "total_price = :totalPrice WHERE order_item_id = :orderItemId";
+        String sql = "UPDATE order_items SET quantity = :quantity, unit_price = :unitPrice, total_price = :totalPrice WHERE order_item_id = :orderItemId";
         int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
                         .bind("quantity", item.getQuantity())
@@ -111,6 +150,12 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         return rowsAffected > 0;
     }
 
+    /**
+     * Xóa .
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM order_items WHERE order_item_id = :orderItemId";
@@ -122,6 +167,12 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         return rowsAffected > 0;
     }
 
+    /**
+     * Xóa by order id.
+     *
+     * @param orderId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public boolean deleteByOrderId(int orderId) {
         String sql = "DELETE FROM order_items WHERE order_id = :orderId";
         int rowsAffected = jdbi.withHandle(handle ->
@@ -132,6 +183,12 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         return rowsAffected > 0;
     }
 
+    /**
+     * Thực hiện map order item.
+     *
+     * @param rs Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     private OrderItem mapOrderItem(java.sql.ResultSet rs) throws java.sql.SQLException {
         OrderItem item = new OrderItem();
         item.setOrderItemId(rs.getInt("order_item_id"));

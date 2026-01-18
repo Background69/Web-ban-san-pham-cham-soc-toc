@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * Model class đại diện cho một item trong giỏ hàng
- * Implements Serializable để có thể lưu trong session
- * Sử dụng Product và ProductVariant model trực tiếp
+ * Lớp CartItem.
  */
 public class CartItem implements Serializable {
 
@@ -15,33 +13,41 @@ public class CartItem implements Serializable {
     private int quantity;
     private String imageUrl;
 
-    // Constructors
+    /**
+     * Thực hiện cart item.
+     */
     public CartItem() {
     }
 
+    /**
+     * Khởi tạo CartItem với product và variant.
+     *
+     * @param product Sản phẩm.
+     * @param variant Bien the.
+     * @param quantity So luong.
+     */
     public CartItem(Product product, ProductVariant variant, int quantity) {
+        this(product, variant, quantity, null);
+    }
+
+    /**
+     * Khởi tạo CartItem đầy đủ thong tin.
+     *
+     * @param product Sản phẩm.
+     * @param variant Bien the.
+     * @param quantity So luong.
+     * @param imageUrl Anh dai dien.
+     */
+    public CartItem(Product product, ProductVariant variant, int quantity, String imageUrl) {
         this.product = product;
         this.variant = variant;
         this.quantity = quantity;
-    }
-
-
-    /**
-     * Lấy variantId từ variant
-     */
-    public int getVariantId() {
-        return variant != null ? variant.getVariantId() : 0;
+        this.imageUrl = imageUrl;
     }
 
     /**
-     * Lấy productId từ product
-     */
-    public int getProductId() {
-        return product != null ? product.getProductId() : 0;
-    }
-
-    /**
-     * Lấy tên sản phẩm từ product
+     * Lấy product name.
+     *
      */
     public String getProductName() {
         return product != null ? product.getProductName() : null;
@@ -151,8 +157,7 @@ public class CartItem implements Serializable {
         if (imageUrl != null) {
             return imageUrl;
         }
-        // Fallback to product primary image
-        if (product != null && product.getPrimaryImageUrl() != null) {
+        if (product != null) {
             return product.getPrimaryImageUrl();
         }
         return null;
@@ -162,17 +167,39 @@ public class CartItem implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    /**
+     * Lấy variant id.
+     */
+    public int getVariantId() {
+        return variant != null ? variant.getVariantId() : 0;
+    }
+
+    /**
+     * Lấy product id.
+     */
+    public int getProductId() {
+        return product != null ? product.getProductId() : 0;
+    }
+
+    /**
+     * Tạo chuỗi mô tả doi tuong.
+     *
+     * @return Kết quả xử lý của phương thức.
+     */
     @Override
     public String toString() {
         return "CartItem{" +
-                "productName='" + getProductName() + '\'' +
-                ", variantName='" + getVariantName() + '\'' +
+                "productId=" + getProductId() +
+                ", variantId=" + getVariantId() +
                 ", quantity=" + quantity +
                 ", unitPrice=" + getUnitPrice() +
                 ", totalPrice=" + getTotalPrice() +
                 '}';
     }
 
+    /**
+     * So sanh doi tuong hiện tại với doi tuong khac.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -181,6 +208,9 @@ public class CartItem implements Serializable {
         return getVariantId() == cartItem.getVariantId();
     }
 
+    /**
+     * Tạo ma bam dai dien cho doi tuong.
+     */
     @Override
     public int hashCode() {
         return Integer.hashCode(getVariantId());
