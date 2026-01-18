@@ -23,6 +23,10 @@ public class AuthenticationService {
     private final UserDAO userDAO;
     private String lastError;
 
+    public Object getLastError() {
+        return lastError;
+    }
+
     /**
      * Thực hiện registration result.
      *
