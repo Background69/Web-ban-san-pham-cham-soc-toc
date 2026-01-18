@@ -17,6 +17,7 @@
     <script src="<%= request.getContextPath() %>/static/js/login.js"></script>
 </head>
 <body>
+<jsp:include page="/layout/header.jsp"/>
 
 <div class="login-wrapper">
     <div class="login-box">
@@ -58,7 +59,7 @@
         </p>
     </div>
 </div>
-
+<jsp:include page="/layout/footer.jsp"/>
 </body>
 </html>
 

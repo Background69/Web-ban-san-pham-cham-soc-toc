@@ -1,81 +1,73 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
-import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
+import com.example.nhom49_webbansanphamchamsoctoc.services.EmailService;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "Register", value = "/Register")
+/**
+ * Servlet xử lý đăng ký tài khoản
+ * GET: Hiển thị form đăng ký
+ * POST: Xử lý đăng ký
+ */
+@WebServlet(name = "RegisterController", urlPatterns = {"/register"})
 public class RegisterController extends HttpServlet {
+
+    private AuthenticationService authService;
+    private EmailService emailService;
+
+    @Override
+    public void init() throws ServletException {
+        authService = new AuthenticationService();
+        emailService = new EmailService();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        if (SessionUtil.isLoggedIn(request.getSession(false))) {
+            response.sendRedirect(request.getContextPath() + "/");
+            return;
+        }
 
-        request.getRequestDispatcher("/register.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         request.setCharacterEncoding("UTF-8");
 
         String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String confirm = request.getParameter("confirm");
-        String name = request.getParameter("name");
+        String username = request.getParameter("username");
         String phone = request.getParameter("phone");
+        String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
 
-        if (email == null || password == null || confirm == null ||
-                name == null || phone == null ||
-                email.isEmpty() || password.isEmpty() ||
-                confirm.isEmpty() || name.isEmpty() || phone.isEmpty()) {
-
-            request.setAttribute("error", "Vui lòng nhập đầy đủ thông tin!");
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
-            return;
-        }
-
-        if (!password.equals(confirm)) {
-            request.setAttribute("error", "Mật khẩu xác nhận không khớp!");
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
-            return;
-        }
-
-        try {
-            UserDAO userDAO = new UserDAO();
-
-            if (userDAO.isEmailExist(email)) {
-                request.setAttribute("error", "Email đã tồn tại!");
-                request.getRequestDispatcher("/register.jsp").forward(request, response);
-                return;
-            }
-
-            User user = new User();
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setFullName(name);
-            user.setPhone(phone);
-            user.setRole("USER");
-
-            int userId = userDAO.insert(user);
-
-            if (userId > 0) {
-                response.sendRedirect("login.jsp");
-            } else {
-                request.setAttribute("error", "Đăng ký thất bại!");
-                request.getRequestDispatcher("register.jsp").forward(request, response);
-            }
+        User newUser = authService.register(email, username, phone, password, confirmPassword);
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Lỗi hệ thống!");
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+        if (newUser != null) {
+            // Gửi email xác minh
+            String verifyLink = request.getRequestURL().toString().replace(request.getServletPath(), "")
+                    + "/verify?token=" + newUser.getVerificationToken();
+            emailService.sendVerificationEmail(email, verifyLink);
+
+            SessionUtil.setSuccessMessage(request.getSession(), "Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.");
+            response.sendRedirect(request.getContextPath() + "/login");
+        } else {
+            request.setAttribute("error", authService.getLastError());
+            request.setAttribute("email", email);
+            request.setAttribute("username", username);
+            request.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(request, response);
         }
     }
 }
