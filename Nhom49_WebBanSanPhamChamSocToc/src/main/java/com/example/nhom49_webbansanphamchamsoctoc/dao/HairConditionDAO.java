@@ -4,6 +4,8 @@ import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.HairCondition;
 import org.jdbi.v3.core.Jdbi;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class HairConditionDAO implements IDAO<HairCondition> {
@@ -11,21 +13,21 @@ public class HairConditionDAO implements IDAO<HairCondition> {
 
     @Override
     public HairCondition findById(int id) {
-
-        return jdbi.withHandle(handle -> handle.createQuery(
-                        "SELECT condition_id, condition_name, condition_slug" + "FROM hair_conditions WHERE condition_id=:id")
-                .bind("id", id)
-                .mapToBean(HairCondition.class)
-                .findOne()
+                 String sql ="SELECT * FROM hair_conditions WHERE condition_id=:id";
+                 return jdbi.withHandle(handle -> handle.createQuery(sql)
+                 .bind("id", id)
+                .map((rs,ctx)-> mapHairCondition(rs))
+                .findFirst()
                 .orElse(null));
     }
 
     @Override
     public List<HairCondition> findAll() {
+        String sql = "SELECT condition_id, condition_name, condition_slug FROM hair_conditions";
         return jdbi.withHandle(handle ->
-                handle.createQuery(
-                                "SELECT condition_id, condition_name, condition_slug FROM hair_conditions")
-                        .mapToBean(HairCondition.class)
+                handle.createQuery(sql)
+
+                        .map((rs, ctx)->mapHairCondition(rs))
                         .list()
         );
     }
@@ -63,4 +65,16 @@ public class HairConditionDAO implements IDAO<HairCondition> {
         );
         return rows >0;
     }
+    private HairCondition mapHairCondition(ResultSet rs) {
+        try {
+            HairCondition h = new HairCondition();
+            h.setConditionId(rs.getInt("condition_id"));
+            h.setConditionName(rs.getString("condition_name"));
+            h.setConditionSlug(rs.getString("condition_slug"));
+            return h;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
