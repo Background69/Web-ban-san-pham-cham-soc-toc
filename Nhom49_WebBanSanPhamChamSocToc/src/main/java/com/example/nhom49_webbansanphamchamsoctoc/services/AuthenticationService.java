@@ -240,3 +240,4 @@ public class AuthenticationService {
         return user != null && user.isAdmin();
     }
 }
+
