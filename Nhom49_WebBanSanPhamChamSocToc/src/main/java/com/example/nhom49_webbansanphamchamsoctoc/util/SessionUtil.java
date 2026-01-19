@@ -4,7 +4,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.Cart;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import jakarta.servlet.http.HttpSession;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,13 +12,10 @@ import java.util.Map;
  */
 public class SessionUtil {
 
-    // Session attribute keys
     public static final String USER_KEY = "user";
     public static final String CART_KEY = "cart";
     public static final String SUCCESS_KEY = "success";
     public static final String ERROR_KEY = "error";
-
-    // ==================== User Session ====================
 
     /**
      * Lấy user hiện tại từ session
@@ -35,7 +31,7 @@ public class SessionUtil {
     public static void setCurrentUser(HttpSession session, User user) {
         if (session == null || user == null) return;
 
-        // Tạo copy không có password để lưu vào session
+        // Tạo copy không có password để luu vao session
         User sessionUser = new User();
         sessionUser.setUserId(user.getUserId());
         sessionUser.setEmail(user.getEmail());
@@ -68,63 +64,40 @@ public class SessionUtil {
     }
 
     /**
-     * Kiểm tra user có phải admin không
-     */
-    public static boolean isAdmin(HttpSession session) {
-        User user = getCurrentUser(session);
-        return user != null && "Admin".equals(user.getRole()) && user.isActive();
-    }
-
-    // ==================== Cart Session ====================
-
-    /**
-     * Lấy Cart object từ session
-     */
-    public static Cart getCartObject(HttpSession session) {
-        if (session == null) return new Cart();
-        Cart cart = (Cart) session.getAttribute(CART_KEY);
-        return cart != null ? cart : new Cart();
-    }
-
-    /**
-     * Lưu Cart object vào session
-     */
-    public static void setCartObject(HttpSession session, Cart cart) {
-        if (session != null) {
-            session.setAttribute(CART_KEY, cart);
-        }
-    }
-
-    /**
-     * Lấy cart từ session dưới dạng Map (để tương thích ngược)
-     */
-    @SuppressWarnings("unchecked")
-    public static Map<Integer, Integer> getCart(HttpSession session) {
-        if (session == null) return new HashMap<>();
-        Object cartObj = session.getAttribute(CART_KEY);
-
-        // Hỗ trợ cả Cart object và Map cũ
-        if (cartObj instanceof Cart) {
-            return ((Cart) cartObj).toVariantQuantityMap();
-        } else if (cartObj instanceof Map) {
-            return (Map<Integer, Integer>) cartObj;
-        }
-        return new HashMap<>();
-    }
-
-    /**
-     * Lưu cart vào session
+     * Thiết lập cart.
      */
     public static void setCart(HttpSession session, Map<Integer, Integer> cart) {
         if (session != null) {
-            // Chuyển đổi sang Cart object
             Cart cartObj = Cart.fromVariantQuantityMap(cart);
             session.setAttribute(CART_KEY, cartObj);
         }
     }
 
     /**
-     * Xóa cart khỏi session
+     * Lấy Cart object từ session hoặc tạo mới nếu chua co.
+     */
+    private static Cart getCartObject(HttpSession session) {
+        if (session == null) {
+            return new Cart();
+        }
+        Object data = session.getAttribute(CART_KEY);
+        if (data instanceof Cart) {
+            return (Cart) data;
+        }
+        if (data instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<Integer, Integer> cartMap = (Map<Integer, Integer>) data;
+            Cart cart = Cart.fromVariantQuantityMap(cartMap);
+            session.setAttribute(CART_KEY, cart);
+            return cart;
+        }
+        Cart cart = new Cart();
+        session.setAttribute(CART_KEY, cart);
+        return cart;
+    }
+
+    /**
+     * Thực hiện clear cart.
      */
     public static void clearCart(HttpSession session) {
         if (session != null) {
@@ -133,7 +106,7 @@ public class SessionUtil {
     }
 
     /**
-     * Kiểm tra cart có trống không
+     * Kiểm tra cart empty.
      */
     public static boolean isCartEmpty(HttpSession session) {
         Cart cart = getCartObject(session);
@@ -141,17 +114,15 @@ public class SessionUtil {
     }
 
     /**
-     * Lấy số lượng items trong cart
+     * Lấy cart item count.
      */
     public static int getCartItemCount(HttpSession session) {
         Cart cart = getCartObject(session);
         return cart.getTotalQuantity();
     }
 
-    // ==================== Flash Messages ====================
-
     /**
-     * Set success message (sẽ hiển thị 1 lần)
+     * Thiết lập success message.
      */
     public static void setSuccessMessage(HttpSession session, String message) {
         if (session != null && message != null) {
@@ -160,7 +131,7 @@ public class SessionUtil {
     }
 
     /**
-     * Set error message (sẽ hiển thị 1 lần)
+     * Thiết lập error message.
      */
     public static void setErrorMessage(HttpSession session, String message) {
         if (session != null && message != null) {
@@ -169,7 +140,7 @@ public class SessionUtil {
     }
 
     /**
-     * Lấy và xóa success message
+     * Lấy và xoa success message.
      */
     public static String getAndClearSuccessMessage(HttpSession session) {
         if (session == null) return null;
@@ -179,7 +150,7 @@ public class SessionUtil {
     }
 
     /**
-     * Lấy và xóa error message
+     * Lấy và xoa error message.
      */
     public static String getAndClearErrorMessage(HttpSession session) {
         if (session == null) return null;
@@ -188,10 +159,8 @@ public class SessionUtil {
         return message;
     }
 
-    // ==================== Session Management ====================
-
     /**
-     * Invalidate session (logout)
+     * Invalidate session.
      */
     public static void invalidateSession(HttpSession session) {
         if (session != null) {
@@ -202,7 +171,7 @@ public class SessionUtil {
     }
 
     /**
-     * Lấy hoặc tạo session
+     * Lấy hoặc tao session.
      */
     public static HttpSession getOrCreateSession(jakarta.servlet.http.HttpServletRequest request) {
         return request.getSession(true);
