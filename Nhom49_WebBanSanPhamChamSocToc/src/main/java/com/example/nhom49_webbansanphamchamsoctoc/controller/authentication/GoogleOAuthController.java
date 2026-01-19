@@ -22,7 +22,7 @@ import java.util.UUID;
         "/auth/google", "/auth/google/callback",
         "/google/login/", "/google/callback"
 })
-public class GoogleOAuthServlet extends HttpServlet {
+public class GoogleOAuthController extends HttpServlet {
 
     private GoogleOAuthService googleOAuthService;
     private UserService userService;
