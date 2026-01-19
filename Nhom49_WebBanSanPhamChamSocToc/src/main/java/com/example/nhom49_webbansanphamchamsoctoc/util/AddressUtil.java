@@ -37,10 +37,47 @@ public class AddressUtil {
         return sb.toString();
     }
 
+    /**
+     * Dinh dang short address.
+     */
+    public static String formatShortAddress(ShippingAddress address) {
+        if (address == null) return "";
+
+        StringBuilder sb = new StringBuilder();
+
+        if (ValidationUtil.isNotEmpty(address.getDistrictName())) {
+            sb.append(address.getDistrictName());
+        }
+
+        if (ValidationUtil.isNotEmpty(address.getProvinceName())) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(address.getProvinceName());
+        }
+
+        return sb.toString();
+    }
 
     /**
-     * Tạo ShippingAddress từ các tham số
+     * Dinh dang recipient info.
      */
+    public static String formatRecipientInfo(ShippingAddress address) {
+        if (address == null) return "";
+
+        StringBuilder sb = new StringBuilder();
+
+        if (ValidationUtil.isNotEmpty(address.getFullName())) {
+            sb.append(address.getFullName());
+        }
+
+        if (ValidationUtil.isNotEmpty(address.getPhone())) {
+            if (sb.length() > 0) sb.append(" - ");
+            sb.append(address.getPhone());
+        }
+
+        return sb.toString();
+    }
+
+
     public static ShippingAddress createAddress(int userId, String fullName, String phone,
                                                 String email, String provinceCode, String provinceName,
                                                 String districtCode, String districtName,
