@@ -2,13 +2,16 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.OrderService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "OrderHistoryController", value = "/OrderHistoryController")
+@WebServlet(name = "OrderHistoryController", urlPatterns = {"/orders"})
 public class OrderHistoryController extends HttpServlet {
     private OrderService orderService;
 
@@ -21,10 +24,20 @@ public class OrderHistoryController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
+        User user = session != null ? (User) session.getAttribute("user") : null;
 
-        request.setAttribute("orders", orderService.getOrdersByUser(user.getUserId()));
-        request.setAttribute("orderService", orderService);
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login?redirect=/orders");
+            return;
+        }
+
+        String status = request.getParameter("status");
+        if (status != null && !status.isEmpty()) {
+            request.setAttribute("orders", orderService.getOrdersByUserAndStatus(user.getUserId(), status.toUpperCase()));
+        } else {
+            request.setAttribute("orders", orderService.getOrdersByUser(user.getUserId()));
+        }
+        request.setAttribute("orderService", orderService); // For status display name
 
         request.getRequestDispatcher("/user/order/history.jsp").forward(request, response);
     }
