@@ -11,7 +11,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "BrandController", value = "/BrandController")
+@WebServlet(name = "BrandController", urlPatterns = {"/brands", "/brand/*"})
 public class BrandController extends HttpServlet {
     private BrandService brandService;
     private ProductService productService;
