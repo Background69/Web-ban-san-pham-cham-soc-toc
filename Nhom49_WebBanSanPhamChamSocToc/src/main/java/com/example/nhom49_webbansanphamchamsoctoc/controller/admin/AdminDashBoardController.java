@@ -16,7 +16,7 @@ import java.util.List;
  * Servlet hiển thị Admin Dashboard
  * GET /admin: Dashboard với thống kê
  */
-@WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin", "/admin/"})
+@WebServlet(name = "AdminDashBoardController", urlPatterns = {"/admin", "/admin/"})
 public class AdminDashBoardController extends HttpServlet {
     UserDAO userDAO = new UserDAO();
     ProductDAO productDAO = new ProductDAO();
@@ -32,7 +32,7 @@ public class AdminDashBoardController extends HttpServlet {
         User currentUser = (User) session.getAttribute("currentUser");
         //Check có phải role Admin hay không
         if (!"Admin".equalsIgnoreCase(currentUser.getRole())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyên truy cập");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
             return;
         }
 
