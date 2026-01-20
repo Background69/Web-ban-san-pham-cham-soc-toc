@@ -12,7 +12,9 @@ import java.util.Locale;
  */
 public class FormatUtil {
 
-    // Date formats
+    /**
+     * Thực hiện simple date format.
+     */
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     private static final SimpleDateFormat DATETIME_FULL_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -104,4 +106,14 @@ public class FormatUtil {
         }
     }
 
+    /**
+     * Định dạng hiển thị giá. Nếu có giá sale thì hiển thị giá sale màu đỏ, in đậm và giá gốc gạch ngang.
+     */
+    public static String formatPriceDisplay(BigDecimal originalPrice, BigDecimal salePrice) {
+        if (salePrice != null && salePrice.compareTo(BigDecimal.ZERO) > 0) {
+            return "<span class='text-danger fw-bold'>" + formatCurrency(salePrice) + "</span> " +
+                    "<span class='text-muted text-decoration-line-through small'>" + formatCurrency(originalPrice) + "</span>";
+        }
+        return "<span class='fw-bold'>" + formatCurrency(originalPrice) + "</span>";
+    }
 }
