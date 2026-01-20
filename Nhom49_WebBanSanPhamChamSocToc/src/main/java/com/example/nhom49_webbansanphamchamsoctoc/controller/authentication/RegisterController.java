@@ -52,7 +52,7 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        User newUser = authService.register(email, username, phone, password, confirmPassword);
+        User newUser = authService.register(email, username, phone, password, confirmPassword).user();
 
 
         if (newUser != null) {
