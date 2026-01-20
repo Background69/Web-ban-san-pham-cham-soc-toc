@@ -4,6 +4,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -247,5 +248,12 @@ public class UserService {
             return false;
         }
         return userDAO.updateRole(userId, newRole);
+    }
+
+    public void setCurrentUser(HttpSession session, User user) {
+    }
+
+    public boolean updateProfile(User user) {
+        return userDAO.update(user);
     }
 }

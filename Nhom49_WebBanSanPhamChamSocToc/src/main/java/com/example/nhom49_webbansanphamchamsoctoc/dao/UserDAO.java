@@ -465,4 +465,15 @@ public class UserDAO implements IDAO<User> {
         user.setResetTokenExpiry(rs.getTimestamp("reset_token_expiry"));
         return user;
     }
+
+    public int countUsers() {
+            String sql = "SELECT COUNT(*) FROM users";
+            return jdbi.withHandle(handle ->
+                    handle.createQuery(sql)
+                            .mapTo(Integer.class)
+                            .findFirst()
+                            .orElse(0)
+            );
+
+    }
 }
