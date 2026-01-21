@@ -13,10 +13,11 @@ import java.util.List;
 
 @WebServlet(name = "ProductManagementController", value = "/ProductManagementController")
 public class ProductManagementController extends HttpServlet {
+    ProductDAO productDAO = new ProductDAO();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        ProductDAO productDAO = new ProductDAO();
         //Nếu chưa đăng nhập chuyển sang trang đăng nhập
         if (session==null|| session.getAttribute("currentUser")==null){
             response.sendRedirect(request.getContextPath()+"/login");
@@ -28,6 +29,32 @@ public class ProductManagementController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN,"Không có quyeefn truy cập");
             return;
         }
+        String action = request.getParameter("action");
+        //Thêm sản phẩm
+        if ("create".equals(action)){
+            request.getRequestDispatcher("/view/admin/productform.jsp")
+                    .forward(request,response);
+            return;
+
+        }
+        // Sửa sản phẩm
+        if ("edit".equals(action)){
+            int id = Integer.parseInt(request.getParameter("id"));
+            Product product = productDAO.findById(id);
+            request.getAttribute("product");
+            request.getRequestDispatcher("/view/admin/productform.jsp")
+                    .forward(request,response);
+
+        }
+        //Xoá Sản phẩm
+        if ("detele".equals(action)){
+            int id = Integer.parseInt(request.getParameter("id"));
+            productDAO.delete(id);
+            response.sendRedirect(request.getContextPath()+"/admin/products");
+            return;
+        }
+
+
         List<Product> products = productDAO.findAll();
         request.setAttribute("products", products);
         request.getRequestDispatcher("view/admin/product.jsp")
