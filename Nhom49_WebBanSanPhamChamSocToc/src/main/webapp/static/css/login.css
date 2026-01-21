@@ -165,5 +165,4 @@ input[type="password"]:focus {
     text-decoration: none;
     font-weight: 600;
 }
-
-/* footer moved to static/css/layout.css */
+}
