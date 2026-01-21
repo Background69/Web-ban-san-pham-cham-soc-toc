@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 /**
  * Service chuyên xử lý authentication (đăng nhập, đăng ký, session)
  * Tách biệt với UserService để quản lý user
@@ -29,19 +28,12 @@ public class AuthenticationService {
 
     /**
      * Thực hiện registration result.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param user Tham số đầu vào.
-     * @param rawVerificationToken Tham số đầu vào.
      */
     public record RegistrationResult(User user, String rawVerificationToken) {
     }
 
     /**
      * Thực hiện auth service.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
      */
     public AuthenticationService() {
         this.userDAO = new UserDAO();
@@ -49,12 +41,6 @@ public class AuthenticationService {
 
     /**
      * Đăng nhập bằng email hoặc username.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param emailOrUsername Tham số đầu vào.
-     * @param password Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public User login(String emailOrUsername, String password) {
         if (ValidationUtil.isEmpty(emailOrUsername)) {
@@ -95,15 +81,6 @@ public class AuthenticationService {
 
     /**
      * Thực hiện register.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param email Tham số đầu vào.
-     * @param username Tham số đầu vào.
-     * @param phone Tham số đầu vào.
-     * @param password Tham số đầu vào.
-     * @param confirmPassword Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public RegistrationResult register(String email, String username, String phone, String password, String confirmPassword) {
         String emailError = ValidationUtil.validateEmail(email);
@@ -173,12 +150,6 @@ public class AuthenticationService {
 
     /**
      * Thiết lập current user vao session.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @param user Tham số đầu vào.
-     * @return Không trả về giá trị.
      */
     public void setCurrentUser(HttpSession session, User user) {
         SessionUtil.setCurrentUser(session, user);
@@ -186,11 +157,6 @@ public class AuthenticationService {
 
     /**
      * Thực hiện đăng xuất.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @return Không trả về giá trị.
      */
     public void logout(HttpSession session) {
         if (session != null) {
@@ -202,11 +168,6 @@ public class AuthenticationService {
 
     /**
      * Lấy current user.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public User getCurrentUser(HttpSession session) {
         return SessionUtil.getCurrentUser(session);
@@ -214,11 +175,6 @@ public class AuthenticationService {
 
     /**
      * Kiểm tra email exists.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param email Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public boolean isEmailExists(String email) {
         return userDAO.existsByEmail(email);
@@ -226,9 +182,6 @@ public class AuthenticationService {
 
     /**
      * Kiểm tra user active.
-     *
-     * @param user Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public boolean isActiveUser(User user) {
         return user != null && user.isActive();
@@ -236,9 +189,6 @@ public class AuthenticationService {
 
     /**
      * Kiểm tra user admin.
-     *
-     * @param user Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public boolean isAdmin(User user) {
         return user != null && user.isAdmin();
