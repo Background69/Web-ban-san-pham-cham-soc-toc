@@ -63,6 +63,22 @@ public class ProductManagementController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
 
+        // Chức năng thêm
+        if ("create".equals(action)) {
+            Product product = productFromRequest(request);
+            product.setProductId(Integer.parseInt(request.getParameter("id")));
+            productDAO.update(product);
+        }
+        response.sendRedirect(request.getContextPath() + "/admin/products");
     }
+        private Product productFromRequest(HttpServletRequest request){
+            Product product = new Product();
+            product.setProductName(request.getParameter("productname"));
+            product.setCategory(request.getParameter("category"));
+            product.setImages(request.getParameter("image"));
+            return product;
+        }
 }
