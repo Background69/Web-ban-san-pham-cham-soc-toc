@@ -37,10 +37,6 @@ public class CartService {
 
     /**
      * Thực hiện cart service.
-     *
-     * @param variantDAO Tham số đầu vào.
-     * @param productDAO Tham số đầu vào.
-     * @param imageDAO Tham số đầu vào.
      */
     public CartService(ProductVariantDAO variantDAO, ProductDAO productDAO, ProductImgDAO imageDAO) {
         this.variantDAO = new ProductVariantDAO();
@@ -50,9 +46,6 @@ public class CartService {
 
     /**
      * Lấy cart từ session, nếu chua co thi tạo mới.
-     *
-     * @param session Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public Cart getCart(HttpSession session) {
         if (session == null) return new Cart();
@@ -72,12 +65,6 @@ public class CartService {
 
     /**
      * Thực hiện save cart to session.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @param cart Tham số đầu vào.
-     * @return Không trả về giá trị.
      */
     private void saveCartToSession(HttpSession session, Cart cart) {
         if (session != null) {
@@ -87,11 +74,6 @@ public class CartService {
 
     /**
      * Them sản phẩm vao giỏ hàng.
-     *
-     * @param session Tham số đầu vào.
-     * @param variantId Tham số đầu vào.
-     * @param quantity Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public boolean addToCart(HttpSession session, int variantId, int quantity) {
         if (session == null || variantId <= 0) return false;
@@ -125,13 +107,6 @@ public class CartService {
 
     /**
      * Cập nhật quantity.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @param variantId Tham số đầu vào.
-     * @param quantity Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public boolean updateQuantity(HttpSession session, int variantId, int quantity) {
         if (session == null) return false;
@@ -150,13 +125,7 @@ public class CartService {
     }
 
     /**
-     * Xóa from cart.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @param variantId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
+     * Xóa sản phẩm trong cart.
      */
     public boolean removeFromCart(HttpSession session, int variantId) {
         if (session == null) return false;
@@ -169,11 +138,6 @@ public class CartService {
 
     /**
      * Thực hiện clear cart.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @return Không trả về giá trị.
      */
     public void clearCart(HttpSession session) {
         if (session != null) {
@@ -183,9 +147,6 @@ public class CartService {
 
     /**
      * Lấy danh sach cart items đã được lam moi thong tin.
-     *
-     * @param session Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public List<CartItem> getCartItems(HttpSession session) {
         return getCartItems(getCart(session));
@@ -193,9 +154,6 @@ public class CartService {
 
     /**
      * Lấy danh sach cart items đã được lam moi thong tin.
-     *
-     * @param cart Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public List<CartItem> getCartItems(Cart cart) {
         List<CartItem> items = new ArrayList<>();
@@ -226,11 +184,6 @@ public class CartService {
 
     /**
      * Thực hiện calculate subtotal.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public BigDecimal calculateSubtotal(HttpSession session) {
         List<CartItem> refreshedItems = getCartItems(session);
@@ -239,9 +192,6 @@ public class CartService {
 
     /**
      * Thực hiện calculate subtotal.
-     *
-     * @param items Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public BigDecimal calculateSubtotal(List<CartItem> items) {
         return items.stream()
@@ -251,9 +201,6 @@ public class CartService {
 
     /**
      * Lấy số lượng sản phẩm trỗng gio.
-     *
-     * @param session Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public int getCartCount(HttpSession session) {
         return getCart(session).getTotalQuantity();
@@ -261,9 +208,6 @@ public class CartService {
 
     /**
      * Lấy product primary image.
-     *
-     * @param productId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     private String getProductPrimaryImage(int productId) {
         List<ProductImage> images = imageDAO.findByProductId(productId);
@@ -278,9 +222,6 @@ public class CartService {
 
     /**
      * Thực hiện rebuild cart from map.
-     *
-     * @param cartMap Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     private Cart rebuildCartFromMap(Map<?, ?> cartMap) {
         Cart cart = new Cart();
@@ -315,9 +256,6 @@ public class CartService {
 
     /**
      * Thực hiện parse integer.
-     *
-     * @param value Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     private Integer parseInteger(Object value) {
         if (value instanceof Number) {
@@ -335,12 +273,7 @@ public class CartService {
 
     /**
      * Thực hiện load cart from database.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @param userId Tham số đầu vào.
-     * @return Không trả về giá trị.
+
      */
     public void loadCartFromDatabase(HttpSession session, int userId) {
         // Cart dang luu trỗng session, chua dong bo với database
@@ -348,9 +281,7 @@ public class CartService {
 
     /**
      * Xóa cart trỗng database (neu co).
-     *
-     * @param userId Tham số đầu vào.
-     * @return Không trả về giá trị.
+
      */
     public void clearCartInDatabase(int userId) {
         // Cart chỉ luu o session, chua can thao tac DB
@@ -371,9 +302,7 @@ public class CartService {
 
     /**
      * Kiểm tra hop le stock.
-     *
-     * @param cartMap Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
+
      */
     public List<StockValidationResult> validateStock(Map<Integer, Integer> cartMap) {
         List<StockValidationResult> invalidItems = new ArrayList<>();
@@ -403,11 +332,6 @@ public class CartService {
 
     /**
      * Kiểm tra stock valid.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public boolean isStockValid(HttpSession session) {
         return validateStock(getCart(session)).isEmpty();
@@ -415,9 +339,6 @@ public class CartService {
 
     /**
      * Tạo thông báo lỗi stock.
-     *
-     * @param items Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public String buildStockErrorMessage(List<StockValidationResult> items) {
         if (items == null || items.isEmpty()) {
@@ -438,11 +359,6 @@ public class CartService {
 
     /**
      * Lấy cart as map.
-     *
-     * Security note: Xu ly du lieu nhay cam (mật khẩu/token/phien), tranh ghi log và dam bao bao mat.
-     *
-     * @param session Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
      */
     public Map<Integer, Integer> getCartAsMap(HttpSession session) {
         return getCart(session).toVariantQuantityMap();
@@ -460,12 +376,6 @@ public class CartService {
 
         /**
          * Thực hiện stock validation result.
-         *
-         * @param variantId Tham số đầu vào.
-         * @param productName Tham số đầu vào.
-         * @param variantName Tham số đầu vào.
-         * @param requestedQuantity Tham số đầu vào.
-         * @param availableStock Tham số đầu vào.
          */
         public StockValidationResult(int variantId, String productName, String variantName, int requestedQuantity, int availableStock) {
             this.variantId = variantId;

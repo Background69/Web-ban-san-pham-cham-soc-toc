@@ -11,8 +11,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Filter kiểm tra authentication cho các URL cần đăng nhập
- * Áp dụng cho: /checkout, /orders/*, /profile/*
+ * Filter để kiểm tra xác thực người dùng trước khi truy cập các trang yêu cầu đăng nhập.
  */
 public class AuthenticationFilter implements Filter {
 
@@ -21,6 +20,9 @@ public class AuthenticationFilter implements Filter {
         // Initialization if needed
     }
 
+    /**
+     * Thực hiện lọc request để kiểm tra xác thực.
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -28,11 +30,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         HttpSession session = httpRequest.getSession(false);
-        User user = null;
-
-        if (session != null) {
-            user = (User) session.getAttribute("user");
-        }
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
 
         if (user != null && user.isActive()) {
             // User đã đăng nhập và active, cho phép truy cập
@@ -54,6 +52,9 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
+    /**
+     * Giải phóng tài nguyên khi kết thúc
+     */
     @Override
     public void destroy() {
         // Cleanup if needed
