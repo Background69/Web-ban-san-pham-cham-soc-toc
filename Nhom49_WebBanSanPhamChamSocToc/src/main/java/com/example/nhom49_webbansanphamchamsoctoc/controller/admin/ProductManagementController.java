@@ -30,27 +30,12 @@ public class ProductManagementController extends HttpServlet {
             return;
         }
         String action = request.getParameter("action");
-        //Thêm sản phẩm
-        if ("create".equals(action)){
-            request.getRequestDispatcher("/view/admin/productform.jsp")
-                    .forward(request,response);
-            return;
 
-        }
-        // Sửa sản phẩm
-        if ("edit".equals(action)){
-            int id = Integer.parseInt(request.getParameter("id"));
-            Product product = productDAO.findById(id);
-            request.getAttribute("product");
-            request.getRequestDispatcher("/view/admin/productform.jsp")
-                    .forward(request,response);
-
-        }
-        //Xoá Sản phẩm
+        //Xoá Sản phẩm (Sửa lại dùng Ajax)
         if ("detele".equals(action)){
             int id = Integer.parseInt(request.getParameter("id"));
             productDAO.delete(id);
-            response.sendRedirect(request.getContextPath()+"/admin/products");
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
@@ -69,16 +54,21 @@ public class ProductManagementController extends HttpServlet {
         // Chức năng thêm
         if ("create".equals(action)) {
             Product product = productFromRequest(request);
+            productDAO.insert(product);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+        if ("edit".equals(action)){
+            Product product = productFromRequest(request);
             product.setProductId(Integer.parseInt(request.getParameter("id")));
             productDAO.update(product);
+            response.setStatus(HttpServletResponse.SC_OK);
+
         }
-        response.sendRedirect(request.getContextPath() + "/admin/products");
     }
         private Product productFromRequest(HttpServletRequest request){
             Product product = new Product();
             product.setProductName(request.getParameter("productname"));
-            product.setCategory(request.getParameter("category"));
-            product.setImages(request.getParameter("image"));
             return product;
         }
 }
