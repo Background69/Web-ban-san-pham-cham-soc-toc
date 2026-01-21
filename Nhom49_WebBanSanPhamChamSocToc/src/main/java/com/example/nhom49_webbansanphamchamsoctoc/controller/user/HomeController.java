@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "HomeController", urlPatterns = {"", "/"})
+@WebServlet(name = "HomeController", urlPatterns = {"/home"})
 /**
  * Lớp HomeController.
  */
@@ -43,6 +43,6 @@ public class HomeController extends HttpServlet {
         // Lấy categories cho navigation
         request.setAttribute("categories", categoryDAO.findAll());
 
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 }
