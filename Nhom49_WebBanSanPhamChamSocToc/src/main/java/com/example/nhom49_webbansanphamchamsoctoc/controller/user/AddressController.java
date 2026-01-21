@@ -1,10 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
-import com.example.nhom49_webbansanphamchamsoctoc.dao.ShippingAddressDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
-import com.example.nhom49_webbansanphamchamsoctoc.util.AddressUtil;
-import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.services.ShippingService;
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -12,206 +12,184 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "AddressController", value = "/AddressController")
+@WebServlet(name = "AddressController", urlPatterns = {"/profile/addresses", "/profile/addresses/*"})
 public class AddressController extends HttpServlet {
 
-    private final ShippingAddressDAO addressDAO = new ShippingAddressDAO();
+    private ShippingService shippingService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        this.shippingService = new ShippingService();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Integer userId = getUserIdFromSession(request);
-        if (userId == null) {
-            response.sendRedirect(request.getContextPath() + "/Login");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login?redirect=/profile/addresses");
             return;
         }
 
-        List<ShippingAddress> addresses = addressDAO.findByUserId(userId);
-        ShippingAddress defaultAddress = addressDAO.findDefaultByUserId(userId);
+        String pathInfo = request.getPathInfo();
 
+        if (pathInfo != null && pathInfo.matches("/\\d+")) {
+            int addressId = Integer.parseInt(pathInfo.substring(1));
+            ShippingAddress address = shippingService.getAddressById(addressId);
+            if (address == null || address.getUserId() != user.getUserId()) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+            request.setAttribute("selectedAddress", address);
+            List<ShippingAddress> addresses = shippingService.getAddressesByUser(user.getUserId());
+            request.setAttribute("addresses", addresses);
+            request.getRequestDispatcher("/user/address.jsp").forward(request, response);
+            return;
+        }
+
+        List<ShippingAddress> addresses = shippingService.getAddressesByUser(user.getUserId());
         request.setAttribute("addresses", addresses);
-        request.setAttribute("defaultAddress", defaultAddress);
-        request.setAttribute("defaultFullAddress",
-                AddressUtil.formatFullAddress(defaultAddress));
 
-        request.getRequestDispatcher("/WEB-INF/views/user/address.jsp").forward(request, response);
+        request.getRequestDispatcher("/user/address.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
 
-        Integer userId = getUserIdFromSession(request);
-        if (userId == null) {
-            response.sendRedirect(request.getContextPath() + "/Login");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        String action = request.getParameter("action");
-        if (action == null) action = "add";
-        switch (action) {
-            case "add" -> handleAddAddress(request, response, userId);
-            case "select" -> handleSelectAddress(request, response, userId);
-            case "setDefault" -> handleSetDefault(request, response, userId);
-            case "delete" -> handleDelete(request, response, userId);
-            default -> response.sendRedirect(request.getContextPath() + "/AddressController");
+        String pathInfo = request.getPathInfo();
+
+        if (pathInfo == null || pathInfo.equals("/") || pathInfo.equals("/save")) {
+            // Thêm hoặc cập nhật địa chỉ
+            saveAddress(request, response, user);
+        } else if (pathInfo.equals("/set-default")) {
+            // Đặt địa chỉ mặc định
+            setDefaultAddress(request, response, user);
+        } else if (pathInfo.equals("/delete")) {
+            // Xóa địa chỉ
+            deleteAddress(request, response, user);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
-    // ===================== HANDLERS =====================
+    private void saveAddress(HttpServletRequest request, HttpServletResponse response, User user)
+            throws IOException {
 
-    private void handleAddAddress(HttpServletRequest request, HttpServletResponse response, int userId)
-            throws IOException, ServletException {
-
-        String fullName = request.getParameter("fullname");
-        String phone = request.getParameter("phonenumber");
+        String fullName = request.getParameter("fullName");
+        String phone = request.getParameter("phone");
         String email = request.getParameter("email");
-
-        String provinceCode = request.getParameter("province");
-        String districtCode = request.getParameter("district");
-        String wardCode = request.getParameter("ward");
-
+        String provinceCode = request.getParameter("provinceCode");
         String provinceName = request.getParameter("provinceName");
+        String districtCode = request.getParameter("districtCode");
         String districtName = request.getParameter("districtName");
+        String wardCode = request.getParameter("wardCode");
         String wardName = request.getParameter("wardName");
-
-        String specificAddress = request.getParameter("specificaddress");
+        String addressLine = request.getParameter("specificAddress");
         String note = request.getParameter("note");
 
-        boolean saveAddress = request.getParameter("save-address") != null;
+        ShippingAddress address = new ShippingAddress();
+        address.setUserId(user.getUserId());
+        address.setFullName(fullName);
+        address.setPhone(phone);
+        address.setEmail(email);
+        address.setProvinceCode(provinceCode);
+        address.setProvinceName(provinceName);
+        address.setDistrictCode(districtCode);
+        address.setDistrictName(districtName);
+        address.setWardCode(wardCode);
+        address.setWardName(wardName);
+        address.setSpecificAddress(addressLine);
+        address.setNote(note);
+        address.setDefault(true);
 
-        // Validate cơ bản
-        if (!ValidationUtil.isNotEmpty(fullName)
-                || !ValidationUtil.isNotEmpty(phone)
-                || !ValidationUtil.isNotEmpty(email)
-                || !ValidationUtil.isNotEmpty(provinceCode)
-                || !ValidationUtil.isNotEmpty(districtCode)
-                || !ValidationUtil.isNotEmpty(wardCode)
-                || !ValidationUtil.isNotEmpty(specificAddress)) {
-
-            request.setAttribute("error", "Vui lòng nhập đầy đủ thông tin địa chỉ.");
-            doGet(request, response);
-            return;
+        boolean success;
+        ShippingAddress existingAddress = getSingleAddress(user.getUserId());
+        if (existingAddress != null) {
+            address.setAddressId(existingAddress.getAddressId());
+            success = shippingService.updateAddress(address);
+        } else {
+            success = shippingService.addAddress(address);
         }
 
-        ShippingAddress address = AddressUtil.createAddress(
-                userId,
-                fullName, phone, email,
-                provinceCode, safe(provinceName),
-                districtCode, safe(districtName),
-                wardCode, safe(wardName),
-                specificAddress, note
-        );
-
-        if (saveAddress) {
-            ShippingAddress currentDefault = addressDAO.findDefaultByUserId(userId);
-            if (currentDefault == null) {
-                address.setDefault(true);
+        if (success) {
+            if (address.getAddressId() > 0) {
+                shippingService.setDefaultAddress(user.getUserId(), address.getAddressId());
             }
-
-            int newId = addressDAO.insert(address);
-
-            if (newId > 0 && address.isDefault()) {
-                addressDAO.setDefault(userId, newId);
-                address.setAddressId(newId);
-            } else if (newId > 0) {
-                address.setAddressId(newId);
-            }
+            response.sendRedirect(request.getContextPath() + "/profile/addresses?success=Đã lưu địa chỉ thành công");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/profile/addresses?error=Không thể lưu địa chỉ");
         }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("checkoutAddress", address);
-
-        response.sendRedirect(request.getContextPath() + "/PaymentController");
     }
 
-    private void handleSelectAddress(HttpServletRequest request, HttpServletResponse response, int userId)
+    private void setDefaultAddress(HttpServletRequest request, HttpServletResponse response, User user)
+            throws IOException {
+
+        ShippingAddress address = getSingleAddress(user.getUserId());
+        if (address != null) {
+            boolean success = shippingService.setDefaultAddress(user.getUserId(), address.getAddressId());
+
+            if (success) {
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?success=Đã đặt địa chỉ mặc định");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?error=Không thể đặt địa chỉ mặc định");
+            }
+        } else {
+            response.sendRedirect(request.getContextPath() + "/profile/addresses");
+        }
+    }
+
+    private void deleteAddress(HttpServletRequest request, HttpServletResponse response, User user)
             throws IOException {
 
         String addressIdStr = request.getParameter("addressId");
-        if (!ValidationUtil.isNotEmpty(addressIdStr)) {
-            response.sendRedirect(request.getContextPath() + "/AddressController");
-            return;
-        }
-
-        int addressId = Integer.parseInt(addressIdStr);
-        ShippingAddress address = addressDAO.findById(addressId);
-
-        if (address == null || address.getUserId() != userId) {
-            response.sendRedirect(request.getContextPath() + "/AddressController");
-            return;
-        }
-
-        request.getSession().setAttribute("checkoutAddress", address);
-
-        response.sendRedirect(request.getContextPath() + "/PaymentController");
-    }
-
-    private void handleSetDefault(HttpServletRequest request, HttpServletResponse response, int userId)
-            throws IOException {
-
-        String addressIdStr = request.getParameter("addressId");
-        if (!ValidationUtil.isNotEmpty(addressIdStr)) {
-            response.sendRedirect(request.getContextPath() + "/AddressController");
-            return;
-        }
-
-        int addressId = Integer.parseInt(addressIdStr);
-        ShippingAddress address = addressDAO.findById(addressId);
-
-        if (address != null && address.getUserId() == userId) {
-            addressDAO.setDefault(userId, addressId);
-        }
-
-        response.sendRedirect(request.getContextPath() + "/AddressController");
-    }
-
-    private void handleDelete(HttpServletRequest request, HttpServletResponse response, int userId)
-            throws IOException {
-
-        String addressIdStr = request.getParameter("addressId");
-        if (!ValidationUtil.isNotEmpty(addressIdStr)) {
-            response.sendRedirect(request.getContextPath() + "/AddressController");
-            return;
-        }
-
-        int addressId = Integer.parseInt(addressIdStr);
-        ShippingAddress address = addressDAO.findById(addressId);
-
-        if (address != null && address.getUserId() == userId) {
-            boolean wasDefault = address.isDefault();
-            addressDAO.delete(addressId);
-
-            if (wasDefault) {
-                List<ShippingAddress> list = addressDAO.findByUserId(userId);
-                if (!list.isEmpty()) {
-                    addressDAO.setDefault(userId, list.get(0).getAddressId());
-                }
+        ShippingAddress address = getSingleAddress(user.getUserId());
+        if (address != null && addressIdStr != null) {
+            int addressId = Integer.parseInt(addressIdStr);
+            if (address.getAddressId() != addressId) {
+                response.sendRedirect(request.getContextPath() + "/profile/addresses");
+                return;
             }
+            boolean success = shippingService.deleteAddress(addressId);
+
+            if (success) {
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?success=Đã xóa địa chỉ");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?error=Không thể xóa địa chỉ");
+            }
+        } else {
+            response.sendRedirect(request.getContextPath() + "/profile/addresses");
+        }
+    }
+
+    private ShippingAddress getSingleAddress(int userId) {
+        ShippingAddress address = shippingService.getDefaultAddress(userId);
+        if (address != null) {
+            return address;
         }
 
-        response.sendRedirect(request.getContextPath() + "/AddressController");
-    }
+        List<ShippingAddress> addresses = shippingService.getAddressesByUser(userId);
+        if (addresses == null || addresses.isEmpty()) {
+            return null;
+        }
 
-    // ===================== HELPERS =====================
-
-    private Integer getUserIdFromSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session == null) return null;
-
-        Object idObj = session.getAttribute("userId");
-        if (idObj instanceof Integer) return (Integer) idObj;
-
-        Object userObj = session.getAttribute("user");
-        if (userObj == null) userObj = session.getAttribute("auth");
-
-        return null;
-    }
-
-    private String safe(String s) {
-        return s == null ? "" : s;
+        ShippingAddress fallback = addresses.get(0);
+        if (fallback != null) {
+            shippingService.setDefaultAddress(userId, fallback.getAddressId());
+            fallback.setDefault(true);
+        }
+        return fallback;
     }
 }
