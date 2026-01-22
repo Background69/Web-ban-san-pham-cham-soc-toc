@@ -13,9 +13,6 @@ public class PasswordUtil {
 
     /**
      * Hash password với BCrypt
-     *
-     * @param password Password cần hash
-     * @return Chuỗi hash BCrypt
      */
     public static String hashPassword(String password) {
         if (password == null || password.isEmpty()) {
@@ -26,10 +23,6 @@ public class PasswordUtil {
 
     /**
      * Verify password với stored hash
-     *
-     * @param password   Password cần verify
-     * @param storedHash Hash đã lưu (BCrypt format)
-     * @return true nếu password khớp, false nếu không
      */
     public static boolean verifyPassword(String password, String storedHash) {
         if (password == null || storedHash == null) {
@@ -46,9 +39,6 @@ public class PasswordUtil {
     /**
      * Kiểm tra độ mạnh của password
      * Password phải có ít nhất 6 ký tự
-     *
-     * @param password Password cần kiểm tra
-     * @return true nếu password đủ mạnh
      */
     public static boolean isValidPassword(String password) {
         return password != null && password.length() >= 6;
@@ -60,9 +50,6 @@ public class PasswordUtil {
      * - Có chữ hoa
      * - Có chữ thường
      * - Có số
-     *
-     * @param password Password cần kiểm tra
-     * @return true nếu password đủ mạnh
      */
     public static boolean isStrongPassword(String password) {
         if (password == null || password.length() < 8) {
@@ -83,9 +70,6 @@ public class PasswordUtil {
 
     /**
      * Tạo password ngẫu nhiên
-     *
-     * @param length Độ dài password
-     * @return Password ngẫu nhiên
      */
     public static String generateRandomPassword(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%";

@@ -6,7 +6,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 
 /**
- * Service chuyên xử lý các thao tác liên quan đến profile user
+ * Lớp ProfileService.
  */
 public class ProfileService {
 
@@ -25,31 +25,26 @@ public class ProfileService {
     }
 
     /**
-     * Cập nhật thông tin profile của user
-     * @return true nếu thành công, false nếu thất bại (lấy lỗi qua getLastError())
+     * Cập nhật thông tin profile người dùng.
      */
     public boolean updateProfile(User user, String newUsername, String newPhone) {
-        // Validate user
-        if (user == null || !ValidationUtil.isPositiveInteger(user.getUserId())) {
-            lastError = "Thông tin user không hợp lệ";
+        lastError = null;
+        if (user == null) {
+            lastError = "Không thấy user";
             return false;
         }
 
-        // Validate username
+        if (ValidationUtil.isEmpty(newUsername)) {
+            lastError = "Username là bắt buộc";
+            return false;
+        }
+
         String usernameError = ValidationUtil.validateUsername(newUsername);
         if (usernameError != null) {
             lastError = usernameError;
             return false;
         }
 
-        // Validate phone (optional)
-        String phoneError = ValidationUtil.validatePhone(newPhone);
-        if (phoneError != null) {
-            lastError = phoneError;
-            return false;
-        }
-
-        // Kiểm tra username đã tồn tại chưa (trừ user hiện tại)
         if (userDAO.existsByUsername(newUsername.trim())) {
             User existingUser = userDAO.findByUsername(newUsername.trim());
             if (existingUser != null && existingUser.getUserId() != user.getUserId()) {
@@ -74,7 +69,7 @@ public class ProfileService {
      * @return true nếu thành công, false nếu thất bại (lấy lỗi qua getLastError())
      */
     public boolean changePassword(int userId, String oldPassword, String newPassword, String confirmPassword) {
-        // Validate userId
+        lastError = null;
         if (!ValidationUtil.isPositiveInteger(userId)) {
             lastError = "ID user không hợp lệ";
             return false;
@@ -82,7 +77,7 @@ public class ProfileService {
 
         // Validate input không null
         if (ValidationUtil.isEmpty(oldPassword)) {
-            lastError = "Mật khẩu cũ không được để trống";
+            lastError = "Mật khẩu hiện tại không được để trống";
             return false;
         }
 
@@ -126,6 +121,7 @@ public class ProfileService {
      * Cập nhật avatar cho user
      */
     public boolean updateAvatar(int userId, String avatarUrl) {
+        lastError = null;
         if (!ValidationUtil.isPositiveInteger(userId)) {
             lastError = "ID user không hợp lệ";
             return false;
@@ -150,3 +146,4 @@ public class ProfileService {
         return success;
     }
 }
+
