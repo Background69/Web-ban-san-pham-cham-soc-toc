@@ -1,222 +1,259 @@
-* {
+:root{
+    --bg: #7ca454;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+
+    --brand: #1f3d2a;
+    --brand2: #2c5940;
+    --focus: rgba(31, 61, 42, .25);
+
+    --shadow: 0 18px 45px rgba(0,0,0,.12);
+}
+
+/* RESET */
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
 }
 
-main {
-    background: #7ca454;
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* ===== BACKGROUND ===== */
+main{
+    background: linear-gradient(
+            135deg,
+            rgba(124,164,84,.95),
+            rgba(106,138,58,.95)
+    );
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 32px 16px;
 }
 
-.login-container {
+/* ===== CONTAINER ===== */
+.login-container{
     width: 100%;
-    max-width: 400px;
-    padding: 20px;
+    max-width: 420px;
 }
 
-.login-box {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    padding: 40px 30px;
+/* ===== CARD ===== */
+.login-box{
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 36px 30px 28px;
     text-align: center;
 }
 
-.logo {
-    height: 130px;
-    width: 120px;
-    margin: 0 auto 5px;
+/* ===== LOGO ===== */
+.logo{
+    height: 96px;
+    margin: 0 auto 12px;
     display: block;
 }
 
-.logo-container {
-    text-align: center;
+/* ===== TITLE ===== */
+.login-box h2{
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
 }
 
-.login-box h2 {
-    font-size: 24px;
-    margin-bottom: 8px;
-    color: #333;
-    font-weight: bold;
-}
-
-.login-box > p {
+.login-box > p{
     font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
+    color: var(--muted);
+    margin-bottom: 22px;
 }
 
-.form-group {
-    margin-bottom: 15px;
+/* ===== FORM ===== */
+.form-group,
+.password-wrapper{
+    margin-bottom: 14px;
     text-align: left;
 }
 
-.form-group label {
+.form-group label,
+.password-wrapper label{
     display: block;
     margin-bottom: 6px;
-    color: #333;
-    font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
 }
 
-.form-group input {
+/* INPUT */
+.form-group input,
+.password-wrapper input{
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    height: 44px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
     font-size: 14px;
-    height: 38px;
-    font-family: 'Times New Roman', Times, serif;
+    color: var(--text);
+    transition: .2s ease;
 }
 
-.form-group input:focus {
+.form-group input::placeholder,
+.password-wrapper input::placeholder{
+    color: #9ca3af;
+}
+
+.form-group input:focus,
+.password-wrapper input:focus{
     outline: none;
-    border-color: #00d90b;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 4px var(--focus);
 }
 
-.password-wrapper {
+/* ===== PASSWORD FIX (KHÔNG LỆCH) ===== */
+.password-wrapper{
     position: relative;
-    margin-bottom: 15px;
-    text-align: left;
 }
 
-.password-wrapper label {
-    display: block;
-    margin-bottom: 6px;
-    color: #333;
-    font-weight: bold;
-    font-size: 14px;
-}
-.toggle-password {
-    top: 40px;
+.password-wrapper input{
+    padding-right: 44px;
 }
 
-.password-wrapper input {
-    width: 100%;
-    padding: 10px;
-    padding-right: 40px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    height: 38px;
-    font-family: 'Times New Roman', Times, serif;
-}
-
-.password-wrapper input:focus {
-    outline: none;
-    border-color: #00d90b;
-}
-
-.toggle-password {
+/* icon mắt */
+.password-wrapper .toggle-password{
     position: absolute;
     right: 12px;
-    top: 32px;
+
+
+    /* CĂN GIỮA INPUT CHUẨN */
+    top: calc(6px + 13px);
+    transform: translateY(50%);
+
+    font-size: 17px;
+    color: #6b7280;
     cursor: pointer;
-    color: #777;
-    font-size: 16px;
+    padding: 6px;
+    border-radius: 8px;
 }
 
-.toggle-password:hover {
-    color: #000;
+.toggle-password:hover{
+    background: #f3f4f6;
+    color: #111827;
 }
 
-.btn-primary {
+/* ===== BUTTON ===== */
+.btn-primary{
     width: 100%;
-    padding: 11px;
-    background-color: #1f3d2a;
-    color: #fff;
+    padding: 13px;
+    border-radius: 14px;
     border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    margin-bottom: 15px;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    color: #fff;
+    font-weight: 800;
     font-size: 15px;
-    font-family: 'Times New Roman', Times, serif;
+    cursor: pointer;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    transition: .2s ease;
 }
 
-.btn-primary:hover {
-    background-color: #2c5940;
+.btn-primary:hover{
+    filter: brightness(1.05);
+    box-shadow: 0 10px 24px rgba(31,61,42,.25);
 }
 
-.or-divider {
+.btn-primary:active{
+    transform: translateY(1px);
+}
+
+/* ===== DIVIDER ===== */
+.or-divider{
     display: flex;
     align-items: center;
-    margin: 20px 0;
-    color: #888;
-    font-size: 14px;
+    margin: 18px 0 14px;
+    font-size: 13px;
+    color: #9ca3af;
 }
 
 .or-divider::before,
-.or-divider::after {
+.or-divider::after{
     content: "";
     flex: 1;
     height: 1px;
-    background: #ddd;
+    background: var(--border);
 }
 
-.or-divider span {
+.or-divider span{
     padding: 0 12px;
-    font-weight: 600;
-    color: #777;
+    font-weight: 700;
 }
 
-.social-login {
-    margin-bottom: 15px;
+/* ===== GOOGLE ===== */
+.social-login{
+    margin-bottom: 14px;
 }
 
-.google-btn {
+.google-btn{
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 10px;
-    border-radius: 4px;
-    background: #f2f2f2;
-    border: 1px solid #ddd;
-    text-decoration: none;
-    font-weight: 600;
-    color: #333;
-    width: 100%;
-    cursor: pointer;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-weight: 800;
     font-size: 14px;
+    color: #111827;
+    cursor: pointer;
+    transition: .2s ease;
 }
 
-.google-btn:hover {
-    background: #e8e8e8;
+.google-btn:hover{
+    background: #fafafa;
+    box-shadow: 0 8px 18px rgba(0,0,0,.08);
 }
 
-.google-btn img {
+.google-btn img{
     width: 18px;
     height: 18px;
 }
 
-.signup-text {
+/* ===== FOOT TEXT ===== */
+.signup-text{
     font-size: 13px;
-    color: #666;
-    margin-top: 15px;
+    color: var(--muted);
 }
 
-.signup-text a {
-    color: #4b7af3;
+.signup-text a{
+    color: #2563eb;
+    font-weight: 800;
     text-decoration: none;
-    font-weight: 600;
 }
 
-.signup-text a:hover {
+.signup-text a:hover{
     text-decoration: underline;
 }
 
-.error-msg {
-    background: #fee;
-    color: #c33;
-    padding: 12px 15px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    border-left: 4px solid #c33;
-    font-size: 14px;
+/* ===== ERROR ===== */
+.error-msg{
+    background: #fff1f2;
+    color: #b42318;
+    border: 1px solid #fecdd3;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 420px){
+    .login-box{
+        padding: 26px 18px 22px;
+    }
+    .login-box h2{
+        font-size: 24px;
+    }
 }
