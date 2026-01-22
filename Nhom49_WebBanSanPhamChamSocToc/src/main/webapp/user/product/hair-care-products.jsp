@@ -22,15 +22,15 @@
             <div class="banner-slides">
                 <!-- Slide 1 -->
                 <div class="item" id="slide-1">
-                    <img alt="banner 1" class="banner-image" src="${pageContext.request.contextPath}/static/assets/banner1.png">
+                    <img alt="banner 1" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner1.png">
                 </div>
                 <!-- Slide 2 -->
                 <div class="item" id="slide-2">
-                    <img alt="banner 2" class="banner-image" src="${pageContext.request.contextPath}/static/assets/banner2.png">
+                    <img alt="banner 2" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
                 </div>
                 <!-- Slide 3 -->
                 <div class="item" id="slide-3">
-                    <img alt="banner 3" class="banner-image" src="${pageContext.request.contextPath}/static/assets/banner3.png">
+                    <img alt="banner 3" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner3.png">
                 </div>
             </div>
 
