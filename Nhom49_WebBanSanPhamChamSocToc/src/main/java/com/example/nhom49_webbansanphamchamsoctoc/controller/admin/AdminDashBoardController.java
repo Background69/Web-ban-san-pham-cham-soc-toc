@@ -15,11 +15,25 @@ import java.io.IOException;
  * Servlet hiển thị Admin Dashboard
  * GET /admin: Dashboard với thống kê
  */
-@WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin", "/admin/"})
+@WebServlet(name = "AdminDashBoardController", urlPatterns = {"/admin", "/admin/"})
 public class AdminDashBoardController extends HttpServlet {
-    private ProductDAO productDAO;
-    private UserDAO userDAO;
-    private OrderDAO orderDAO;
+    UserDAO userDAO = new UserDAO();
+    ProductDAO productDAO = new ProductDAO();
+    OrderDAO orderDAO = new OrderDAO();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        //Nếu chưa đăng nhập chuyển sang trang đăng nhập
+        if (session==null|| session.getAttribute("currentUser")==null){
+            response.sendRedirect(request.getContextPath()+"/login");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("currentUser");
+        //Check có phải role Admin hay không
+        if (!"Admin".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
+            return;
+        }
 
     /**
      * Khởi tạo tài nguyên hoặc cau hinh can thiet.

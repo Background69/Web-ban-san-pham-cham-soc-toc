@@ -1,6 +1,8 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
+import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import jakarta.servlet.*;
@@ -8,13 +10,14 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "OrderManagementController", value = "/OrderManagementController")
 public class OrderManagementController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        ProductDAO productDAO = new ProductDAO();
+        OrderDAO orderDAO = new OrderDAO();
         //Nếu chưa đăng nhập chuyển sang trang đăng nhập
         if (session == null || session.getAttribute("currentUser") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -23,9 +26,29 @@ public class OrderManagementController extends HttpServlet {
         User currentUser = (User) session.getAttribute("currentUser");
         //Check có phải role Admin hay không
         if (!"Admin".equalsIgnoreCase(currentUser.getRole())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyeefn truy cập");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
             return;
         }
+        // Cập nhật trạng thái của đơn hàng
+        String action = request.getParameter("action");
+        if ("updateStatus".equals(action)) {
+            int orderId = Integer.parseInt(request.getParameter("id"));
+            String status = request.getParameter("status");
+            orderDAO.updateStatus(orderId, status);
+            response.sendRedirect(request.getContextPath() + "/admin/orders");
+        }
+        //Xoá đơn hàng
+        if ("detele".equals(action)){
+            int orderId = Integer.parseInt(request.getParameter("id"));
+            orderDAO.delete(orderId);
+            response.sendRedirect(request.getContextPath() + "/admin/orders");
+            return;
+        }
+        //Danh sách đơn hàng
+        List<Order> orders = orderDAO.findAll();
+        request.setAttribute("orders",orders);
+        request.getRequestDispatcher("view/admin/ordermanagent.jsp")
+                .forward(request,response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
