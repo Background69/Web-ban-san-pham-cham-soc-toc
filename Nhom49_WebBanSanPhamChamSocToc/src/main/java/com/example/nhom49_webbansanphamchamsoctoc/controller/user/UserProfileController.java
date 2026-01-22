@@ -3,9 +3,9 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
+import com.example.nhom49_webbansanphamchamsoctoc.services.ProfileService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ShippingService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.OrderService;
-import com.example.nhom49_webbansanphamchamsoctoc.services.UserService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import com.google.gson.Gson;
 
@@ -20,21 +20,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-/**
- * Servlet xử lý profile management cho user
- * URL: /profile, /profile/edit, /profile/addresses, /profile/orders, /profile/security
- */
-@WebServlet(name = "UserProfileServlet", urlPatterns = {"/profile", "/profile/*"})
+@WebServlet(name = "UserProfileController", urlPatterns = {"/profile", "/profile/*"})
 public class UserProfileController extends HttpServlet {
 
-    private UserService userService;
+    private ProfileService profileService;
     private ShippingService shippingService;
     private OrderService orderService;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        this.userService = new UserService();
+        this.profileService = new ProfileService();
         this.shippingService = new ShippingService();
         this.orderService = new OrderService();
     }
@@ -93,9 +89,10 @@ public class UserProfileController extends HttpServlet {
         } else if (pathInfo.equals("/orders")) {
             // Trang lịch sử đơn hàng
             String status = request.getParameter("status");
+            String normalizedStatus = normalizeOrderStatus(status);
             List<Order> orders;
-            if (status != null && !status.isEmpty()) {
-                orders = orderService.getOrdersByUserAndStatus(currentUser.getUserId(), status.toUpperCase());
+            if (normalizedStatus != null && !normalizedStatus.isEmpty()) {
+                orders = orderService.getOrdersByUserAndStatus(currentUser.getUserId(), normalizedStatus.toUpperCase());
             } else {
                 orders = orderService.getOrdersByUser(currentUser.getUserId());
             }
@@ -105,9 +102,9 @@ public class UserProfileController extends HttpServlet {
             request.setAttribute("status", status);
             request.setAttribute("totalOrders", orderService.countOrdersByUser(currentUser.getUserId()));
             request.setAttribute("pendingCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "PENDING"));
-            request.setAttribute("processingCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "PROCESSING"));
+            request.setAttribute("processingCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "CONFIRMED"));
             request.setAttribute("shippingCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "SHIPPING"));
-            request.setAttribute("deliveredCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "DELIVERED"));
+            request.setAttribute("deliveredCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "COMPLETED"));
             request.setAttribute("cancelledCount", orderService.countOrdersByUserAndStatus(currentUser.getUserId(), "CANCELLED"));
             request.setAttribute("activeTab", "orders");
             request.getRequestDispatcher("/user/orders.jsp").forward(request, response);
@@ -159,18 +156,40 @@ public class UserProfileController extends HttpServlet {
         }
     }
 
+    private String normalizeOrderStatus(String status) {
+        if (status == null) {
+            return null;
+        }
+        String normalized = status.trim().toLowerCase();
+        if (normalized.isEmpty()) {
+            return normalized;
+        }
+        switch (normalized) {
+            case "processing":
+                return "confirmed";
+            case "delivered":
+                return "completed";
+            default:
+                return normalized;
+        }
+    }
+
     private void updateProfile(HttpServletRequest request, HttpServletResponse response, User currentUser)
             throws ServletException, IOException {
 
-        boolean success = userService.updateProfile(currentUser);
+        String username = request.getParameter("username");
+        String phone = request.getParameter("phone");
 
+        boolean success = profileService.updateProfile(currentUser, username, phone);
         if (success) {
             SessionUtil.setCurrentUser(request.getSession(), currentUser);
-            request.setAttribute("success", "Cập nhật thông tin thành công");
-
+            request.setAttribute("success", "Profile updated thành công.");
+        } else {
+            String errorMessage = profileService.getLastError();
+            request.setAttribute("error", errorMessage != null ? errorMessage : "Update profile thất bại.");
         }
 
-        request.getRequestDispatcher("/WEB-INF/views/user/profile-edit.jsp").forward(request, response);
+        request.getRequestDispatcher("/user/profile-edit.jsp").forward(request, response);
     }
 
     private void changePassword(HttpServletRequest request, HttpServletResponse response, User currentUser)
@@ -181,13 +200,17 @@ public class UserProfileController extends HttpServlet {
             oldPassword = request.getParameter("currentPassword");
         }
         String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
 
-        boolean success = userService.changePassword(
-                currentUser.getUserId(), oldPassword, newPassword
+        boolean success = profileService.changePassword(
+                currentUser.getUserId(), oldPassword, newPassword, confirmPassword
         );
 
         if (success) {
-            request.setAttribute("success", "Đổi mật khẩu thành công");
+            request.setAttribute("success", "Đổi mật khẩu thành công.");
+        } else {
+            String errorMessage = profileService.getLastError();
+            request.setAttribute("error", errorMessage != null ? errorMessage : "Đổi mật khẩu thất bại.");
         }
 
         // Kiểm tra xem request từ trang nào
@@ -292,7 +315,7 @@ public class UserProfileController extends HttpServlet {
             Order order = orderService.getOrderById(orderId);
 
             if (order != null && order.getUserId() == currentUser.getUserId() && "pending".equalsIgnoreCase(order.getOrderStatus())) {
-                boolean success = orderService.updateOrderStatus(orderId, "CANCELLED");
+                boolean success = orderService.updateOrderStatus(orderId, "cancelled");
                 if (success) {
                     request.getSession().setAttribute("success", "Đã hủy đơn hàng thành công");
                 } else {
