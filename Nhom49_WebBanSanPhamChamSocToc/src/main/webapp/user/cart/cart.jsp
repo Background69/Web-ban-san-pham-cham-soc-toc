@@ -9,6 +9,7 @@
     <title>Giỏ hàng</title>
     <link href="${pageContext.request.contextPath}/static/css/cart.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/cart.css">
 </head>
 <body>
 

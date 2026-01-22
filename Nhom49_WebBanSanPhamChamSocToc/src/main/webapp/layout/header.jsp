@@ -28,7 +28,7 @@
             <!-- Account and cart -->
             <div class="right-header">
                 <div class="account">
-                    <a href="${pageContext.request.contextPath}/login">
+                    <a href="${pageContext.request.contextPath}/authentication/login.jsp">
                         <i class="fas fa-user-circle"></i>
                         <span class="login-in-text">Đăng nhập</span>
                     </a>
