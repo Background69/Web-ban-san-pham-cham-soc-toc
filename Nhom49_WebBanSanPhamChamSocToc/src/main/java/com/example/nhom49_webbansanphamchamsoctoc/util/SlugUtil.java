@@ -4,24 +4,27 @@ import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 /**
- * Utility class để sinh slug từ tên
- * Slug được sử dụng cho URL thân thiện SEO
+ * Lớp SlugUtil.
  */
 public class SlugUtil {
 
+    /**
+     * Pattern cho ký tự không phải Latin.
+     */
     private static final Pattern NONLATIN = Pattern.compile("[^\\w-]");
-    private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
+
+    /**
+     * Pattern cho khoảng trắng.
+     */
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
+    /**
+     * Pattern cho nhiều dấu gạch ngang liên tiếp.
+     */
     private static final Pattern MULTIPLE_HYPHENS = Pattern.compile("-+");
 
     /**
-     * Sinh slug từ tên
-     * - Chuyển thành chữ thường
-     * - Loại bỏ dấu tiếng Việt
-     * - Thay khoảng trắng bằng dấu gạch ngang
-     * - Loại bỏ ký tự đặc biệt
-     *
-     * @param name Tên cần chuyển đổi
-     * @return Slug đã được chuẩn hóa
+     * Sinh slug.
      */
     public static String generateSlug(String name) {
         if (name == null || name.trim().isEmpty()) {
