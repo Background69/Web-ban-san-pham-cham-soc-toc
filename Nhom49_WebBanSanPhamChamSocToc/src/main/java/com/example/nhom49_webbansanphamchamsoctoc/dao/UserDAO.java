@@ -31,28 +31,36 @@ public class UserDAO implements IDAO<User> {
      */
     @Override
     public int insert(User user) {
-        String sql = "INSERT INTO users (email, username, password, phone, avatar, role, is_active, google_id, auth_provider, is_verified, verification_token, reset_token_expiry) " +
-                "VALUES (:email, :username, :password, :phone, :avatar, :role, :isActive, :googleId, :authProvider, :isVerified, :verificationToken, :resetTokenExpiry)";
-        return jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("email", user.getEmail())
-                        .bind("username", user.getUsername())
-                        .bind("password", user.getPassword())
-                        .bind("phone", user.getPhone())
-                        .bind("avatar", user.getAvatar() != null ? user.getAvatar() : "avatar/avatar.jpg")
-                        .bind("role", user.getRole() != null ? user.getRole() : "Khách hàng")
-                        .bind("isActive", user.isActive())
-                        .bind("googleId", user.getGoogleId())
-                        .bind("authProvider", user.getAuthProvider())
-                        .bind("isVerified", user.isVerified())
-                        .bind("verificationToken", user.getVerificationToken())
-                        .bind("resetTokenExpiry", user.getResetTokenExpiry())
-                        .executeAndReturnGeneratedKeys("user_id")
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(-1)
-        );
+        String sql = """
+        INSERT INTO users
+        (email, username, password, phone, avatar, role, is_active, is_verified, auth_provider)
+        VALUES
+        (:email, :username, :password, :phone, :avatar, :role, :isActive, :isVerified, :authProvider)
+    """;
+
+        try {
+            return jdbi.withHandle(handle ->
+                    handle.createUpdate(sql)
+                            .bind("email", user.getEmail())
+                            .bind("username", user.getUsername())
+                            .bind("password", user.getPassword())
+                            .bind("phone", user.getPhone())
+                            .bind("avatar", user.getAvatar() != null ? user.getAvatar() : "avatar/avatar.jpg")
+                            .bind("role", user.getRole() != null ? user.getRole() : "Khách hàng")
+                            .bind("isActive", true)
+                            .bind("isVerified", true) // ⚠️ tạm cho verified luôn
+                            .bind("authProvider", "LOCAL")
+                            .executeAndReturnGeneratedKeys("user_id")
+                            .mapTo(Integer.class)
+                            .findFirst()
+                            .orElse(-1)
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
+
 
     /**
      * Cập nhật .
