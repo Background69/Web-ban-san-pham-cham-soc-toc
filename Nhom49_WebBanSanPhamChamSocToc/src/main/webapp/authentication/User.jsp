@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Hồ sơ người dùng</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/user.css">
     <script src="<%= request.getContextPath() %>/static/js/login.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 </head>
