@@ -65,7 +65,6 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        // User thường -> về trang chủ
         response.sendRedirect(request.getContextPath() + "/");
     }
 }
