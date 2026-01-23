@@ -33,7 +33,7 @@ public class ForgotPasswordController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/authentication/forgot_password.jsp")
+        request.getRequestDispatcher("/authentication/forgot-password.jsp")
                 .forward(request, response);
     }
 
@@ -49,7 +49,7 @@ public class ForgotPasswordController extends HttpServlet {
         User user = userDAO.findByEmail(email);
         if (user == null) {
             request.setAttribute("message", commonMsg);
-            request.getRequestDispatcher("/authentication/forgot_password.jsp")
+            request.getRequestDispatcher("/authentication/forgot-password.jsp")
                     .forward(request, response);
             return;
         }
@@ -73,7 +73,7 @@ public class ForgotPasswordController extends HttpServlet {
             request.setAttribute("error", "Không gửi được email. Kiểm tra cấu hình Gmail App Password / log Tomcat.");
         }
 
-        request.getRequestDispatcher("/authentication/forgot_password.jsp")
+        request.getRequestDispatcher("/authentication/forgot-password.jsp")
                 .forward(request, response);
     }
 }

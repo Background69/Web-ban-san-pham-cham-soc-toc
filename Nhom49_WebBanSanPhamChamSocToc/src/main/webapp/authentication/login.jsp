@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="options">
-                    <a href="${pageContext.request.contextPath}/authentication/forgot_password.jsp">Quên mật khẩu?</a>
+                    <a href="${pageContext.request.contextPath}/authentication/forgot-password.jsp">Quên mật khẩu?</a>
                 </div>
 
                 <button type="submit" class="btn-login">Đăng nhập</button>
