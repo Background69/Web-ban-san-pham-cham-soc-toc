@@ -33,7 +33,6 @@ public class ForgotPasswordController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // ✅ ĐÚNG TÊN FILE (forgot_password.jsp)
         request.getRequestDispatcher("/authentication/forgot_password.jsp")
                 .forward(request, response);
     }
@@ -45,7 +44,6 @@ public class ForgotPasswordController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String email = request.getParameter("email");
 
-        // luôn trả về message chung để tránh lộ email tồn tại hay không
         String commonMsg = "Nếu email tồn tại trong hệ thống, chúng tôi đã gửi link đặt lại mật khẩu.";
 
         User user = userDAO.findByEmail(email);
@@ -56,21 +54,17 @@ public class ForgotPasswordController extends HttpServlet {
             return;
         }
 
-        // 1) tạo token
         String rawToken = UUID.randomUUID().toString();
         String tokenHash = TokenUtil.hashToken(rawToken);
         Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(RESET_TOKEN_EXPIRY_MINUTES));
 
-        // 2) lưu DB
         userDAO.saveResetToken(user.getUserId(), tokenHash, expiry);
 
-        // 3) tạo link reset đúng
         String resetLink = request.getScheme() + "://" + request.getServerName()
                 + ":" + request.getServerPort()
                 + request.getContextPath()
                 + "/reset-password?token=" + rawToken;
 
-        // 4) gửi mail
         boolean sent = emailService.sendPasswordResetEmail(email, resetLink);
 
         if (sent) {
@@ -79,7 +73,6 @@ public class ForgotPasswordController extends HttpServlet {
             request.setAttribute("error", "Không gửi được email. Kiểm tra cấu hình Gmail App Password / log Tomcat.");
         }
 
-        // ✅ forward đúng file
         request.getRequestDispatcher("/authentication/forgot_password.jsp")
                 .forward(request, response);
     }

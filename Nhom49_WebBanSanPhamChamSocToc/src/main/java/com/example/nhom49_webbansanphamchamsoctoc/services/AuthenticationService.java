@@ -15,10 +15,8 @@ public class AuthenticationService {
         this.userDAO = new UserDAO();
     }
 
-    // ====== KẾT QUẢ ĐĂNG KÝ ======
     public record RegisterResult(boolean success, String message, User user) {}
 
-    // ====== LOGIN ======
     public User login(String emailOrUsername, String password) {
 
         if (ValidationUtil.isEmpty(emailOrUsername) || ValidationUtil.isEmpty(password)) {
@@ -79,12 +77,10 @@ public class AuthenticationService {
         u.setRole("Khách hàng");
         u.setActive(true);
 
-        // test đăng nhập OK luôn:
         u.setVerified(true);
 
         u.setAuthProvider("LOCAL");
 
-        // token/reset để null (chưa dùng)
         u.setVerificationToken(null);
         u.setResetToken(null);
         u.setResetTokenExpiry(null);
@@ -98,23 +94,18 @@ public class AuthenticationService {
         return new RegisterResult(false, "Đăng ký thất bại (không insert được)", null);
     }
 
-    // ======================================================
-    // ✅ BỔ SUNG LẠI 3 HÀM để hết lỗi build (GIỮ ĐÚNG CHỮ KÝ)
-    // ======================================================
 
-    // 1) LogoutController đang gọi authService.logout(session)
+
     public void logout(HttpSession session) {
         if (session != null) {
             session.invalidate();
         }
     }
 
-    // 2) UserService đang gọi authService.isActiveUser(user)
     public boolean isActiveUser(User user) {
         return user != null && user.isActive();
     }
 
-    // 3) GoogleOAuthController đang gọi authService.setCurrentUser(session, user)
     public void setCurrentUser(HttpSession session, User user) {
         if (session != null) {
             session.setAttribute("currentUser", user);

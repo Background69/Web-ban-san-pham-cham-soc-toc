@@ -29,7 +29,6 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        // ✅ Bạn đang dùng webapp/authentication/register.jsp
         request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
     }
 
@@ -50,12 +49,10 @@ public class RegisterController extends HttpServlet {
                 authService.register(email, username, phone, password, confirmPassword);
 
         if (result.success()) {
-            // ✅ đăng ký xong chuyển về trang login servlet
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 
-        // fail -> trả lỗi
         request.setAttribute("error", result.message());
         request.setAttribute("email", email);
         request.setAttribute("username", username);

@@ -29,7 +29,6 @@
             <h1>Đăng nhập</h1>
             <p class="subtitle">Tiếp tục để mua sắm</p>
 
-            <!-- ✅ Hiển thị lỗi -->
             <c:if test="${not empty error}">
                 <div class="error-msg">${error}</div>
             </c:if>
@@ -52,7 +51,6 @@
                 </div>
 
                 <div class="options">
-                    <!-- nếu bạn chưa có servlet forgot thì giữ jsp -->
                     <a href="${pageContext.request.contextPath}/authentication/forgot_password.jsp">Quên mật khẩu?</a>
                 </div>
 

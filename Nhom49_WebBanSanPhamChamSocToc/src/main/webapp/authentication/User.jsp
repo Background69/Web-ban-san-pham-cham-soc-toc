@@ -44,7 +44,6 @@
         </div>
     </div>
 
-    <!-- FORM CẬP NHẬT THÔNG TIN -->
     <form action="${pageContext.request.contextPath}/UpdateProfile" method="post" class="profile-right">
 
         <div>

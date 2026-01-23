@@ -39,7 +39,6 @@
                            value="${email}">
                 </div>
 
-                <!-- ✅ username (không phải fullName) -->
                 <div class="form-group">
                     <label for="username">Họ tên / Username</label>
                     <input type="text" id="username" name="username" placeholder="Nhập username" required
@@ -75,7 +74,6 @@
                     </a>
                 </div>
 
-                <!-- ✅ link về servlet login -->
                 <p class="signup-text">
                     Đã có tài khoản? <a href="${pageContext.request.contextPath}/auth/login">Đăng nhập</a>
                 </p>

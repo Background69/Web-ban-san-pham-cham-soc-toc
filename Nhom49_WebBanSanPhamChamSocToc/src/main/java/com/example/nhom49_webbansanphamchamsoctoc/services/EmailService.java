@@ -22,7 +22,7 @@ public class EmailService {
         Properties config = loadConfig();
 
         EMAIL_USERNAME = mustGet(config, "mail.username").trim();
-        EMAIL_PASSWORD = mustGet(config, "mail.app_password").replaceAll("\\s+", ""); // bỏ khoảng trắng
+        EMAIL_PASSWORD = mustGet(config, "mail.app_password").replaceAll("\\s+", "");
         EMAIL_FROM_NAME = config.getProperty("mail.from_name", "HairGlow").trim();
 
         Properties props = new Properties();
@@ -31,11 +31,9 @@ public class EmailService {
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        // TLS
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
-        // FIX quan trọng cho Tomcat 10 + Java 21 (thường thiếu là fail send)
         props.put("mail.smtp.socketFactory.port", "587");
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
@@ -46,12 +44,10 @@ public class EmailService {
             }
         });
 
-        // debug SMTP log
         session.setDebug(true);
 
-        // log nhanh để check config đang đọc đúng
         System.out.println("MAIL USER = " + EMAIL_USERNAME);
-        System.out.println("MAIL PASS LEN = " + EMAIL_PASSWORD.length()); // phải = 16
+        System.out.println("MAIL PASS LEN = " + EMAIL_PASSWORD.length());
     }
 
     public boolean sendPasswordResetEmail(String toEmail, String resetLink) {
@@ -83,7 +79,7 @@ public class EmailService {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace(); // xem chi tiết trong Tomcat log
+            e.printStackTrace();
             return false;
         }
     }
@@ -109,7 +105,6 @@ public class EmailService {
         return v;
     }
 
-    // TEST nhanh không qua web
     public static void main(String[] args) {
         EmailService s = new EmailService();
         boolean ok = s.sendPasswordResetEmail(
