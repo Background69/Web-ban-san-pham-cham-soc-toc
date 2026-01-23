@@ -37,10 +37,8 @@ public class LoginController extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // DEBUG: đảm bảo request có vào doPost
         System.out.println("✅ HIT /auth/login doPost | email=" + email);
 
-        // 1) Validate dữ liệu
         if (email == null || password == null ||
                 email.trim().isEmpty() || password.trim().isEmpty()) {
 
@@ -50,10 +48,8 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        // 2) Xác thực người dùng (chỗ này mới đụng DB)
         User user = userDAO.authenticate(email.trim(), password);
 
-        // DEBUG: xem authenticate có ra user không
         System.out.println("AUTH RESULT = " + (user != null));
 
         if (user == null) {
@@ -63,7 +59,6 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        // 3) Kiểm tra trạng thái tài khoản
         if (!user.isActive()) {
             request.setAttribute("error", "Tài khoản đã bị khóa");
             request.getRequestDispatcher("/views/authentication/login.jsp")
@@ -71,12 +66,10 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        // 4) Lưu session
         HttpSession session = request.getSession(true);
         session.setAttribute("currentUser", user);
         session.setMaxInactiveInterval(30 * 60);
 
-        // 5) Điều hướng sau đăng nhập (THÊM return để chắc chắn redirect chạy)
         if ("Admin".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/Admin/Dashboard");
             return;
