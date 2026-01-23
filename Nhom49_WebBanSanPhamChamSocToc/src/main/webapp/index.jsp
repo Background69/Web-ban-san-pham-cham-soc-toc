@@ -13,8 +13,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style_for_main-page.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css">
 </head>
 <body>
 <!-- Header -->

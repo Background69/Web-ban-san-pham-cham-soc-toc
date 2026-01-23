@@ -8,7 +8,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
     <title>HairGlow | Thương hiệu</title>
-    <link href="${pageContext.request.contextPath}/static/css/style_for_brands.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/static/css/user/style_for_brands.css" rel="stylesheet">
 
 </head>
 <body>

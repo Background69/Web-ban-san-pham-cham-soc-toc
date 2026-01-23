@@ -14,8 +14,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 
     <!-- CSS của bạn -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/layout.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/address.css?v=1">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/address.css?v=1">
 </head>
 <body>
 
