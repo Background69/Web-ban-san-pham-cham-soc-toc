@@ -6,19 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký - HairGlow</title>
-    
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <!-- Custom CSS -->
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/register.css">
-
 </head>
 <body>
 
-<!-- Header -->
 <%@ include file="/layout/header.jsp" %>
 
 <main>
@@ -31,18 +27,29 @@
             <h2>Đăng ký</h2>
             <p>Tạo tài khoản mới để tiếp tục</p>
 
-            <!-- Hiển thị lỗi -->
-            <%
-                String error = (String) request.getAttribute("error");
-                if (error != null) {
-            %>
-            <div class="error-msg"><%= error %></div>
-            <% } %>
+            <c:if test="${not empty error}">
+                <div class="error-msg">${error}</div>
+            </c:if>
 
             <form action="${pageContext.request.contextPath}/auth/register" method="post">
+
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Nhập email" required>
+                    <input type="email" id="email" name="email" placeholder="Nhập email" required
+                           value="${email}">
+                </div>
+
+                <!-- ✅ username (không phải fullName) -->
+                <div class="form-group">
+                    <label for="username">Họ tên / Username</label>
+                    <input type="text" id="username" name="username" placeholder="Nhập username" required
+                           value="${username}">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại" required
+                           value="${phone}">
                 </div>
 
                 <div class="password-wrapper">
@@ -57,21 +64,9 @@
                     <i class="fas fa-eye toggle-password" data-target="confirm"></i>
                 </div>
 
-                <div class="form-group">
-                    <label for="fullName">Họ tên</label>
-                    <input type="text" id="fullName" name="fullName" placeholder="Nhập họ tên" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Số điện thoại</label>
-                    <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
-                </div>
-
                 <button type="submit" class="btn-primary">Đăng ký</button>
 
-                <div class="or-divider">
-                    <span>Hoặc</span>
-                </div>
+                <div class="or-divider"><span>Hoặc</span></div>
 
                 <div class="social-login">
                     <a class="google-btn" href="${pageContext.request.contextPath}/auth/google">
@@ -80,20 +75,19 @@
                     </a>
                 </div>
 
+                <!-- ✅ link về servlet login -->
                 <p class="signup-text">
-                    Đã có tài khoản? <a href="${pageContext.request.contextPath}/authentication/login.jsp">Đăng nhập</a>
+                    Đã có tài khoản? <a href="${pageContext.request.contextPath}/auth/login">Đăng nhập</a>
                 </p>
             </form>
         </div>
     </div>
 </main>
 
-<!-- Footer -->
 <%@ include file="/layout/footer.jsp" %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Toggle password visibility
     document.querySelectorAll('.toggle-password').forEach(icon => {
         icon.addEventListener('click', function () {
             const targetId = this.getAttribute('data-target');

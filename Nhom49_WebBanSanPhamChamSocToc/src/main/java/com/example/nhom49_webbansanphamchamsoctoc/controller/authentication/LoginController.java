@@ -8,7 +8,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "LoginController", value = "/Login")
+@WebServlet(name = "LoginController", value = "/auth/login")
 public class LoginController extends HttpServlet {
 
     private UserDAO userDAO;
@@ -18,16 +18,15 @@ public class LoginController extends HttpServlet {
         userDAO = new UserDAO();
     }
 
-    // Hiển thị trang login
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/views/authentication/login.jsp")
+        request.getRequestDispatcher("/authentication/login.jsp")
                 .forward(request, response);
     }
 
-    // Xử lý đăng nhập
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,7 +37,10 @@ public class LoginController extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // 1️⃣ Validate dữ liệu
+        // DEBUG: đảm bảo request có vào doPost
+        System.out.println("✅ HIT /auth/login doPost | email=" + email);
+
+        // 1) Validate dữ liệu
         if (email == null || password == null ||
                 email.trim().isEmpty() || password.trim().isEmpty()) {
 
@@ -48,8 +50,11 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        // 2️⃣ Xác thực người dùng
-        User user = userDAO.authenticate(email, password);
+        // 2) Xác thực người dùng (chỗ này mới đụng DB)
+        User user = userDAO.authenticate(email.trim(), password);
+
+        // DEBUG: xem authenticate có ra user không
+        System.out.println("AUTH RESULT = " + (user != null));
 
         if (user == null) {
             request.setAttribute("error", "Email hoặc mật khẩu không đúng");
@@ -58,7 +63,7 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        // 3️⃣ Kiểm tra trạng thái tài khoản
+        // 3) Kiểm tra trạng thái tài khoản
         if (!user.isActive()) {
             request.setAttribute("error", "Tài khoản đã bị khóa");
             request.getRequestDispatcher("/views/authentication/login.jsp")
@@ -66,16 +71,18 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        // 4️⃣ Lưu session
+        // 4) Lưu session
         HttpSession session = request.getSession(true);
         session.setAttribute("currentUser", user);
-        session.setMaxInactiveInterval(30 * 60); // 30 phút
+        session.setMaxInactiveInterval(30 * 60);
 
-        // 5️⃣ Điều hướng theo role
+        // 5) Điều hướng sau đăng nhập (THÊM return để chắc chắn redirect chạy)
         if ("Admin".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/Admin/Dashboard");
-        } else {
-            response.sendRedirect(request.getContextPath() + "/Home");
+            return;
         }
+
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
     }
 }
