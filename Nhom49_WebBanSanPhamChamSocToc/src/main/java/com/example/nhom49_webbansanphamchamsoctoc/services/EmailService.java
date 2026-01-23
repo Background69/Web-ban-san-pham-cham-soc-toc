@@ -105,12 +105,4 @@ public class EmailService {
         return v;
     }
 
-    public static void main(String[] args) {
-        EmailService s = new EmailService();
-        boolean ok = s.sendPasswordResetEmail(
-                "luongvanthang27112001@gmail.com",
-                "https://example.com/test"
-        );
-        System.out.println("MAIL RESULT = " + ok);
-    }
 }
