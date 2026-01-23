@@ -7,9 +7,9 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Giỏ hàng</title>
-    <link href="${pageContext.request.contextPath}/static/css/cart.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/static/css/user/cart.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/cart.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cart.css">
 </head>
 <body>
 

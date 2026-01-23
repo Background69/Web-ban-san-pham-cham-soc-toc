@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/layout.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
 <header>
     <div class="header-container">
         <div class="header-row header-top">
