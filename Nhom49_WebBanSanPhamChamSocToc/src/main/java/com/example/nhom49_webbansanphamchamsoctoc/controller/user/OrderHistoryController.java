@@ -24,10 +24,10 @@ public class OrderHistoryController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User user = session != null ? (User) session.getAttribute("user") : null;
+        User user = session != null ? (User) session.getAttribute("currentUser") : null;
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login?redirect=/orders");
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/orders");
             return;
         }
 

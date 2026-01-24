@@ -1,501 +1,338 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-    <title>Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</title>
-    <link href="${pageContext.request.contextPath}/static/css/user/style_for_product_detail.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${product.productName} - HairGlow</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_product_detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+<!-- Header -->
+<jsp:include page="/layout/header.jsp"/>
 
-<jsp:include page="/layout/header.jsp" />
+<main class="product-detail-main">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="${pageContext.request.contextPath}/">Trang chủ</a>
+        <span class="separator">›</span>
+        <c:if test="${product.category != null}">
+            <a href="${pageContext.request.contextPath}/products?category=${product.category.categorySlug}">${product.category.categoryName}</a>
+            <span class="separator">›</span>
+        </c:if>
+        <span class="current">${product.productName}</span>
+    </nav>
 
-<main>
-    <!-- Product detail -->
     <div class="product-detail-container">
-
-        <div class="product-detail-left">
-            <div class="product-detail-image">
-                <img alt="Product 1" class="product-image" src="${pageContext.request.contextPath}/static/assets/product-1-1.jpg">
+        <!-- Product Images -->
+        <div class="product-images">
+            <div class="main-image">
+                <c:choose>
+                    <c:when test="${not empty product.primaryImage}">
+                        <img id="main-product-image" src="${pageContext.request.contextPath}/static/images/${product.primaryImage.imageUrl}"
+                             alt="${product.productName}">
+                    </c:when>
+                    <c:otherwise>
+                        <img id="main-product-image" src="${pageContext.request.contextPath}/static/images/default-product.png"
+                             alt="${product.productName}">
+                    </c:otherwise>
+                </c:choose>
             </div>
-            <div class="thumbnail-images">
-                <img alt="img-11" class="thumbnail active" src="${pageContext.request.contextPath}/static/assets/product-1-1.jpg">
-                <img alt="img-12" class="thumbnail" src="${pageContext.request.contextPath}/static/assets/product-1-2.jpg">
-                <img alt="img-13" class="thumbnail" src="${pageContext.request.contextPath}/static/assets/product-1-3.png">
-                <img alt="img-14" class="thumbnail" src="${pageContext.request.contextPath}/static/assets/product-1-4.jpg">
-            </div>
+            <c:if test="${not empty product.images}">
+                <div class="thumbnail-images">
+                    <c:forEach var="image" items="${product.images}">
+                        <img src="${pageContext.request.contextPath}/static/images/${image.imageUrl}"
+                             alt="${product.productName}"
+                             onclick="changeMainImage('${pageContext.request.contextPath}/static/images/${image.imageUrl}')"
+                             class="thumbnail">
+                    </c:forEach>
+                </div>
+            </c:if>
         </div>
 
-        <div class="product-detail-right">
-            <h1 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h1>
-            <div class="product-header-details">
-                <div class="product-rating-section">
-                    <div class="rating-stars">
-                        <a class="stars">★★★★★</a>
-                        <span class="rating-number">4.8</span>
-                    </div>
-                    <p class="rating-count">(423 đánh giá)</p>
+        <!-- Product Info -->
+        <div class="product-info">
+            <h1 class="product-title">${product.productName}</h1>
+
+            <!-- Brand -->
+            <c:if test="${not empty product.brand}">
+                <p class="product-brand">
+                    <span>Thương hiệu:</span>
+                    <a href="${pageContext.request.contextPath}/brand/${product.brand.brandSlug}">${product.brand.brandName}</a>
+                </p>
+            </c:if>
+
+            <!-- Rating -->
+            <div class="product-rating">
+                <div class="rating-stars">
+                    <c:forEach begin="1" end="5" var="i">
+                        <c:choose>
+                            <c:when test="${i <= averageRating}">
+                                <i class="fas fa-star"></i>
+                            </c:when>
+                            <c:when test="${i - 0.5 <= averageRating}">
+                                <i class="fas fa-star-half-alt"></i>
+                            </c:when>
+                            <c:otherwise>
+                                <i class="far fa-star"></i>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
                 </div>
+                <span class="rating-text">${averageRating}/5</span>
+                <span class="review-count">(${reviewCount} đánh giá)</span>
             </div>
 
-            <div class="product-section-price">
-                <div class="price-main">
-                    <p class="price-current">220.000₫</p>
-                    <p class="price-old">280.000₫</p>
-                    <p class="discount-percent">-21%</p>
-                </div>
-                <div class="price-note">
-                    <i class="fas fa-info-circle"></i>
-                    <p>Giá đã bao gồm VAT</p>
-                </div>
+            <!-- Price -->
+            <div class="product-price">
+                <c:if test="${not empty product.defaultVariant}">
+                    <span class="current-price">
+                        <fmt:formatNumber value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}" type="number"/>₫
+                    </span>
+                    <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                        <span class="original-price">
+                            <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>₫
+                        </span>
+                        <span class="discount-badge">-${product.defaultVariant.discountPercent}%</span>
+                    </c:if>
+                </c:if>
             </div>
 
-            <div class="product-section-info">
-                <div class="info-item">
-                    <i class="fas fa-certificate"></i>
-                    <div>
-                        <strong>Thương hiệu:</strong>
-                        <span>L'Oréal Professionnel</span>
+            <!-- Short Description -->
+            <c:if test="${not empty product.shortDescription}">
+                <div class="product-short-desc">
+                    <p>${product.shortDescription}</p>
+                </div>
+            </c:if>
+
+            <!-- Variants -->
+            <c:if test="${not empty product.variants && product.variants.size() > 1}">
+                <div class="product-variants">
+                    <h4>Chọn loại:</h4>
+                    <div class="variant-options">
+                        <c:forEach var="variant" items="${product.variants}">
+                            <button class="variant-btn ${variant.variantId == product.defaultVariant.variantId ? 'active' : ''}"
+                                    data-variant-id="${variant.variantId}"
+                                    data-original-price="${variant.originalPrice}"
+                                    data-sale-price="${variant.salePrice != null ? variant.salePrice : variant.originalPrice}"
+                                    data-stock="${variant.stockQuantity}">
+                                    ${variant.variantName}
+                            </button>
+                        </c:forEach>
                     </div>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-globe"></i>
-                    <div>
-                        <strong>Xuất xứ:</strong>
-                        <span>Pháp</span>
-                    </div>
+            </c:if>
+
+            <!-- Quantity -->
+            <div class="quantity-section">
+                <label>Số lượng:</label>
+                <div class="quantity-control">
+                    <button type="button" class="qty-btn minus">-</button>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1"
+                           max="${product.defaultVariant.stockQuantity}">
+                    <button type="button" class="qty-btn plus">+</button>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-box"></i>
-                    <div>
-                        <strong>Tình trạng:</strong>
-                        <span class="in-stock">Còn hàng</span>
-                    </div>
-                </div>
+                <span class="stock-info">
+                    <c:choose>
+                        <c:when test="${product.defaultVariant.stockQuantity > 0}">
+                            Còn ${product.defaultVariant.stockQuantity} sản phẩm
+                        </c:when>
+                        <c:otherwise>
+                            <span class="out-of-stock">Hết hàng</span>
+                        </c:otherwise>
+                    </c:choose>
+                </span>
             </div>
 
-            <!-- Tình trạng tóc phù hợp - Sử dụng bảng product_hair_conditions -->
-            <div class="product-section-hair-conditions">
-                <div class="hair-conditions-label">
-                    <i class="fas fa-leaf"></i>
-                    <strong>Phù hợp với tình trạng tóc:</strong>
-                </div>
-                <div class="hair-conditions-tags">
-                    <a class="condition-tag" href="${pageContext.request.contextPath}/store.jsp?condition=kho-xo">
-                        <i class="fas fa-tint-slash"></i> Khô xơ
-                    </a>
-                    <a class="condition-tag" href="${pageContext.request.contextPath}/store.jsp?condition=hu-ton-nhuom">
-                        <i class="fas fa-paint-brush"></i> Hư tổn – Nhuộm
-                    </a>
-                    <a class="condition-tag" href="${pageContext.request.contextPath}/store.jsp?condition=mong-rung-toc">
-                        <i class="fas fa-wind"></i> Mỏng – Rụng tóc
-                    </a>
-                </div>
-            </div>
-
-            <div class="product-section-options">
-                <div class="option-group">
-                    <label>Dung tích:</label>
-                    <div class="option-buttons">
-                        <button class="option-btn active" data-old-price="280000" data-price="220000">
-                            30ml
-                        </button>
-                        <button class="option-btn" data-old-price="450000" data-price="380000">
-                            50ml
-                        </button>
-                        <button class="option-btn" data-old-price="750000" data-price="620000">
-                            100ml
-                        </button>
-                    </div>
-                </div>
-
-                <div class="option-group">
-                    <label>Số lượng:</label>
-                    <div class="quantity-selector">
-                        <button class="qty-btn">-</button>
-                        <input id="quantity" max="99" min="1" type="number" value="1">
-                        <button class="qty-btn">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-section-btn">
-                <button class="btn btn-add-cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    Thêm vào giỏ hàng
+            <!-- Add to Cart -->
+            <div class="product-actions">
+                <form id="add-to-cart-form" action="${pageContext.request.contextPath}/cart/add" method="post">
+                    <input type="hidden" name="variantId" id="selectedVariantId"
+                           value="${product.defaultVariant.variantId}">
+                    <input type="hidden" name="quantity" id="cartQuantity" value="1">
+                    <button type="submit" class="btn-add-cart" ${product.defaultVariant.stockQuantity <= 0 ? 'disabled' : ''}>
+                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
+                    </button>
+                </form>
+                <button class="btn-buy-now" ${product.defaultVariant.stockQuantity <= 0 ? 'disabled' : ''}>
+                    <i class="fas fa-bolt"></i> Mua ngay
                 </button>
-                <button class="btn btn-buy-now" onclick="location.href='${pageContext.request.contextPath}/user/cart/cart.jsp'">
-                    Mua ngay
-                </button>
+            </div>
+
+            <!-- Product Meta -->
+            <div class="product-meta">
+                <c:if test="${not empty product.origin}">
+                    <p><strong>Xuất xứ:</strong> ${product.origin}</p>
+                </c:if>
+                <c:if test="${not empty product.category}">
+                    <p><strong>Danh mục:</strong>
+                        <a href="${pageContext.request.contextPath}/products?category=${product.category.categorySlug}">
+                                ${product.category.categoryName}
+                        </a>
+                    </p>
+                </c:if>
             </div>
         </div>
     </div>
 
-    <div class="product-main-detail-page">
-        <div class="main-detail-header">
-            <button class="detail-page-btn active">Mô tả sản phẩm</button>
-            <button class="detail-page-btn">Đánh giá (423)</button>
+    <!-- Product Description Tabs -->
+    <div class="product-tabs">
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="description">Mô tả sản phẩm</button>
+            <button class="tab-btn" data-tab="reviews">Đánh giá (${reviewCount})</button>
         </div>
 
-        <!-- Description -->
-        <div class="detail-page-content active" id="description">
-            <h2>Mô tả sản phẩm</h2>
+        <div class="tab-content">
+            <div id="description" class="tab-pane active">
+                <c:choose>
+                    <c:when test="${not empty product.fullDescription}">
+                        ${product.fullDescription}
+                    </c:when>
+                    <c:otherwise>
+                        <p>Chưa có mô tả chi tiết cho sản phẩm này.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
 
-            <div class="description-content">
-                <h3>Serum dưỡng tóc L'Oreal Professionnel - Bí quyết cho mái tóc khỏe đẹp chuẩn salon</h3>
-                <p>
-                    Serum dưỡng tóc L'Oreal Professionnel là giải pháp chuyên sâu giúp phục hồi và nuôi dưỡng mái tóc hư
-                    tổn,
-                    khô xơ do tác động của hóa chất, nhiệt độ cao và môi trường. Với công thức chứa các dưỡng chất cao
-                    cấp,
-                    sản phẩm giúp mang lại mái tóc mềm mượt, óng ả và tràn đầy sức sống.
-                </p>
+            <div id="reviews" class="tab-pane">
+                <!-- Rating Summary -->
+                <div class="rating-summary">
+                    <div class="rating-average">
+                        <span class="big-number">${averageRating}</span>
+                        <span class="out-of">/5</span>
+                        <div class="total-reviews">${reviewCount} đánh giá</div>
+                    </div>
+                    <div class="rating-bars">
+                        <c:forEach var="entry" items="${ratingStats}">
+                            <div class="rating-bar-row">
+                                <span>${entry.key} <i class="fas fa-star"></i></span>
+                                <div class="bar">
+                                    <div class="fill" style="width: ${entry.value}%"></div>
+                                </div>
+                                <span>${entry.value}%</span>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
 
-                <h4>Công dụng nổi bật:</h4>
-                <ul>
-                    <li>Phục hồi tóc hư tổn từ sâu bên trong cấu trúc tóc</li>
-                    <li>Giúp tóc mềm mượt, giảm xơ rối và gãy rụng</li>
-                    <li>Bảo vệ tóc trước tác động của nhiệt độ cao khi sấy, uốn, duỗi, nhuộm</li>
-                    <li>Tăng độ bóng khỏe, cho mái tóc suôn mượt tự nhiên</li>
-                    <li>Không gây bết dính hay nặng tóc</li>
-                </ul>
-
-                <h4>Thành phần chính:</h4>
-                <ul>
-                    <li><strong>Ceramide:</strong> Giúp phục hồi và củng cố liên kết biểu bì tóc, tăng độ chắc khỏe</li>
-                    <li><strong>Vitamin E:</strong> Chống oxy hóa, bảo vệ tóc khỏi tác nhân gây hại từ môi trường</li>
-                    <li><strong>Dầu Argan:</strong> Cung cấp độ ẩm, giúp tóc mềm mượt và óng ả</li>
-                </ul>
-
-                <h4>Hướng dẫn sử dụng:</h4>
-                <ol>
-                    <li>Gội sạch và lau khô tóc bằng khăn</li>
-                    <li>Lấy một lượng serum vừa đủ (2-3 giọt) ra lòng bàn tay</li>
-                    <li>Thoa đều lên thân và ngọn tóc, tránh tiếp xúc với da đầu</li>
-                    <li>Có thể sử dụng trước khi sấy hoặc để khô tự nhiên</li>
-                </ol>
-
-                <h4>Đối tượng phù hợp:</h4>
-                <p>
-                    Phù hợp cho mọi loại tóc, đặc biệt là tóc hư tổn, khô xơ, tóc nhuộm, uốn, duỗi thường xuyên.
-                </p>
-
-                <h4>Cam kết chất lượng:</h4>
-                <ul>
-                    <li>Sản phẩm chính hãng 100%</li>
-                    <li>Được phân phối bởi nhà cung cấp uy tín</li>
-                    <li>Bảo đảm an toàn cho da đầu và sức khỏe người dùng</li>
-                </ul>
+                <!-- Reviews List -->
+                <div class="reviews-list">
+                    <c:choose>
+                        <c:when test="${not empty reviews}">
+                            <c:forEach var="review" items="${reviews}">
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <div class="reviewer-info">
+                                            <img src="${pageContext.request.contextPath}/static/images/${not empty review.user.avatar ? review.user.avatar : 'avatar/avatar.jpg'}"
+                                                 alt="${review.user.username}" class="reviewer-avatar">
+                                            <span class="reviewer-name">${review.user.username}</span>
+                                        </div>
+                                        <div class="review-rating">
+                                            <c:forEach begin="1" end="5" var="i">
+                                                <i class="fas fa-star ${i <= review.rating ? 'active' : ''}"></i>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                    <div class="review-date">
+                                        <fmt:formatDate value="${review.createdAt}" pattern="dd/MM/yyyy"/>
+                                    </div>
+                                    <p class="review-content">${review.comment}</p>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-reviews">
+                                <i class="fas fa-comment-slash"></i>
+                                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
         </div>
-        <!-- Reviews -->
-        <div class="detail-page-content" id="reviews">
-            <h2>Đánh giá từ khách hàng</h2>
-            <div class="reviews-list">
-                <!-- Review 1 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">N</div>
-                            <div class="reviewer-details">
-                                <div class="reviewer-name">Nguyễn Thị Mai</div>
-                                <div class="review-date">15/10/2024</div>
-                            </div>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                    </div>
-                    <div class="review-content">
-                        <p>Sản phẩm rất tuyệt vời! Tóc mình khô và xơ do nhuộm nhiều, sau khi dùng serum này
-                            tóc mềm mượt hơn hẳn. Mùi hương cũng rất thơm và sang trọng. Mình sẽ tiếp tục ủng hộ!</p>
-                    </div>
-                </div>
-
-                <!-- Review 2 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">T</div>
-                            <div class="reviewer-details">
-                                <div class="reviewer-name">Trần Văn Hoàng</div>
-                                <div class="review-date">12/10/2024</div>
-                            </div>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                    </div>
-                    <div class="review-content">
-                        <p>Đóng gói cẩn thận, ship nhanh. Sản phẩm chính hãng, dùng thấy hiệu quả sau 1 tuần.
-                            Tóc bớt gãy rụng, mềm hơn nhiều. Giá cả hợp lý so với chất lượng.</p>
-                    </div>
-                </div>
-
-                <!-- Review 3 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">L</div>
-                            <div class="reviewer-details">
-                                <div class="reviewer-name">Lê Thị Hương</div>
-                                <div class="review-date">08/10/2024</div>
-                            </div>
-                        </div>
-                        <div class="review-rating">★★★★☆</div>
-                    </div>
-                    <div class="review-content">
-                        <p>Sản phẩm tốt nhưng mình thấy hơi đắt. Tuy nhiên chất lượng xứng đáng với giá tiền.
-                            Tóc mình bị hư tổn do duỗi, dùng serum này giúp phục hồi khá tốt.</p>
-                    </div>
-                </div>
-
-                <!-- Review 4 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">P</div>
-                            <div class="reviewer-details">
-                                <div class="reviewer-name">Phạm Minh Tuấn</div>
-                                <div class="review-date">05/10/2024</div>
-                            </div>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                    </div>
-                    <div class="review-content">
-                        <p>Lần đầu mua hàng ở shop, rất hài lòng! Sản phẩm authentic, date xa, đóng gói kỹ.
-                            Dùng thử thấy tóc mềm hơn ngay lần đầu. Sẽ giới thiệu cho bạn bè!</p>
-                    </div>
-                </div>
-
-                <!-- Review 5 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">H</div>
-                            <div class="reviewer-details">
-                                <div class="reviewer-name">Hoàng Thị Lan</div>
-                                <div class="review-date">01/10/2024</div>
-                            </div>
-                        </div>
-                        <div class="review-rating">★★★★★</div>
-                    </div>
-                    <div class="review-content">
-                        <p>Serum rất thơm, chai đẹp. Dùng ít mà hiệu quả cao, tóc mượt hẳn. Mình hay sử dụng
-                            máy sấy nên tóc khô lắm, nhưng dùng serum này thấy cải thiện rõ rệt.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="load-more-reviews">
-                <button class="btn btn-load-more">Xem thêm đánh giá</button>
-            </div>
-        </div>
-
-    </div>
     </div>
 </main>
 
-<jsp:include page="/layout/footer.jsp" />
+<!-- Footer -->
+<jsp:include page="/layout/footer.jsp"/>
 
-<!-- Change Images Script -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const mainImg = document.querySelector('.product-detail-image .product-image');
-        const thumbWrap = document.querySelector('.thumbnail-images');
-        const thumbs = Array.from(document.querySelectorAll('.thumbnail-images .thumbnail'));
-        if (!mainImg || !thumbWrap || thumbs.length === 0) return;
+    // Change main image
+    function changeMainImage(src) {
+        document.getElementById('main-product-image').src = src;
+    }
 
-        function setActiveThumb(thumb, animate = true) {
-            if (!thumb) return;
-            // đổi viền xanh
-            thumbs.forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
+    // Quantity control
+    document.querySelector('.qty-btn.minus').addEventListener('click', function() {
+        const input = document.getElementById('quantity');
+        let value = parseInt(input.value) || 1;
+        if (value > 1) {
+            input.value = value - 1;
+            document.getElementById('cartQuantity').value = value - 1;
+        }
+    });
 
-            const newSrc = thumb.getAttribute('data-full') || thumb.getAttribute('src');
-            const newAlt = thumb.getAttribute('alt') || 'Product image';
-            if (!newSrc) return;
+    document.querySelector('.qty-btn.plus').addEventListener('click', function() {
+        const input = document.getElementById('quantity');
+        let value = parseInt(input.value) || 1;
+        const max = parseInt(input.getAttribute('max')) || 999;
+        if (value < max) {
+            input.value = value + 1;
+            document.getElementById('cartQuantity').value = value + 1;
+        }
+    });
 
-            if (animate) {
-                mainImg.classList.add('is-fading');
-                setTimeout(() => {
-                    mainImg.src = newSrc;
-                    mainImg.alt = newAlt;
-                    mainImg.classList.remove('is-fading');
-                }, 120);
+    document.getElementById('quantity').addEventListener('change', function() {
+        document.getElementById('cartQuantity').value = this.value;
+    });
+
+    // Variant selection
+    document.querySelectorAll('.variant-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            document.getElementById('selectedVariantId').value = this.dataset.variantId;
+
+            // Update price display
+            const salePrice = this.dataset.salePrice;
+            const originalPrice = this.dataset.originalPrice;
+            const stock = this.dataset.stock;
+
+            // Update stock info
+            document.getElementById('quantity').max = stock;
+            const stockInfo = document.querySelector('.stock-info');
+            if (stock > 0) {
+                stockInfo.innerHTML = 'Còn ' + stock + ' sản phẩm';
             } else {
-                mainImg.src = newSrc;
-                mainImg.alt = newAlt;
+                stockInfo.innerHTML = '<span class="out-of-stock">Hết hàng</span>';
             }
-        }
-
-        // khi tải trang ưu tiên ảnh đang active
-        setActiveThumb(thumbWrap.querySelector('.thumbnail.active') || thumbs[0], false);
-
-        // nhấn ảnh (dùng event delegation)
-        thumbWrap.addEventListener('click', function (e) {
-            const thumb = e.target.closest('.thumbnail');
-            if (!thumb) return;
-            setActiveThumb(thumb, true);
         });
     });
-</script>
-<!-- Main Script cho phần product-detail-right-->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // format tiền VND đúng chuẩn
-        function formatCurrency(value) {
-            if (typeof value !== 'number' || isNaN(value)) return '';
-            return value.toLocaleString('vi-VN') + '₫';
-        }
 
-        // Tự chọn dung tích & cập nhật giá
-        const optionButtons = document.querySelectorAll('.product-section-options .option-btn');
-        const priceCurrentEl = document.querySelector('.product-section-price .price-current');
-        const priceOldEl = document.querySelector('.product-section-price .price-old');
-        const discountEl = document.querySelector('.product-section-price .discount-percent');
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
 
-        if (optionButtons.length && priceCurrentEl && priceOldEl && discountEl) {
-            optionButtons.forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    optionButtons.forEach(function (b) {
-                        b.classList.remove('active');
-                    });
-                    btn.classList.add('active');
-
-                    const price = parseInt(btn.dataset.price, 10);
-                    const oldPrice = parseInt(btn.dataset.oldPrice, 10);
-
-                    if (!isNaN(price)) {
-                        priceCurrentEl.textContent = formatCurrency(price);
-                    }
-                    if (!isNaN(oldPrice)) {
-                        priceOldEl.textContent = formatCurrency(oldPrice);
-                    }
-
-                    if (!isNaN(price) && !isNaN(oldPrice) && oldPrice > 0) {
-                        const discount = Math.round((1 - price / oldPrice) * 100);
-                        if (discount > 0) {
-                            discountEl.textContent = '-' + discount + '%';
-                            discountEl.style.display = '';
-                        } else {
-                            discountEl.textContent = '';
-                            discountEl.style.display = 'none';
-                        }
-                    }
-                });
-            });
-        }
-        // Tăng / giảm số lượng mua
-        const qtyInput = document.getElementById('quantity');
-        const qtyButtons = document.querySelectorAll('.quantity-selector .qty-btn');
-
-        if (qtyInput) {
-            const min = parseInt(qtyInput.min || '1', 10);
-            const max = parseInt(qtyInput.max || '99', 10);
-
-            function clampQty(value) {
-                if (isNaN(value)) return min;
-                return Math.max(min, Math.min(max, value));
-            }
-
-            qtyButtons.forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    let current = clampQty(parseInt(qtyInput.value, 10));
-                    if (btn.textContent.trim() === '-') {
-                        current = clampQty(current - 1);
-                    } else {
-                        current = clampQty(current + 1);
-                    }
-                    qtyInput.value = current;
-                });
-            });
-
-            qtyInput.addEventListener('input', function () {
-                qtyInput.value = clampQty(parseInt(qtyInput.value, 10));
-            });
-        }
-        // Hiệu ứng & cộng số khi bấm Thêm vào giỏ
-        const addCartBtn = document.querySelector('.btn btn-add-cart, .btn-add-cart');
-        const cartCountEl = document.querySelector('.cart-count');
-
-        if (addCartBtn) {
-            addCartBtn.addEventListener('click', function () {
-                // số lượng muốn thêm
-                let quantityToAdd = 1;
-                if (qtyInput) {
-                    quantityToAdd = parseInt(qtyInput.value, 10);
-                    if (isNaN(quantityToAdd) || quantityToAdd < 1) quantityToAdd = 1;
-                }
-
-                // cộng vào số trên icon giỏ hàng
-                if (cartCountEl) {
-                    const currentCount = parseInt(cartCountEl.textContent, 10) || 0;
-                    cartCountEl.textContent = currentCount + quantityToAdd;
-                }
-
-                // hiệu ứng nút
-                const originalHTML = addCartBtn.innerHTML;
-                addCartBtn.classList.add('added');
-                addCartBtn.disabled = true;
-                addCartBtn.innerHTML = '<i class="fas fa-check"></i> Đã thêm vào giỏ';
-
-                setTimeout(function () {
-                    addCartBtn.classList.remove('added');
-                    addCartBtn.disabled = false;
-                    addCartBtn.innerHTML = originalHTML;
-                }, 2000);
-            });
-        }
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
     });
-</script>
-<!-- Review Header Script -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tabButtons = document.querySelectorAll('.main-detail-header .detail-page-btn');
-        const tabContents = document.querySelectorAll('.product-main-detail-page .detail-page-content');
-        const header = document.querySelector('header');
 
-        function getHeaderOffset() {
-            return header ? header.offsetHeight + 20 : 0;
-        }
-
-        function activateTab(index) {
-            if (!tabButtons[index] || !tabContents[index]) return;
-
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-
-            const btn = tabButtons[index];
-            const content = tabContents[index];
-
-            btn.classList.add('active');
-            content.classList.add('active');
-
-            const headerOffset = getHeaderOffset();
-            const top = content.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-                top: top,
-                behavior: 'smooth'
-            });
-        }
-
-        // Click nút tab
-        tabButtons.forEach((btn, index) => {
-            btn.addEventListener('click', function () {
-                activateTab(index);
-            });
-        });
-
-        // Click h2 của từng khối detail-page-content để chuyển
-        const headings = document.querySelectorAll('.detail-page-content > h2');
-        headings.forEach((heading, index) => {
-            heading.style.cursor = 'pointer';
-            heading.addEventListener('click', function () {
-                activateTab(index);
-            });
-        });
+    // Buy now
+    document.querySelector('.btn-buy-now').addEventListener('click', function() {
+        const form = document.getElementById('add-to-cart-form');
+        const originalAction = form.action;
+        form.action = '${pageContext.request.contextPath}/checkout?buyNow=true';
+        form.submit();
+        form.action = originalAction;
     });
 </script>
 </body>

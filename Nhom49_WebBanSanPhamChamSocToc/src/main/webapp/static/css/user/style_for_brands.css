@@ -21,6 +21,7 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
 /* header and navigation moved to static/css/layout.css (included via layout/header.jsp) */
 /* Brand Banner Section */
 

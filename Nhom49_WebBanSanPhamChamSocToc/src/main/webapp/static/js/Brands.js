@@ -1,4 +1,4 @@
-    document.querySelectorAll('.filter-tag').forEach(tag => {
+document.querySelectorAll('.filter-tag').forEach(tag => {
     tag.addEventListener('click', function () {
         // Xóa class active ở tất cả các nút
         document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));

@@ -135,17 +135,21 @@
                         </div>
                         <div class="product-price">
                             <p class="price-current">
-                                <fmt:formatNumber value="${product.salePrice}" type="currency" currencySymbol="" maxFractionDigits="0"/>₫
+                                <fmt:formatNumber value="${product.salePrice}" type="currency" currencySymbol=""
+                                                  maxFractionDigits="0"/>₫
                             </p>
                             <c:if test="${product.originalPrice > product.salePrice}">
                                 <p class="price-old">
-                                    <fmt:formatNumber value="${product.originalPrice}" type="currency" currencySymbol="" maxFractionDigits="0"/>₫
+                                    <fmt:formatNumber value="${product.originalPrice}" type="currency" currencySymbol=""
+                                                      maxFractionDigits="0"/>₫
                                 </p>
                             </c:if>
                         </div>
                         <div class="product-actions">
-                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.slug}">Xem thêm</a>
-                            <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-cart-form">
+                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.slug}">Xem
+                                thêm</a>
+                            <form action="${pageContext.request.contextPath}/cart/add" method="post"
+                                  class="add-cart-form">
                                 <input type="hidden" name="productId" value="${product.productId}">
                                 <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn primary">Thêm vào giỏ</button>
@@ -178,7 +182,7 @@
 <script>
     // Filter products by category
     document.querySelectorAll('.product-filter-tag').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             document.querySelectorAll('.product-filter-tag').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
