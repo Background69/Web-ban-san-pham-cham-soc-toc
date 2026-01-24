@@ -57,9 +57,6 @@ public class UserService {
         user.setRole("Khách hàng");
         user.setActive(true);
         user.setAuthProvider("LOCAL");
-        user.setVerified(true);
-        user.setVerificationToken(null);
-
         int userId = userDAO.insert(user);
         if (userId > 0) {
             user.setUserId(userId);
@@ -145,8 +142,6 @@ public class UserService {
         newUser.setRole("Khách hàng");
         newUser.setActive(true);
         newUser.setAuthProvider("GOOGLE");
-        newUser.setVerified(true);
-
         int userId = userDAO.insert(newUser);
         if (userId > 0) {
             newUser.setUserId(userId);
