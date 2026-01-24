@@ -32,11 +32,50 @@ public class CategoryManagementController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN,"Không có quyeefn truy cập");
             return;
         }
-
+        List<Category> categories = categoryDAO.findAll();
+        request.setAttribute("categories",categories);
+        request.getRequestDispatcher("/admin/CategoryManagement.jsp")
+                .forward(request,response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
 
+        if (action == null) {
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            return;
+        }
+
+        switch (action) {
+            case "add": {
+                Category category = new Category();
+                category.setCategoryName(request.getParameter("name"));
+                category.setCategorySlug(request.getParameter("slug"));
+                categoryDAO.insert(category);
+                break;
+            }
+
+            case "update": {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Category category = categoryDAO.findById(id);
+                if (category != null) {
+                    category.setCategoryName(request.getParameter("name"));
+                    category.setCategorySlug(request.getParameter("slug"));
+                    categoryDAO.update(category);
+                }
+                break;
+            }
+
+            case "delete": {
+                int id = Integer.parseInt(request.getParameter("id"));
+                categoryDAO.delete(id);
+                break;
+            }
+        }
+
+        response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
+
 }
