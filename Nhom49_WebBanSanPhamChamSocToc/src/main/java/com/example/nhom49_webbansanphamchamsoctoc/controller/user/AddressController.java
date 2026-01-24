@@ -28,10 +28,10 @@ public class AddressController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("currentUser");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login?redirect=/profile/addresses");
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/profile/addresses");
             return;
         }
 
@@ -62,10 +62,10 @@ public class AddressController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("currentUser");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 
