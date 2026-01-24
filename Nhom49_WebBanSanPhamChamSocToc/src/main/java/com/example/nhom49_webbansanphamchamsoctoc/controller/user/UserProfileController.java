@@ -43,7 +43,7 @@ public class UserProfileController extends HttpServlet {
         User currentUser = SessionUtil.getCurrentUser(session);
 
         if (currentUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login?redirect=/profile");
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/profile");
             return;
         }
 
@@ -131,7 +131,7 @@ public class UserProfileController extends HttpServlet {
         User currentUser = SessionUtil.getCurrentUser(session);
 
         if (currentUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 

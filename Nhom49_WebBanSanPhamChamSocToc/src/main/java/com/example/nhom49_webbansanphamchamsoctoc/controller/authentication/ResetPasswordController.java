@@ -51,7 +51,9 @@ public class ResetPasswordController extends HttpServlet {
         if (!ValidationUtil.isNotEmpty(newPassword) || !newPassword.equals(confirmPassword)) {
             req.setAttribute("error", "Passwords không khớp.");
             req.setAttribute("token", token);
-            req.getRequestDispatcher("/WEB-INF/views/auth/forgot-password-reset.jsp").forward(req, resp);
+            req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
+
+
             return;
         }
         User user = userDAO.findByResetToken(tokenHash);
@@ -64,6 +66,7 @@ public class ResetPasswordController extends HttpServlet {
         String hashed = PasswordUtil.hashPassword(newPassword);
         userDAO.updatePassword(user.getUserId(), hashed);
         userDAO.saveResetToken(user.getUserId(), null, null);
-        resp.sendRedirect(req.getContextPath() + "/login");
+        resp.sendRedirect(req.getContextPath() + "/authentication/login.jsp");
+
     }
 }

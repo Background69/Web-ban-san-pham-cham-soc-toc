@@ -1,79 +1,100 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 10/12/2025
-  Time: 10:04 SA
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng nhập</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/login.css">
-    <script src="<%= request.getContextPath() %>/static/js/login.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - HairGlow</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/login.css">
 </head>
 <body>
 
-<jsp:include page="/layout/header.jsp"/>
+<%@ include file="/layout/header.jsp" %>
 
-<div class="login-wrapper">
-    <div class="login-box">
-        <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo">
+<main>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png"
+                 class="logo" alt="HairGlow Logo">
 
-        <h1>Đăng nhập</h1>
-        <p class="subtitle">Tiếp tục để mua</p>
+            <h1>Đăng nhập</h1>
+            <p class="subtitle">Tiếp tục để mua sắm</p>
 
-        <!-- Hiển thị lỗi từ servlet -->
-        <%
-            String error = (String) request.getAttribute("error");
-            if (error != null) {
-        %>
-        <div class="error-msg"><%= error %></div>
-        <% } %>
+            <c:if test="${not empty error}">
+                <div class="error-msg">${error}</div>
+            </c:if>
 
-        <form action="${pageContext.request.contextPath}/authentication/login.jsp" method="post">
+            <form action="${pageContext.request.contextPath}/auth/login" method="post" autocomplete="on">
+                <div class="form-group">
+                    <label for="email">Email hoặc Username</label>
+                    <!-- backend của bạn lấy param "email" -->
+                    <input type="text" id="email" name="email"
+                           placeholder="Nhập email hoặc username" required autocomplete="username">
+                </div>
 
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <div class="password-field">
+                        <input type="password" id="password" name="password"
+                               placeholder="Nhập mật khẩu" required autocomplete="current-password">
+                        <i class="fas fa-eye toggle-password" data-target="password"></i>
+                    </div>
+                </div>
 
-        <label>Email</label>
-            <label>
-                <input type="email" name="email" required>
-            </label>
+                <div class="options">
+                    <a href="${pageContext.request.contextPath}/authentication/forgot-password.jsp">Quên mật khẩu?</a>
+                </div>
 
-            <label>Mật khẩu</label>
-            <div class="password-field">
-                <label for="password"></label><input type="password" name="password" id="password" required>
-                <i class="fa-solid fa-eye toggle-password" data-target="password"></i>
-            </div>
+                <button type="submit" class="btn-login">Đăng nhập</button>
 
-            <div class="options">
-                <a class="forgot" href="${pageContext.request.contextPath}/authentication/forgot_password.jsp">Quên mật khẩu</a>
-            </div>
+                <div class="or-divider"><span>Hoặc</span></div>
 
-            <button class="btn primary-btn" type="submit">Đăng nhập</button>
+                <div class="social-login">
+                    <a class="google-btn" href="${pageContext.request.contextPath}/auth/google">
+                        <img src="${pageContext.request.contextPath}/static/assets/icons/Google.png" alt="Google">
+                        <span>Google</span>
+                    </a>
+                </div>
+            </form>
 
-            <div class="or-divider">
-                <span>Hoặc</span>
-            </div>
+            <p class="signup-text">
+                Chưa có tài khoản?
+                <!-- ✅ về đúng servlet register -->
+                <a href="${pageContext.request.contextPath}/authentication/register.jsp">Đăng ký</a>
 
-            <div class="social-login">
-                <a class="google-btn" href="${pageContext.request.contextPath}/auth/google">
-                <img src="https://developers.google.com/identity/images/g-logo.png" alt="">
-                    Đăng nhập với Google
-                </a>
-            </div>
-
-        </form>
-
-        <p class="signup-text">
-            Không có tài khoản? <a href="${pageContext.request.contextPath}/authentication/register.jsp">Đăng ký ngay</a>
-        </p>
+            </p>
+        </div>
     </div>
-</div>
-<jsp:include page="/layout/footer.jsp"/>
+</main>
+
+<%@ include file="/layout/footer.jsp" %>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', function () {
+            const input = document.getElementById(this.dataset.target);
+            if (!input) return;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                this.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
-
