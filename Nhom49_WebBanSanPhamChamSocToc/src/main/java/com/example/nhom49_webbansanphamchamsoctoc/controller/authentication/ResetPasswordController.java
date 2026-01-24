@@ -23,7 +23,6 @@ public class ResetPasswordController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String token = req.getParameter("token");
 
-        // ✅ Check token TRƯỚC
         if (token == null || token.isBlank()) {
             req.setAttribute("error", "Link đặt lại mật khẩu không hợp lệ.");
             req.getRequestDispatcher("/authentication/forgot-password-sent.jsp").forward(req, resp);
@@ -40,8 +39,6 @@ public class ResetPasswordController extends HttpServlet {
             req.getRequestDispatcher("/authentication/forgot-password-sent.jsp").forward(req, resp);
             return;
         }
-
-        // Truyền RAW token để form post lại
         req.setAttribute("token", token);
         req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
     }
@@ -54,14 +51,12 @@ public class ResetPasswordController extends HttpServlet {
         String newPassword = req.getParameter("newPassword");
         String confirmPassword = req.getParameter("confirmPassword");
 
-        // ✅ Check token TRƯỚC (đây là chỗ hay gây 500)
         if (token == null || token.isBlank()) {
             req.setAttribute("error", "Token không hợp lệ.");
             req.getRequestDispatcher("/authentication/forgot-password-sent.jsp").forward(req, resp);
             return;
         }
 
-        // ✅ Validate password (bạn có ValidationUtil.validatePassword thì dùng luôn)
         String passErr = ValidationUtil.validatePassword(newPassword);
         if (passErr != null) {
             req.setAttribute("error", passErr);
@@ -90,11 +85,8 @@ public class ResetPasswordController extends HttpServlet {
 
         String hashed = PasswordUtil.hashPassword(newPassword);
         userDAO.updatePassword(user.getUserId(), hashed);
-
-        // clear token sau khi đổi pass
         userDAO.saveResetToken(user.getUserId(), null, null);
 
-        // ✅ redirect đúng route login của bạn
         resp.sendRedirect(req.getContextPath() + "/auth/login");
     }
 }
