@@ -1,6 +1,3 @@
-/* =========================
-   HairGlow Login - Modern UI
-   ========================= */
 
 :root {
     --bg: #7ca454;
@@ -20,6 +17,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Roboto', system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI',
+    Arial, sans-serif;
 }
 
 main {
@@ -133,7 +133,6 @@ main {
     color: #111827;
 }
 
-/* Forgot password */
 .options {
     display: flex;
     justify-content: flex-end;
@@ -152,7 +151,6 @@ main {
     text-decoration: underline;
 }
 
-/* Login button */
 .btn-login {
     width: 100%;
     padding: 12px 14px;
@@ -175,7 +173,6 @@ main {
     transform: translateY(1px);
 }
 
-/* Divider */
 .or-divider {
     display: flex;
     align-items: center;
@@ -197,8 +194,6 @@ main {
     font-weight: 700;
     color: #6b7280;
 }
-
-/* Google */
 .social-login {
     margin-top: 6px;
 }
@@ -234,7 +229,6 @@ main {
     height: 18px;
 }
 
-/* Signup */
 .signup-text {
     font-size: 13px;
     color: var(--muted);
@@ -251,7 +245,6 @@ main {
     text-decoration: underline;
 }
 
-/* Error */
 .error-msg {
     background: #fff1f2;
     color: #b42318;
@@ -263,7 +256,6 @@ main {
     text-align: left;
 }
 
-/* Small screens */
 @media (max-width: 420px) {
     .login-box {
         padding: 26px 18px 20px;

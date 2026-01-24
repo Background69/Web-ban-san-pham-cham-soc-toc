@@ -18,7 +18,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/images/LOGO.png" alt="logo">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" alt="logo">
         </div>
         <p>HairGlow Admin</p>
 
