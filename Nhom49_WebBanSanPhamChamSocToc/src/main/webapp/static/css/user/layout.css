@@ -44,7 +44,6 @@ a {
     min-height: 80px;
 }
 
-/* Logo Header */
 
 .left-header {
     flex-shrink: 0;
@@ -68,7 +67,6 @@ a {
     width: auto;
 }
 
-/* Search Header */
 
 .center-header {
     flex: 1;
@@ -112,9 +110,6 @@ a {
     transition: all 0.3s ease;
     flex-shrink: 0;
 }
-
-
-/* Account and Cart Header */
 
 .right-header {
     display: flex;
@@ -165,8 +160,6 @@ a {
     min-width: 18px;
     text-align: center;
 }
-
-/* Navigation Menu Header*/
 
 .nav-container {
     background: #a5c87f;
@@ -590,7 +583,6 @@ footer {
     margin-top: 25px;
 }
 
-/* Nút quay về */
 .btn-back {
     flex: 1;
     text-align: center;
@@ -613,7 +605,6 @@ footer {
     background: #d5d5d5;
 }
 
-/* Nút tiếp theo */
 .btn-next {
     flex: 1;
     text-align: center;
@@ -634,5 +625,3 @@ footer {
 .btn-next:hover {
     background: #56732e;
 }
-
-/* end layout */
