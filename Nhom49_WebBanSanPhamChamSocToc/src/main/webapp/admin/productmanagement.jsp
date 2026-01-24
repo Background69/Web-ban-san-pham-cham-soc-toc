@@ -9,7 +9,7 @@
     <title>Quản lý sản phẩm</title>
 
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/admin.css">
+          href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 
     <style>
         /* ===== Modal ===== */
