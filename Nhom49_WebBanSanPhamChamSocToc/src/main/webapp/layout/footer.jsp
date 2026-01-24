@@ -4,7 +4,6 @@
     <div class="main-footer footer-top">
         <div class="footer-container">
 
-            <!-- Contact Info -->
             <div class="footer-col">
                 <h4><i class="fas fa-address-card me-2"></i>Liên hệ với chúng tôi</h4>
                 <div class="contact-info">

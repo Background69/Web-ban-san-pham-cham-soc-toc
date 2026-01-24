@@ -5,7 +5,6 @@
     <div class="header-container">
         <div class="header-row header-top">
 
-            <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
                     <a class="logo" href="${pageContext.request.contextPath}/">
@@ -15,7 +14,6 @@
                 </div>
             </div>
 
-            <!-- Search bar -->
             <div class="center-header">
                 <div class="search-bar">
                     <form action="${pageContext.request.contextPath}/search" class="search-form" method="get">
@@ -27,7 +25,6 @@
                 </div>
             </div>
 
-            <!-- Account and cart -->
             <div class="right-header">
 
 
@@ -42,7 +39,6 @@
                 </a>
             </div>
             <div class="account">
-                <!-- CHƯA đăng nhập -->
                 <c:if test="${empty sessionScope.currentUser}">
                     <a href="${pageContext.request.contextPath}/authentication/login.jsp">
                         <i class="fas fa-user-circle"></i>
@@ -50,7 +46,6 @@
                     </a>
                 </c:if>
 
-                <!-- ĐÃ đăng nhập -->
                 <c:if test="${not empty sessionScope.currentUser}">
                     <a href="${pageContext.request.contextPath}/Logout">
                         <i class="fas fa-sign-out-alt"></i>
@@ -63,7 +58,6 @@
         </div>
     </div>
 
-    <!-- Navigation -->
     <div class="header-row header-below nav-container">
         <nav>
             <div>

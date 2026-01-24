@@ -18,7 +18,6 @@
 <div class="profile-card">
 
     <div class="profile-header">
-        <!-- User không có fullName nên dùng username -->
         <h2>Xin chào ${sessionScope.currentUser.username}</h2>
     </div>
 

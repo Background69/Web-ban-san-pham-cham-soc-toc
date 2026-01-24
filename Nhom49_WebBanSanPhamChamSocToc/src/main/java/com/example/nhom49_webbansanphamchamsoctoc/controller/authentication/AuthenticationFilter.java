@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Filter để kiểm tra xác thực người dùng trước khi truy cập các trang yêu cầu đăng nhập.
- */
+
 public class AuthenticationFilter implements Filter {
 
     @Override
@@ -20,9 +18,7 @@ public class AuthenticationFilter implements Filter {
         // Initialization if needed
     }
 
-    /**
-     * Thực hiện lọc request để kiểm tra xác thực.
-     */
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -33,10 +29,8 @@ public class AuthenticationFilter implements Filter {
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
         if (user != null && user.isActive()) {
-            // User đã đăng nhập và active, cho phép truy cập
             chain.doFilter(request, response);
         } else {
-            // Chưa đăng nhập hoặc user không active, redirect to login
             String requestURI = httpRequest.getRequestURI();
             String contextPath = httpRequest.getContextPath();
             String redirectPath = requestURI.substring(contextPath.length());
@@ -52,11 +46,7 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
-    /**
-     * Giải phóng tài nguyên khi kết thúc
-     */
     @Override
     public void destroy() {
-        // Cleanup if needed
     }
 }
