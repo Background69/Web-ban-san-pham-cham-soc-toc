@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -38,7 +39,7 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        request.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(request, response);
+        request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
     }
 
     @Override
@@ -52,22 +53,19 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        User newUser = authService.register(email, username, phone, password, confirmPassword).user();
-
-
-        if (newUser != null) {
-            // Gửi email xác minh
-            String verifyLink = request.getRequestURL().toString().replace(request.getServletPath(), "")
-                    + "/verify?token=" + newUser.getVerificationToken();
-            emailService.sendVerificationEmail(email, verifyLink);
-
-            SessionUtil.setSuccessMessage(request.getSession(), "Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.");
-            response.sendRedirect(request.getContextPath() + "/login");
-        } else {
-            request.setAttribute("error", authService.getLastError());
+        User user = authService.register(email, username, phone, password, confirmPassword);
+        if (user == null) {
+            String errorMessage = authService.getLastError();
+            request.setAttribute("error", errorMessage != null ? errorMessage : "Dang ky that bai");
             request.setAttribute("email", email);
             request.setAttribute("username", username);
-            request.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
+            return;
         }
+        HttpSession session = request.getSession(true);
+        request.changeSessionId();
+        SessionUtil.setCurrentUser(session, user);
+        SessionUtil.setSuccessMessage(session, "Registration successful.");
+        response.sendRedirect(request.getContextPath() + "/");
     }
 }
