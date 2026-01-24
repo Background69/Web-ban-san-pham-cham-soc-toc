@@ -51,6 +51,6 @@ public class ProductDetailController extends HttpServlet {
         request.setAttribute("reviewCount", reviewService.countReviewsByProduct(product.getProductId()));
         request.setAttribute("ratingStats", reviewService.getRatingStatistics(product.getProductId()));
 
-        request.getRequestDispatcher("/user/product-detail.jsp").forward(request, response);
+        request.getRequestDispatcher("/user/product/product-detail.jsp").forward(request, response);
     }
 }
