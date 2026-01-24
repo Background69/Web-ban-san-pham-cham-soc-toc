@@ -17,6 +17,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Roboto', system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI',
+    Arial, sans-serif;
 }
 
 main {
@@ -226,7 +229,6 @@ main {
     height: 18px;
 }
 
-/* Signup */
 .signup-text {
     font-size: 13px;
     color: var(--muted);

@@ -30,6 +30,10 @@
             <c:if test="${not empty error}">
                 <div class="error-msg">${error}</div>
             </c:if>
+            <%
+                String redirect = request.getParameter("redirect");
+                if (redirect == null) redirect = "";
+            %>
 
             <form action="${pageContext.request.contextPath}/auth/login" method="post" autocomplete="on">
                 <div class="form-group">
@@ -57,10 +61,14 @@
                 <div class="or-divider"><span>Hoặc</span></div>
 
                 <div class="social-login">
-                    <a class="google-btn" href="${pageContext.request.contextPath}/auth/google">
+                    <a class="google-btn"
+                       href="${pageContext.request.contextPath}/auth/google<%=
+        redirect.isEmpty() ? "" : "?redirect=" + java.net.URLEncoder.encode(redirect, "UTF-8")
+   %>">
                         <img src="${pageContext.request.contextPath}/static/assets/icons/Google.png" alt="Google">
-                        <span>Google</span>
+                        <span>Đăng nhập bằng Google</span>
                     </a>
+
                 </div>
             </form>
 
