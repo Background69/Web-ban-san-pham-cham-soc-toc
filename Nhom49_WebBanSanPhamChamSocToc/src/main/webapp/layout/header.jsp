@@ -27,12 +27,12 @@
 
             <!-- Account and cart -->
             <div class="right-header">
-                <div class="account">
-                    <a href="${pageContext.request.contextPath}/authentication/login.jsp">
-                        <i class="fas fa-user-circle"></i>
-                        <span class="login-in-text">Đăng nhập</span>
-                    </a>
+                <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
+
                 </div>
+
 
                 <div class="cart position-relative">
                     <a href="${pageContext.request.contextPath}/cart">
@@ -41,7 +41,26 @@
                         <span class="cart-count badge bg-danger rounded-pill">0</span>
                     </a>
                 </div>
+            <div class="account">
+                <!-- CHƯA đăng nhập -->
+                <c:if test="${empty sessionScope.currentUser}">
+                    <a href="${pageContext.request.contextPath}/authentication/login.jsp">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="login-in-text">Đăng nhập</span>
+                    </a>
+                </c:if>
+
+                <!-- ĐÃ đăng nhập -->
+                <c:if test="${not empty sessionScope.currentUser}">
+                    <a href="${pageContext.request.contextPath}/Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="login-in-text">Đăng xuất</span>
+                    </a>
+                </c:if>
+
             </div>
+
+        </div>
         </div>
 
         <!-- Navigation -->
