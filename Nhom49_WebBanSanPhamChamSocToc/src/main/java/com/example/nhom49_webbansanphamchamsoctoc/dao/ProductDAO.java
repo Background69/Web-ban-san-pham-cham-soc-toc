@@ -4,7 +4,9 @@ import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import org.jdbi.v3.core.Jdbi;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Lớp ProductDao.
@@ -357,6 +359,63 @@ public class ProductDAO implements IDAO<Product> {
                         .findFirst()
                         .orElse(0)
         );
+    }
+
+    public List<Product> findByFilters(String search, Integer categoryId, Integer brandId, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
+        Map<String, Object> params = new HashMap<>();
+
+        if (search != null && !search.trim().isEmpty()) {
+            sql.append(" AND (product_name LIKE :search OR short_description LIKE :search)");
+            params.put("search", "%" + search.trim() + "%");
+        }
+        if (categoryId != null) {
+            sql.append(" AND category_id = :categoryId");
+            params.put("categoryId", categoryId);
+        }
+        if (brandId != null) {
+            sql.append(" AND brand_id = :brandId");
+            params.put("brandId", brandId);
+        }
+
+        sql.append(" ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset");
+        params.put("pageSize", pageSize);
+        params.put("offset", offset);
+
+        return jdbi.withHandle(handle -> {
+            var query = handle.createQuery(sql.toString());
+            for (var entry : params.entrySet()) {
+                query.bind(entry.getKey(), entry.getValue());
+            }
+            return query.map((rs, ctx) -> mapProduct(rs)).list();
+        });
+    }
+
+    public int countByFilters(String search, Integer categoryId, Integer brandId) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE 1=1");
+        Map<String, Object> params = new HashMap<>();
+
+        if (search != null && !search.trim().isEmpty()) {
+            sql.append(" AND (product_name LIKE :search OR short_description LIKE :search)");
+            params.put("search", "%" + search.trim() + "%");
+        }
+        if (categoryId != null) {
+            sql.append(" AND category_id = :categoryId");
+            params.put("categoryId", categoryId);
+        }
+        if (brandId != null) {
+            sql.append(" AND brand_id = :brandId");
+            params.put("brandId", brandId);
+        }
+
+        return jdbi.withHandle(handle -> {
+            var query = handle.createQuery(sql.toString());
+            for (var entry : params.entrySet()) {
+                query.bind(entry.getKey(), entry.getValue());
+            }
+            return query.mapTo(Integer.class).findFirst().orElse(0);
+        });
     }
 
     // Rating update
