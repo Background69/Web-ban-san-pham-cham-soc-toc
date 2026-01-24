@@ -40,20 +40,19 @@ public class RegisterController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         String email = request.getParameter("email");
-        String username = request.getParameter("username"); // ✅ phải là username
+        String username = request.getParameter("username");
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        AuthenticationService.RegisterResult result =
-                authService.register(email, username, phone, password, confirmPassword);
+        User user = authService.register(email, username, phone, password, confirmPassword);
 
-        if (result.success()) {
+        if (user != null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 
-        request.setAttribute("error", result.message());
+        request.setAttribute("error", authService.getLastError());
         request.setAttribute("email", email);
         request.setAttribute("username", username);
         request.setAttribute("phone", phone);
