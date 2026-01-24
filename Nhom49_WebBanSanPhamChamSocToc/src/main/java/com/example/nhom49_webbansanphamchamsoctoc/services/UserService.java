@@ -156,9 +156,6 @@ public class UserService {
         return null;
     }
 
-    /**
-     * Thực hiện link google account.
-     */
     public boolean linkGoogleAccount(int userId, String googleId) {
         if (googleId == null || googleId.isEmpty()) {
             return false;
