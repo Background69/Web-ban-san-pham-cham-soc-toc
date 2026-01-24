@@ -52,7 +52,7 @@ public class OrderDetailController extends HttpServlet {
             request.setAttribute("order", order);
             request.setAttribute("orderService", orderService);
 
-            request.getRequestDispatcher("/user/product_detail.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/product-detail.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/orders");
         }
