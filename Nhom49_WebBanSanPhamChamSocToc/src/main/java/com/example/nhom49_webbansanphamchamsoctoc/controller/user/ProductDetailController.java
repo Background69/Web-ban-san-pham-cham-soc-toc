@@ -10,7 +10,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "ProductDetailController", value = "/product-detail")
+@WebServlet(name = "ProductDetailController", value = "/product/*")
 public class ProductDetailController extends HttpServlet {
 
     private ProductService productService;
