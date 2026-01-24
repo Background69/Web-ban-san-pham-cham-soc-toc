@@ -8,7 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý đơn hàng</title>
-    <link href="${pageContext.request.contextPath}/css/admin.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 </head>
 
 <body>

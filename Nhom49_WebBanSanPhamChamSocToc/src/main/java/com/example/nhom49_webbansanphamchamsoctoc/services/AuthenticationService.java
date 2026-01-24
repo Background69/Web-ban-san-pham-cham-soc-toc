@@ -9,10 +9,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 
 import jakarta.servlet.http.HttpSession;
 
-/**
- * Service chuyên xử lý authentication (đăng nhập, đăng ký, session)
- * Tách biệt với UserService để quản lý user
- */
 public class AuthenticationService {
 
     private static final int VERIFICATION_TOKEN_EXPIRY_HOURS = 24;
@@ -22,9 +18,6 @@ public class AuthenticationService {
     public AuthenticationService() {
         this.userDAO = new UserDAO();
     }
-    /**
-     * Thực hiện registration result.
-     */
     public String getLastError() {
         return lastError;
     }
