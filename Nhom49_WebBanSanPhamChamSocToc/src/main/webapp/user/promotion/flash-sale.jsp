@@ -9,7 +9,7 @@
     <title>Flash Sale - HairGlow</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/super-deal.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_super-deal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
