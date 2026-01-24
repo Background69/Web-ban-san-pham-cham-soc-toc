@@ -70,7 +70,8 @@
                 <c:if test="${not empty brand.shortDescription}">
                     <p class="brand-description">${brand.shortDescription}</p>
                 </c:if>
-                <a class="brand-link" href="${pageContext.request.contextPath}/brand/${brand.brandSlug}">Xem Sản Phẩm</a>
+                <a class="brand-link" href="${pageContext.request.contextPath}/brand/${brand.brandSlug}">Xem Sản
+                    Phẩm</a>
             </div>
         </c:forEach>
     </div>
@@ -91,7 +92,7 @@
 <script>
     // Filter by origin
     document.querySelectorAll('.filter-tag').forEach(tag => {
-        tag.addEventListener('click', function() {
+        tag.addEventListener('click', function () {
             document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             const origin = this.dataset.origin;

@@ -4,61 +4,65 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
+
+
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Service chuyên xử lý authentication (đăng nhập, đăng ký, session)
+ * Tách biệt với UserService để quản lý user
+ */
 public class AuthenticationService {
 
+    private static final int VERIFICATION_TOKEN_EXPIRY_HOURS = 24;
     private final UserDAO userDAO;
     private String lastError;
 
     public AuthenticationService() {
         this.userDAO = new UserDAO();
     }
-
+    /**
+     * Thực hiện registration result.
+     */
     public String getLastError() {
         return lastError;
     }
 
     public User login(String emailOrUsername, String password) {
         lastError = null;
-
-        if (ValidationUtil.isEmpty(emailOrUsername) || ValidationUtil.isEmpty(password)) {
-            lastError = "Vui lòng nhập đầy đủ thông tin";
+        if (ValidationUtil.isEmpty(emailOrUsername)) {
+            lastError = "Email hoặc tên đăng nhập không được để trống";
+            return null;
+        }
+        if (ValidationUtil.isEmpty(password)) {
+            lastError = "Mật khẩu không được để trống";
             return null;
         }
 
-        String key = emailOrUsername.trim();
-
-        User user = userDAO.findByEmail(key);
-        if (user == null) user = userDAO.findByUsername(key);
+        User user = userDAO.findByEmail(emailOrUsername.trim());
         if (user == null) {
-            lastError = "Email/tên đăng nhập hoặc mật khẩu không đúng";
-            return null;
+            user = userDAO.findByUsername(emailOrUsername.trim());
         }
 
+        if (user == null) {
+            lastError = "Tài khoản không tồn tại";
+            return null;
+        }
         if (!user.isActive()) {
             lastError = "Tài khoản đã bị khóa";
             return null;
         }
-
         if (!PasswordUtil.verifyPassword(password, user.getPassword())) {
-            lastError = "Email/tên đăng nhập hoặc mật khẩu không đúng";
-            return null;
-        }
-
-        if (!user.isVerified()) {
-            lastError = "Tài khoản chưa được xác minh";
+            lastError = "Mật khẩu không đúng";
             return null;
         }
 
         return user;
     }
 
-    // REGISTER: trả về User nếu thành công, null nếu thất bại
-    public User register(String email, String username, String phone,
-                         String password, String confirmPassword) {
+    public User register(String email, String username, String phone, String password, String confirmPassword) {
         lastError = null;
-
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             lastError = emailError;
@@ -89,60 +93,52 @@ public class AuthenticationService {
             return null;
         }
 
-        String emailTrim = email.trim();
-        String usernameTrim = username.trim();
-        String phoneTrim = phone.trim();
-
-        if (userDAO.existsByEmail(emailTrim)) {
-            lastError = "Email đã được sử dụng";
-            return null;
-        }
-        if (userDAO.existsByUsername(usernameTrim)) {
-            lastError = "Username đã được sử dụng";
-            return null;
-        }
-        if (userDAO.existsByPhone(phoneTrim)) {
-            lastError = "Số điện thoại đã được sử dụng";
+        if (userDAO.existsByEmail(email.trim())) {
+            lastError = "Email đã tồn tại";
             return null;
         }
 
-        User u = new User();
-        u.setEmail(emailTrim);
-        u.setUsername(usernameTrim);
-        u.setPhone(phoneTrim);
-        u.setPassword(PasswordUtil.hashPassword(password));
-
-        u.setAvatar("avatar/avatar.jpg");
-        u.setRole("Khách hàng");
-        u.setActive(true);
-
-        // Vì bạn muốn bỏ verify/email token nên để true cho giống code cũ của bạn
-        u.setVerified(true);
-
-        u.setAuthProvider("LOCAL");
-        u.setVerificationToken(null);
-        u.setResetToken(null);
-        u.setResetTokenExpiry(null);
-
-        int id = userDAO.insert(u);
-        if (id > 0) {
-            u.setUserId(id);
-            return u;
+        if (userDAO.existsByUsername(username.trim())) {
+            lastError = "Tên đăng nhập đã tồn tại";
+            return null;
         }
 
-        lastError = "Đăng ký thất bại (không insert được)";
+        User user = new User();
+        user.setEmail(email.trim());
+        user.setUsername(username.trim());
+        user.setPassword(PasswordUtil.hashPassword(password));
+        user.setRole("Khách hàng");
+        user.setActive(true);
+        user.setPhone(ValidationUtil.sanitize(phone));
+        user.setAuthProvider("LOCAL");
+
+        int userId = userDAO.insert(user);
+        if (userId > 0) {
+            user.setUserId(userId);
+            return user;
+        }
+
+        lastError = "Đăng ký thất bại, vui lòng thử lại";
         return null;
     }
 
-    public void logout(HttpSession session) {
-        if (session != null) session.invalidate();
+    public void setCurrentUser(HttpSession session, User user) {
+        SessionUtil.setCurrentUser(session, user);
     }
+
+    public void logout(HttpSession session) {
+        if (session != null) {
+            session.removeAttribute("user");
+            session.removeAttribute("cart");
+            session.invalidate();
+        }
+    }
+
+
 
     public boolean isActiveUser(User user) {
         return user != null && user.isActive();
     }
 
-    public void setCurrentUser(HttpSession session, User user) {
-        if (session != null) session.setAttribute("currentUser", user);
-    }
 }
+

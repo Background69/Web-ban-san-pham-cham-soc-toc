@@ -1,44 +1,55 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HairGlow | Sản phẩm chăm sóc tóc</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css">
 </head>
 <body>
 <!-- Header -->
-<%@ include file="layout/header.jsp" %>
+<jsp:include page="/layout/header.jsp"/>
 
+<!-- Banner Section -->
 <section class="banner-section">
     <div class="banner-container">
-        <!-- Banner / Slider -->
+        <div class="hero-copy">
+            <p class="eyebrow">Chăm sóc tóc chuyên sâu</p>
+            <h1>Nuôi dưỡng mái tóc <span>khỏe & mềm mượt</span> mỗi ngày</h1>
+            <p class="subtext">Sản phẩm tối ưu cho mọi tình trạng tóc, giao nhanh trong ngày.</p>
+            <div class="hero-actions">
+                <a class="btn primary" href="${pageContext.request.contextPath}/products">Khám phá sản phẩm</a>
+                <a class="btn ghost" href="${pageContext.request.contextPath}/promotion/super-deal">Flash sale hôm nay</a>
+            </div>
+        </div>
         <div class="slider" id="banner-slider">
             <div class="banner-slides">
-                <!-- Slide 1 -->
-                <div class="item" id="slide-1">
-                    <img alt="banner 1" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner1.png">
+                <div class="item active" id="slide-1">
+                    <img alt="Banner 1" class="banner-image"
+                         src="${pageContext.request.contextPath}/static/assets/images/banner1.png">
                 </div>
-                <!-- Slide 2 -->
                 <div class="item" id="slide-2">
-                    <img alt="banner 2" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
+                    <img alt="Banner 2" class="banner-image"
+                         src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
                 </div>
-                <!-- Slide 3 -->
                 <div class="item" id="slide-3">
-                    <img alt="banner 3" class="banner-image" src="${pageContext.request.contextPath}/static/assets/images/banner3.png">
+                    <img alt="Banner 3" class="banner-image"
+                         src="${pageContext.request.contextPath}/static/assets/images/banner3.png">
                 </div>
             </div>
-
             <button aria-label="Trước" class="nav prev">&lsaquo;</button>
             <button aria-label="Sau" class="nav next">&rsaquo;</button>
             <div aria-label="Chuyển slide" class="slider-dots" role="tablist"></div>
@@ -46,6 +57,7 @@
     </div>
 </section>
 
+<!-- Flash Sale Section -->
 <section class="flash-sale-section">
     <div class="flash-sale-container">
         <div class="flash-sale-header">
@@ -54,113 +66,68 @@
             </div>
             <div class="flash-sale-countdown">
                 <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-hours">12</span>
+                    <span class="countdown-number" id="flash-sale-hours">00</span>
                     <span class="countdown-label">Giờ</span>
                 </div>
                 <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-minutes">34</span>
+                    <span class="countdown-number" id="flash-sale-minutes">00</span>
                     <span class="countdown-label">Phút</span>
                 </div>
                 <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-seconds">56</span>
+                    <span class="countdown-number" id="flash-sale-seconds">00</span>
                     <span class="countdown-label">Giây</span>
                 </div>
             </div>
         </div>
 
         <div class="flash-sale-slider-container">
+            <button class="flash-sale-nav prev" id="flash-sale-prev"><i class="fas fa-chevron-left"></i></button>
             <div class="flash-sale-slider">
                 <div class="flash-sale-track" id="flash-sale-track">
-                    <!-- Sale 1 -->
-                    <div class="product-item">
-                        <div class="flash-sale-badge">-50%</div>
-                        <div class="product-img">
-                            <a href="${pageContext.request.contextPath}/product/1">
-                                <img alt="Product 1" class="product-image"
-                                     src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
-                            </a>
-                        </div>
-                        <div class="product-body">
-                            <h3 class="product-title">Dầu gội Elgon Puifying hỗ trợ trị gàu 1000ml</h3>
-                            <div class="product-price">
-                                <p class="price-current">350.000₫</p>
-                                <p class="price-old">700.000₫</p>
-                                <p class="badge-discount">-50%</p>
+                    <c:forEach var="product" items="${saleProducts}">
+                        <div class="product-item">
+                            <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                                <div class="flash-sale-badge">-${product.defaultVariant.discountPercent}%</div>
+                            </c:if>
+                            <div class="product-img">
+                                <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                    <img alt="${product.productName}" class="product-image"
+                                         src="${pageContext.request.contextPath}/static/images/${product.primaryImage != null ? product.primaryImage.imageUrl : 'default-product.png'}">
+                                </a>
                             </div>
-                            <div class="product">
-                                <a class="btn" href="${pageContext.request.contextPath}/product/1">Xem thêm</a>
-                                <a class="btn primary" href="#">Thêm vào giỏ</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Sale 2 -->
-                    <div class="product-item">
-                        <div class="flash-sale-badge">-21%</div>
-                        <div class="product-img">
-                            <a href="${pageContext.request.contextPath}/product/2">
-                                <img alt="Product 2" class="product-image"
-                                     src="${pageContext.request.contextPath}/static/assets/images/super-deal-product-1.jpg">
-                            </a>
-                        </div>
-                        <div class="product-body">
-                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
-                            <div class="product-price">
-                                <p class="price-current">220.000₫</p>
-                                <p class="price-old">280.000₫</p>
-                                <p class="badge-discount">-21%</p>
-                            </div>
-                            <div class="product">
-                                <a class="btn" href="${pageContext.request.contextPath}/product/2">Xem thêm</a>
-                                <a class="btn primary" href="#">Thêm vào giỏ</a>
+                            <div class="product-body">
+                                <h3 class="product-title">${product.productName}</h3>
+                                <div class="product-price">
+                                    <c:if test="${product.defaultVariant != null}">
+                                        <p class="price-current">
+                                            <fmt:formatNumber
+                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                    type="number"/>₫
+                                        </p>
+                                        <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                            <p class="price-old"><fmt:formatNumber
+                                                    value="${product.defaultVariant.originalPrice}" type="number"/>₫</p>
+                                            <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                        </c:if>
+                                    </c:if>
+                                </div>
+                                <div class="product">
+                                    <a class="btn"
+                                       href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
+                                        thêm</a>
+                                    <a class="btn primary add-to-cart" href="#" data-product-id="${product.productId}">Thêm
+                                        vào giỏ</a>
+                                </div>
+                                <div class="sale-progress">
+                                    <div class="sale-progress-bar" style="width: 60%;"></div>
+                                    <div class="sale-progress-label">Đã bán 60%</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Sale 3 -->
-                    <div class="product-item">
-                        <div class="flash-sale-badge">-40%</div>
-                        <div class="product-img">
-                            <a href="${pageContext.request.contextPath}/product/3">
-                                <img alt="Product 3" class="product-image"
-                                     src="${pageContext.request.contextPath}/static/assets/images/xakho.png">
-                            </a>
-                        </div>
-                        <div class="product-body">
-                            <h3 class="product-title">Xả khô BambooMiracle phục hồi tóc 178ml</h3>
-                            <div class="product-price">
-                                <p class="price-current">252.000₫</p>
-                                <p class="price-old">420.000₫</p>
-                                <p class="badge-discount">-40%</p>
-                            </div>
-                            <div class="product">
-                                <a class="btn" href="${pageContext.request.contextPath}/product/3">Xem thêm</a>
-                                <a class="btn primary" href="#">Thêm vào giỏ</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Sale 4 -->
-                    <div class="product-item">
-                        <div class="flash-sale-badge">-21%</div>
-                        <div class="product-img">
-                            <a href="${pageContext.request.contextPath}/product/4">
-                                <img alt="Product 4" class="product-image"
-                                     src="${pageContext.request.contextPath}/static/assets/images/Collagen.webp">
-                            </a>
-                        </div>
-                        <div class="product-body">
-                            <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
-                            <div class="product-price">
-                                <p class="price-current">220.000₫</p>
-                                <p class="price-old">280.000₫</p>
-                                <p class="badge-discount">-21%</p>
-                            </div>
-                            <div class="product">
-                                <a class="btn" href="${pageContext.request.contextPath}/product/4">Xem thêm</a>
-                                <a class="btn primary" href="#">Thêm vào giỏ</a>
-                            </div>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
             </div>
+            <button class="flash-sale-nav next" id="flash-sale-next"><i class="fas fa-chevron-right"></i></button>
         </div>
     </div>
 </section>
@@ -170,37 +137,32 @@
     <div class="categories-container" id="categories-container">
         <h2 class="container-title">Danh Mục Sản Phẩm</h2>
         <div class="categories-grid">
-            <a class="category-item" href="${pageContext.request.contextPath}/store?category=dau-goi">
+            <a class="category-item" href="${pageContext.request.contextPath}/products?category=dau-goi">
                 <div class="category-icon"><i class="fas fa-shower"></i></div>
                 <h3>Dầu Gội</h3>
                 <p>Làm sạch và nuôi dưỡng tóc từ gốc</p>
             </a>
-
-            <a class="category-item" href="${pageContext.request.contextPath}/store?category=dau-xa">
+            <a class="category-item" href="${pageContext.request.contextPath}/products?category=dau-xa">
                 <div class="category-icon"><i class="fas fa-spray-can"></i></div>
                 <h3>Dầu Xả</h3>
                 <p>Mềm mượt, dễ chải</p>
             </a>
-
-            <a class="category-item" href="${pageContext.request.contextPath}/store?category=kem-u">
+            <a class="category-item" href="${pageContext.request.contextPath}/products?category=kem-u">
                 <div class="category-icon"><i class="fas fa-heart"></i></div>
                 <h3>Kem Ủ Tóc</h3>
                 <p>Phục hồi tóc hư tổn sâu</p>
             </a>
-
-            <a class="category-item" href="${pageContext.request.contextPath}/store?category=serum">
+            <a class="category-item" href="${pageContext.request.contextPath}/products?category=serum">
                 <div class="category-icon"><i class="fas fa-flask"></i></div>
                 <h3>Serum Dưỡng</h3>
                 <p>Dưỡng chất tinh tuý cho tóc</p>
             </a>
-
-            <a class="category-item" href="${pageContext.request.contextPath}/store?category=tri-gau">
+            <a class="category-item" href="${pageContext.request.contextPath}/products?category=tri-gau">
                 <div class="category-icon"><i class="fas fa-shield-alt"></i></div>
                 <h3>Trị Gàu & Rụng Tóc</h3>
                 <p>Giải pháp toàn diện cho tóc</p>
             </a>
-
-            <a class="category-item" href="${pageContext.request.contextPath}/store?category=tao-kieu">
+            <a class="category-item" href="${pageContext.request.contextPath}/products?category=sap-gel">
                 <div class="category-icon"><i class="fas fa-wind"></i></div>
                 <h3>Tạo Kiểu</h3>
                 <p>Sáp, gel, gôm tạo kiểu</p>
@@ -212,125 +174,59 @@
     <div class="featured-container" id="featured-container">
         <h2 class="container-title">Sản Phẩm Nổi Bật</h2>
         <div class="product-grid" id="featured-products">
-            <div class="product-item">
-                <div class="product-img">
-                    <a href="${pageContext.request.contextPath}/product/1">
-                        <img alt="Dầu gội Elgon" class="product-image"
-                             src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
-                    </a>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-title">Dầu gội Elgon Puifying hỗ trợ trị gàu</h3>
-                    <div class="product-small-details">
-                        <p><span>Elgon</span> • <span>Dầu gội</span> • Ý</p>
+            <c:forEach var="product" items="${featuredProducts}">
+                <div class="product-item">
+                    <div class="product-img">
+                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                            <img alt="${product.productName}" class="product-image"
+                                 src="${pageContext.request.contextPath}/static/images/${product.primaryImage != null ? product.primaryImage.imageUrl : 'default-product.png'}">
+                        </a>
                     </div>
-                    <div class="product-rating">
-                        <div class="rating-stars">
-                            <span class="stars">★★★★★</span>
+                    <div class="product-body">
+                        <h3 class="product-title">${product.productName}</h3>
+                        <div class="product-small-details">
+                            <p>
+                                <span>${product.brand != null ? product.brand.brandName : ''}</span>
+                                • <span>${product.category != null ? product.category.categoryName : ''}</span>
+                                • ${product.origin}
+                            </p>
                         </div>
-                        <p class="review-count">(156)</p>
-                    </div>
-                    <div class="product-price">
-                        <p class="price-current">700.000₫</p>
-                        <p class="price-old">850.000₫</p>
-                        <p class="badge-discount">-18%</p>
-                    </div>
-                    <div class="product">
-                        <a class="btn" href="${pageContext.request.contextPath}/product/1">Xem thêm</a>
-                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-item">
-                <div class="product-img">
-                    <a href="${pageContext.request.contextPath}/product/2">
-                        <img alt="Xả khô BambooMiracle" class="product-image"
-                             src="${pageContext.request.contextPath}/static/assets/images/xakho.png">
-                    </a>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-title">Xả khô BambooMiracle phục hồi tóc</h3>
-                    <div class="product-small-details">
-                        <p><span>BambooMiracle</span> • <span>Xịt dưỡng</span> • Mỹ</p>
-                    </div>
-                    <div class="product-rating">
-                        <div class="rating-stars">
-                            <span class="stars">★★★★★</span>
+                        <div class="product-rating">
+                            <div class="rating-stars">
+                                <span class="stars">
+                                    <c:forEach begin="1" end="5" var="i">
+                                        <c:choose>
+                                            <c:when test="${i <= product.averageRating}">★</c:when>
+                                            <c:otherwise>☆</c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </span>
+                            </div>
+                            <p class="review-count">(${product.reviewCount})</p>
                         </div>
-                        <p class="review-count">(203)</p>
-                    </div>
-                    <div class="product-price">
-                        <p class="price-current">420.000₫</p>
-                        <p class="price-old">520.000₫</p>
-                        <p class="badge-discount">-19%</p>
-                    </div>
-                    <div class="product">
-                        <a class="btn" href="${pageContext.request.contextPath}/product/2">Xem thêm</a>
-                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-item">
-                <div class="product-img">
-                    <a href="${pageContext.request.contextPath}/product/3">
-                        <img alt="Serum L'Oreal" class="product-image"
-                             src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
-                    </a>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-title">Serum L'Oreal Sáng Da, Mờ Thâm Mụn & Nám 30ml</h3>
-                    <div class="product-small-details">
-                        <p><span>L'Oréal Professionnel</span> • <span>Serum</span> • Pháp</p>
-                    </div>
-                    <div class="product-rating">
-                        <div class="rating-stars">
-                            <span class="stars">★★★★★</span>
+                        <div class="product-price">
+                            <c:if test="${product.defaultVariant != null}">
+                                <p class="price-current">
+                                    <fmt:formatNumber
+                                            value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                            type="number"/>₫
+                                </p>
+                                <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                    <p class="price-old"><fmt:formatNumber
+                                            value="${product.defaultVariant.originalPrice}" type="number"/>₫</p>
+                                    <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                </c:if>
+                            </c:if>
                         </div>
-                        <p class="review-count">(423)</p>
-                    </div>
-                    <div class="product-price">
-                        <p class="price-current">220.000₫</p>
-                        <p class="price-old">280.000₫</p>
-                        <p class="badge-discount">-21%</p>
-                    </div>
-                    <div class="product">
-                        <a class="btn" href="${pageContext.request.contextPath}/product/3">Xem thêm</a>
-                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-item">
-                <div class="product-img">
-                    <a href="${pageContext.request.contextPath}/product/4">
-                        <img alt="Dầu gội Cehko" class="product-image"
-                             src="${pageContext.request.contextPath}/static/assets/images/dau-goi-can-bang-ph-elgon.png">
-                    </a>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-title">Dầu gội Cehko Vital chống rụng tóc</h3>
-                    <div class="product-small-details">
-                        <p><span>Cehko</span> • <span>Dầu gội</span> • Đức</p>
-                    </div>
-                    <div class="product-rating">
-                        <div class="rating-stars">
-                            <span class="stars">★★★★☆</span>
+                        <div class="product">
+                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
+                                thêm</a>
+                            <a class="btn primary add-to-cart" href="#" data-product-id="${product.productId}">Thêm vào
+                                giỏ</a>
                         </div>
-                        <p class="review-count">(98)</p>
-                    </div>
-                    <div class="product-price">
-                        <p class="price-current">250.000₫</p>
-                        <p class="price-old">320.000₫</p>
-                        <p class="badge-discount">-22%</p>
-                    </div>
-                    <div class="product">
-                        <a class="btn" href="${pageContext.request.contextPath}/product/4">Xem thêm</a>
-                        <a class="btn primary" href="${pageContext.request.contextPath}/cart">Thêm vào giỏ</a>
                     </div>
                 </div>
-            </div>
+            </c:forEach>
         </div>
     </div>
 
@@ -338,22 +234,142 @@
     <div class="brands-container" id="brands-container">
         <h2 class="container-title">Thương Hiệu Uy Tín</h2>
         <div class="brands-grid">
-            <div class="brand-item">L'Oréal</div>
-            <div class="brand-item">Kérastase</div>
-            <div class="brand-item">Davines</div>
-            <div class="brand-item">Moroccanoil</div>
-            <div class="brand-item">Head &<br>Shoulders</div>
-            <div class="brand-item">Sunsilk</div>
-            <div class="brand-item">TRESemmé</div>
-            <div class="brand-item">OGX</div>
+            <c:forEach var="brand" items="${brands}">
+                <a class="brand-item" href="${pageContext.request.contextPath}/products?brand=${brand.brandSlug}">
+                    <c:choose>
+                        <c:when test="${not empty brand.logoUrl}">
+                            <img src="${pageContext.request.contextPath}/static/images/${brand.logoUrl}"
+                                 alt="${brand.brandName}">
+                        </c:when>
+                        <c:otherwise>
+                            ${brand.brandName}
+                        </c:otherwise>
+                    </c:choose>
+                </a>
+            </c:forEach>
         </div>
     </div>
 </main>
 
 <!-- Footer -->
-<%@ include file="layout/footer.jsp" %>
+<jsp:include page="/layout/footer.jsp"/>
 
-<!-- Custom JS -->
-<script src="${pageContext.request.contextPath}/static/js/main.js"></script>
+<script>
+    // Banner Slider
+    (function () {
+        const slides = document.querySelectorAll('.banner-slides .item');
+        const dotsContainer = document.querySelector('.slider-dots');
+        const prevBtn = document.querySelector('.slider .nav.prev');
+        const nextBtn = document.querySelector('.slider .nav.next');
+        let currentSlide = 0;
+        let autoSlideInterval;
+
+        if (slides.length === 0) return;
+
+        // Create dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.slider-dots .dot');
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            goToSlide(currentSlide - 1);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoSlide();
+        });
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoSlide();
+        });
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(nextSlide, 5000);
+        }
+
+        autoSlideInterval = setInterval(nextSlide, 5000);
+    })();
+
+    // Flash Sale Countdown
+    (function () {
+        const hoursEl = document.getElementById('flash-sale-hours');
+        const minutesEl = document.getElementById('flash-sale-minutes');
+        const secondsEl = document.getElementById('flash-sale-seconds');
+
+        if (!hoursEl || !minutesEl || !secondsEl) return;
+
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            const diff = endOfDay - now;
+
+            if (diff <= 0) {
+                hoursEl.textContent = '00';
+                minutesEl.textContent = '00';
+                secondsEl.textContent = '00';
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    })();
+
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            fetch('${pageContext.request.contextPath}/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: 'productId=' + productId + '&quantity=1'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector('.cart-count').textContent = data.cartCount;
+                        alert('Đã thêm vào giỏ hàng!');
+                    } else {
+                        alert(data.message || 'Có lỗi xảy ra!');
+                    }
+                })
+                .catch(() => alert('Có lỗi xảy ra!'));
+        });
+    });
+</script>
 </body>
 </html>
