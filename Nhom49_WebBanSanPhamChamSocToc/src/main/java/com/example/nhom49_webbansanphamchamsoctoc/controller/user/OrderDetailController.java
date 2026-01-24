@@ -33,9 +33,9 @@ public class OrderDetailController extends HttpServlet {
         }
 
         HttpSession session = request.getSession(false);
-        User user = session != null ? (User) session.getAttribute("user") : null;
+        User user = session != null ? (User) session.getAttribute("currentUser") : null;
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login?redirect=/orders");
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/orders");
             return;
         }
 
@@ -52,7 +52,7 @@ public class OrderDetailController extends HttpServlet {
             request.setAttribute("order", order);
             request.setAttribute("orderService", orderService);
 
-            request.getRequestDispatcher("/user/product-detail.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/order/order-detail.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/orders");
         }
@@ -74,9 +74,9 @@ public class OrderDetailController extends HttpServlet {
             throws IOException {
         String pathInfo = request.getPathInfo();
         HttpSession session = request.getSession(false);
-        User user = session != null ? (User) session.getAttribute("user") : null;
+        User user = session != null ? (User) session.getAttribute("currentUser") : null;
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login?redirect=/orders");
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/orders");
             return;
         }
 

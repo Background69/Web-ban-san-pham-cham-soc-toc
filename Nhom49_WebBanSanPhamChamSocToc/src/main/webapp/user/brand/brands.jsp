@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<jsp:include page="/layout/header.jsp" />
+<jsp:include page="/layout/header.jsp"/>
 
 <!-- Brands Banner Full Width -->
 <section class="brands-banner">
@@ -51,7 +51,8 @@
     <div class="brands-grid">
         <div class="brand-item" data-origin="france">
             <div class="brand-logo">
-                <img alt="Logo L'Oréal Professionnel" src="${pageContext.request.contextPath}/static/assets/brands/loreal-professionnel.svg">
+                <img alt="Logo L'Oréal Professionnel"
+                     src="${pageContext.request.contextPath}/static/assets/brands/loreal-professionnel.svg">
             </div>
             <div class="brand-logo-text">L'Oréal Professionnel</div>
             <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Pháp</div>
@@ -90,7 +91,8 @@
 
         <div class="brand-item" data-origin="usa">
             <div class="brand-logo">
-                <img alt="Logo Moroccanoil" src="${pageContext.request.contextPath}/static/assets/brands/moroccanoil.png">
+                <img alt="Logo Moroccanoil"
+                     src="${pageContext.request.contextPath}/static/assets/brands/moroccanoil.png">
             </div>
             <div class="brand-logo-text">Moroccanoil</div>
             <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Mỹ</div>
@@ -116,7 +118,8 @@
 
         <div class="brand-item" data-origin="usa">
             <div class="brand-logo">
-                <img alt="Logo Head &amp; Shoulders" src="${pageContext.request.contextPath}/static/assets/brands/head-shoulders.svg">
+                <img alt="Logo Head &amp; Shoulders"
+                     src="${pageContext.request.contextPath}/static/assets/brands/head-shoulders.svg">
             </div>
             <div class="brand-logo-text">Head &amp; Shoulders</div>
             <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Mỹ</div>
@@ -129,7 +132,8 @@
 
         <div class="brand-item" data-origin="korea">
             <div class="brand-logo">
-                <img alt="Logo Mise En Scène" src="${pageContext.request.contextPath}/static/assets/brands/mise-en-scene.png">
+                <img alt="Logo Mise En Scène"
+                     src="${pageContext.request.contextPath}/static/assets/brands/mise-en-scene.png">
             </div>
             <div class="brand-logo-text">Mise En Scène</div>
             <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Hàn Quốc</div>
@@ -194,7 +198,8 @@
 
         <div class="brand-item" data-origin="france">
             <div class="brand-logo">
-                <img alt="Logo L'Oréal Paris" src="${pageContext.request.contextPath}/static/assets/brands/loreal-paris.svg">
+                <img alt="Logo L'Oréal Paris"
+                     src="${pageContext.request.contextPath}/static/assets/brands/loreal-paris.svg">
             </div>
             <div class="brand-logo-text">L'Oréal Paris</div>
             <div class="brand-origin"><i class="fas fa-map-marker-alt"></i> Pháp</div>
@@ -208,7 +213,7 @@
 
 </main>
 
-<jsp:include page="/layout/footer.jsp" />
+<jsp:include page="/layout/footer.jsp"/>
 
 <!-- Filter Tag Script -->
 <script>
