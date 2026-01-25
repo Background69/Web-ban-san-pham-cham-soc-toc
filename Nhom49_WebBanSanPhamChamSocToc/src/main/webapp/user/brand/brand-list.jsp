@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -50,7 +50,7 @@
     <!-- Brands Grid -->
     <div class="brands-grid">
         <c:forEach var="brand" items="${brands}">
-            <div class="brand-item" data-origin="${brand.origin.toLowerCase()}">
+            <div class="brand-item" data-origin="${not empty brand.origin ? brand.origin.toLowerCase() : 'unknown'}">
                 <div class="brand-logo">
                     <c:choose>
                         <c:when test="${not empty brand.logoUrl}">
@@ -108,3 +108,4 @@
 </script>
 </body>
 </html>
+

@@ -11,6 +11,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.ProductImage;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service class cho Product business logic
@@ -53,6 +54,12 @@ public class ProductService {
 
     public List<Product> getAllProducts(int page, int pageSize) {
         List<Product> products = productDAO.findWithPagination(page, pageSize);
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
+    public List<Product> getAllProducts() {
+        List<Product> products = productDAO.findAll();
         enrichProductsWithBasicDetails(products);
         return products;
     }
@@ -215,6 +222,13 @@ public class ProductService {
         List<ProductImage> images = imageDAO.findByProductId(product.getProductId());
         product.setVariants(variants);
         product.setImages(images);
+        int remainingStock = 0;
+        if (variants != null) {
+            for (ProductVariant variant : variants) {
+                remainingStock += Math.max(0, variant.getStockQuantity());
+            }
+        }
+        applyStockStats(product, remainingStock);
 
         // Load category and brand names
         if (product.getCategoryId() != null) {
@@ -238,6 +252,11 @@ public class ProductService {
 
      */
     private void enrichProductsWithBasicDetails(List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            return;
+        }
+        List<Integer> productIds = products.stream().map(Product::getProductId).toList();
+        Map<Integer, Integer> remainingStockMap = variantDAO.getTotalStockByProductIds(productIds);
         for (Product product : products) {
             ProductImage primaryImage = imageDAO.findPrimaryByProductId(product.getProductId());
             if (primaryImage != null) {
@@ -264,7 +283,27 @@ public class ProductService {
                     product.setBrandName(brand.getBrandName());
                 }
             }
+
+            int remainingStock = remainingStockMap.getOrDefault(product.getProductId(), 0);
+            applyStockStats(product, remainingStock);
         }
+    }
+
+    private void applyStockStats(Product product, int remainingStock) {
+        if (product == null) {
+            return;
+        }
+        int totalStock = Math.max(0, product.getStockQuantity());
+        int remaining = Math.max(0, remainingStock);
+        int soldQuantity = Math.max(0, totalStock - remaining);
+        if (soldQuantity > totalStock) {
+            soldQuantity = totalStock;
+        }
+        int soldPercent = totalStock > 0 ? (int) Math.round((soldQuantity * 100.0) / totalStock) : 0;
+
+        product.setRemainingStock(remaining);
+        product.setSoldQuantity(soldQuantity);
+        product.setSoldPercent(soldPercent);
     }
 
     /**

@@ -5,6 +5,8 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Lớp ProductVariantDao.
@@ -66,6 +68,28 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
                         .map((rs, ctx) -> mapVariant(rs))
                         .findFirst()
                         .orElse(null)
+        );
+    }
+
+    /**
+     * Lay tong stock theo danh sach product ids.
+     *
+     * @param productIds Tham so dau vao.
+     * @return Map productId -> total stock.
+     */
+    public Map<Integer, Integer> getTotalStockByProductIds(List<Integer> productIds) {
+        if (productIds == null || productIds.isEmpty()) {
+            return Map.of();
+        }
+        String sql = "SELECT product_id, COALESCE(SUM(stock_quantity), 0) AS total_stock " +
+                "FROM product_variants WHERE product_id IN (<productIds>) GROUP BY product_id";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bindList("productIds", productIds)
+                        .map((rs, ctx) -> Map.entry(rs.getInt("product_id"), rs.getInt("total_stock")))
+                        .list()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
     }
 

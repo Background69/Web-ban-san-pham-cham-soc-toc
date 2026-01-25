@@ -121,8 +121,9 @@ public class AuthenticationService {
 
     public void logout(HttpSession session) {
         if (session != null) {
-            session.removeAttribute("user");
-            session.removeAttribute("cart");
+            session.removeAttribute(SessionUtil.USER_KEY);
+            session.removeAttribute(SessionUtil.CURRENT_USER_KEY);
+            session.removeAttribute(SessionUtil.CART_KEY);
             session.invalidate();
         }
     }

@@ -6,7 +6,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "StaticPageController", value = "/StaticPage")
+@WebServlet(name = "StaticPageController", urlPatterns = {"/StaticPage", "/terms", "/privacy", "/about", "/faq", "/guide", "/report"})
 public class StaticPageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

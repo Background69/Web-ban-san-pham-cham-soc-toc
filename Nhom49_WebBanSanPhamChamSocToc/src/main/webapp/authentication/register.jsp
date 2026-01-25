@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -20,7 +20,8 @@
     <div class="login-container">
         <div class="login-box">
             <div class="logo-container">
-                <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="HairGlow Logo">
+                <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo"
+                     alt="HairGlow Logo">
             </div>
 
             <h2>Đăng ký</h2>

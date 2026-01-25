@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -68,8 +68,8 @@
                 <div class="stats-grid">
                     <c:forEach var="stat" items="${categoryStats}">
                         <div class="stat-item">
-                            <span class="stat-number">${stat.count}</span>
-                            <span class="stat-label">${stat.categoryName}</span>
+                            <span class="stat-number">${stat.value}</span>
+                            <span class="stat-label">${stat.key}</span>
                         </div>
                     </c:forEach>
                 </div>
@@ -84,36 +84,40 @@
             <div class="product-filter-tags">
                 <button class="product-filter-tag active" data-category="all">Tất cả</button>
                 <c:forEach var="category" items="${categories}">
-                    <button class="product-filter-tag" data-category="${category.slug}">${category.name}</button>
+                    <button class="product-filter-tag"
+                            data-category="${category.categorySlug}">${category.categoryName}</button>
                 </c:forEach>
             </div>
         </div>
 
         <div class="brand-products-grid">
             <c:forEach var="product" items="${products}">
-                <div class="product-item" data-category="${product.category.slug}">
+                <div class="product-item"
+                     data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
                     <div class="product-img">
-                        <a href="${pageContext.request.contextPath}/product/${product.slug}">
+                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                             <c:choose>
                                 <c:when test="${not empty product.primaryImage}">
-                                    <img src="${product.primaryImage}" alt="${product.name}" class="product-image">
+                                    <img src="${pageContext.request.contextPath}/static/images/${product.primaryImage.imageUrl}"
+                                         alt="${product.productName}" class="product-image">
                                 </c:when>
                                 <c:otherwise>
                                     <img src="${pageContext.request.contextPath}/static/images/no-image.png"
-                                         alt="${product.name}" class="product-image">
+                                         alt="${product.productName}" class="product-image">
                                 </c:otherwise>
                             </c:choose>
                         </a>
-                        <c:if test="${product.discountPercent > 0}">
-                            <span class="badge-discount">-${product.discountPercent}%</span>
+                        <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                            <span class="badge-discount">-${product.defaultVariant.discountPercent}%</span>
                         </c:if>
                     </div>
                     <div class="product-body">
                         <h3 class="product-title">
-                            <a href="${pageContext.request.contextPath}/product/${product.slug}">${product.name}</a>
+                            <a href="${pageContext.request.contextPath}/product/${product.productSlug}">${product.productName}</a>
                         </h3>
                         <div class="product-small-details">
-                            <p><span>${brand.brandName}</span> • <span>${product.category.name}</span></p>
+                            <p><span>${brand.brandName}</span> •
+                                <span>${product.category != null ? product.category.categoryName : ''}</span></p>
                         </div>
                         <div class="product-rating">
                             <div class="rating-stars">
@@ -134,19 +138,32 @@
                             <p class="review-count">(${product.reviewCount})</p>
                         </div>
                         <div class="product-price">
-                            <p class="price-current">
-                                <fmt:formatNumber value="${product.salePrice}" type="currency" currencySymbol=""
-                                                  maxFractionDigits="0"/>₫
-                            </p>
-                            <c:if test="${product.originalPrice > product.salePrice}">
-                                <p class="price-old">
-                                    <fmt:formatNumber value="${product.originalPrice}" type="currency" currencySymbol=""
-                                                      maxFractionDigits="0"/>₫
+                            <c:if test="${product.defaultVariant != null}">
+                                <p class="price-current">
+                                    <fmt:formatNumber value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                      type="currency" currencySymbol="" maxFractionDigits="0"/>₫
                                 </p>
+                                <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                    <p class="price-old">
+                                        <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
+                                                          type="currency" currencySymbol="" maxFractionDigits="0"/>₫
+                                    </p>
+                                </c:if>
                             </c:if>
                         </div>
+                        <c:if test="${product.stockQuantity > 0}">
+                            <div class="stock-progress">
+                                <div class="stock-progress-bar">
+                                    <div class="stock-progress-fill"
+                                         style="width: ${product.soldPercent}%"></div>
+                                </div>
+                                <div class="stock-progress-text">
+                                    Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                </div>
+                            </div>
+                        </c:if>
                         <div class="product-actions">
-                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.slug}">Xem
+                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
                                 thêm</a>
                             <form action="${pageContext.request.contextPath}/cart/add" method="post"
                                   class="add-cart-form">
@@ -199,3 +216,4 @@
 </script>
 </body>
 </html>
+
