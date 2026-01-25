@@ -12,7 +12,7 @@
 <body>
 <div class="container">
 
-    <%@ include file="../common/sidebar.jsp" %>
+    <jsp:include page="../layout/sidebar.jsp"/>
 
     <main class="content">
         <h1>Chi tiết người dùng</h1>

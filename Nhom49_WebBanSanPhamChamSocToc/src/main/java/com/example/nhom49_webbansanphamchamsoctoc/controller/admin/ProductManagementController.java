@@ -1,8 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
+import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -15,6 +17,7 @@ import java.util.List;
 public class ProductManagementController extends HttpServlet {
 
     ProductDAO productDAO = new ProductDAO();
+    ProductVariantDAO productVariantDAO = new ProductVariantDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -97,10 +100,9 @@ public class ProductManagementController extends HttpServlet {
     // ===== MAP FORM → OBJECT =====
     private Product productFromRequest(HttpServletRequest request) {
         Product product = new Product();
+        ProductVariant productVariant = new ProductVariant();
         product.setProductName(request.getParameter("name"));
-        product.setPrice(Double.parseDouble(request.getParameter("price")));
         product.setCategoryName(request.getParameter("category"));
-        product.setImages(request.getParameter("image"));
         return product;
     }
 }
