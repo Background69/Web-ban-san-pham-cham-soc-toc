@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -45,13 +45,15 @@
         </c:choose>
     </nav>
 
+    <c:set var="searchTerm" value="${not empty param.search ? param.search : param.q}"/>
+
     <div class="store-layout">
         <!-- Sidebar Filters -->
         <aside class="store-sidebar">
             <form action="${pageContext.request.contextPath}/products" method="get" id="filterForm">
                 <!-- Search -->
-                <c:if test="${not empty param.search}">
-                    <input type="hidden" name="search" value="${param.search}">
+                <c:if test="${not empty searchTerm}">
+                    <input type="hidden" name="search" value="${searchTerm}">
                 </c:if>
 
                 <!-- Category Filter -->
@@ -128,8 +130,8 @@
             <div class="store-header">
                 <div class="result-count">
                     <c:choose>
-                        <c:when test="${not empty param.search}">
-                            <h2>Kết quả tìm kiếm: "${param.search}"</h2>
+                        <c:when test="${not empty searchTerm}">
+                            <h2>Kết quả tìm kiếm: "${searchTerm}"</h2>
                             <p>Tìm thấy ${totalProducts} sản phẩm</p>
                         </c:when>
                         <c:when test="${not empty currentCategory}">
@@ -217,6 +219,17 @@
                                             </c:if>
                                         </c:if>
                                     </div>
+                                    <c:if test="${product.stockQuantity > 0}">
+                                        <div class="stock-progress">
+                                            <div class="stock-progress-bar">
+                                                <div class="stock-progress-fill"
+                                                     style="width: ${product.soldPercent}%"></div>
+                                            </div>
+                                            <div class="stock-progress-text">
+                                                Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                            </div>
+                                        </div>
+                                    </c:if>
                                     <div class="product-actions">
                                         <a class="btn btn-outline"
                                            href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
@@ -281,3 +294,6 @@
 </script>
 </body>
 </html>
+
+
+

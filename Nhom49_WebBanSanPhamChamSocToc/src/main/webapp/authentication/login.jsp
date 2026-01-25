@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 
 <!DOCTYPE html>
@@ -10,7 +10,7 @@
     <title>Đăng nhập - HairGlow</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/login.css">
 </head>
@@ -36,6 +36,9 @@
             %>
 
             <form action="${pageContext.request.contextPath}/auth/login" method="post" autocomplete="on">
+                <c:if test="${not empty param.redirect}">
+                    <input type="hidden" name="redirect" value="${param.redirect}">
+                </c:if>
                 <div class="form-group">
                     <label for="email">Email hoặc Username</label>
                     <!-- backend của bạn lấy param "email" -->

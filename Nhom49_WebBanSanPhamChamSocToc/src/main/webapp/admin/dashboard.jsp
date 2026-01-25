@@ -1,21 +1,13 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 10/12/2025
-  Time: 10:01 SA
-  To change this template use File | Settings | File Templates.
---%>
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+﻿<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"  pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>DashBoard</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 </head>
 
@@ -25,7 +17,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/images/LOGO.png" alt="logo">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" alt="logo">
         </div>
         <p>HairGlow Admin</p>
 
@@ -37,7 +29,7 @@
             <li><a href="${pageContext.request.contextPath}/admin/banners">Quản lý banner</a></li>
         </ul>
 
-        <a class="view-site" href="${pageContext.request.contextPath}/index">Quay lại Website</a>
+        <a class="view-site" href="${pageContext.request.contextPath}/">Quay lại Website</a>
     </aside>
 
     <!-- Main content -->
@@ -63,7 +55,9 @@
             </div>
             <div class="card">
                 <h3>Doanh Thu</h3>
-                <p class="number">${totalRevenue}</p>
+                <p class="number">
+                    <fmt:formatNumber value="${totalRevenue}" type="number"/> ₫
+                </p>
             </div>
         </div>
 
@@ -80,11 +74,13 @@
                 <c:forEach var="order" items="${recentOrders}">
                     <tr>
                         <td>#HD${order.orderId}</td>
-                        <td>${order.customerName}</td>
-                        <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/></td>
-                        <td> <span class="status ${order.status}">
-                                ${order.status}
-                        </span></td>
+                        <td>${order.shippingFullName}</td>
+                        <td><fmt:formatNumber value="${order.totalAmount}" type="number"/> ₫</td>
+                        <td>
+                            <span class="status ${order.orderStatus}">
+                                ${order.orderStatus}
+                            </span>
+                        </td>
                     </tr>
                 </c:forEach>
                 <c:if test="${empty recentOrders}">

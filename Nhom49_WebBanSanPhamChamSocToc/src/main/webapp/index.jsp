@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -186,10 +186,17 @@
                                     <a class="btn primary add-to-cart" href="#" data-product-id="${product.productId}">Thêm
                                         vào giỏ</a>
                                 </div>
-                                <div class="sale-progress">
-                                    <div class="sale-progress-bar" style="width: 60%;"></div>
-                                    <div class="sale-progress-label">Đã bán 60%</div>
-                                </div>
+                                <c:if test="${product.stockQuantity > 0}">
+                                    <div class="stock-progress">
+                                        <div class="stock-progress-bar">
+                                            <div class="stock-progress-fill"
+                                                 style="width: ${product.soldPercent}%"></div>
+                                        </div>
+                                        <div class="stock-progress-text">
+                                            Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                        </div>
+                                    </div>
+                                </c:if>
                             </div>
                         </div>
                     </c:forEach>
@@ -286,6 +293,17 @@
                                 </c:if>
                             </c:if>
                         </div>
+                        <c:if test="${product.stockQuantity > 0}">
+                            <div class="stock-progress">
+                                <div class="stock-progress-bar">
+                                    <div class="stock-progress-fill"
+                                         style="width: ${product.soldPercent}%"></div>
+                                </div>
+                                <div class="stock-progress-text">
+                                    Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                </div>
+                            </div>
+                        </c:if>
                         <div class="product">
                             <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
                                 thêm</a>
@@ -547,3 +565,4 @@
 </script>
 </body>
 </html>
+

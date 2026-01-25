@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
@@ -8,7 +8,6 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Giỏ hàng</title>
-    <link href="${pageContext.request.contextPath}/static/css/user/cart.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cart.css">
 </head>
@@ -94,7 +93,7 @@
 
         <label class="shipping-option">
             <input name="shipping" type="radio" value="express">
-            <span>Giao hàng nhanh (40.000 VNĐ) - Dự kiến nhận hàng trong 1-3 ngày</span>
+            <span>Giao hàng nhanh (50.000 VNĐ) - Dự kiến nhận hàng trong 1-3 ngày</span>
         </label>
 
     </div>
@@ -152,7 +151,7 @@
         if (shippingRadio) {
             const shipping = shippingRadio.value;
             if (shipping === 'standard') shippingFee = 30000;
-            if (shipping === 'express') shippingFee = 40000;
+            if (shipping === 'express') shippingFee = 50000;
         }
 
         document.querySelector('.cart-shipping-fee').textContent = shippingFee.toLocaleString('vi-VN') + '₫';
@@ -212,3 +211,5 @@
 </script>
 </body>
 </html>
+
+
