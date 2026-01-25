@@ -127,5 +127,4 @@
             </div>
         </nav>
     </div>
-    </div>
 </header>

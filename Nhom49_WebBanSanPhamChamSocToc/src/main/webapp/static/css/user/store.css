@@ -5,7 +5,7 @@
 
 /* ========== IMPORT BASE STYLES ========== */
 @import url('style.css');
-@import url('animations.css');
+@import url('../animation.css');
 
 /* ========== STORE CONTAINER ========== */
 .store-container {
