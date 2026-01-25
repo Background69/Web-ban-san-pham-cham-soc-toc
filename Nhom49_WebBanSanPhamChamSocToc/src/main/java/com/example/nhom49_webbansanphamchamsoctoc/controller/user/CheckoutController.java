@@ -40,7 +40,11 @@ public class CheckoutController extends HttpServlet {
         HttpSession session = request.getSession(false);
         User user = SessionUtil.getCurrentUser(session);
 
-        // Lấy Cart object từ session
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/checkout");
+            return;
+        }
+
         Cart cart = cartService.getCart(session);
 
         if (cart.isEmpty()) {
@@ -48,10 +52,8 @@ public class CheckoutController extends HttpServlet {
             return;
         }
 
-        // Validate stock trước khi hiển thị trang checkout
         List<CartService.StockValidationResult> stockErrors = cartService.validateStock(cart);
         if (!stockErrors.isEmpty()) {
-            // Có sản phẩm vượt tồn kho, redirect về cart với thông báo lỗi
             String errorMessage = cartService.buildStockErrorMessage(stockErrors);
             SessionUtil.setErrorMessage(session, errorMessage);
             response.sendRedirect(request.getContextPath() + "/cart");
@@ -64,7 +66,7 @@ public class CheckoutController extends HttpServlet {
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("subtotal", cartService.calculateSubtotal(cartItems));
 
-        request.getRequestDispatcher("user/cart/checkout.jsp").forward(request, response);
+        request.getRequestDispatcher("/user/cart/checkout.jsp").forward(request, response);
     }
 
     @Override
@@ -74,7 +76,11 @@ public class CheckoutController extends HttpServlet {
         HttpSession session = request.getSession(false);
         User user = SessionUtil.getCurrentUser(session);
 
-        // Lấy Cart object từ session
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/checkout");
+            return;
+        }
+
         Cart cart = cartService.getCart(session);
 
         if (cart.isEmpty()) {
@@ -82,7 +88,6 @@ public class CheckoutController extends HttpServlet {
             return;
         }
 
-        // Validate stock trước khi tạo đơn hàng
         List<CartService.StockValidationResult> stockErrors = cartService.validateStock(cart);
         if (!stockErrors.isEmpty()) {
             String errorMessage = cartService.buildStockErrorMessage(stockErrors);
@@ -97,13 +102,11 @@ public class CheckoutController extends HttpServlet {
 
         ShippingAddress address = null;
 
-        // Sử dụng địa chỉ có sẵn hoặc tạo mới
         Integer addressId = ValidationUtil.parseIntSafe(addressIdParam);
         if (addressId != null) {
             address = shippingService.getAddressById(addressId);
         }
 
-        // Nếu không có địa chỉ có sẵn, tạo địa chỉ mới từ form
         if (address == null) {
             address = createAddressFromForm(request, user.getUserId());
             if (address == null) {
@@ -115,7 +118,6 @@ public class CheckoutController extends HttpServlet {
 
         Map<Integer, Integer> cartMap = cart.toVariantQuantityMap();
 
-        // Tạo order
         Order order = orderService.createOrder(
                 user.getUserId(),
                 cartMap,
@@ -125,10 +127,8 @@ public class CheckoutController extends HttpServlet {
         );
 
         if (order != null) {
-            // Xóa giỏ hàng sau khi đặt hàng thành công
             cartService.clearCart(session);
             cartService.clearCartInDatabase(user.getUserId());
-
             response.sendRedirect(request.getContextPath() + "/orders/" + order.getOrderId());
         } else {
             request.setAttribute("error", orderService.getLastError() != null ?
@@ -137,9 +137,6 @@ public class CheckoutController extends HttpServlet {
         }
     }
 
-    /**
-     * Tạo address cho form.
-     */
     private ShippingAddress createAddressFromForm(HttpServletRequest request, int userId) {
         return shippingService.createAddress(
                 userId,

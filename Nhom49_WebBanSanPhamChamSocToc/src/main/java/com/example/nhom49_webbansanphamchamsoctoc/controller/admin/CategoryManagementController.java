@@ -1,42 +1,48 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.CategoryDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "CategoryManagementController", value = "/CategoryManagementController")
+@WebServlet(name = "CategoryManagementController", urlPatterns = {"/admin/categories", "/CategoryManagementController"})
 public class CategoryManagementController extends HttpServlet {
     private CategoryDAO categoryDAO;
-    public void init(){
+
+    @Override
+    public void init() throws ServletException {
         categoryDAO = new CategoryDAO();
-    }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-
-
-        //Nếu chưa đăng nhập chuyển sang trang Login
-        if (session==null|| session.getAttribute("currentUser")==null){
-            response.sendRedirect(request.getContextPath()+"/login");
-            return;
-        }
-        User currentUser = (User) session.getAttribute("currentUser");
-        //Check có phải role Admin hay không
-        if (!"Admin".equalsIgnoreCase(currentUser.getRole())){
-            response.sendError(HttpServletResponse.SC_FORBIDDEN,"Không có quyeefn truy cập");
-            return;
-        }
-
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        User currentUser = SessionUtil.getCurrentUser(session);
 
+        if (currentUser == null) {
+            response.sendRedirect(request.getContextPath() + "/auth/login");
+            return;
+        }
+        if (!"Admin".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
+            return;
+        }
+
+        request.setAttribute("categories", categoryDAO.findAll());
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 }

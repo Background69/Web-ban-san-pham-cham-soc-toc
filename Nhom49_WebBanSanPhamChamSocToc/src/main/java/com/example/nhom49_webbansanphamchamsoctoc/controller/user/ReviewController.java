@@ -3,6 +3,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ReviewService;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "ReviewController", urlPatterns = {"/review"})
 
@@ -31,11 +34,15 @@ public class ReviewController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
+        HttpSession session = request.getSession(true);
+        User user = SessionUtil.getCurrentUser(session);
 
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
+            if (user == null) {
+                redirectToLogin(request, response, productId);
+                return;
+            }
             int rating = Integer.parseInt(request.getParameter("rating"));
             String content = request.getParameter("content");
 
@@ -67,6 +74,18 @@ public class ReviewController extends HttpServlet {
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/products");
         }
+    }
+
+    private void redirectToLogin(HttpServletRequest request, HttpServletResponse response, int productId)
+            throws IOException {
+        var product = productService.getProductById(productId);
+        String redirectPath = "/products";
+        if (product != null) {
+            redirectPath = "/product/" + product.getProductSlug();
+        }
+
+        String encodedRedirect = URLEncoder.encode(redirectPath, StandardCharsets.UTF_8);
+        response.sendRedirect(request.getContextPath() + "/auth/login?redirect=" + encodedRedirect);
     }
 
     private void redirectToProduct(HttpServletRequest request, HttpServletResponse response, int productId)
