@@ -753,6 +753,29 @@ button.flash-sale-nav:active {
     margin-top: 4px;
 }
 
+.stock-progress {
+    margin-top: 12px;
+}
+
+.stock-progress-bar {
+    background: #f0f0f0;
+    height: 6px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.stock-progress-fill {
+    background: linear-gradient(90deg, #ff6b6b, #ee5a6f);
+    height: 100%;
+    border-radius: 10px;
+}
+
+.stock-progress-text {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 4px;
+}
+
 .flash-sale-btn {
     display: block;
     width: 100%;
