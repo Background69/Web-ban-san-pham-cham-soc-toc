@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
 <header>
     <div class="header-container">
@@ -40,7 +40,7 @@
             </div>
             <div class="account">
                 <c:if test="${empty sessionScope.currentUser}">
-                    <a href="${pageContext.request.contextPath}/authentication/login.jsp">
+                    <a href="${pageContext.request.contextPath}/auth/login">
                         <i class="fas fa-user-circle"></i>
                         <span class="login-in-text">Đăng nhập</span>
                     </a>
@@ -126,6 +126,5 @@
                 </ul>
             </div>
         </nav>
-    </div>
     </div>
 </header>

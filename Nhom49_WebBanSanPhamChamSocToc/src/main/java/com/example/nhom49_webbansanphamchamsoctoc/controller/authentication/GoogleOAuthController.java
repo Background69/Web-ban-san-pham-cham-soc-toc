@@ -63,7 +63,7 @@ public class GoogleOAuthController extends HttpServlet {
 
         String contextPath = request.getContextPath();
         if (!oauthEnabled) {
-            response.sendRedirect(contextPath + "/login?error=oauth_not_configured");
+            response.sendRedirect(contextPath + "/auth/login?error=oauth_not_configured");
             return;
         }
 
@@ -87,7 +87,7 @@ public class GoogleOAuthController extends HttpServlet {
         String contextPath = request.getContextPath();
 
         if (!oauthEnabled) {
-            response.sendRedirect(contextPath + "/login?error=oauth_not_configured");
+            response.sendRedirect(contextPath + "/auth/login?error=oauth_not_configured");
             return;
         }
 
@@ -96,7 +96,7 @@ public class GoogleOAuthController extends HttpServlet {
 
         if (state == null || !state.equals(sessionState)) {
             log("State mismatch: expected=" + sessionState + ", got=" + state);
-            response.sendRedirect(contextPath + "/login?error=invalid_state");
+            response.sendRedirect(contextPath + "/auth/login?error=invalid_state");
             return;
         }
 
@@ -105,13 +105,13 @@ public class GoogleOAuthController extends HttpServlet {
         String error = request.getParameter("error");
         if (error != null) {
             log("Google OAuth error: " + error);
-            response.sendRedirect(contextPath + "/login?error=oauth_" + error);
+            response.sendRedirect(contextPath + "/auth/login?error=oauth_" + error);
             return;
         }
 
         String authorizationCode = request.getParameter("code");
         if (authorizationCode == null || authorizationCode.isEmpty()) {
-            response.sendRedirect(contextPath + "/login?error=no_code");
+            response.sendRedirect(contextPath + "/auth/login?error=no_code");
             return;
         }
 
@@ -125,7 +125,7 @@ public class GoogleOAuthController extends HttpServlet {
             }
 
             if (user != null && !user.isActive()) {
-                response.sendRedirect(contextPath + "/login?error=account_inactive");
+                response.sendRedirect(contextPath + "/auth/login?error=account_inactive");
                 return;
             }
 
@@ -150,7 +150,7 @@ public class GoogleOAuthController extends HttpServlet {
 
         } catch (Exception e) {
             log("Google OAuth processing error: " + e.getMessage(), e);
-            response.sendRedirect(contextPath + "/login?error=oauth_processing_failed");
+            response.sendRedirect(contextPath + "/auth/login?error=oauth_processing_failed");
         }
     }
 }

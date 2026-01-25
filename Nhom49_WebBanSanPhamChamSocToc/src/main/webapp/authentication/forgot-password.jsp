@@ -1,5 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -9,7 +9,7 @@
     <title>Quên mật khẩu - HairGlow</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/Forgot.css">
 </head>
@@ -21,7 +21,8 @@
     <div class="login-container">
         <div class="login-box">
             <div class="logo-container">
-                <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="HairGlow Logo">
+                <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo"
+                     alt="HairGlow Logo">
             </div>
 
             <h2>Quên mật khẩu</h2>
@@ -42,7 +43,7 @@
 
             <p class="signup-text">
                 Còn nhớ mật khẩu?
-                <a href="${pageContext.request.contextPath}/authentication/login.jsp">Đăng nhập ngay!</a>
+                <a href="${pageContext.request.contextPath}/auth/login">Đăng nhập ngay!</a>
             </p>
         </div>
     </div>
@@ -52,3 +53,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+

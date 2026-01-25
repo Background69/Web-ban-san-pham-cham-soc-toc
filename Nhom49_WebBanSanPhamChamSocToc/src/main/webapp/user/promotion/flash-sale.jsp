@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -20,12 +20,12 @@
     <!-- Flash Sale Banner -->
     <div class="flash-sale-banner">
         <div class="flash-content">
-            <h1>⚡ FLASH SALE SIÊU ƯU ĐÃI ⚡</h1>
+            <h1>FLASH SALE SIÊU ƯU ĐÃI</h1>
             <p>Giảm đến 70% - Số lượng có hạn</p>
             <div class="countdown" id="countdown">
                 <div class="time-box">
                     <span id="hours">02</span>
-                    <small>Giờ</small>
+                    <small>Gi?</small>
                 </div>
                 <div class="time-box">
                     <span id="minutes">15</span>
@@ -40,28 +40,10 @@
     </div>
 
     <div class="super-deal-container">
-        <!-- Filter Categories -->
-        <div class="super-deal-categories">
-            <button class="super-deal-btn active" data-filter="all">
-                <i class="fas fa-fire"></i> Tất cả
-            </button>
-            <button class="super-deal-btn" data-filter="flash-sale">
-                <i class="fas fa-bolt"></i> Flash Sale
-            </button>
-            <button class="super-deal-btn" data-filter="combo">
-                <i class="fas fa-gift"></i> Combo siêu hời
-            </button>
-            <button class="super-deal-btn" data-filter="new">
-                <i class="fas fa-sparkles"></i> Deal mới
-            </button>
-            <button class="super-deal-btn" data-filter="clearance">
-                <i class="fas fa-percentage"></i> Xả kho
-            </button>
-        </div>
 
         <!-- Deals Section -->
         <div class="super-deal-section">
-            <h2><i class="fas fa-fire"></i> DEALS ĐANG HOT</h2>
+            <h2><i class="fas fa-fire"></i> DEALS DANG HOT</h2>
             <div class="deals-grid">
                 <c:forEach var="product" items="${saleProducts}">
                     <div class="super-deal-item"
@@ -98,12 +80,17 @@
                                     </span>
                                 </c:if>
                             </div>
-                            <div class="deal-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 0%"></div>
+                            <c:if test="${product.stockQuantity > 0}">
+                                <div class="deal-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"
+                                             style="width: ${product.soldPercent}%"></div>
+                                    </div>
+                                    <span class="sold-text">
+                                        Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                    </span>
                                 </div>
-                                <span class="sold-text">Đã bán 0</span>
-                            </div>
+                            </c:if>
                             <form action="${pageContext.request.contextPath}/cart/add" method="post">
                                 <input type="hidden" name="productId" value="${product.productId}">
                                 <input type="hidden" name="quantity" value="1">
@@ -134,7 +121,7 @@
                 <div class="combo-grid">
                     <c:forEach var="combo" items="${comboDeals}">
                         <div class="combo-item">
-                            <div class="combo-badge">Tiết kiệm ${combo.saveAmount}₫</div>
+                            <div class="combo-badge">Ti?t ki?m ${combo.saveAmount}?</div>
                             <div class="combo-images">
                                 <c:forEach var="item" items="${combo.products}">
                                     <img src="${item.primaryImage}" alt="${item.name}">
@@ -145,10 +132,10 @@
                                 <p>${combo.description}</p>
                                 <div class="combo-price">
                                     <span class="current-price">
-                                        <fmt:formatNumber value="${combo.comboPrice}" type="number"/>₫
+                                        <fmt:formatNumber value="${combo.comboPrice}" type="number"/>?
                                     </span>
                                     <span class="original-price">
-                                        <fmt:formatNumber value="${combo.originalPrice}" type="number"/>₫
+                                        <fmt:formatNumber value="${combo.originalPrice}" type="number"/>?
                                     </span>
                                 </div>
                                 <button class="combo-btn">Mua combo</button>
@@ -214,3 +201,5 @@
 </script>
 </body>
 </html>
+
+
