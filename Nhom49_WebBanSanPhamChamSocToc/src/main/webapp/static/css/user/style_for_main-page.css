@@ -23,7 +23,6 @@ a {
 }
 
 /* Header */
-
 .main-header {
     background: #326e51;
     position: sticky;
@@ -45,7 +44,6 @@ a {
 }
 
 /* Logo Header */
-
 .left-header {
     flex-shrink: 0;
 }
@@ -69,7 +67,6 @@ a {
 }
 
 /* Search Header */
-
 .center-header {
     flex: 1;
     min-width: 0;
@@ -123,7 +120,6 @@ a {
 }
 
 /* Account and Cart Header */
-
 .right-header {
     display: flex;
     align-items: center;
@@ -144,7 +140,6 @@ a {
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
-
 }
 
 .account:hover, .cart:hover {
@@ -199,10 +194,8 @@ a {
 }
 
 .header-below.nav-container {
-
     background: #a5c87f;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
-
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
 }
@@ -219,8 +212,6 @@ a {
     white-space: nowrap;
     position: relative;
     padding: 10px 14px;
-
-
 }
 
 .nav-link:hover {
@@ -283,7 +274,6 @@ a {
 }
 
 /* Dropdown Menu for Sản Phẩm*/
-
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -355,19 +345,16 @@ section.banner-section {
 
 .banner-slides {
     display: flex;
+    width: 100%; /* ĐÃ SỬA */
     height: 100%;
-    transition: transform .6s ease;
+    transition: transform 0.6s ease-in-out;
 }
 
 .banner-slides .item {
-    min-width: 100%;
+    flex: 0 0 100%; /* ĐÃ SỬA */
+    width: 100%; /* ĐÃ SỬA */
     height: 100%;
     background: #f3f5f7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 24px;
 }
 
 .banner-image {
@@ -412,48 +399,68 @@ section.banner-section {
     color: #333;
 }
 
-
 .slider .nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     border: 0;
-    background: rgba(255, 255, 255, .92);
+    background: rgba(255, 255, 255, .9);
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+    font-size: 24px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.slider .nav:hover {
+    background: #fff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .25);
 }
 
 .slider .prev {
-    left: 10px;
+    left: 15px;
 }
 
 .slider .next {
-    right: 10px;
+    right: 15px;
 }
 
 .slider-dots {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 10px;
+    bottom: 15px;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    z-index: 10;
 }
 
-.slider-dots button {
-    width: 8px;
-    height: 8px;
+.slider-dots .dot {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    border: 0;
-    background: rgba(255, 255, 255, .6);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.slider-dots button.active {
+.slider-dots .dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.slider-dots .dot.active {
     background: #fff;
+    transform: scale(1.2);
 }
 
 .news {
@@ -510,9 +517,7 @@ section.banner-section {
     padding: 12px;
 }
 
-
 /* Flash Sale Section */
-
 .flash-sale-section {
     padding: 40px 20px;
     background: #daf3b6;
@@ -540,7 +545,6 @@ section.banner-section {
     gap: 15px;
 }
 
-
 .flash-sale-title-group {
     display: flex;
     align-items: center;
@@ -558,6 +562,11 @@ section.banner-section {
 
 .flash-sale-header h2 i {
     animation: flashBlink 1.5s infinite;
+}
+
+@keyframes flashBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
 .flash-sale-countdown {
@@ -590,22 +599,136 @@ section.banner-section {
     opacity: 0.95;
 }
 
+/* ========================================
+   FLASH SALE NAVIGATION BUTTONS - FIXED
+   ======================================== */
+
+/* Container chứa slider và buttons */
 .flash-sale-slider-container {
-    position: relative;
-    padding: 0 50px;
+    position: relative !important;
+    padding: 0 70px !important; /* Chừa chỗ cho nút */
 }
 
 .flash-sale-slider {
-    overflow: hidden;
-    margin: 0 -10px;
+    overflow: hidden !important;
+    margin: 0 -10px !important;
 }
 
 .flash-sale-track {
-    display: flex;
-    transition: transform 0.3s ease;
-    gap: 20px;
-    padding: 0 10px;
+    display: flex !important;
+    transition: transform 0.4s ease !important;
+    gap: 20px !important;
+    padding: 10px !important;
 }
+
+/* FLASH SALE NAVIGATION BUTTONS */
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav,
+button.flash-sale-nav {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 2px solid rgba(255, 71, 87, 0.3) !important;
+    width: 55px !important;
+    height: 55px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow:
+            0 8px 32px rgba(255, 71, 87, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    z-index: 20 !important;
+    outline: none !important;
+}
+
+/* HOVER STATE */
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav:hover,
+button.flash-sale-nav:hover {
+    transform: translateY(-50%) scale(1.1) !important;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%) !important;
+    border-color: transparent !important;
+    box-shadow:
+            0 12px 40px rgba(255, 71, 87, 0.35),
+            0 0 20px rgba(255, 71, 87, 0.3),
+            0 0 0 4px rgba(255, 71, 87, 0.1) !important;
+}
+
+/* POSITION - PREV */
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav.prev,
+button.flash-sale-nav.prev,
+button#flash-sale-prev {
+    left: 5px !important;
+}
+
+/* POSITION - NEXT */
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav.next,
+button.flash-sale-nav.next,
+button#flash-sale-next {
+    right: 5px !important;
+}
+
+/* HOVER ROTATION */
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav.prev:hover,
+button.flash-sale-nav.prev:hover {
+    transform: translateY(-50%) scale(1.1) rotate(-5deg) !important;
+}
+
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav.next:hover,
+button.flash-sale-nav.next:hover {
+    transform: translateY(-50%) scale(1.1) rotate(5deg) !important;
+}
+
+/* ICON STYLES */
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav i,
+button.flash-sale-nav i {
+    color: #ff4757 !important;
+    transition: all 0.3s ease !important;
+    font-size: 20px !important;
+    font-weight: 900 !important;
+}
+
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav:hover i,
+button.flash-sale-nav:hover i {
+    color: white !important;
+}
+
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav.prev:hover i,
+button.flash-sale-nav.prev:hover i {
+    transform: translateX(-2px) !important;
+}
+
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav.next:hover i,
+button.flash-sale-nav.next:hover i {
+    transform: translateX(2px) !important;
+}
+
+/* ACTIVE STATE */
+.flash-sale-section .flash-sale-slider-container .flash-sale-nav:active,
+button.flash-sale-nav:active {
+    transform: translateY(-50%) scale(1.05) !important;
+}
+
+/* Animation cho Flash Sale icon */
+@keyframes flashBlink {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+.flash-sale-header h2 i {
+    animation: flashBlink 1.5s infinite !important;
+}
+
 
 .flash-sale-progress {
     margin-bottom: 12px;
@@ -648,48 +771,6 @@ section.banner-section {
     background: #e63946;
 }
 
-.flash-sale-nav-btn {
-    position: absolute;
-    top: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: #ff4757;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s;
-    z-index: 20;
-}
-
-.flash-sale-nav-btn:hover {
-    background: white;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.flash-sale-nav-prev {
-    left: 10px;
-}
-
-.flash-sale-nav-next {
-    right: 10px;
-}
-
-.flash-sale-slider-container .flash-nav-prev,
-.flash-sale-slider-container .flash-sale-nav-prev {
-    left: 10px;
-}
-
-.flash-sale-slider-container .flash-nav-next,
-.flash-sale-slider-container .flash-sale-nav-next {
-    right: 10px;
-}
-
 .flash-sale-view-all {
     text-align: right;
     margin-top: 20px;
@@ -713,17 +794,14 @@ section.banner-section {
 }
 
 /* Product Flash Sale Section */
-
 .flash-sale-section .product-item {
     position: relative;
 }
-
 
 .flash-sale-section .product-img {
     position: relative;
     z-index: 1;
 }
-
 
 .flash-sale-badge {
     position: absolute;
@@ -739,15 +817,12 @@ section.banner-section {
     box-shadow: 0 6px 12px rgba(255, 71, 87, .18);
 }
 
-
 .flash-sale-track .product-item {
     flex: 0 0 calc(25% - 20px);
     min-width: 240px;
 }
 
 /* Product Section */
-
-
 .product-item {
     background: #fff;
     border: 1px solid #eaecef;
@@ -757,7 +832,6 @@ section.banner-section {
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
-
 
 .product-item:hover {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
@@ -780,6 +854,10 @@ section.banner-section {
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s;
+}
+
+.product-item:hover .product-img img {
+    transform: scale(1.05);
 }
 
 .product-body {
@@ -912,7 +990,6 @@ section.banner-section {
 }
 
 /* Categories Section */
-
 .categories-container {
     padding: 60px 20px;
     background: #f9fafb;
@@ -966,7 +1043,6 @@ section.banner-section {
 }
 
 /* Featured Products Section */
-
 .featured-container {
     padding: 60px 20px;
     background: #ffffff;
@@ -984,9 +1060,7 @@ section.banner-section {
     flex: 1 1 200px;
 }
 
-
 /* Offers Section */
-
 .offers-grid {
     display: grid;
     grid-template-columns:repeat(4, 1fr);
@@ -1018,7 +1092,6 @@ section.banner-section {
 }
 
 /* Brands Section */
-
 .brands-container {
     padding: 60px 20px;
     background: #ffffff;
@@ -1066,7 +1139,6 @@ section.banner-section {
 }
 
 /* Footer */
-
 footer {
     background: linear-gradient(180deg, #2c5940, #1f3d2a);
     color: #fff;
@@ -1182,7 +1254,6 @@ footer {
 }
 
 /* Footer Bottom */
-
 .footer-bottom {
     background: rgba(0, 0, 0, 0.2);
     padding: 20px 0;

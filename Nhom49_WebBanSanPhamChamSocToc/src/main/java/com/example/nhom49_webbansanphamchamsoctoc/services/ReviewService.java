@@ -161,16 +161,25 @@ public class ReviewService {
 
     /**
      * Lấy rating statistics.
+     * Trả về Map với key là số sao (5 xuống 1), value là phần trăm
      */
-    public int[] getRatingStatistics(int productId) {
+    public java.util.Map<Integer, Integer> getRatingStatistics(int productId) {
         List<Review> reviews = reviewDAO.findByProductId(productId);
-        int[] stats = new int[5]; // Index 0 = 1 star, Index 4 = 5 stars
+        int[] counts = new int[5]; // Index 0 = 1 star, Index 4 = 5 stars
+        int totalReviews = reviews.size();
 
         for (Review review : reviews) {
             int rating = review.getRating();
             if (rating >= 1 && rating <= 5) {
-                stats[rating - 1]++;
+                counts[rating - 1]++;
             }
+        }
+
+        // Tạo LinkedHashMap để giữ thứ tự từ 5 sao xuống 1 sao
+        java.util.Map<Integer, Integer> stats = new java.util.LinkedHashMap<>();
+        for (int i = 5; i >= 1; i--) {
+            int percent = (totalReviews > 0) ? (counts[i - 1] * 100 / totalReviews) : 0;
+            stats.put(i, percent);
         }
 
         return stats;

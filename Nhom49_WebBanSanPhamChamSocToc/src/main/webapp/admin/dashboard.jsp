@@ -55,7 +55,7 @@
             </div>
             <div class="card">
                 <h3>Tổng Người Dùng</h3>
-                <p class="number" >${userCount}</p>
+                <p class="number">${userCount}</p>
             </div>
             <div class="card">
                 <h3>Tổng Đơn Hàng</h3>
@@ -81,7 +81,7 @@
                     <tr>
                         <td>#HD${order.orderId}</td>
                         <td>${order.customerName}</td>
-                        <td> <fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/></td>
+                        <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/></td>
                         <td> <span class="status ${order.status}">
                                 ${order.status}
                         </span></td>
