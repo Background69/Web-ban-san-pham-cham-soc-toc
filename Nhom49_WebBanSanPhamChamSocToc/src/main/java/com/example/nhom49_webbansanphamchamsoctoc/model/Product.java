@@ -38,6 +38,9 @@ public class Product {
     private String brandName;
     private String primaryImageUrl;
     private ProductVariant defaultVariant;
+    private int remainingStock;
+    private int soldQuantity;
+    private int soldPercent;
 
     // Constructors
     public Product() {
@@ -256,6 +259,30 @@ public class Product {
 
     public void setPrimaryImageUrl(String primaryImageUrl) {
         this.primaryImageUrl = primaryImageUrl;
+    }
+
+    public int getRemainingStock() {
+        return remainingStock;
+    }
+
+    public void setRemainingStock(int remainingStock) {
+        this.remainingStock = remainingStock;
+    }
+
+    public int getSoldQuantity() {
+        return soldQuantity;
+    }
+
+    public void setSoldQuantity(int soldQuantity) {
+        this.soldQuantity = soldQuantity;
+    }
+
+    public int getSoldPercent() {
+        return soldPercent;
+    }
+
+    public void setSoldPercent(int soldPercent) {
+        this.soldPercent = soldPercent;
     }
 
     public void setDefaultVariant(ProductVariant defaultVariant) {

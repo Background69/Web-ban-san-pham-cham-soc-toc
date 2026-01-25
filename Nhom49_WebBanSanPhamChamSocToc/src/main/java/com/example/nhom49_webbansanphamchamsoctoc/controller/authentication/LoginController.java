@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -33,6 +34,7 @@ public class LoginController extends HttpServlet {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String redirect = request.getParameter("redirect");
 
         if (email == null || password == null ||
                 email.trim().isEmpty() || password.trim().isEmpty()) {
@@ -56,15 +58,34 @@ public class LoginController extends HttpServlet {
         }
 
         HttpSession session = request.getSession(true);
-        session.setAttribute("currentUser", user);
+        SessionUtil.setCurrentUser(session, user);
         session.setMaxInactiveInterval(30 * 60); // 30 phút
 
         // Admin
         if ("Admin".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/Admin/Dashboard");
+            response.sendRedirect(request.getContextPath() + "/admin");
+            return;
+        }
+        String safeRedirect = normalizeRedirect(redirect);
+        if (safeRedirect != null) {
+            response.sendRedirect(request.getContextPath() + safeRedirect);
             return;
         }
 
         response.sendRedirect(request.getContextPath() + "/");
+    }
+
+    private String normalizeRedirect(String redirect) {
+        if (redirect == null) {
+            return null;
+        }
+        String trimmed = redirect.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+        if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+            return null;
+        }
+        return trimmed.startsWith("/") ? trimmed : "/" + trimmed;
     }
 }
