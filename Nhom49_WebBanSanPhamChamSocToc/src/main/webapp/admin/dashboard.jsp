@@ -25,16 +25,19 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/images/LOGO.png" alt="logo">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" alt="logo">
         </div>
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li class="active"><a href="${pageContext.request.contextPath}/admin">Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/banners">Quản lý banner</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+
         </ul>
 
         <a class="view-site" href="${pageContext.request.contextPath}/index">Quay lại Website</a>
@@ -44,7 +47,6 @@
     <main class="content">
         <div class="header">
             <h1>Dashboard</h1>
-            <button class="btn-add">+ Thêm Sản Phẩm Mới</button>
         </div>
 
         <!-- Cards -->

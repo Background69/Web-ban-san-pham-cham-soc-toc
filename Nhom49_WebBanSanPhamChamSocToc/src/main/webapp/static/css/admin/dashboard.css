@@ -295,3 +295,145 @@ body {
 .action-btn.delete:hover {
     background: #c0392b;
 }
+/* ===== USER DETAIL PAGE ===== */
+.content h1 {
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+
+.content form {
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    max-width: 600px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.content form p {
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.content form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.content form input,
+.content form select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background: #fafafa;
+}
+
+.content form input:disabled {
+    background: #f1f1f1;
+    color: #555;
+}
+
+.content form button {
+    margin-top: 20px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    background: #9bb76d;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.content form button:hover {
+    background: #89a35e;
+}
+
+.content form a {
+    margin-left: 15px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #555;
+}
+
+.content form a:hover {
+    text-decoration: underline;
+}
+/* ===== MODAL ===== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    width: 420px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.modal-content button {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 22px;
+    cursor: pointer;
+}
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.product-table th, .product-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 6px;
+}
+
+

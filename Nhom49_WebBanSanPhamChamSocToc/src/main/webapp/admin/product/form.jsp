@@ -1,62 +1,41 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>${product != null ? "Sửa sản phẩm" : "Thêm sản phẩm"}</title>
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/admin.css">
-</head>
+<h2>
+    <c:choose>
+        <c:when test="${product != null}">Sửa sản phẩm</c:when>
+        <c:otherwise>Thêm sản phẩm</c:otherwise>
+    </c:choose>
+</h2>
 
-<body>
-<div class="container">
+<form id="productForm" enctype="multipart/form-data">
 
-    <%-- Sidebar dùng chung --%>
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/images/logo.png">
-        </div>
-        <p>HairGlow Admin</p>
-    </aside>
+    <input type="hidden" name="action"
+           value="${product != null ? 'edit' : 'create'}">
 
-    <main class="content">
+    <c:if test="${product != null}">
+        <input type="hidden" name="id" value="${product.productId}">
+    </c:if>
 
-        <h1>
-            <c:choose>
-                <c:when test="${product != null}">Sửa sản phẩm</c:when>
-                <c:otherwise>Thêm sản phẩm</c:otherwise>
-            </c:choose>
-        </h1>
+    <label>Tên sản phẩm</label>
+    <input name="name" value="${product.name}" required>
 
-        <form method="post"
-              action="${pageContext.request.contextPath}/admin/products">
+    <label>Giá</label>
+    <input type="number" name="price" value="${product.price}" required>
 
-            <input type="hidden" name="action"
-                   value="${product != null ? 'edit' : 'create'}">
+    <label>Danh mục</label>
+    <select name="categoryId">
+        <c:forEach var="c" items="${categories}">
+            <option value="${c.id}"
+                ${product.categoryId == c.id ? "selected" : ""}>
+                    ${c.name}
+            </option>
+        </c:forEach>
+    </select>
 
-            <c:if test="${product != null}">
-                <input type="hidden" name="id" value="${product.productId}">
-            </c:if>
+    <label>Ảnh</label>
+    <input type="file" name="image">
 
-            <label>Tên sản phẩm</label>
-            <input name="name" value="${product.name}" required>
-
-            <label>Giá</label>
-            <input name="price" value="${product.price}" required>
-
-            <label>Danh mục</label>
-            <input name="category" value="${product.categoryName}" required>
-
-            <label>Ảnh</label>
-            <input name="image" value="${product.image}">
-
-            <button type="submit">Lưu</button>
-            <a href="${pageContext.request.contextPath}/admin/products">Hủy</a>
-        </form>
-
-    </main>
-</div>
-</body>
-</html>
+    <br><br>
+    <button type="submit">Lưu</button>
+</form>
