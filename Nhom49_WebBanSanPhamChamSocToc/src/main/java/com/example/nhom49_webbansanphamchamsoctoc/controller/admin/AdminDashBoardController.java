@@ -19,15 +19,19 @@ import java.io.IOException;
  */
 @WebServlet(name = "AdminDashBoardController", urlPatterns = {"/admin", "/admin/"})
 public class AdminDashBoardController extends HttpServlet {
-    UserDAO userDAO = new UserDAO();
-    ProductDAO productDAO = new ProductDAO();
-    OrderDAO orderDAO = new OrderDAO();
+    //UserDAO userDAO = new UserDAO();
+    //ProductDAO productDAO = new ProductDAO();
+    //OrderDAO orderDAO = new OrderDAO();
+    private UserDAO userDAO;
+    private ProductDAO productDAO;
+    private OrderDAO orderDAO;
     @Override
     public void init() throws ServletException {
         productDAO = new ProductDAO();
         userDAO = new UserDAO();
         orderDAO = new OrderDAO();
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

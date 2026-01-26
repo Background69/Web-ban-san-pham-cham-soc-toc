@@ -166,7 +166,6 @@ public class OrderDAO implements IDAO<Order> {
                         .list()
         );
     }
-
     /**
      * Tim by order code.
      *
