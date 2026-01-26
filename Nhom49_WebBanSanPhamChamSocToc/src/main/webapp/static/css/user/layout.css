@@ -574,7 +574,7 @@ footer {
     font-size: 15px;
     text-decoration: none;
     transition: 0.2s ease;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Roboto', Times, serif;
     margin-right: auto;
     font-weight: bold;
 }
@@ -632,3 +632,4 @@ footer {
 .btn-next:hover {
     background: #56732e;
 }
+
