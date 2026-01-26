@@ -560,6 +560,18 @@ a {
     font-weight: bold;
 }
 
+.current-price {
+    color: #ff5252;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.original-price {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 14px;
+}
+
 .deal-progress {
     margin-top: auto;
     padding-top: 10px;
@@ -583,6 +595,11 @@ a {
 .deal-progress span {
     font-size: 13px;
     color: #666;
+}
+
+.deal-progress .sold-text {
+    font-weight: 600;
+    color: #555;
 }
 
 .deal-savings, .deal-gift, .deal-quantity, .deal-promo-note {
@@ -618,6 +635,24 @@ a {
 
 .btn-grab-deal:hover {
     background: linear-gradient(135deg, #ff5252, #ff4141);
+}
+
+.deal-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.deal-btn:hover {
+    background: linear-gradient(135deg, #ff5252, #ff4141);
+    transform: translateY(-2px);
 }
 
 

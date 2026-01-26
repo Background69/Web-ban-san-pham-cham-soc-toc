@@ -62,16 +62,6 @@
                 </div>
             </div>
 
-            <div class="contact-item">
-                <div class="contact-icon">
-                    <i class="fas fa-comment-dots"></i>
-                </div>
-                <div class="contact-body">
-                    <h3>Chat trực tuyến</h3>
-                    <p>Hỗ trợ ngay lập tức</p>
-                    <button class="chat-btn" type="button">Bắt đầu chat</button>
-                </div>
-            </div>
         </div>
 
         <!-- Hướng dẫn mua hàng -->
