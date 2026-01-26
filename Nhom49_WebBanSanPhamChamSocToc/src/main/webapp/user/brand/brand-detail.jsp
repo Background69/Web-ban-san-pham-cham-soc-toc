@@ -16,7 +16,7 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <!-- Brand Banner -->
-<section class="brand-banner">
+<section class="brand-banner section-animate">
     <div class="brand-banner-overlay"></div>
     <div class="brand-banner-content">
         <nav class="breadcrumb">
@@ -51,9 +51,9 @@
     </div>
 </section>
 
-<main class="brand-detail-main">
+<main class="brand-detail-main page-animate">
     <!-- Brand Info Section -->
-    <div class="brand-info-section">
+    <div class="brand-info-section section-animate">
         <c:if test="${not empty brand.fullDescription}">
             <div class="brand-description-card">
                 <h2><i class="fas fa-info-circle"></i> Giới thiệu thương hiệu</h2>
@@ -65,7 +65,7 @@
         <c:if test="${not empty categoryStats}">
             <div class="brand-stats">
                 <h3><i class="fas fa-chart-pie"></i> Danh mục sản phẩm</h3>
-                <div class="stats-grid">
+                <div class="stats-grid stagger-fade">
                     <c:forEach var="stat" items="${categoryStats}">
                         <div class="stat-item">
                             <span class="stat-number">${stat.value}</span>
@@ -90,7 +90,7 @@
             </div>
         </div>
 
-        <div class="brand-products-grid">
+        <div class="brand-products-grid stagger-fade">
             <c:forEach var="product" items="${products}">
                 <div class="product-item"
                      data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
@@ -151,7 +151,7 @@
                                 </c:if>
                             </c:if>
                         </div>
-                        <c:if test="${product.stockQuantity > 0}">
+                        <c:if test="${product.onSale && product.stockQuantity > 0}">
                             <div class="stock-progress">
                                 <div class="stock-progress-bar">
                                     <div class="stock-progress-fill"
