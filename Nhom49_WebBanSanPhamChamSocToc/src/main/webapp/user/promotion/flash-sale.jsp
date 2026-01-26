@@ -15,7 +15,7 @@
 </head>
 <body>
 <!-- Header -->
-<jsp:include page="/layout/header.jsp"/>
+<jsp:include page="/src/main/webapp/layout/header.jsp"/>
 
 <main class="page-animate">
     <!-- Flash Sale Banner -->
@@ -199,7 +199,7 @@
 </main>
 
 <!-- Footer -->
-<jsp:include page="/layout/footer.jsp"/>
+<jsp:include page="/src/main/webapp/layout/footer.jsp"/>
 
 <script>
     // Countdown timer - đếm ngược đến cuối ngày
