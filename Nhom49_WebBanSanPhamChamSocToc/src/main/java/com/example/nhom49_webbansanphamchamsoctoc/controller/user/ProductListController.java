@@ -59,8 +59,8 @@ public class ProductListController extends HttpServlet {
         Brand currentBrand = resolveBrand(brandParam);
 
         List<Product> products = search != null
-                ? productService.searchProducts(search)
-                : productService.getAllProducts();
+                ? productService.searchProductsExcludingOnSale(search)
+                : productService.getAllProductsExcludingOnSale();
 
         List<Product> filtered = new ArrayList<>();
         BigDecimal minPrice = null;
@@ -76,9 +76,6 @@ public class ProductListController extends HttpServlet {
                 continue;
             }
             if (currentBrand != null && !Objects.equals(product.getBrandId(), currentBrand.getBrandId())) {
-                continue;
-            }
-            if (product.isOnSale()) {
                 continue;
             }
             if (minPrice != null || maxPrice != null) {

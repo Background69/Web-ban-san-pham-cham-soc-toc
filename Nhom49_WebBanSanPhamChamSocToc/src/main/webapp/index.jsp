@@ -126,7 +126,7 @@
 </section>
 
 <!-- Flash Sale Section -->
-<section class="flash-sale-section">
+<section class="flash-sale-section section-animate">
     <div class="flash-sale-container">
         <div class="flash-sale-header">
             <div class="flash-sale-title-group">
@@ -151,52 +151,61 @@
         <div class="flash-sale-slider-container">
             <button class="flash-sale-nav prev" id="flash-sale-prev"><i class="fas fa-chevron-left"></i></button>
             <div class="flash-sale-slider">
-                <div class="flash-sale-track" id="flash-sale-track">
+                <div class="flash-sale-track stagger-fade" id="flash-sale-track">
                     <c:forEach var="product" items="${saleProducts}">
-                        <div class="product-item">
-                            <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
-                                <div class="flash-sale-badge">-${product.defaultVariant.discountPercent}%</div>
-                            </c:if>
+                        <div class="product-item flash-sale-item">
                             <div class="product-img">
+                                <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                                    <div class="flash-sale-badge">-${product.defaultVariant.discountPercent}%</div>
+                                </c:if>
                                 <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                     <img alt="${product.productName}" class="product-image"
                                          src="${pageContext.request.contextPath}/static/images/${product.primaryImage != null ? product.primaryImage.imageUrl : 'default-product.png'}">
                                 </a>
                             </div>
                             <div class="product-body">
-                                <h3 class="product-title">${product.productName}</h3>
-                                <div class="product-price">
-                                    <c:if test="${product.defaultVariant != null}">
-                                        <p class="price-current">
-                                            <fmt:formatNumber
-                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
-                                                    type="number"/>₫
-                                        </p>
-                                        <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                            <p class="price-old"><fmt:formatNumber
-                                                    value="${product.defaultVariant.originalPrice}" type="number"/>₫</p>
-                                            <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                <h3 class="product-title">
+                                    <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                            ${product.productName}
+                                    </a>
+                                </h3>
+                                <div class="product-footer">
+                                    <div class="product-price">
+                                        <c:if test="${product.defaultVariant != null}">
+                                            <p class="price-current">
+                                                <fmt:formatNumber
+                                                        value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                        type="number"/>₫
+                                            </p>
+                                            <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                                <p class="price-old"><fmt:formatNumber
+                                                        value="${product.defaultVariant.originalPrice}" type="number"/>₫</p>
+                                                <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                            </c:if>
                                         </c:if>
-                                    </c:if>
-                                </div>
-                                <div class="product">
-                                    <a class="btn"
-                                       href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
-                                        thêm</a>
-                                    <a class="btn primary add-to-cart" href="#" data-product-id="${product.productId}">Thêm
-                                        vào giỏ</a>
-                                </div>
-                                <c:if test="${product.stockQuantity > 0}">
-                                    <div class="stock-progress">
-                                        <div class="stock-progress-bar">
-                                            <div class="stock-progress-fill"
-                                                 style="width: ${product.soldPercent}%"></div>
-                                        </div>
-                                        <div class="stock-progress-text">
-                                            Đã bán ${product.soldQuantity}/${product.stockQuantity}
-                                        </div>
                                     </div>
-                                </c:if>
+                                    <c:if test="${product.onSale && product.stockQuantity > 0}">
+                                        <div class="stock-progress">
+                                            <div class="stock-progress-bar">
+                                                <div class="stock-progress-fill"
+                                                     style="width: ${product.soldPercent}%"></div>
+                                            </div>
+                                            <div class="stock-progress-text">
+                                                Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <form class="action-buttons" action="${pageContext.request.contextPath}/cart/add" method="post">
+                                        <input type="hidden" name="productId" value="${product.productId}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" name="action" value="add_to_cart" class="btn btn-outline-cart">
+                                            <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                                        </button>
+                                        <button type="submit" name="action" value="buy_now" class="btn btn-buy-now">
+                                            Mua ngay
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </c:forEach>
@@ -207,11 +216,11 @@
     </div>
 </section>
 
-<main>
+<main class="page-animate">
     <!-- Categories Container -->
     <div class="categories-container" id="categories-container">
         <h2 class="container-title">Danh Mục Sản Phẩm</h2>
-        <div class="categories-grid">
+        <div class="categories-grid stagger-fade">
             <a class="category-item" href="${pageContext.request.contextPath}/products?category=dau-goi">
                 <div class="category-icon"><i class="fas fa-shower"></i></div>
                 <h3>Dầu Gội</h3>
@@ -248,7 +257,7 @@
     <!-- Featured Products Container -->
     <div class="featured-container" id="featured-container">
         <h2 class="container-title">Sản Phẩm Nổi Bật</h2>
-        <div class="product-grid" id="featured-products">
+        <div class="product-grid stagger-fade" id="featured-products">
             <c:forEach var="product" items="${featuredProducts}">
                 <div class="product-item">
                     <div class="product-img">
@@ -293,7 +302,7 @@
                                 </c:if>
                             </c:if>
                         </div>
-                        <c:if test="${product.stockQuantity > 0}">
+                        <c:if test="${product.onSale && product.stockQuantity > 0}">
                             <div class="stock-progress">
                                 <div class="stock-progress-bar">
                                     <div class="stock-progress-fill"
@@ -304,7 +313,7 @@
                                 </div>
                             </div>
                         </c:if>
-                        <div class="product">
+                        <div class="product product-actions">
                             <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
                                 thêm</a>
                             <a class="btn primary add-to-cart" href="#" data-product-id="${product.productId}">Thêm vào
@@ -319,7 +328,7 @@
     <!-- Brands Container -->
     <div class="brands-container" id="brands-container">
         <h2 class="container-title">Thương Hiệu Uy Tín</h2>
-        <div class="brands-grid">
+        <div class="brands-grid stagger-fade">
             <c:forEach var="brand" items="${brands}">
                 <a class="brand-item" href="${pageContext.request.contextPath}/products?brand=${brand.brandSlug}">
                     <c:choose>
