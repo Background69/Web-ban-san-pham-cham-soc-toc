@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/login.css">
 </head>
-<body>
+<body class="login-page">
+
 
 <%@ include file="/layout/header.jsp" %>
 
