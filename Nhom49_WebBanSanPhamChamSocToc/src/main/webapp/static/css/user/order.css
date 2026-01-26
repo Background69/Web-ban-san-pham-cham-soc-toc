@@ -1,0 +1,242 @@
+.order-history-main {
+    background: #f6f7fb;
+    min-height: 70vh;
+    padding: 40px 0;
+}
+
+.order-history-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.order-history-container h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1f2a44;
+    margin-bottom: 20px;
+}
+
+.order-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.order-tabs {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.order-tabs .tab-btn {
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid #e0e7ff;
+    background: #fff;
+    color: #374151;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.order-tabs .tab-btn.active,
+.order-tabs .tab-btn:hover {
+    background: #2563eb;
+    color: #fff;
+    border-color: #2563eb;
+}
+
+.order-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 16px;
+}
+
+.order-status {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.status-confirmed {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.status-shipping {
+    background: #ecfdf3;
+    color: #16a34a;
+}
+
+.status-completed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-cancelled {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.order-items {
+    display: grid;
+    gap: 12px;
+}
+
+.order-item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #f3f4f6;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.item-name {
+    font-weight: 600;
+    color: #111827;
+}
+
+.item-variant,
+.item-qty {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.item-price {
+    font-weight: 700;
+    color: #111827;
+}
+
+.more-items {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 8px;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.order-total span {
+    font-weight: 700;
+    color: #111827;
+}
+
+.order-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-detail {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-cancel {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #ef4444;
+    background: #fff;
+    color: #ef4444;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-shop {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: #16a34a;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.order-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.order-detail-box {
+    padding: 16px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+.order-detail-box h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+@media (max-width: 768px) {
+    .order-item {
+        grid-template-columns: 56px 1fr;
+    }
+
+    .item-price {
+        grid-column: 1 / -1;
+        text-align: right;
+    }
+}
