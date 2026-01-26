@@ -1,41 +1,50 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<h2>
-    <c:choose>
-        <c:when test="${product != null}">Sửa sản phẩm</c:when>
-        <c:otherwise>Thêm sản phẩm</c:otherwise>
-    </c:choose>
-</h2>
+<div class="product-form-wrapper">
+    <h2>
+        <c:choose>
+            <c:when test="${product != null}">Sửa sản phẩm</c:when>
+            <c:otherwise>Thêm sản phẩm</c:otherwise>
+        </c:choose>
+    </h2>
 
-<form id="productForm" enctype="multipart/form-data">
+    <form id="productForm" class="product-form" enctype="multipart/form-data">
 
-    <input type="hidden" name="action"
-           value="${product != null ? 'edit' : 'create'}">
+        <input type="hidden" name="action"
+               value="${product != null ? 'edit' : 'create'}">
 
-    <c:if test="${product != null}">
-        <input type="hidden" name="id" value="${product.productId}">
-    </c:if>
+        <c:if test="${product != null}">
+            <input type="hidden" name="id" value="${product.productId}">
+        </c:if>
 
-    <label>Tên sản phẩm</label>
-    <input name="name" value="${product.name}" required>
+        <div class="form-group">
+            <label>Tên sản phẩm</label>
+            <input name="name" value="${product.name}" required>
+        </div>
 
-    <label>Giá</label>
-    <input type="number" name="price" value="${product.price}" required>
+        <div class="form-group">
+            <label>Giá</label>
+            <input type="number" name="price" value="${product.price}" required>
+        </div>
 
-    <label>Danh mục</label>
-    <select name="categoryId">
-        <c:forEach var="c" items="${categories}">
-            <option value="${c.id}"
-                ${product.categoryId == c.id ? "selected" : ""}>
-                    ${c.name}
-            </option>
-        </c:forEach>
-    </select>
+        <div class="form-group">
+            <label>Danh mục</label>
+            <select name="categoryId">
+                <c:forEach var="c" items="${categories}">
+                    <option value="${c.id}"
+                        ${product.categoryId == c.id ? "selected" : ""}>
+                            ${c.name}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
 
-    <label>Ảnh</label>
-    <input type="file" name="image">
+        <div class="form-group">
+            <label>Ảnh</label>
+            <input type="file" name="image">
+        </div>
 
-    <br><br>
-    <button type="submit">Lưu</button>
-</form>
+        <button type="submit" class="btn-submit">Lưu</button>
+    </form>
+</div>
