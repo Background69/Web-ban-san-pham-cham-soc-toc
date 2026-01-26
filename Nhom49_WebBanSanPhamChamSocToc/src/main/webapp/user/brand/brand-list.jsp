@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -15,7 +15,7 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <!-- Brands Banner -->
-<section class="brands-banner">
+<section class="brands-banner section-animate">
     <div class="brands-banner-overlay"></div>
     <div class="brands-banner-content">
         <nav class="breadcrumb">
@@ -35,11 +35,11 @@
     </div>
 </section>
 
-<main class="brands-main">
+<main class="brands-main page-animate">
     <!-- Filter Section -->
     <div class="filter-section">
         <h3><i class="fas fa-filter"></i> Lọc theo xuất xứ</h3>
-        <div class="filter-tags">
+        <div class="filter-tags stagger-fade">
             <button class="filter-tag active" data-origin="all">Tất cả</button>
             <c:forEach var="origin" items="${origins}">
                 <button class="filter-tag" data-origin="${origin.toLowerCase()}">${origin}</button>
@@ -48,9 +48,9 @@
     </div>
 
     <!-- Brands Grid -->
-    <div class="brands-grid">
+    <div class="brands-grid stagger-fade">
         <c:forEach var="brand" items="${brands}">
-            <div class="brand-item" data-origin="${brand.origin.toLowerCase()}">
+            <div class="brand-item" data-origin="${not empty brand.origin ? brand.origin.toLowerCase() : 'unknown'}">
                 <div class="brand-logo">
                     <c:choose>
                         <c:when test="${not empty brand.logoUrl}">
@@ -108,3 +108,4 @@
 </script>
 </body>
 </html>
+

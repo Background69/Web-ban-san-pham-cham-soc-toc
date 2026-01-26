@@ -1,10 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <footer>
     <!-- Footer Top -->
     <div class="main-footer footer-top">
         <div class="footer-container">
 
-            <!-- Contact Info -->
             <div class="footer-col">
                 <h4><i class="fas fa-address-card me-2"></i>Liên hệ với chúng tôi</h4>
                 <div class="contact-info">
@@ -121,8 +120,8 @@
         <div class="footer-bottom-content">
             <p><i class="far fa-copyright me-1"></i>2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
             <div class="footer-bottom-links">
-                <a href="#"><i class="fas fa-file-contract me-1"></i>Điều khoản sử dụng</a>
-                <a href="#"><i class="fas fa-user-shield me-1"></i>Chính sách bảo mật</a>
+                <a href="${pageContext.request.contextPath}/terms"><i class="fas fa-file-contract me-1"></i>Điều khoản sử dụng</a>
+                <a href="${pageContext.request.contextPath}/privacy"><i class="fas fa-user-shield me-1"></i>Chính sách bảo mật</a>
             </div>
         </div>
     </div>
@@ -132,3 +131,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
 </script>
+
+

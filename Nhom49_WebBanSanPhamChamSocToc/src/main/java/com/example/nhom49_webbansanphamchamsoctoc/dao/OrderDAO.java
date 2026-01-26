@@ -7,7 +7,6 @@ import org.jdbi.v3.core.Jdbi;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.sun.tools.attach.VirtualMachine.list;
 
 /**
  * Lớp OrderDao.

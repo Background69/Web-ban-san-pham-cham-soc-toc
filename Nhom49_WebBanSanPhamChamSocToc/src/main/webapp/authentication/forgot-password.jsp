@@ -1,5 +1,6 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -8,23 +9,24 @@
     <title>Quên mật khẩu - HairGlow</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/Forgot.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/login.css">
 </head>
-<body>
+
+<body class="login-page">
 
 <%@ include file="/layout/header.jsp" %>
 
-<main>
+<main class="login-main">
     <div class="login-container">
         <div class="login-box">
-            <div class="logo-container">
-                <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="HairGlow Logo">
-            </div>
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png"
+                 class="logo" alt="HairGlow Logo">
 
-            <h2>Quên mật khẩu</h2>
-            <p>Nhập địa chỉ Email đã liên kết với tài khoản</p>
+            <h1>Quên mật khẩu</h1>
+            <p class="subtitle">Nhập email đã liên kết với tài khoản</p>
 
             <c:if test="${not empty message}">
                 <div class="success-msg">${message}</div>
@@ -34,20 +36,26 @@
                 <div class="error-msg">${error}</div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/auth/forgot-password" method="post">
-                <input type="email" name="email" placeholder="Nhập email của bạn" required>
-                <button type="submit" class="btn-primary">Gửi link đặt lại mật khẩu</button>
+            <form action="${pageContext.request.contextPath}/auth/forgot-password" method="post" autocomplete="on">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email"
+                           placeholder="Nhập email của bạn" required autocomplete="email">
+                </div>
+
+                <button type="submit" class="btn-login">Gửi link đặt lại mật khẩu</button>
             </form>
 
             <p class="signup-text">
                 Còn nhớ mật khẩu?
-                <a href="${pageContext.request.contextPath}/authentication/login.jsp">Đăng nhập ngay!</a>
+                <a href="${pageContext.request.contextPath}/auth/login">Đăng nhập ngay!</a>
             </p>
         </div>
     </div>
 </main>
 
 <%@ include file="/layout/footer.jsp" %>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -3,13 +3,18 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ShippingService;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 
-import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "AddressController", urlPatterns = {"/profile/addresses", "/profile/addresses/*"})
@@ -27,16 +32,18 @@ public class AddressController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("currentUser");
+        HttpSession session = request.getSession(false);
+        User user = SessionUtil.getCurrentUser(session);
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/profile/addresses");
             return;
         }
 
-        String pathInfo = request.getPathInfo();
+        request.setAttribute("success", request.getParameter("success"));
+        request.setAttribute("error", request.getParameter("error"));
 
+        String pathInfo = request.getPathInfo();
         if (pathInfo != null && pathInfo.matches("/\\d+")) {
             int addressId = Integer.parseInt(pathInfo.substring(1));
             ShippingAddress address = shippingService.getAddressById(addressId);
@@ -45,15 +52,10 @@ public class AddressController extends HttpServlet {
                 return;
             }
             request.setAttribute("selectedAddress", address);
-            List<ShippingAddress> addresses = shippingService.getAddressesByUser(user.getUserId());
-            request.setAttribute("addresses", addresses);
-            request.getRequestDispatcher("/user/address.jsp").forward(request, response);
-            return;
         }
 
         List<ShippingAddress> addresses = shippingService.getAddressesByUser(user.getUserId());
         request.setAttribute("addresses", addresses);
-
         request.getRequestDispatcher("/user/address.jsp").forward(request, response);
     }
 
@@ -61,8 +63,8 @@ public class AddressController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("currentUser");
+        HttpSession session = request.getSession(false);
+        User user = SessionUtil.getCurrentUser(session);
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
@@ -72,13 +74,10 @@ public class AddressController extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/") || pathInfo.equals("/save")) {
-            // Thêm hoặc cập nhật địa chỉ
             saveAddress(request, response, user);
         } else if (pathInfo.equals("/set-default")) {
-            // Đặt địa chỉ mặc định
             setDefaultAddress(request, response, user);
         } else if (pathInfo.equals("/delete")) {
-            // Xóa địa chỉ
             deleteAddress(request, response, user);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -128,9 +127,11 @@ public class AddressController extends HttpServlet {
             if (address.getAddressId() > 0) {
                 shippingService.setDefaultAddress(user.getUserId(), address.getAddressId());
             }
-            response.sendRedirect(request.getContextPath() + "/profile/addresses?success=Đã lưu địa chỉ thành công");
+            response.sendRedirect(request.getContextPath() + "/profile/addresses?success=" +
+                    encodeMessage("Đã lưu địa chỉ thành công"));
         } else {
-            response.sendRedirect(request.getContextPath() + "/profile/addresses?error=Không thể lưu địa chỉ");
+            response.sendRedirect(request.getContextPath() + "/profile/addresses?error=" +
+                    encodeMessage("Không thể lưu địa chỉ"));
         }
     }
 
@@ -142,9 +143,11 @@ public class AddressController extends HttpServlet {
             boolean success = shippingService.setDefaultAddress(user.getUserId(), address.getAddressId());
 
             if (success) {
-                response.sendRedirect(request.getContextPath() + "/profile/addresses?success=Đã đặt địa chỉ mặc định");
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?success=" +
+                        encodeMessage("Đã đặt địa chỉ mặc định"));
             } else {
-                response.sendRedirect(request.getContextPath() + "/profile/addresses?error=Không thể đặt địa chỉ mặc định");
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?error=" +
+                        encodeMessage("Không thể đặt địa chỉ mặc định"));
             }
         } else {
             response.sendRedirect(request.getContextPath() + "/profile/addresses");
@@ -165,9 +168,11 @@ public class AddressController extends HttpServlet {
             boolean success = shippingService.deleteAddress(addressId);
 
             if (success) {
-                response.sendRedirect(request.getContextPath() + "/profile/addresses?success=Đã xóa địa chỉ");
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?success=" +
+                        encodeMessage("Đã xóa địa chỉ"));
             } else {
-                response.sendRedirect(request.getContextPath() + "/profile/addresses?error=Không thể xóa địa chỉ");
+                response.sendRedirect(request.getContextPath() + "/profile/addresses?error=" +
+                        encodeMessage("Không thể xóa địa chỉ"));
             }
         } else {
             response.sendRedirect(request.getContextPath() + "/profile/addresses");
@@ -191,5 +196,9 @@ public class AddressController extends HttpServlet {
             fallback.setDefault(true);
         }
         return fallback;
+    }
+
+    private String encodeMessage(String message) {
+        return URLEncoder.encode(message, StandardCharsets.UTF_8);
     }
 }

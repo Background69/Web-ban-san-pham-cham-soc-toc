@@ -5,7 +5,7 @@
 
 /* ========== IMPORT BASE STYLES ========== */
 @import url('style.css');
-@import url('animations.css');
+@import url('../animation.css');
 
 /* ========== STORE CONTAINER ========== */
 .store-container {
@@ -332,6 +332,9 @@
 /* Product Body */
 .product-body {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .product-title {
@@ -423,6 +426,15 @@
 .product-actions {
     display: flex;
     gap: 10px;
+    margin-top: auto;
+}
+
+.product-item .stock-progress {
+    margin-bottom: 12px;
+}
+
+.product-item .stock-progress-text {
+    font-size: 12px;
 }
 
 .product-actions .btn {

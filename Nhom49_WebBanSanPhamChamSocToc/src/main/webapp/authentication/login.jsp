@@ -1,4 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -6,15 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập - HairGlow</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <!-- Custom CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/login.css">
 </head>
-<body>
+<body class="login-page">
+
 
 <%@ include file="/layout/header.jsp" %>
 
@@ -30,8 +31,15 @@
             <c:if test="${not empty error}">
                 <div class="error-msg">${error}</div>
             </c:if>
+            <%
+                String redirect = request.getParameter("redirect");
+                if (redirect == null) redirect = "";
+            %>
 
             <form action="${pageContext.request.contextPath}/auth/login" method="post" autocomplete="on">
+                <c:if test="${not empty param.redirect}">
+                    <input type="hidden" name="redirect" value="${param.redirect}">
+                </c:if>
                 <div class="form-group">
                     <label for="email">Email hoặc Username</label>
                     <!-- backend của bạn lấy param "email" -->
@@ -57,16 +65,19 @@
                 <div class="or-divider"><span>Hoặc</span></div>
 
                 <div class="social-login">
-                    <a class="google-btn" href="${pageContext.request.contextPath}/auth/google">
+                    <a class="google-btn"
+                       href="${pageContext.request.contextPath}/auth/google<%=
+        redirect.isEmpty() ? "" : "?redirect=" + java.net.URLEncoder.encode(redirect, "UTF-8")
+   %>">
                         <img src="${pageContext.request.contextPath}/static/assets/icons/Google.png" alt="Google">
-                        <span>Google</span>
+                        <span>Đăng nhập bằng Google</span>
                     </a>
+
                 </div>
             </form>
 
             <p class="signup-text">
                 Chưa có tài khoản?
-                <!-- ✅ về đúng servlet register -->
                 <a href="${pageContext.request.contextPath}/authentication/register.jsp">Đăng ký</a>
 
             </p>

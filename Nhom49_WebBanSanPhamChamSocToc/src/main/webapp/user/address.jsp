@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -7,19 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý địa chỉ</title>
 
-    <!-- Bootstrap CSS (BẮT BUỘC) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-
-    <!-- CSS của bạn -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/address.css?v=1">
 </head>
 <body>
 
-<jsp:include page="/layout/header.jsp" />
+<jsp:include page="/layout/header.jsp"/>
 
 <main class="py-5" style="background:#f5f5f5;">
     <div class="container">
@@ -31,25 +26,25 @@
                     <ul class="list-unstyled mb-0 d-grid gap-2">
                         <li>
                             <a class="text-decoration-none d-block px-3 py-2 rounded-2"
-                               href="${pageContext.request.contextPath}/user/profile">
+                               href="${pageContext.request.contextPath}/profile">
                                 Hồ sơ
                             </a>
                         </li>
                         <li>
                             <a class="text-decoration-none d-block px-3 py-2 rounded-2 bg-success-subtle fw-semibold"
-                               href="${pageContext.request.contextPath}/user/address">
+                               href="${pageContext.request.contextPath}/profile/addresses">
                                 Địa chỉ
                             </a>
                         </li>
                         <li>
                             <a class="text-decoration-none d-block px-3 py-2 rounded-2"
-                               href="${pageContext.request.contextPath}/user/orders">
+                               href="${pageContext.request.contextPath}/orders">
                                 Đơn hàng
                             </a>
                         </li>
                         <li>
                             <a class="text-decoration-none d-block px-3 py-2 rounded-2"
-                               href="${pageContext.request.contextPath}/user/change-password">
+                               href="${pageContext.request.contextPath}/profile/change-password">
                                 Đổi mật khẩu
                             </a>
                         </li>
@@ -75,15 +70,19 @@
 
                     <hr class="my-4">
 
-                    <!-- Alert -->
-                    <c:if test="${not empty success}">
+                    <c:if test="${not empty param.success}">
+                        <div class="alert alert-success">${param.success}</div>
+                    </c:if>
+                    <c:if test="${not empty param.error}">
+                        <div class="alert alert-danger">${param.error}</div>
+                    </c:if>
+                    <c:if test="${empty param.success && not empty success}">
                         <div class="alert alert-success">${success}</div>
                     </c:if>
-                    <c:if test="${not empty error}">
+                    <c:if test="${empty param.error && not empty error}">
                         <div class="alert alert-danger">${error}</div>
                     </c:if>
 
-                    <!-- LIST -->
                     <c:choose>
                         <c:when test="${empty addresses}">
                             <div class="text-center py-5">
@@ -96,27 +95,29 @@
                                 <c:forEach var="address" items="${addresses}">
                                     <div class="border rounded-3 p-3 d-flex justify-content-between align-items-start gap-3">
                                         <div>
-                                            <div class="fw-bold mb-1">${address.fullName}</div>
+                                            <div class="fw-bold mb-1">
+                                                ${address.fullName}
+                                                <c:if test="${address.default}">
+                                                    <span class="badge bg-success ms-2">Mặc định</span>
+                                                </c:if>
+                                            </div>
                                             <div class="text-muted mb-1">${address.phone}</div>
                                             <div class="text-muted">
-                                                    ${address.specificAddress},
-                                                    ${address.wardName},
-                                                    ${address.districtName},
-                                                    ${address.provinceName}
+                                                ${address.specificAddress},
+                                                ${address.wardName},
+                                                ${address.districtName},
+                                                ${address.provinceName}
                                             </div>
                                         </div>
 
                                         <div class="d-flex gap-2 flex-shrink-0">
-                                            <a href="${pageContext.request.contextPath}/user/address?action=edit&id=${address.addressId}"
-                                               class="btn btn-sm btn-outline-primary">
-                                                Sửa
-                                            </a>
-
-                                            <a href="${pageContext.request.contextPath}/user/address?action=delete&id=${address.addressId}"
-                                               class="btn btn-sm btn-outline-danger"
-                                               onclick="return confirm('Bạn chắc chắn muốn xóa địa chỉ này?')">
-                                                Xóa
-                                            </a>
+                                            <form action="${pageContext.request.contextPath}/profile/addresses/delete" method="post">
+                                                <input type="hidden" name="addressId" value="${address.addressId}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Bạn chắc chắn muốn xóa địa chỉ này?')">
+                                                    Xóa
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -138,7 +139,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form action="${pageContext.request.contextPath}/user/address" method="post">
+            <form action="${pageContext.request.contextPath}/profile/addresses" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Họ tên</label>
@@ -151,29 +152,42 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label fw-semibold">Email (tùy chọn)</label>
+                        <input type="email" class="form-control" name="email">
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label fw-semibold">Tỉnh/Thành phố</label>
-                        <select class="form-select" name="province" id="province" required>
+                        <select class="form-select" name="provinceCode" id="province" required>
                             <option value="">Chọn tỉnh/thành phố</option>
                         </select>
+                        <input type="hidden" name="provinceName" id="provinceName">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Quận/Huyện</label>
-                        <select class="form-select" name="district" id="district" required>
+                        <select class="form-select" name="districtCode" id="district" required>
                             <option value="">Chọn quận/huyện</option>
                         </select>
+                        <input type="hidden" name="districtName" id="districtName">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Phường/Xã</label>
-                        <select class="form-select" name="ward" id="ward" required>
+                        <select class="form-select" name="wardCode" id="ward" required>
                             <option value="">Chọn phường/xã</option>
                         </select>
+                        <input type="hidden" name="wardName" id="wardName">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Địa chỉ cụ thể</label>
                         <textarea class="form-control" name="specificAddress" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Ghi chú (tùy chọn)</label>
+                        <textarea class="form-control" name="note" rows="2"></textarea>
                     </div>
                 </div>
 
@@ -186,13 +200,11 @@
     </div>
 </div>
 
-<jsp:include page="/layout/footer.jsp" />
-
-<!-- Bootstrap JS -->
+<jsp:include page="/layout/footer.jsp"/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- JS của bạn -->
+<script src="${pageContext.request.contextPath}/static/js/address.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/main.js"></script>
 
 </body>
 </html>
+

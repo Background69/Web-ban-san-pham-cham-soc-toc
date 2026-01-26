@@ -1,6 +1,7 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
 import com.example.nhom49_webbansanphamchamsoctoc.model.Brand;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.services.BrandService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
@@ -9,7 +10,10 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "BrandController", urlPatterns = {"/brands", "/brand/*"})
 public class BrandController extends HttpServlet {
@@ -85,15 +89,44 @@ public class BrandController extends HttpServlet {
             page = 1;
         }
 
-        List<Product> products = productService.getProductsByBrand(brand.getBrandId(), page, pageSize);
-        int totalProducts = productService.countProductsByBrand(brand.getBrandId());
+        List<Product> allBrandProducts = productService.getProductsByBrand(brand.getBrandId());
+        List<Product> filteredProducts = new ArrayList<>();
+        for (Product product : allBrandProducts) {
+            if (!product.isOnSale()) {
+                filteredProducts.add(product);
+            }
+        }
+
+        int totalProducts = filteredProducts.size();
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+        if (totalPages > 0 && page > totalPages) {
+            page = totalPages;
+        }
+
+        int fromIndex = Math.max(0, (page - 1) * pageSize);
+        int toIndex = Math.min(fromIndex + pageSize, filteredProducts.size());
+        List<Product> products = fromIndex >= filteredProducts.size()
+                ? List.of()
+                : filteredProducts.subList(fromIndex, toIndex);
+        Map<Integer, Category> categoryMap = new LinkedHashMap<>();
+        Map<String, Integer> categoryStats = new LinkedHashMap<>();
+        for (Product product : filteredProducts) {
+            Category category = product.getCategory();
+            if (category == null) {
+                continue;
+            }
+            categoryMap.putIfAbsent(category.getCategoryId(), category);
+            categoryStats.put(category.getCategoryName(),
+                    categoryStats.getOrDefault(category.getCategoryName(), 0) + 1);
+        }
 
         request.setAttribute("brand", brand);
         request.setAttribute("products", products);
         request.setAttribute("totalProducts", totalProducts);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("categories", new ArrayList<>(categoryMap.values()));
+        request.setAttribute("categoryStats", categoryStats);
 
         request.getRequestDispatcher("/user/brand/brand-detail.jsp").forward(request, response);
     }
