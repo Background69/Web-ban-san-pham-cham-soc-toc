@@ -1,6 +1,7 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.CategoryDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.services.BrandService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "HomeController", urlPatterns = {"/home", ""})
 /**
@@ -22,7 +24,7 @@ public class HomeController extends HttpServlet {
     private BrandService brandService;
 
     /**
-     * Khởi tạo tài nguyên hoặc cau hinh can thiet.
+     * Khởi tạo tài nguyên hoặc cấu hình cần thiết.
      *
      * @return Không trả về giá trị.
      */
@@ -38,11 +40,11 @@ public class HomeController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Lấy featured products
-        request.setAttribute("featuredProducts", productService.getFeaturedProducts());
-
+        List<Product> featuredProducts = productService.getFeaturedProducts();
+        request.setAttribute("featuredProducts", featuredProducts);
         // Lấy on-sale products cho Flash Sale
-        request.setAttribute("saleProducts", productService.getOnSaleProducts());
-
+        List<Product> saleProducts = productService.getOnSaleProducts();
+        request.setAttribute("saleProducts", saleProducts);
         // Lấy categories cho navigation
         request.setAttribute("categories", categoryDAO.findAll());
 

@@ -42,14 +42,18 @@ public class Product {
     private int soldQuantity;
     private int soldPercent;
 
+    // Transient fields for promotion display
+    private BigDecimal finalPrice;
+    private Promotion activePromotion;
+
     // Constructors
     public Product() {
     }
 
     public Product(int productId, String productName, String productSlug, Integer brandId, Integer categoryId,
-                   String origin, String shortDescription, String fullDescription, int stockQuantity,
-                   boolean isFeatured, boolean isOnSale, BigDecimal averageRating, int reviewCount,
-                   Timestamp createdAt, Timestamp updatedAt) {
+            String origin, String shortDescription, String fullDescription, int stockQuantity,
+            boolean isFeatured, boolean isOnSale, BigDecimal averageRating, int reviewCount,
+            Timestamp createdAt, Timestamp updatedAt) {
         this.productId = productId;
         this.productName = productName;
         this.productSlug = productSlug;
@@ -283,6 +287,22 @@ public class Product {
 
     public void setSoldPercent(int soldPercent) {
         this.soldPercent = soldPercent;
+    }
+
+    public BigDecimal getFinalPrice() {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(BigDecimal finalPrice) {
+        this.finalPrice = finalPrice;
+    }
+
+    public Promotion getActivePromotion() {
+        return activePromotion;
+    }
+
+    public void setActivePromotion(Promotion activePromotion) {
+        this.activePromotion = activePromotion;
     }
 
     public void setDefaultVariant(ProductVariant defaultVariant) {

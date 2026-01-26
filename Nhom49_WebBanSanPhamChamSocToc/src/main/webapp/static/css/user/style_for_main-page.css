@@ -619,6 +619,7 @@ section.banner-section {
     transition: transform 0.4s ease !important;
     gap: 20px !important;
     padding: 10px !important;
+    align-items: stretch !important;
 }
 
 /* FLASH SALE NAVIGATION BUTTONS */
@@ -819,11 +820,76 @@ button.flash-sale-nav:active {
 /* Product Flash Sale Section */
 .flash-sale-section .product-item {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .flash-sale-section .product-img {
     position: relative;
     z-index: 1;
+    height: 200px;
+}
+
+.flash-sale-section .product-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.flash-sale-section .product-title {
+    min-height: 45px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.flash-sale-section .product-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.flash-sale-section .product-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flash-sale-section .action-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
+}
+
+.flash-sale-section .action-buttons .btn {
+    flex: 1;
+    font-size: 13px;
+    padding: 10px 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.flash-sale-section .btn-outline-cart {
+    border: 1px solid #89af63;
+    color: #89af63;
+    background: #fff;
+}
+
+.flash-sale-section .btn-outline-cart:hover {
+    background: #f5faf1;
+}
+
+.flash-sale-section .btn-buy-now {
+    background: #dc3545;
+    color: #fff;
+    border: 1px solid #dc3545;
+}
+
+.flash-sale-section .btn-buy-now:hover {
+    background: #c82333;
+    border-color: #c82333;
 }
 
 .flash-sale-badge {
@@ -843,6 +909,7 @@ button.flash-sale-nav:active {
 .flash-sale-track .product-item {
     flex: 0 0 calc(25% - 20px);
     min-width: 240px;
+    height: 100%;
 }
 
 /* Product Section */
@@ -1073,14 +1140,34 @@ button.flash-sale-nav:active {
 
 .featured-container .product-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    align-items: stretch;
 }
 
 .featured-container .product-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     flex: 1 1 200px;
+}
+
+.featured-container .product-img {
+    height: 250px;
+}
+
+.featured-container .product-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.featured-container .product-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
 }
 
 /* Offers Section */
