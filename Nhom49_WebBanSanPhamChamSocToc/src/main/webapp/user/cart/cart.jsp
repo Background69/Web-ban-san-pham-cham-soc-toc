@@ -117,8 +117,8 @@
         <c:if test="${not empty cartItems}">
             <a href="${pageContext.request.contextPath}/checkout" class="checkout-btn">Tiếp tục thanh toán</a>
             <form action="${pageContext.request.contextPath}/cart/clear" method="post" style="margin-top: 10px;">
-                <button type="submit" class="clear-cart-btn" onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')">
-                    Xóa toàn bộ giỏ hàng
+                <button type="submit" class="clear-cart-btn danger" onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')">
+                    <i class="fa-solid fa-trash-can"></i> Xóa toàn bộ giỏ hàng
                 </button>
             </form>
         </c:if>
