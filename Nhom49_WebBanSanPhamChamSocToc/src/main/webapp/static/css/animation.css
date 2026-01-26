@@ -201,6 +201,51 @@
     animation: shake 0.5s ease-in-out;
 }
 
+/* ========== PAGE / SECTION UTILITIES ========== */
+
+.page-animate {
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+.section-animate {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.stagger-fade > * {
+    opacity: 0;
+    animation: fadeInUp 0.55s ease-out forwards;
+    will-change: transform, opacity;
+}
+
+.stagger-fade > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-fade > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-fade > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-fade > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-fade > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-fade > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-fade > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-fade > *:nth-child(8) { animation-delay: 0.4s; }
+.stagger-fade > *:nth-child(9) { animation-delay: 0.45s; }
+.stagger-fade > *:nth-child(10) { animation-delay: 0.5s; }
+.stagger-fade > *:nth-child(11) { animation-delay: 0.55s; }
+.stagger-fade > *:nth-child(12) { animation-delay: 0.6s; }
+
+.stagger-scale > * {
+    opacity: 0;
+    animation: scaleIn 0.5s ease-out forwards;
+    will-change: transform, opacity;
+}
+
+.stagger-scale > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-scale > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-scale > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-scale > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-scale > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-scale > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-scale > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-scale > *:nth-child(8) { animation-delay: 0.4s; }
+
 /* Staggered Animation Delays */
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.2s; }
@@ -816,6 +861,19 @@
 
     .product-card-modern {
         border-radius: 16px;
+    }
+}
+
+/* ========== REDUCED MOTION ========== */
+
+@media (prefers-reduced-motion: reduce) {
+    .page-animate,
+    .section-animate,
+    .stagger-fade > *,
+    .stagger-scale > * {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
     }
 }
 

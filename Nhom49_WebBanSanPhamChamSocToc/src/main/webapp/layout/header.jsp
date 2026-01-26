@@ -31,6 +31,7 @@
             </div>
 
 
+            <c:if test="${not empty sessionScope.user}">
             <div class="cart position-relative">
                 <a href="${pageContext.request.contextPath}/cart">
                     <i class="fas fa-shopping-cart"></i>
@@ -38,6 +39,7 @@
                     <span class="cart-count badge bg-danger rounded-pill">0</span>
                 </a>
             </div>
+            </c:if>
             <div class="account">
                 <c:if test="${empty sessionScope.currentUser}">
                     <a href="${pageContext.request.contextPath}/auth/login">
