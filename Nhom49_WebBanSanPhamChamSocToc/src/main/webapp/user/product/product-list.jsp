@@ -23,7 +23,7 @@
 <!-- Header -->
 <jsp:include page="/layout/header.jsp"/>
 
-<main class="store-container">
+<main class="store-container page-animate">
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
         <a href="${pageContext.request.contextPath}/">Trang chủ</a>
@@ -111,16 +111,6 @@
                     </div>
                 </div>
 
-                <!-- Sale Filter -->
-                <div class="filter-section">
-                    <h3><i class="fas fa-percent"></i> Khuyến mãi</h3>
-                    <label class="sale-filter">
-                        <input type="checkbox" name="sale" value="true"
-                        ${param.sale == 'true' ? 'checked' : ''}
-                               onchange="document.getElementById('filterForm').submit()">
-                        Chỉ hiện sản phẩm giảm giá
-                    </label>
-                </div>
             </form>
         </aside>
 
@@ -173,7 +163,7 @@
             <!-- Products -->
             <c:choose>
                 <c:when test="${not empty products}">
-                    <div class="product-grid">
+                    <div class="product-grid stagger-fade">
                         <c:forEach var="product" items="${products}">
                             <div class="product-item">
                                 <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
@@ -219,7 +209,7 @@
                                             </c:if>
                                         </c:if>
                                     </div>
-                                    <c:if test="${product.stockQuantity > 0}">
+                                    <c:if test="${product.onSale && product.stockQuantity > 0}">
                                         <div class="stock-progress">
                                             <div class="stock-progress-bar">
                                                 <div class="stock-progress-fill"

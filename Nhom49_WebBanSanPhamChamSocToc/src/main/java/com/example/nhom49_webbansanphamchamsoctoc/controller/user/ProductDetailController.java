@@ -9,6 +9,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @WebServlet(name = "ProductDetailController", value = "/product/*")
 public class ProductDetailController extends HttpServlet {
@@ -44,12 +47,18 @@ public class ProductDetailController extends HttpServlet {
             return;
         }
 
+        List<Product> candidates = new ArrayList<>(productService.getAllProducts());
+        candidates.removeIf(item -> item.getProductId() == product.getProductId() || item.isOnSale());
+        Collections.shuffle(candidates);
+        List<Product> relatedProducts = candidates.size() > 4 ? candidates.subList(0, 4) : candidates;
+
         // Lấy reviews của sản phẩm
         request.setAttribute("product", product);
         request.setAttribute("reviews", reviewService.getReviewsByProduct(product.getProductId()));
         request.setAttribute("averageRating", reviewService.calculateAverageRating(product.getProductId()));
         request.setAttribute("reviewCount", reviewService.countReviewsByProduct(product.getProductId()));
         request.setAttribute("ratingStats", reviewService.getRatingStatistics(product.getProductId()));
+        request.setAttribute("relatedProducts", relatedProducts);
 
         request.getRequestDispatcher("/user/product/product-detail.jsp").forward(request, response);
     }

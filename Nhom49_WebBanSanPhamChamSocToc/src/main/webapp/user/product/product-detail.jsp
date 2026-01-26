@@ -196,6 +196,7 @@
                     <input type="hidden" name="variantId" id="selectedVariantId"
                            value="${product.defaultVariant.variantId}">
                     <input type="hidden" name="quantity" id="cartQuantity" value="1">
+                    <input type="hidden" name="action" id="cartAction" value="add_to_cart">
 
                     <button type="submit" class="btn btn-add-cart"
                             <c:if test="${product.defaultVariant.stockQuantity <= 0}">disabled</c:if>>
@@ -625,10 +626,15 @@
             if (this.disabled) return;
 
             const form = document.getElementById('add-to-cart-form');
-            const originalAction = form.action;
-            form.action = '${pageContext.request.contextPath}/checkout?buyNow=true';
+            const actionInput = document.getElementById('cartAction');
+            if (!form) return;
+            if (actionInput) {
+                actionInput.value = 'buy_now';
+            }
             form.submit();
-            form.action = originalAction;
+            if (actionInput) {
+                actionInput.value = 'add_to_cart';
+            }
         });
     }
 </script>
@@ -636,4 +642,3 @@
 
 </body>
 </html>
-
