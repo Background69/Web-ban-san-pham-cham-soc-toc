@@ -20,7 +20,7 @@
     <main class="content">
         <div class="header">
             <h1>Chi tiết đơn hàng</h1>
-            <a href="${pageContext.request.contextPath}/admin/orders">← Quay lại</a>
+            <a href="${pageContext.request.contextPath}/admin/order/list.jsp">← Quay lại</a>
         </div>
 
         <!-- Thông tin đơn -->

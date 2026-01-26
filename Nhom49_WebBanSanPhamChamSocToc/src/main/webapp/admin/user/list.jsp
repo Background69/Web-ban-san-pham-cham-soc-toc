@@ -16,15 +16,18 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/images/LOGO.png">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
         </div>
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li><a href="${pageContext.request.contextPath}/admin">Dashboard</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
         </ul>
 
         <a class="view-site" href="${pageContext.request.contextPath}/index">
@@ -38,7 +41,7 @@
             <h1>Quản lý người dùng</h1>
         </div>
 
-        <table>
+        <table class="product-table">
             <thead>
             <tr>
                 <th>ID</th>
@@ -59,7 +62,7 @@
                     <td>${user.phone}</td>
                     <td>${user.role}</td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin/users?action=detail&id=${user.userId}">
+                        <a href="${pageContext.request.contextPath}/admin/user?action=detail&id=${user.userId}">
                             Chi tiết
                         </a>
                     </td>

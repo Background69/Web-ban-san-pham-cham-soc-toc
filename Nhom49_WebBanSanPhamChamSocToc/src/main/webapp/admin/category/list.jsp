@@ -1,13 +1,42 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<h2>Quản lý danh mục</h2>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý người dùng</title>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+</head>
 
+<body>
+<div class="container">
+<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="logo">
+        <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
+    </div>
+    <p>HairGlow Admin</p>
+
+    <ul class="menu">
+        <li ><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
+        <li class="active"><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+    </ul>
+
+    <a class="view-site" href="${pageContext.request.contextPath}/index">
+        Quay lại Website
+    </a>
+</aside>
 <a href="${pageContext.request.contextPath}/admin/category/form">
-    ➕ Thêm danh mục
+    + Thêm danh mục
 </a>
-
-<table border="1" cellpadding="8" cellspacing="0">
+<table class="product-table">
     <tr>
         <th>ID</th>
         <th>Tên danh mục</th>
@@ -33,3 +62,5 @@
         </tr>
     </c:forEach>
 </table>
+</div>
+</body>

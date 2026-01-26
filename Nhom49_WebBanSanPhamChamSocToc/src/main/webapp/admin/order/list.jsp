@@ -15,16 +15,34 @@
 <body>
 <div class="container">
 
-    <!-- SIDEBAR -->
-    <jsp:include page="/admin/layout/sidebar.jsp"/>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
+        </div>
+        <p>HairGlow Admin</p>
 
+        <ul class="menu">
+            <li ><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+        </ul>
+
+        <a class="view-site" href="${pageContext.request.contextPath}/index">
+            Quay lại Website
+        </a>
+    </aside>
     <!-- CONTENT -->
     <main class="content">
         <div class="header">
             <h1>Quản lý đơn hàng</h1>
         </div>
 
-        <table class="orders-table">
+        <table class="product-table">
             <thead>
             <tr>
                 <th>Mã đơn</th>
@@ -46,7 +64,7 @@
                     </td>
 
                     <td>
-                        <form action="${pageContext.request.contextPath}/admin/orders"
+                        <form action="${pageContext.request.contextPath}/admin/order/detail.jsp"
                               method="post">
                             <input type="hidden" name="action" value="updateStatus">
                             <input type="hidden" name="id" value="${o.orderId}">
