@@ -13,6 +13,7 @@ import java.util.Map;
 public class SessionUtil {
 
     public static final String USER_KEY = "user";
+    public static final String CURRENT_USER_KEY = "currentUser";
     public static final String CART_KEY = "cart";
     public static final String SUCCESS_KEY = "success";
     public static final String ERROR_KEY = "error";
@@ -22,7 +23,11 @@ public class SessionUtil {
      */
     public static User getCurrentUser(HttpSession session) {
         if (session == null) return null;
-        return (User) session.getAttribute(USER_KEY);
+        User user = (User) session.getAttribute(USER_KEY);
+        if (user == null) {
+            user = (User) session.getAttribute(CURRENT_USER_KEY);
+        }
+        return user;
     }
 
     /**
@@ -45,6 +50,7 @@ public class SessionUtil {
         // Password KHÔNG được set vào session
 
         session.setAttribute(USER_KEY, sessionUser);
+        session.setAttribute(CURRENT_USER_KEY, sessionUser);
     }
 
     /**
@@ -53,6 +59,7 @@ public class SessionUtil {
     public static void removeCurrentUser(HttpSession session) {
         if (session != null) {
             session.removeAttribute(USER_KEY);
+            session.removeAttribute(CURRENT_USER_KEY);
         }
     }
 
@@ -165,6 +172,7 @@ public class SessionUtil {
     public static void invalidateSession(HttpSession session) {
         if (session != null) {
             session.removeAttribute(USER_KEY);
+            session.removeAttribute(CURRENT_USER_KEY);
             session.removeAttribute(CART_KEY);
             session.invalidate();
         }

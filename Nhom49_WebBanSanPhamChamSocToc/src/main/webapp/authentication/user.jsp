@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <c:if test="${empty sessionScope.currentUser}">
     <c:redirect url="/auth/login"/>
@@ -18,7 +18,6 @@
 <div class="profile-card">
 
     <div class="profile-header">
-        <!-- User không có fullName nên dùng username -->
         <h2>Xin chào ${sessionScope.currentUser.username}</h2>
     </div>
 

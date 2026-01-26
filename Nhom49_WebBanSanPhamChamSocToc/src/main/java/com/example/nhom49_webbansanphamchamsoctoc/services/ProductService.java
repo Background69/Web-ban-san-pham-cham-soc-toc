@@ -8,15 +8,25 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.BrandDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductImage;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Promotion;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service class cho Product business logic
  * Xử lý product retrieval, search, management
  */
 public class ProductService {
+
+    private static final int FEATURED_PRODUCTS_LIMIT = 8;
 
     private final ProductDAO productDAO;
     private final ProductVariantDAO variantDAO;
@@ -31,7 +41,6 @@ public class ProductService {
         this.categoryDAO = new CategoryDAO();
         this.brandDAO = new BrandDAO();
     }
-
 
     // Product retrieval methods
 
@@ -57,7 +66,14 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> getProductsForAdmin(String search, Integer categoryId, Integer brandId, int page, int pageSize) {
+    public List<Product> getAllProducts() {
+        List<Product> products = productDAO.findAll();
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
+    public List<Product> getProductsForAdmin(String search, Integer categoryId, Integer brandId, int page,
+            int pageSize) {
         List<Product> products = productDAO.findByFilters(search, categoryId, brandId, page, pageSize);
         enrichProductsWithBasicDetails(products);
         return products;
@@ -73,6 +89,12 @@ public class ProductService {
         return products;
     }
 
+    public List<Product> getAllProductsExcludingOnSale() {
+        List<Product> products = filterOutOnSale(productDAO.findAll());
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
     public List<Product> searchProducts(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return List.of();
@@ -82,8 +104,23 @@ public class ProductService {
         return products;
     }
 
+    public List<Product> searchProductsExcludingOnSale(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Product> products = filterOutOnSale(productDAO.search(keyword.trim()));
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
     public List<Product> getFeaturedProducts() {
-        List<Product> products = productDAO.findFeatured();
+        List<Product> products = productDAO.getTopRatedBestSellingProducts(FEATURED_PRODUCTS_LIMIT);
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
+    public List<Product> getFeaturedProductsExcludingOnSale() {
+        List<Product> products = filterOutOnSale(productDAO.findFeatured());
         enrichProductsWithBasicDetails(products);
         return products;
     }
@@ -94,6 +131,16 @@ public class ProductService {
         return products;
     }
 
+    public List<Product> getOnSaleProducts(int limit, int offset) {
+        List<Product> products = productDAO.findOnSale(limit, offset);
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
+    public int countOnSaleProducts() {
+        return productDAO.countOnSale();
+    }
+
     /**
      * Lấy flash sale products.
      */
@@ -101,6 +148,81 @@ public class ProductService {
         List<Product> products = productDAO.findFlashSale();
         enrichProductsWithBasicDetails(products);
         return products;
+    }
+
+    /**
+     * Lấy sản phẩm với đầy đủ quan hệ (HairConditions, Promotions) và tính giá
+     * khuyến mãi.
+     */
+    public Product getProductWithPromotions(int productId) {
+        Product product = productDAO.findByIdWithRelations(productId);
+        if (product != null) {
+            enrichProductWithDetails(product);
+            calculateFinalPrice(product);
+        }
+        return product;
+    }
+
+    /**
+     * Lấy sản phẩm theo slug với đầy đủ quan hệ và tính giá khuyến mãi.
+     */
+    public Product getProductBySlugWithPromotions(String slug) {
+        Product product = productDAO.findBySlug(slug);
+        if (product != null) {
+            Product withRelations = productDAO.findByIdWithRelations(product.getProductId());
+            if (withRelations != null) {
+                product.setHairConditions(withRelations.getHairConditions());
+                product.setPromotions(withRelations.getPromotions());
+            }
+            enrichProductWithDetails(product);
+            calculateFinalPrice(product);
+        }
+        return product;
+    }
+
+    /**
+     * Tính giá cuối cùng sau khi áp dụng khuyến mãi.
+     * Lọc promotion đang active và chọn mức giảm cao nhất.
+     */
+    public BigDecimal calculateFinalPrice(Product product) {
+        if (product == null)
+            return BigDecimal.ZERO;
+
+        ProductVariant defaultVariant = product.getDefaultVariant();
+        BigDecimal originalPrice = defaultVariant != null
+                ? (defaultVariant.getSalePrice() != null ? defaultVariant.getSalePrice()
+                        : defaultVariant.getOriginalPrice())
+                : BigDecimal.ZERO;
+
+        java.util.List<Promotion> promotions = product.getPromotions();
+        if (promotions == null || promotions.isEmpty()) {
+            product.setFinalPrice(originalPrice);
+            return originalPrice;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        Promotion bestPromotion = promotions.stream()
+                .filter(Promotion::isActive)
+                .filter(p -> p.getStartDate() != null && p.getEndDate() != null)
+                .filter(p -> now.isAfter(p.getStartDate()) && now.isBefore(p.getEndDate()))
+                .filter(p -> p.getDiscountPercent() != null && p.getDiscountPercent() > 0)
+                .max(Comparator.comparing(Promotion::getDiscountPercent))
+                .orElse(null);
+
+        if (bestPromotion != null) {
+            int discountPercent = bestPromotion.getDiscountPercent();
+            BigDecimal discount = originalPrice.multiply(BigDecimal.valueOf(discountPercent))
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+            BigDecimal finalPrice = originalPrice.subtract(discount);
+
+            product.setFinalPrice(finalPrice);
+            product.setActivePromotion(bestPromotion);
+            return finalPrice;
+        }
+
+        product.setFinalPrice(originalPrice);
+        return originalPrice;
     }
 
     /**
@@ -215,6 +337,13 @@ public class ProductService {
         List<ProductImage> images = imageDAO.findByProductId(product.getProductId());
         product.setVariants(variants);
         product.setImages(images);
+        int remainingStock = 0;
+        if (variants != null) {
+            for (ProductVariant variant : variants) {
+                remainingStock += Math.max(0, variant.getStockQuantity());
+            }
+        }
+        applyStockStats(product, remainingStock);
 
         // Load category and brand names
         if (product.getCategoryId() != null) {
@@ -233,11 +362,29 @@ public class ProductService {
         }
     }
 
+    private List<Product> filterOutOnSale(List<Product> products) {
+        List<Product> filtered = new ArrayList<>();
+        if (products == null || products.isEmpty()) {
+            return filtered;
+        }
+        for (Product product : products) {
+            if (product != null && !product.isOnSale()) {
+                filtered.add(product);
+            }
+        }
+        return filtered;
+    }
+
     /**
      * Thực hiện enrich products with basic details.
-
+     * 
      */
     private void enrichProductsWithBasicDetails(List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            return;
+        }
+        List<Integer> productIds = products.stream().map(Product::getProductId).toList();
+        Map<Integer, Integer> remainingStockMap = variantDAO.getTotalStockByProductIds(productIds);
         for (Product product : products) {
             ProductImage primaryImage = imageDAO.findPrimaryByProductId(product.getProductId());
             if (primaryImage != null) {
@@ -264,7 +411,27 @@ public class ProductService {
                     product.setBrandName(brand.getBrandName());
                 }
             }
+
+            int remainingStock = remainingStockMap.getOrDefault(product.getProductId(), 0);
+            applyStockStats(product, remainingStock);
         }
+    }
+
+    private void applyStockStats(Product product, int remainingStock) {
+        if (product == null) {
+            return;
+        }
+        int totalStock = Math.max(0, product.getStockQuantity());
+        int remaining = Math.max(0, remainingStock);
+        int soldQuantity = Math.max(0, totalStock - remaining);
+        if (soldQuantity > totalStock) {
+            soldQuantity = totalStock;
+        }
+        int soldPercent = totalStock > 0 ? (int) Math.round((soldQuantity * 100.0) / totalStock) : 0;
+
+        product.setRemainingStock(remaining);
+        product.setSoldQuantity(soldQuantity);
+        product.setSoldPercent(soldPercent);
     }
 
     /**

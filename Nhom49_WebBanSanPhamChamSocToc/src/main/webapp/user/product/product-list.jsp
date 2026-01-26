@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
 <!-- Header -->
 <jsp:include page="/layout/header.jsp"/>
 
-<main class="store-container">
+<main class="store-container page-animate">
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
         <a href="${pageContext.request.contextPath}/">Trang chủ</a>
@@ -45,13 +45,15 @@
         </c:choose>
     </nav>
 
+    <c:set var="searchTerm" value="${not empty param.search ? param.search : param.q}"/>
+
     <div class="store-layout">
         <!-- Sidebar Filters -->
         <aside class="store-sidebar">
             <form action="${pageContext.request.contextPath}/products" method="get" id="filterForm">
                 <!-- Search -->
-                <c:if test="${not empty param.search}">
-                    <input type="hidden" name="search" value="${param.search}">
+                <c:if test="${not empty searchTerm}">
+                    <input type="hidden" name="search" value="${searchTerm}">
                 </c:if>
 
                 <!-- Category Filter -->
@@ -109,16 +111,6 @@
                     </div>
                 </div>
 
-                <!-- Sale Filter -->
-                <div class="filter-section">
-                    <h3><i class="fas fa-percent"></i> Khuyến mãi</h3>
-                    <label class="sale-filter">
-                        <input type="checkbox" name="sale" value="true"
-                        ${param.sale == 'true' ? 'checked' : ''}
-                               onchange="document.getElementById('filterForm').submit()">
-                        Chỉ hiện sản phẩm giảm giá
-                    </label>
-                </div>
             </form>
         </aside>
 
@@ -128,8 +120,8 @@
             <div class="store-header">
                 <div class="result-count">
                     <c:choose>
-                        <c:when test="${not empty param.search}">
-                            <h2>Kết quả tìm kiếm: "${param.search}"</h2>
+                        <c:when test="${not empty searchTerm}">
+                            <h2>Kết quả tìm kiếm: "${searchTerm}"</h2>
                             <p>Tìm thấy ${totalProducts} sản phẩm</p>
                         </c:when>
                         <c:when test="${not empty currentCategory}">
@@ -171,7 +163,7 @@
             <!-- Products -->
             <c:choose>
                 <c:when test="${not empty products}">
-                    <div class="product-grid">
+                    <div class="product-grid stagger-fade">
                         <c:forEach var="product" items="${products}">
                             <div class="product-item">
                                 <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
@@ -217,6 +209,17 @@
                                             </c:if>
                                         </c:if>
                                     </div>
+                                    <c:if test="${product.onSale && product.stockQuantity > 0}">
+                                        <div class="stock-progress">
+                                            <div class="stock-progress-bar">
+                                                <div class="stock-progress-fill"
+                                                     style="width: ${product.soldPercent}%"></div>
+                                            </div>
+                                            <div class="stock-progress-text">
+                                                Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                            </div>
+                                        </div>
+                                    </c:if>
                                     <div class="product-actions">
                                         <a class="btn btn-outline"
                                            href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
@@ -281,3 +284,6 @@
 </script>
 </body>
 </html>
+
+
+

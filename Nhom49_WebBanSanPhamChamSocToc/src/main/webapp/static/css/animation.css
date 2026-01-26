@@ -1,0 +1,897 @@
+/* ========================================
+   HAIRGLOW - ANIMATIONS & EFFECTS CSS
+   Modern UI Enhancements
+   ======================================== */
+
+/* ========== CSS VARIABLES ========== */
+:root {
+    /* Primary Colors - Green Theme */
+    --primary-gradient: linear-gradient(135deg, #2c5940 0%, #3d7a5a 50%, #89af63 100%);
+    --primary-gradient-hover: linear-gradient(135deg, #1a3d2e 0%, #2c5940 50%, #3d7a5a 100%);
+    --accent-gradient: linear-gradient(135deg, #89af63 0%, #a5c87f 100%);
+
+    /* Glass Effect */
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow-strong: 0 15px 50px rgba(0, 0, 0, 0.15);
+    --shadow-glow: 0 0 40px rgba(137, 175, 99, 0.3);
+
+    /* Transitions */
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ========== KEYFRAME ANIMATIONS ========== */
+
+/* Fade In Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade In Down */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade In Left */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Fade In Right */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Scale In */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Pulse Glow */
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(137, 175, 99, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(137, 175, 99, 0.6);
+    }
+}
+
+/* Float Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Rotate */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Bounce */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-15px);
+    }
+    60% {
+        transform: translateY(-7px);
+    }
+}
+
+/* Shake */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Gradient Flow */
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ========== ANIMATION CLASSES ========== */
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fadeInDown {
+    animation: fadeInDown 0.6s ease-out forwards;
+}
+
+.animate-fadeInLeft {
+    animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.animate-fadeInRight {
+    animation: fadeInRight 0.6s ease-out forwards;
+}
+
+.animate-scaleIn {
+    animation: scaleIn 0.5s ease-out forwards;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse {
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-bounce {
+    animation: bounce 1s ease infinite;
+}
+
+.animate-shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* ========== PAGE / SECTION UTILITIES ========== */
+
+.page-animate {
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+.section-animate {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.stagger-fade > * {
+    opacity: 0;
+    animation: fadeInUp 0.55s ease-out forwards;
+    will-change: transform, opacity;
+}
+
+.stagger-fade > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-fade > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-fade > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-fade > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-fade > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-fade > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-fade > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-fade > *:nth-child(8) { animation-delay: 0.4s; }
+.stagger-fade > *:nth-child(9) { animation-delay: 0.45s; }
+.stagger-fade > *:nth-child(10) { animation-delay: 0.5s; }
+.stagger-fade > *:nth-child(11) { animation-delay: 0.55s; }
+.stagger-fade > *:nth-child(12) { animation-delay: 0.6s; }
+
+.stagger-scale > * {
+    opacity: 0;
+    animation: scaleIn 0.5s ease-out forwards;
+    will-change: transform, opacity;
+}
+
+.stagger-scale > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-scale > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-scale > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-scale > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-scale > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-scale > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-scale > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-scale > *:nth-child(8) { animation-delay: 0.4s; }
+
+/* Staggered Animation Delays */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* ========== HOVER EFFECTS ========== */
+
+/* Lift Effect */
+.hover-lift {
+    transition: var(--transition-normal);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-strong);
+}
+
+/* Scale Effect */
+.hover-scale {
+    transition: var(--transition-normal);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Glow Effect */
+.hover-glow {
+    transition: var(--transition-normal);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-glow);
+}
+
+/* Shine Effect */
+.hover-shine {
+    position: relative;
+    overflow: hidden;
+}
+
+.hover-shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent
+    );
+    transition: var(--transition-slow);
+}
+
+.hover-shine:hover::before {
+    left: 100%;
+}
+
+/* ========== BUTTON STYLES ========== */
+
+.btn-modern {
+    position: relative;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: var(--transition-normal);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-modern-primary {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 15px rgba(44, 89, 64, 0.3);
+}
+
+.btn-modern-primary:hover {
+    background: var(--primary-gradient-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(44, 89, 64, 0.4);
+}
+
+.btn-modern-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-modern-secondary {
+    background: transparent;
+    color: #2c5940;
+    border: 2px solid #2c5940;
+}
+
+.btn-modern-secondary:hover {
+    background: #2c5940;
+    color: white;
+    transform: translateY(-3px);
+}
+
+.btn-modern-accent {
+    background: var(--accent-gradient);
+    color: #1a3d2e;
+    box-shadow: 0 4px 15px rgba(137, 175, 99, 0.3);
+}
+
+.btn-modern-accent:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(137, 175, 99, 0.4);
+}
+
+/* Ripple Effect */
+.btn-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-ripple::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.3) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.btn-ripple:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+}
+
+/* ========== CARD STYLES ========== */
+
+.card-modern {
+    background: var(--glass-bg);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-normal);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-modern:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-strong);
+}
+
+/* Product Card Enhanced */
+.product-card-modern {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-normal);
+    position: relative;
+}
+
+.product-card-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transition: var(--transition-normal);
+}
+
+.product-card-modern:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-strong);
+}
+
+.product-card-modern:hover::before {
+    transform: scaleX(1);
+}
+
+.product-card-modern .product-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+}
+
+.product-card-modern .product-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-slow);
+}
+
+.product-card-modern:hover .product-image-wrapper img {
+    transform: scale(1.1);
+}
+
+.product-card-modern .product-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    transform: translateY(100%);
+    transition: var(--transition-normal);
+}
+
+.product-card-modern:hover .product-overlay {
+    transform: translateY(0);
+}
+
+/* ========== INPUT STYLES ========== */
+
+.input-modern {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #fafafa;
+    transition: var(--transition-normal);
+}
+
+.input-modern:focus {
+    outline: none;
+    border-color: #89af63;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(137, 175, 99, 0.1);
+}
+
+.input-modern::placeholder {
+    color: #999;
+}
+
+/* Floating Label Input */
+.input-floating-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-floating {
+    width: 100%;
+    padding: 20px 15px 10px;
+    font-size: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: transparent;
+    transition: var(--transition-normal);
+}
+
+.input-floating:focus {
+    outline: none;
+    border-color: #2c5940;
+}
+
+.input-floating-label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #999;
+    pointer-events: none;
+    transition: var(--transition-normal);
+    background: white;
+    padding: 0 5px;
+}
+
+.input-floating:focus ~ .input-floating-label,
+.input-floating:not(:placeholder-shown) ~ .input-floating-label {
+    top: 0;
+    font-size: 12px;
+    color: #2c5940;
+}
+
+/* ========== BADGE STYLES ========== */
+
+.badge-modern {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-sale {
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: white;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.badge-new {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+}
+
+.badge-hot {
+    background: linear-gradient(135deg, #fa709a, #fee140);
+    color: white;
+}
+
+.badge-bestseller {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    color: white;
+}
+
+/* ========== LOADING STATES ========== */
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+.skeleton-text {
+    height: 16px;
+    margin-bottom: 10px;
+}
+
+.skeleton-title {
+    height: 24px;
+    width: 70%;
+    margin-bottom: 15px;
+}
+
+.skeleton-image {
+    aspect-ratio: 1;
+    width: 100%;
+}
+
+/* Loading Spinner */
+.spinner-modern {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f0f0f0;
+    border-top-color: #2c5940;
+    border-radius: 50%;
+    animation: rotate 0.8s linear infinite;
+}
+
+/* ========== SCROLL ANIMATIONS ========== */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: var(--transition-slow);
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========== TOOLTIP ========== */
+
+.tooltip-modern {
+    position: relative;
+}
+
+.tooltip-modern::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+    padding: 8px 15px;
+    background: #333;
+    color: white;
+    font-size: 13px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-fast);
+    z-index: 100;
+}
+
+.tooltip-modern::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #333;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-fast);
+}
+
+.tooltip-modern:hover::after,
+.tooltip-modern:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========== NOTIFICATION TOAST ========== */
+
+.toast-modern {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-strong);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateX(120%);
+    transition: var(--transition-normal);
+    z-index: 9999;
+}
+
+.toast-modern.show {
+    transform: translateX(0);
+}
+
+.toast-modern.success {
+    border-left: 4px solid #4caf50;
+}
+
+.toast-modern.error {
+    border-left: 4px solid #f44336;
+}
+
+.toast-modern.warning {
+    border-left: 4px solid #ff9800;
+}
+
+.toast-modern.info {
+    border-left: 4px solid #2196f3;
+}
+
+/* ========== MODAL STYLES ========== */
+
+.modal-modern-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-normal);
+    z-index: 9999;
+}
+
+.modal-modern-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-modern {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    transform: scale(0.9) translateY(20px);
+    transition: var(--transition-normal);
+}
+
+.modal-modern-overlay.show .modal-modern {
+    transform: scale(1) translateY(0);
+}
+
+/* ========== PROGRESS BAR ========== */
+
+.progress-modern {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-modern-bar {
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+/* ========== RATING STARS ========== */
+
+.rating-stars-modern {
+    display: flex;
+    gap: 3px;
+}
+
+.rating-stars-modern .star {
+    font-size: 18px;
+    color: #ddd;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.rating-stars-modern .star.filled,
+.rating-stars-modern .star:hover,
+.rating-stars-modern .star:hover ~ .star {
+    color: #ffc107;
+}
+
+.rating-stars-modern:hover .star {
+    color: #ddd;
+}
+
+.rating-stars-modern:hover .star:hover,
+.rating-stars-modern:hover .star:hover ~ .star {
+    color: #ffc107;
+}
+
+/* ========== QUANTITY SELECTOR ========== */
+
+.qty-selector-modern {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.qty-selector-modern button {
+    width: 45px;
+    height: 45px;
+    border: none;
+    background: #f5f5f5;
+    font-size: 20px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.qty-selector-modern button:hover {
+    background: #2c5940;
+    color: white;
+}
+
+.qty-selector-modern input {
+    width: 60px;
+    height: 45px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* ========== PRICE DISPLAY ========== */
+
+.price-modern {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.price-modern .current {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e91e63;
+}
+
+.price-modern .original {
+    font-size: 16px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.price-modern .discount {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    background: #e91e63;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+/* ========== RESPONSIVE UTILITIES ========== */
+
+@media (max-width: 768px) {
+    .btn-modern {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .card-modern {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .product-card-modern {
+        border-radius: 16px;
+    }
+}
+
+/* ========== REDUCED MOTION ========== */
+
+@media (prefers-reduced-motion: reduce) {
+    .page-animate,
+    .section-animate,
+    .stagger-fade > *,
+    .stagger-scale > * {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* ========== DARK MODE SUPPORT ========== */
+
+@media (prefers-color-scheme: dark) {
+    .card-modern {
+        background: #1e1e1e;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .input-modern {
+        background: #2d2d2d;
+        border-color: #404040;
+        color: white;
+    }
+
+    .input-modern:focus {
+        background: #333;
+    }
+}

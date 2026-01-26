@@ -5,7 +5,6 @@
     <div class="header-container">
         <div class="header-row header-top">
 
-            <!-- Logo -->
             <div class="left-header">
                 <div class="header-logo">
                     <a class="logo" href="${pageContext.request.contextPath}/">
@@ -15,7 +14,6 @@
                 </div>
             </div>
 
-            <!-- Search bar -->
             <div class="center-header">
                 <div class="search-bar">
                     <form action="${pageContext.request.contextPath}/search" class="search-form" method="get">
@@ -27,13 +25,13 @@
                 </div>
             </div>
 
-            <!-- Account and cart -->
             <div class="right-header">
 
 
             </div>
 
 
+            <c:if test="${not empty sessionScope.user}">
             <div class="cart position-relative">
                 <a href="${pageContext.request.contextPath}/cart">
                     <i class="fas fa-shopping-cart"></i>
@@ -41,16 +39,15 @@
                     <span class="cart-count badge bg-danger rounded-pill">0</span>
                 </a>
             </div>
+            </c:if>
             <div class="account">
-                <!-- CHƯA đăng nhập -->
                 <c:if test="${empty sessionScope.currentUser}">
-                    <a href="${pageContext.request.contextPath}/authentication/login.jsp">
+                    <a href="${pageContext.request.contextPath}/auth/login">
                         <i class="fas fa-user-circle"></i>
                         <span class="login-in-text">Đăng nhập</span>
                     </a>
                 </c:if>
 
-                <!-- ĐÃ đăng nhập -->
                 <c:if test="${not empty sessionScope.currentUser}">
                     <a href="${pageContext.request.contextPath}/Logout">
                         <i class="fas fa-sign-out-alt"></i>
@@ -63,7 +60,6 @@
         </div>
     </div>
 
-    <!-- Navigation -->
     <div class="header-row header-below nav-container">
         <nav>
             <div>
@@ -132,6 +128,5 @@
                 </ul>
             </div>
         </nav>
-    </div>
     </div>
 </header>
