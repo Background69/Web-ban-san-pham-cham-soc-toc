@@ -1,8 +1,9 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +12,19 @@
     <!-- Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
+          rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_product_detail.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/static/css/user/style_for_product_detail.css">
 </head>
+
 <body>
 
 <jsp:include page="/layout/header.jsp"/>
@@ -30,7 +35,8 @@
         <a href="${pageContext.request.contextPath}/">Trang chủ</a>
         <span class="separator">›</span>
         <c:if test="${product.category != null}">
-            <a href="${pageContext.request.contextPath}/products?category=${product.category.categorySlug}">
+            <a
+                    href="${pageContext.request.contextPath}/products?category=${product.category.categorySlug}">
                     ${product.category.categoryName}
             </a>
             <span class="separator">›</span>
@@ -107,17 +113,20 @@
             <c:if test="${not empty product.defaultVariant}">
                 <div class="product-section-price">
                     <div class="price-main">
-                        <span class="price-current">
-                            <fmt:formatNumber
-                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
-                                    type="number"/>₫
-                        </span>
+                                        <span class="price-current">
+                                            <fmt:formatNumber
+                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                    type="number"/>₫
+                                        </span>
 
-                        <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                            <span class="price-old">
-                                <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>₫
-                            </span>
-                            <span class="discount-percent">-${product.defaultVariant.discountPercent}%</span>
+                        <c:if
+                                test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                            <span class="price-old">
+                                                <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
+                                                                  type="number"/>₫
+                                            </span>
+                            <span
+                                    class="discount-percent">-${product.defaultVariant.discountPercent}%</span>
                         </c:if>
                     </div>
                     <div class="price-note">
@@ -168,7 +177,8 @@
                     <div class="stock-line">
                         <c:choose>
                             <c:when test="${product.defaultVariant.stockQuantity > 0}">
-                                <span class="in-stock">Còn ${product.defaultVariant.stockQuantity} sản phẩm</span>
+                                                <span class="in-stock">Còn ${product.defaultVariant.stockQuantity} sản
+                                                    phẩm</span>
                             </c:when>
                             <c:otherwise>
                                 <span class="out-of-stock">Hết hàng</span>
@@ -178,7 +188,8 @@
                     <c:if test="${product.stockQuantity > 0}">
                         <div class="stock-progress">
                             <div class="stock-progress-bar">
-                                <div class="stock-progress-fill" style="width: ${product.soldPercent}%"></div>
+                                <div class="stock-progress-fill" style="width: ${product.soldPercent}%">
+                                </div>
                             </div>
                             <div class="stock-progress-text">
                                 Đã bán ${product.soldQuantity}/${product.stockQuantity}
@@ -190,19 +201,21 @@
 
             <!-- Action Buttons -->
             <div class="product-section-btn">
-                <form id="add-to-cart-form" action="${pageContext.request.contextPath}/cart/add" method="post" style="flex:1;">
-                    <input type="hidden" name="variantId" id="selectedVariantId" value="${product.defaultVariant.variantId}">
+                <form id="add-to-cart-form" action="${pageContext.request.contextPath}/cart/add"
+                      method="post" style="flex:1;">
+                    <input type="hidden" name="variantId" id="selectedVariantId"
+                           value="${product.defaultVariant.variantId}">
                     <input type="hidden" name="quantity" id="cartQuantity" value="1">
                     <input type="hidden" name="action" id="cartAction" value="add_to_cart">
 
-                    <button type="submit" class="btn btn-add-cart"
-                            <c:if test="${product.defaultVariant.stockQuantity <= 0}">disabled</c:if>>
+                    <button type="submit" class="btn btn-add-cart" <c:if
+                            test="${product.defaultVariant.stockQuantity <= 0}">disabled</c:if>>
                         <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
                     </button>
                 </form>
 
-                <button type="button" class="btn btn-buy-now"
-                        <c:if test="${product.defaultVariant.stockQuantity <= 0}">disabled</c:if>>
+                <button type="button" class="btn btn-buy-now" <c:if
+                        test="${product.defaultVariant.stockQuantity <= 0}">disabled</c:if>>
                     <i class="fas fa-bolt"></i> Mua ngay
                 </button>
             </div>
@@ -247,7 +260,8 @@
                                 <th>Xuất xứ thương hiệu</th>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${product.brand != null && not empty product.brand.origin}">
+                                        <c:when
+                                                test="${product.brand != null && not empty product.brand.origin}">
                                             ${product.brand.origin}
                                         </c:when>
                                         <c:when test="${not empty product.origin}">
@@ -262,7 +276,8 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${product.category != null}">
-                                            <a href="${pageContext.request.contextPath}/products?category=${product.category.categorySlug}">
+                                            <a
+                                                    href="${pageContext.request.contextPath}/products?category=${product.category.categorySlug}">
                                                     ${product.category.categoryName}
                                             </a>
                                         </c:when>
@@ -280,7 +295,8 @@
                                         <c:when test="${not empty product.variants}">
                                             <div class="variant-list">
                                                 <c:forEach var="variant" items="${product.variants}">
-                                                    <span class="variant-badge">${variant.variantName}</span>
+                                                                    <span
+                                                                            class="variant-badge">${variant.variantName}</span>
                                                 </c:forEach>
                                             </div>
                                         </c:when>
@@ -298,7 +314,8 @@
                 <div class="review-summary">
                     <div class="rating-overview">
                         <div class="rating-big">
-                            <fmt:formatNumber value="${averageRating}" maxFractionDigits="1" minFractionDigits="1"/>
+                            <fmt:formatNumber value="${averageRating}" maxFractionDigits="1"
+                                              minFractionDigits="1"/>
                         </div>
                         <div class="rating-stars-big">
                             <c:forEach begin="1" end="5" var="i">
@@ -318,56 +335,90 @@
                     <c:remove var="reviewError" scope="session"/>
                 </c:if>
 
-                <c:if test="${not empty sessionScope.user}">
-                    <div class="write-review">
-                        <h3>Viết đánh giá của bạn</h3>
-                        <form action="${pageContext.request.contextPath}/review" method="post" class="review-form">
-                            <input type="hidden" name="productId" value="${product.productId}">
-                            <div class="rating-input">
-                                <label>Đánh giá:</label>
-                                <div class="star-rating">
-                                    <c:forEach begin="1" end="5" var="i">
-                                        <input type="radio" name="rating" value="${6-i}" id="star${6-i}" required>
-                                        <label for="star${6-i}">★</label>
-                                    </c:forEach>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <c:choose>
+                            <c:when test="${canReviewStatus == 'CAN_REVIEW'}">
+                                <div class="write-review">
+                                    <h3>Viết đánh giá của bạn</h3>
+                                    <form action="${pageContext.request.contextPath}/review"
+                                          method="post" class="review-form">
+                                        <input type="hidden" name="productId"
+                                               value="${product.productId}">
+                                        <div class="rating-input">
+                                            <label>Đánh giá:</label>
+                                            <div class="star-rating">
+                                                <c:forEach begin="1" end="5" var="i">
+                                                    <input type="radio" name="rating" value="${6-i}"
+                                                           id="star${6-i}" required>
+                                                    <label for="star${6-i}">★</label>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                                        <div class="review-content-input">
+                                            <label for="reviewContent">Nội dung:</label>
+                                            <textarea name="content" id="reviewContent" rows="4"
+                                                      placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
+                                                      required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Gửi đánh
+                                            giá
+                                        </button>
+                                    </form>
                                 </div>
-                            </div>
-                            <div class="review-content-input">
-                                <label for="reviewContent">Nội dung:</label>
-                                <textarea name="content" id="reviewContent" rows="4"
-                                          placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
-                                          required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-                        </form>
-                    </div>
-                </c:if>
-                <c:if test="${empty sessionScope.user}">
-                    <div class="login-to-review">
-                        <p>Vui lòng <a href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng nhập</a> để viết đánh giá.</p>
-                    </div>
-                </c:if>
+                            </c:when>
+                            <c:when test="${canReviewStatus == 'ALREADY_REVIEWED'}">
+                                <div class="login-to-review">
+                                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Bạn
+                                        đã đánh giá sản phẩm này.</p>
+                                </div>
+                            </c:when>
+                            <c:when test="${canReviewStatus == 'ORDER_PENDING'}">
+                                <div class="login-to-review">
+                                    <p><i class="fas fa-clock" style="color: #ffc107;"></i> Đơn hàng của
+                                        bạn đang được xử lý. Vui lòng đợi đơn hàng hoàn thành để đánh
+                                        giá.</p>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="login-to-review">
+                                    <p><i class="fas fa-shopping-bag" style="color: #6c757d;"></i> Bạn
+                                        cần mua sản phẩm này để có thể đánh giá.</p>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="login-to-review">
+                            <p>Vui lòng <a
+                                    href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng
+                                nhập</a> để viết đánh giá.</p>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
 
                 <div class="reviews-list">
                     <c:forEach var="review" items="${reviews}">
                         <div class="review-item">
                             <div class="review-header">
                                 <div class="reviewer-info">
-                                    <span class="reviewer-name">
-                                        <c:choose>
-                                            <c:when test="${not empty review.reviewerName}">
-                                                ${review.reviewerName}
-                                            </c:when>
-                                            <c:otherwise>Ẩn danh</c:otherwise>
-                                        </c:choose>
-                                    </span>
+                                                    <span class="reviewer-name">
+                                                        <c:choose>
+                                                            <c:when test="${not empty review.reviewerName}">
+                                                                ${review.reviewerName}
+                                                            </c:when>
+                                                            <c:otherwise>Ẩn danh</c:otherwise>
+                                                        </c:choose>
+                                                    </span>
                                     <span class="review-date">
-                                        <fmt:formatDate value="${review.createdAt}" pattern="dd/MM/yyyy"/>
-                                    </span>
+                                                        <fmt:formatDate value="${review.createdAt}"
+                                                                        pattern="dd/MM/yyyy"/>
+                                                    </span>
                                 </div>
                                 <div class="review-rating">
                                     <c:forEach begin="1" end="5" var="i">
-                                        <span class="star ${i <= review.rating ? 'filled' : ''}">★</span>
+                                                        <span
+                                                                class="star ${i <= review.rating ? 'filled' : ''}">★</span>
                                     </c:forEach>
                                 </div>
                             </div>
@@ -589,4 +640,5 @@
 </script>
 
 </body>
+
 </html>

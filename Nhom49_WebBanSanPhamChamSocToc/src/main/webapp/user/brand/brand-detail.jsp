@@ -1,21 +1,82 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${brand.brandName} - HairGlow</title>
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-</head>
-<body>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
+    <style>
+        .brand-detail-main {
+            max-width: 1400px;
+            margin: 40px auto 60px;
+            padding: 0 20px;
+        }
+
+        .brand-products-section .product-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 24px !important;
+            margin-top: 30px !important;
+        }
+
+        .brand-products-section .product-item {
+            width: 100% !important;
+            max-width: none !important;
+            min-width: 0 !important;
+        }
+
+        .brand-products-section .product-img {
+            aspect-ratio: 1 / 1;
+        }
+
+        .brand-products-section .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 1199px) {
+            .brand-products-section .product-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 20px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .brand-products-section .product-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px !important;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .brand-detail-main {
+                padding: 0 12px;
+            }
+
+            .brand-products-section .product-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Header -->
 <jsp:include page="/layout/header.jsp"/>
 
+<!-- Brand Banner -->
 <section class="brand-banner section-animate">
     <div class="brand-banner-overlay"></div>
     <div class="brand-banner-content">
@@ -26,25 +87,18 @@
             <span class="separator">›</span>
             <span class="current">${brand.brandName}</span>
         </nav>
-
         <div class="brand-banner-info">
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
-                        <%-- DB: images/brands/xxx.png -> File: static/assets/images/brands/xxx.png
-                            --%>
                         <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                             alt="Logo ${brand.brandName}"
-                             onerror="this.onerror=null;
-                                         this.remove();
-                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';">
+                             alt="Logo ${brand.brandName}">
                     </c:when>
                     <c:otherwise>
                         <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>
                     </c:otherwise>
                 </c:choose>
             </div>
-
             <div class="brand-text">
                 <h1>${brand.brandName}</h1>
                 <p class="brand-tagline">${brand.shortDescription}</p>
@@ -52,7 +106,8 @@
                     <c:if test="${not empty brand.origin}">
                         <span class="meta-item"><i class="fas fa-globe"></i> ${brand.origin}</span>
                     </c:if>
-                    <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản phẩm</span>
+                    <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản
+                                            phẩm</span>
                 </div>
             </div>
         </div>
@@ -60,7 +115,7 @@
 </section>
 
 <main class="brand-detail-main page-animate">
-
+    <!-- Brand Info Section -->
     <div class="brand-info-section section-animate">
         <c:if test="${not empty brand.fullDescription}">
             <div class="brand-description-card">
@@ -69,6 +124,7 @@
             </div>
         </c:if>
 
+        <!-- Category Stats -->
         <c:if test="${not empty categoryStats}">
             <div class="brand-stats">
                 <h3><i class="fas fa-chart-pie"></i> Danh mục sản phẩm</h3>
@@ -84,15 +140,16 @@
         </c:if>
     </div>
 
-    <section class="brand-products-section">
+    <!-- Products Section -->
+    <section class="brand-products-section store-page">
         <div class="brand-products-header">
             <h2>Sản phẩm của ${brand.brandName}</h2>
+            <p class="product-count">${totalProducts} sản phẩm</p>
             <div class="product-filter-tags">
                 <button class="product-filter-tag active" data-category="all">Tất cả</button>
                 <c:forEach var="category" items="${categories}">
-                    <button class="product-filter-tag" data-category="${category.categorySlug}">
-                            ${category.categoryName}
-                    </button>
+                    <button class="product-filter-tag"
+                            data-category="${category.categorySlug}">${category.categoryName}</button>
                 </c:forEach>
             </div>
         </div>
@@ -107,7 +164,7 @@
                                 <a
                                         href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                     <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
+                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'default-product.png'}">
                                 </a>
                             </div>
                             <div class="product-body">
@@ -191,48 +248,32 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="product-price">
-                            <c:if test="${product.defaultVariant != null}">
-                                <p class="price-current">
-                                    <fmt:formatNumber
-                                            value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
-                                            type="number"/>₫
-                                </p>
-                            </c:if>
-                        </div>
-
-                        <div class="product-actions">
-                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem thêm</a>
-                            <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-cart-form">
-                                <input type="hidden" name="productId" value="${product.productId}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="btn primary">Thêm vào giỏ</button>
-                            </form>
-                        </div>
-                    </div>
-
+                    </c:forEach>
                 </div>
-            </c:forEach>
-        </div>
+            </c:when>
+            <c:otherwise>
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h3>Chưa có sản phẩm nào</h3>
+                    <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
+                </div>
+            </c:otherwise>
+        </c:choose>
 
-        <c:if test="${empty products}">
-            <div class="empty-state">
-                <i class="fas fa-box-open"></i>
-                <h3>Chưa có sản phẩm nào</h3>
-                <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
-            </div>
-        </c:if>
-
+        <!-- Pagination -->
         <c:if test="${totalPages > 1}">
             <jsp:include page="/layout/pagination.jsp"/>
         </c:if>
     </section>
 </main>
 
+<!-- Footer -->
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
+    // ===== ADD TO CART - Đã được xử lý trong header.jsp =====
+
+    // Filter products by category
     document.querySelectorAll('.product-filter-tag').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.product-filter-tag').forEach(b => b.classList.remove('active'));
@@ -249,7 +290,6 @@
         });
     });
 </script>
-
 </body>
 
 </html>
