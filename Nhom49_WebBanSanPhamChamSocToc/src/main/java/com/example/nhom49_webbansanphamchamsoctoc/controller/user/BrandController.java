@@ -90,27 +90,21 @@ public class BrandController extends HttpServlet {
         }
 
         List<Product> allBrandProducts = productService.getProductsByBrand(brand.getBrandId());
-        List<Product> filteredProducts = new ArrayList<>();
-        for (Product product : allBrandProducts) {
-            if (!product.isOnSale()) {
-                filteredProducts.add(product);
-            }
-        }
 
-        int totalProducts = filteredProducts.size();
+        int totalProducts = allBrandProducts.size();
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
         if (totalPages > 0 && page > totalPages) {
             page = totalPages;
         }
 
         int fromIndex = Math.max(0, (page - 1) * pageSize);
-        int toIndex = Math.min(fromIndex + pageSize, filteredProducts.size());
-        List<Product> products = fromIndex >= filteredProducts.size()
+        int toIndex = Math.min(fromIndex + pageSize, allBrandProducts.size());
+        List<Product> products = fromIndex >= allBrandProducts.size()
                 ? List.of()
-                : filteredProducts.subList(fromIndex, toIndex);
+                : allBrandProducts.subList(fromIndex, toIndex);
         Map<Integer, Category> categoryMap = new LinkedHashMap<>();
         Map<String, Integer> categoryStats = new LinkedHashMap<>();
-        for (Product product : filteredProducts) {
+        for (Product product : allBrandProducts) {
             Category category = product.getCategory();
             if (category == null) {
                 continue;
