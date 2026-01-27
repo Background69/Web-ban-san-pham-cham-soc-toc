@@ -96,7 +96,7 @@ public class AddressUtil {
         address.setWardName(wardName);
         address.setSpecificAddress(ValidationUtil.sanitize(specificAddress));
         address.setNote(ValidationUtil.sanitize(note));
-        address.setDefault(false);
+        address.setDefaultAddress(false);
         return address;
     }
 }

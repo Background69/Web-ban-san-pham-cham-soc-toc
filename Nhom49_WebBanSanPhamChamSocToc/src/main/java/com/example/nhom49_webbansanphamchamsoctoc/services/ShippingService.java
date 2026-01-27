@@ -199,4 +199,12 @@ public class ShippingService {
     public String formatFullAddress(ShippingAddress address) {
         return AddressUtil.formatFullAddress(address);
     }
+
+    /**
+     * Đếm số địa chỉ của user
+     */
+    public int countAddressesByUser(int userId) {
+        List<ShippingAddress> addresses = addressDAO.findByUserId(userId);
+        return addresses != null ? addresses.size() : 0;
+    }
 }

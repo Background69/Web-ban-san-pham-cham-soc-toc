@@ -1,8 +1,11 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
+import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.services.OrderService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProfileService;
+import com.example.nhom49_webbansanphamchamsoctoc.services.ReviewService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ShippingService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 
@@ -14,18 +17,25 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@WebServlet(name = "UserProfileController", urlPatterns = {"/profile", "/profile/*"})
+@WebServlet(name = "UserProfileController", urlPatterns = { "/profile", "/profile/*" })
 public class UserProfileController extends HttpServlet {
 
     private ProfileService profileService;
     private ShippingService shippingService;
+    private OrderService orderService;
+    private ReviewService reviewService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         this.profileService = new ProfileService();
         this.shippingService = new ShippingService();
+        this.orderService = new OrderService();
+        this.reviewService = new ReviewService();
     }
 
     @Override
@@ -43,24 +53,95 @@ public class UserProfileController extends HttpServlet {
         String pathInfo = request.getPathInfo();
         request.setAttribute("user", currentUser);
 
-        if (pathInfo == null || pathInfo.equals("/")) {
-            ShippingAddress defaultAddress = shippingService.getDefaultAddress(currentUser.getUserId());
-            request.setAttribute("defaultAddress", defaultAddress);
-            request.setAttribute("activeTab", "info");
-            request.getRequestDispatcher("/user/user-profile.jsp").forward(request, response);
+        if (pathInfo == null || pathInfo.equals("/") || pathInfo.equals("/overview")) {
+            // Profile Overview - trang tổng quan mới
+            showProfileOverview(request, response, currentUser);
         } else if (pathInfo.equals("/edit")) {
             request.setAttribute("activeTab", "info");
             request.getRequestDispatcher("/user/profile-edit.jsp").forward(request, response);
         } else if (pathInfo.equals("/addresses")) {
             response.sendRedirect(request.getContextPath() + "/profile/addresses");
         } else if (pathInfo.equals("/orders")) {
-            response.sendRedirect(request.getContextPath() + "/orders");
+            // Tab đơn hàng của tôi
+            showUserOrders(request, response, currentUser);
+        } else if (pathInfo.equals("/reviews")) {
+            // Tab đánh giá của tôi
+            showUserReviews(request, response, currentUser);
         } else if (pathInfo.equals("/security") || pathInfo.equals("/change-password")) {
             request.setAttribute("activeTab", "security");
             request.getRequestDispatcher("/user/change-password.jsp").forward(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    /**
+     * Hiển thị trang Profile Overview với statistics
+     */
+    private void showProfileOverview(HttpServletRequest request, HttpServletResponse response, User currentUser)
+            throws ServletException, IOException {
+        int userId = currentUser.getUserId();
+
+        // Lấy statistics
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalOrders", orderService.countOrdersByUser(userId));
+        stats.put("totalSpending", orderService.getTotalSpendingByUser(userId));
+        stats.put("totalAddresses", shippingService.countAddressesByUser(userId));
+
+        // Lấy địa chỉ mặc định
+        ShippingAddress defaultAddress = shippingService.getDefaultAddress(userId);
+
+        // Lấy đơn hàng gần đây (3 đơn gần nhất)
+        List<Order> recentOrders = orderService.getRecentOrdersByUser(userId, 3);
+
+        request.setAttribute("stats", stats);
+        request.setAttribute("defaultAddress", defaultAddress);
+        request.setAttribute("recentOrders", recentOrders);
+        request.setAttribute("activeTab", "overview");
+
+        request.getRequestDispatcher("/user/profile-overview.jsp").forward(request, response);
+    }
+
+    /**
+     * Hiển thị danh sách đơn hàng của người dùng
+     */
+    private void showUserOrders(HttpServletRequest request, HttpServletResponse response, User currentUser)
+            throws ServletException, IOException {
+        int userId = currentUser.getUserId();
+        String status = request.getParameter("status");
+
+        List<Order> orders;
+        if (status != null && !status.isEmpty() && !status.equalsIgnoreCase("ALL")) {
+            orders = orderService.getOrdersByUserAndStatus(userId, status.toUpperCase());
+        } else {
+            orders = orderService.getOrdersByUser(userId);
+        }
+
+        // Lấy số lượng đơn hàng theo từng status
+        Map<String, Integer> orderCounts = orderService.getOrderCountsByStatus(userId);
+
+        request.setAttribute("orders", orders);
+        request.setAttribute("orderCounts", orderCounts);
+        request.setAttribute("status", status);
+        request.setAttribute("activeTab", "orders");
+
+        request.getRequestDispatcher("/user/profile-orders.jsp").forward(request, response);
+    }
+
+    /**
+     * Hiển thị danh sách đánh giá của người dùng
+     */
+    private void showUserReviews(HttpServletRequest request, HttpServletResponse response, User currentUser)
+            throws ServletException, IOException {
+        int userId = currentUser.getUserId();
+
+        // Lấy danh sách reviews với thông tin sản phẩm
+        var reviews = reviewService.getUserReviewsWithProduct(userId);
+
+        request.setAttribute("reviews", reviews);
+        request.setAttribute("activeTab", "reviews");
+
+        request.getRequestDispatcher("/user/profile-reviews.jsp").forward(request, response);
     }
 
     @Override
@@ -79,7 +160,8 @@ public class UserProfileController extends HttpServlet {
 
         if (pathInfo != null && pathInfo.equals("/edit")) {
             updateProfile(request, response, currentUser);
-        } else if (pathInfo != null && (pathInfo.equals("/change-password") || pathInfo.equals("/security/change-password"))) {
+        } else if (pathInfo != null
+                && (pathInfo.equals("/change-password") || pathInfo.equals("/security/change-password"))) {
             changePassword(request, response, currentUser);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -116,8 +198,7 @@ public class UserProfileController extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
 
         boolean success = profileService.changePassword(
-                currentUser.getUserId(), oldPassword, newPassword, confirmPassword
-        );
+                currentUser.getUserId(), oldPassword, newPassword, confirmPassword);
 
         if (success) {
             request.setAttribute("success", "Đổi mật khẩu thành công.");
