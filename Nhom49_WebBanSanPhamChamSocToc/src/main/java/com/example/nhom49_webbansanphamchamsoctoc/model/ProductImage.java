@@ -1,23 +1,11 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
-import java.sql.Timestamp;
-
-/**
- * Model ProductImage - Bảng product_images trong database
- * Quản lý hình ảnh sản phẩm (gallery)
- */
 public class ProductImage {
     private int imageId;
     private int productId;
     private String imageUrl;
     private boolean isPrimary;
-    private Timestamp createdAt;
 
-    // Constructors
-    public ProductImage() {
-    }
-
-    // Getters and Setters
     public int getImageId() {
         return imageId;
     }
@@ -49,13 +37,4 @@ public class ProductImage {
     public void setPrimary(boolean primary) {
         isPrimary = primary;
     }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
 }
