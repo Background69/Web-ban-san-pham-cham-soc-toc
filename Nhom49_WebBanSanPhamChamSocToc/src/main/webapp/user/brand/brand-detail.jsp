@@ -94,14 +94,13 @@
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
-                        <%-- DB: images/brands/xxx.png  -> File: static/assets/images/brands/xxx.png --%>
-                        <img
-                                src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                                alt="Logo ${brand.brandName}"
-                                onerror="this.onerror=null;
+                        <%-- DB: images/brands/xxx.png -> File: static/assets/images/brands/xxx.png
+                            --%>
+                        <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
+                             alt="Logo ${brand.brandName}"
+                             onerror="this.onerror=null;
                                          this.remove();
-                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';"
-                        >
+                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';">
                     </c:when>
                     <c:otherwise>
                         <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>
@@ -175,7 +174,7 @@
                                 <a
                                         href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                     <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/images/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'default-product.png'}">
+                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
                                 </a>
                             </div>
                             <div class="product-body">
