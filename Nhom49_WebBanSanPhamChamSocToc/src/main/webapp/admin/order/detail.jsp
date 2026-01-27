@@ -9,55 +9,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết đơn hàng</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+    <link rel="stylesheet" href="<c:url value='/static/css/admin/dashboard.css'/>">
 </head>
 
 <body>
 <div class="container">
-
     <jsp:include page="/admin/layout/sidebar.jsp"/>
 
     <main class="content">
         <div class="header">
-            <h1>Chi tiết đơn hàng</h1>
-            <a href="${pageContext.request.contextPath}/admin/order/list.jsp">← Quay lại</a>
+            <h1>Chi tiết đơn hàng #${order.id}</h1>
+            <a href="<c:url value='/admin/order'/>">← Quay lại</a>
         </div>
 
-        <!-- Thông tin đơn -->
+        <!-- THÔNG TIN ĐƠN -->
         <div class="order-info">
-            <p><b>Mã đơn:</b> ${order.orderCode}</p>
-            <p><b>Khách hàng:</b> ${order.shippingFullName}</p>
-            <p><b>Địa chỉ:</b> ${order.shippingAddress}</p>
-            <p><b>SĐT:</b> ${order.shippingPhone}</p>
-            <p><b>Trạng thái:</b> ${order.orderStatus}</p>
+            <p><b>Khách hàng:</b> ${order.customerName}</p>
+            <p><b>Ngày đặt:</b>
+                <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
+            </p>
+            <p><b>Trạng thái:</b> ${order.status}</p>
             <p><b>Tổng tiền:</b>
                 <fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫"/>
             </p>
         </div>
 
-        <!-- Danh sách sản phẩm -->
         <h3>Sản phẩm trong đơn</h3>
-        <table>
+
+        <table class="table">
             <thead>
             <tr>
                 <th>Sản phẩm</th>
+                <th>Phân loại</th>
                 <th>Số lượng</th>
-                <th>Giá</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
             </tr>
             </thead>
+
             <tbody>
             <c:forEach items="${orderItems}" var="item">
                 <tr>
                     <td>${item.productName}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty item.variantName}">
+                                ${item.variantName}
+                            </c:when>
+                            <c:otherwise>-</c:otherwise>
+                        </c:choose>
+                    </td>
                     <td>${item.quantity}</td>
                     <td>
-                        <fmt:formatNumber value="${item.price}" type="currency" currencySymbol="₫"/>
+                        <fmt:formatNumber value="${item.unitPrice}" type="currency" currencySymbol="₫"/>
+                    </td>
+                    <td>
+                        <fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="₫"/>
                     </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
-
     </main>
 </div>
 </body>

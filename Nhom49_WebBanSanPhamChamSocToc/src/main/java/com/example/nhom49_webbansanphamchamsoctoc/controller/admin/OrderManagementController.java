@@ -1,8 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderItemDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
+import com.example.nhom49_webbansanphamchamsoctoc.model.OrderItem;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import jakarta.servlet.*;
@@ -34,6 +36,20 @@ public class OrderManagementController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/orders");
             return;
         }
+        if ("detail".equals(action)) {
+            int orderId = Integer.parseInt(request.getParameter("id"));
+            OrderItemDAO orderItemDAO = new OrderItemDAO();
+            Order order = orderDAO.findById(orderId);
+            List<OrderItem> orderItems = orderItemDAO.findByOrderId(orderId);
+
+            request.setAttribute("order", order);
+            request.setAttribute("orderItems", orderItems);
+
+            request.getRequestDispatcher("/admin/order/detail.jsp")
+                    .forward(request, response);
+            return;
+        }
+
         //Danh sách đơn hàng
         List<Order> orders = orderDAO.findAll();
         request.setAttribute("orders",orders);
