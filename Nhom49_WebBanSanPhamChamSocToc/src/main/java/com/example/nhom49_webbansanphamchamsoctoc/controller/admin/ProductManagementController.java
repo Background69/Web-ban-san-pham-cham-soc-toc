@@ -1,8 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
+import com.example.nhom49_webbansanphamchamsoctoc.dao.CategoryDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
@@ -18,6 +20,8 @@ public class ProductManagementController extends HttpServlet {
 
     ProductDAO productDAO = new ProductDAO();
     ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+    CategoryDAO categoryDAO = new CategoryDAO();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,10 +41,14 @@ public class ProductManagementController extends HttpServlet {
 
         // ===== OPEN CREATE FORM =====
         if ("create".equals(action)) {
-            request.getRequestDispatcher("admin/products/form.jsp")
+            List<Category> categories = categoryDAO.findAll();
+            request.setAttribute("categories", categories);
+
+            request.getRequestDispatcher("/admin/products/form.jsp")
                     .forward(request, response);
             return;
         }
+
 
         // ===== OPEN EDIT FORM =====
         if ("edit".equals(action)) {
@@ -48,10 +56,14 @@ public class ProductManagementController extends HttpServlet {
             Product product = productDAO.findById(id);
             request.setAttribute("product", product);
 
+            List<Category> categories = categoryDAO.findAll();
+            request.setAttribute("categories", categories);
+
             request.getRequestDispatcher("/admin/products/form.jsp")
                     .forward(request, response);
             return;
         }
+
 
         // ===== LIST =====
         List<Product> products = productDAO.findAll();
@@ -88,9 +100,11 @@ public class ProductManagementController extends HttpServlet {
     // ===== MAP FORM → OBJECT =====
     private Product productFromRequest(HttpServletRequest request) {
         Product product = new Product();
-        ProductVariant productVariant = new ProductVariant();
         product.setProductName(request.getParameter("name"));
-        product.setCategoryName(request.getParameter("category"));
+        product.setCategoryId(
+                Integer.parseInt(request.getParameter("categoryId"))
+        );
         return product;
     }
+
 }
