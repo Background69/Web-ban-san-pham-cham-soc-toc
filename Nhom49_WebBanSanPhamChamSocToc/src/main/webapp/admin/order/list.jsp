@@ -2,14 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<c:set var="activeMenu" value="orders"/>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý đơn hàng</title>
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 </head>
 
 <body>
@@ -18,28 +18,31 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
-            <img src="${pageContext.request.contextPath}/images/logo.PNG" alt="Logo HairGlow">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
         </div>
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/UserManagementController">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/ProductManagementController">Quản lý sản phẩm</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/OrderManagementController">Quản lý đơn hàng</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
         </ul>
 
-        <a class="view-site" href="${pageContext.request.contextPath}/home">Quay lại Website</a>
+        <a class="view-site" href="${pageContext.request.contextPath}/index">
+            Quay lại Website
+        </a>
     </aside>
-
-    <!-- Main content -->
+    <!-- CONTENT -->
     <main class="content">
         <div class="header">
             <h1>Quản lý đơn hàng</h1>
         </div>
 
-        <!-- Orders Table -->
-        <table class="orders-table">
+        <table class="product-table">
             <thead>
             <tr>
                 <th>Mã đơn</th>
@@ -61,15 +64,8 @@
                     </td>
 
                     <td>
-                        <span class="status ${o.orderStatus}">
-                            ${o.orderStatus}
-                        </span>
-                    </td>
-
-                    <td>
-                        <!-- UPDATE STATUS -->
-                        <form action="${pageContext.request.contextPath}/OrderManagementController"
-                              method="get" style="display:inline">
+                        <form action="${pageContext.request.contextPath}/admin/order/detail.jsp"
+                              method="post">
                             <input type="hidden" name="action" value="updateStatus">
                             <input type="hidden" name="id" value="${o.orderId}">
                             <select name="status" onchange="this.form.submit()">
@@ -78,19 +74,28 @@
                                 <option value="cancelled" ${o.orderStatus == 'cancelled' ? 'selected' : ''}>Đã hủy</option>
                             </select>
                         </form>
+                    </td>
 
-                        <!-- DELETE -->
-                        <a class="action-btn delete"
-                           href="${pageContext.request.contextPath}/OrderManagementController?action=delete&id=${o.orderId}"
-                           onclick="return confirm('Bạn có chắc muốn xóa đơn này?')">
+                    <td>
+                        <a href="${pageContext.request.contextPath}/admin/orders?action=detail&id=${o.orderId}">
+                            Chi tiết
+                        </a>
+                        |
+                        <a href="${pageContext.request.contextPath}/admin/orders?action=delete&id=${o.orderId}"
+                           onclick="return confirm('Xóa đơn này?')">
                             Xóa
                         </a>
                     </td>
                 </tr>
             </c:forEach>
+
+            <c:if test="${empty orders}">
+                <tr>
+                    <td colspan="5" style="text-align:center">Không có đơn hàng</td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
-
     </main>
 </div>
 </body>
