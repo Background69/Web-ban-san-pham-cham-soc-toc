@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet"
-      href="${pageContext.request.contextPath}/static/css/admin/form.css">
+      href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 
 <div class="product-form-wrapper">
     <h2>
@@ -32,16 +32,8 @@
 
         <div class="form-group">
             <label>Danh mục</label>
-            <select name="categoryId">
-                <c:forEach var="c" items="${categories}">
-                    <option value="${c.id}"
-                        ${product.categoryId == c.id ? "selected" : ""}>
-                            ${c.name}
-                    </option>
-                </c:forEach>
-            </select>
+            <input name="name" value="${product.name}" required>
         </div>
-
         <div class="form-group">
             <label>Ảnh</label>
             <input type="file" name="image">
