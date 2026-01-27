@@ -28,14 +28,14 @@ public class OrderDetailController extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            response.sendRedirect(request.getContextPath() + "/orders");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
             return;
         }
 
         HttpSession session = request.getSession(false);
         User user = SessionUtil.getCurrentUser(session);
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/orders");
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/profile/orders");
             return;
         }
 
@@ -51,7 +51,7 @@ public class OrderDetailController extends HttpServlet {
             request.setAttribute("order", order);
             request.getRequestDispatcher("/user/order/order-detail.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/orders");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
         }
     }
 
@@ -63,7 +63,7 @@ public class OrderDetailController extends HttpServlet {
         if (pathInfo != null && pathInfo.endsWith("/cancel")) {
             cancelOrder(request, response);
         } else {
-            response.sendRedirect(request.getContextPath() + "/orders");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
         }
     }
 
@@ -73,7 +73,7 @@ public class OrderDetailController extends HttpServlet {
         HttpSession session = request.getSession(false);
         User user = SessionUtil.getCurrentUser(session);
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/orders");
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/profile/orders");
             return;
         }
 
@@ -89,7 +89,7 @@ public class OrderDetailController extends HttpServlet {
 
             response.sendRedirect(request.getContextPath() + "/orders/" + orderId);
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/orders");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
         }
     }
 }

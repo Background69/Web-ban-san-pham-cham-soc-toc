@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -93,14 +93,17 @@
 
                             <div class="order-footer">
                                 <div class="order-total">
-                                    Tổng tiền: <span><fmt:formatNumber value="${order.totalAmount}" type="number"/>₫</span>
+                                    Tổng tiền: <span><fmt:formatNumber value="${order.totalAmount}"
+                                                                       type="number"/>₫</span>
                                 </div>
                                 <div class="order-actions">
-                                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}" class="btn-detail">
+                                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}"
+                                       class="btn-detail">
                                         Xem chi tiết
                                     </a>
                                     <c:if test="${order.orderStatus == 'pending'}">
-                                        <form action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel" method="post" style="display: inline;">
+                                        <form action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel"
+                                              method="post" style="display: inline;">
                                             <button type="submit" class="btn-cancel"
                                                     onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
                                                 Hủy đơn

@@ -16,6 +16,7 @@ public class OrderItem {
     private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
+    private String productImage; // Thêm field để lưu đường dẫn ảnh sản phẩm
 
     // Đối tượng liên kết
     private Product product;
@@ -96,6 +97,14 @@ public class OrderItem {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 
     public Product getProduct() {

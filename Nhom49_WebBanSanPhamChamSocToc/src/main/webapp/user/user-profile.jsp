@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -38,7 +38,7 @@
                         </li>
                         <li>
                             <a class="text-decoration-none d-block px-3 py-2 rounded-2"
-                               href="${pageContext.request.contextPath}/orders">
+                               href="${pageContext.request.contextPath}/profile/orders">
                                 Đơn hàng
                             </a>
                         </li>
@@ -85,10 +85,10 @@
                                         <div class="mb-2"><strong>${defaultAddress.fullName}</strong></div>
                                         <div class="mb-2">${defaultAddress.phone}</div>
                                         <div class="text-muted">
-                                            ${defaultAddress.specificAddress},
-                                            ${defaultAddress.wardName},
-                                            ${defaultAddress.districtName},
-                                            ${defaultAddress.provinceName}
+                                                ${defaultAddress.specificAddress},
+                                                ${defaultAddress.wardName},
+                                                ${defaultAddress.districtName},
+                                                ${defaultAddress.provinceName}
                                         </div>
                                     </c:when>
                                     <c:otherwise>

@@ -1,215 +1,315 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Giỏ hàng</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - HairGlow</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cart.css">
 </head>
 <body>
-
 <jsp:include page="/layout/header.jsp"/>
 
-<div class="cart-process">
-    <div class="cart-checkout-process active">
-        <i class="fa-solid fa-cart-shopping"></i>
-    </div>
-    <div class="cart-checkout-process">
-        <i class="fa-solid fa-location-dot"></i>
-    </div>
-    <div class="cart-checkout-process">
-        <i class="fa-solid fa-credit-card"></i>
-    </div>
-</div>
-
-<div class="cart-container">
-
-    <!-- BÊN TRÁI -->
-    <div class="cart-left">
-        <h3>Giỏ hàng của bạn</h3>
-
-        <!-- Tiêu đề bảng -->
-        <div class="cart-header-table">
-            <span>Sản phẩm</span>
-            <span>Tên sản phẩm</span>
-            <span>Loại</span>
-            <span>Số lượng</span>
-            <span>Giá tiền</span>
-            <span>Xóa</span>
+<main class="cart-page">
+    <div class="cart-container">
+        <!-- Cart Header -->
+        <div class="cart-header">
+            <h1 class="cart-title">
+                <i class="fas fa-shopping-cart"></i>
+                Giỏ hàng của bạn
+                <c:if test="${cartCount > 0}">
+                    <span class="cart-count-badge">${cartCount} sản phẩm</span>
+                </c:if>
+            </h1>
         </div>
 
-        <!-- Danh sách sản phẩm -->
-        <div class="cart-product">
-            <c:choose>
-                <c:when test="${empty cartItems}">
-                    <div class="empty-cart">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <p>Giỏ hàng của bạn đang trống</p>
-                        <a href="${pageContext.request.contextPath}/products" class="btn-continue">Tiếp tục mua sắm</a>
+        <c:choose>
+            <c:when test="${empty cartItems || cartCount == 0}">
+                <!-- Empty Cart State -->
+                <div class="cart-empty">
+                    <div class="cart-empty-icon">
+                        <i class="fas fa-shopping-cart"></i>
                     </div>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach var="item" items="${cartItems}">
-                        <div class="cart-product-item" data-price="${item.unitPrice}" data-variant-id="${item.variantId}">
-                            <div class="cart-product-image">
-                                <a href="${pageContext.request.contextPath}/product/${item.productSlug}">
-                                    <img alt="${item.productName}"
-                                         src="${pageContext.request.contextPath}/static/images/${not empty item.imageUrl ? item.imageUrl : 'default-product.png'}">
-                                </a>
+                    <h2 class="cart-empty-title">Giỏ hàng trống</h2>
+                    <p class="cart-empty-text">
+                        Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản phẩm chăm sóc tóc tuyệt vời của
+                        chúng tôi!
+                    </p>
+                    <a href="${pageContext.request.contextPath}/store" class="cart-empty-btn">
+                        <i class="fas fa-shopping-bag"></i> Khám phá sản phẩm
+                    </a>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <!-- Cart Content -->
+                <div class="cart-layout">
+                    <!-- Cart Items -->
+                    <div class="cart-items-section">
+                        <div class="cart-items-header">
+                            <span class="cart-items-title">Sản phẩm trong giỏ</span>
+                            <form action="${pageContext.request.contextPath}/cart/clear" method="post"
+                                  style="display: inline;">
+                                <button type="submit" class="cart-clear-btn"
+                                        onclick="return confirm('Bạn có chắc muốn xóa tất cả sản phẩm?')">
+                                    <i class="fas fa-trash-alt"></i> Xóa tất cả
+                                </button>
+                            </form>
+                        </div>
+
+                        <c:forEach var="item" items="${cartItems}">
+                            <div class="cart-item" data-variant-id="${item.variant.variantId}">
+                                <div class="cart-item-image">
+                                    <img src="${pageContext.request.contextPath}/static/images/products/${not empty item.imageUrl ? item.imageUrl : 'default-product.png'}"
+                                         alt="${item.product.productName}"
+                                         onerror="this.src='${pageContext.request.contextPath}/static/images/default-product.png'">
+                                </div>
+                                <div class="cart-item-details">
+                                    <h3 class="cart-item-name">
+                                        <a href="${pageContext.request.contextPath}/product/${item.product.productId}">
+                                                ${item.product.productName}
+                                        </a>
+                                    </h3>
+                                    <p class="cart-item-variant">
+                                        <i class="fas fa-cube"></i> ${item.variant.variantName}
+                                    </p>
+                                    <div class="cart-item-price">
+                                        <span class="cart-item-current-price">
+                                            <fmt:formatNumber
+                                                    value="${item.variant.salePrice != null ? item.variant.salePrice : item.variant.originalPrice}"
+                                                    type="number"/>đ
+                                        </span>
+                                        <c:if test="${item.variant.salePrice != null && item.variant.salePrice < item.variant.originalPrice}">
+                                            <span class="cart-item-original-price">
+                                                <fmt:formatNumber value="${item.variant.originalPrice}" type="number"/>đ
+                                            </span>
+                                            <span class="cart-item-discount">
+                                                -<fmt:formatNumber
+                                                    value="${(1 - item.variant.salePrice / item.variant.originalPrice) * 100}"
+                                                    maxFractionDigits="0"/>%
+                                            </span>
+                                        </c:if>
+                                    </div>
+                                    <c:choose>
+                                        <c:when test="${item.variant.stockQuantity > 0}">
+                                            <span class="cart-item-stock">
+                                                <i class="fas fa-check-circle"></i> Còn ${item.variant.stockQuantity} sản phẩm
+                                            </span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="cart-item-stock out-of-stock">
+                                                <i class="fas fa-times-circle"></i> Hết hàng
+                                            </span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="cart-item-actions">
+                                    <div class="quantity-control">
+                                        <button type="button" class="quantity-btn"
+                                                onclick="updateQuantity(${item.variant.variantId}, ${item.quantity - 1})"
+                                            ${item.quantity <= 1 ? 'disabled' : ''}>
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input type="number" class="quantity-input" value="${item.quantity}" min="1"
+                                               max="${item.variant.stockQuantity}"
+                                               onchange="updateQuantity(${item.variant.variantId}, this.value)">
+                                        <button type="button" class="quantity-btn"
+                                                onclick="updateQuantity(${item.variant.variantId}, ${item.quantity + 1})"
+                                            ${item.quantity >= item.variant.stockQuantity ? 'disabled' : ''}>
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="cart-item-subtotal">
+                                        <fmt:formatNumber
+                                                value="${(item.variant.salePrice != null ? item.variant.salePrice : item.variant.originalPrice) * item.quantity}"
+                                                type="number"/>đ
+                                    </div>
+                                    <form action="${pageContext.request.contextPath}/cart/remove" method="post"
+                                          style="display: inline;">
+                                        <input type="hidden" name="variantId" value="${item.variant.variantId}">
+                                        <button type="submit" class="cart-item-remove" title="Xóa sản phẩm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="cart-product-name">${item.productName}</div>
-                            <div class="cart-product-type">${item.variantName}</div>
-                            <div class="cart-product-quantity">
-                                <form action="${pageContext.request.contextPath}/cart/update" method="post" class="quantity-form">
-                                    <input type="hidden" name="variantId" value="${item.variantId}">
-                                    <button type="button" class="minus">-</button>
-                                    <input name="quantity" min="1" max="${item.stockQuantity}" type="number" value="${item.quantity}">
-                                    <button type="button" class="plus">+</button>
-                                </form>
+                        </c:forEach>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <div class="order-summary-header">
+                            <h2 class="order-summary-title">Tóm tắt đơn hàng</h2>
+                        </div>
+                        <div class="order-summary-body">
+                            <!-- Coupon Form -->
+                            <div class="coupon-form">
+                                <div class="coupon-input-group">
+                                    <input type="text" class="coupon-input" placeholder="Nhập mã giảm giá"
+                                           id="couponCode">
+                                    <button type="button" class="coupon-btn" onclick="applyCoupon()">Áp dụng</button>
+                                </div>
+                                <div class="coupon-message" id="couponMessage" style="display: none;"></div>
                             </div>
-                            <div class="cart-product-price"><fmt:formatNumber value="${item.totalPrice}" type="number"/>₫</div>
-                            <div class="cart-product-remove">
-                                <form action="${pageContext.request.contextPath}/cart/remove" method="post">
-                                    <input type="hidden" name="variantId" value="${item.variantId}">
-                                    <button type="submit" class="remove-btn"><i class="fa-solid fa-trash"></i></button>
-                                </form>
+
+                            <!-- Price Breakdown -->
+                            <div class="price-breakdown">
+                                <div class="price-row">
+                                    <span class="price-label">Tạm tính (${cartCount} sản phẩm)</span>
+                                    <span class="price-value"><fmt:formatNumber value="${subtotal}"
+                                                                                type="number"/>đ</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="price-label">Phí vận chuyển</span>
+                                    <span class="price-value">Tính khi thanh toán</span>
+                                </div>
+                                <div class="price-row total">
+                                    <span class="price-label">Tổng cộng</span>
+                                    <span class="price-value"><fmt:formatNumber value="${subtotal}"
+                                                                                type="number"/>đ</span>
+                                </div>
+                            </div>
+
+                            <!-- Checkout Button -->
+                            <a href="${pageContext.request.contextPath}/checkout" class="checkout-btn">
+                                <i class="fas fa-lock"></i> Tiến hành thanh toán
+                            </a>
+
+                            <!-- Benefits -->
+                            <div class="cart-benefits">
+                                <div class="benefit-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Thanh toán an toàn & bảo mật</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-truck"></i>
+                                    <span>Giao hàng nhanh toàn quốc</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-undo"></i>
+                                    <span>Đổi trả trong 7 ngày</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <i class="fas fa-headset"></i>
+                                    <span>Hỗ trợ 24/7</span>
+                                </div>
                             </div>
                         </div>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-        </div>
-        <h3>Phương thức giao hàng</h3>
-
-        <label class="shipping-option">
-            <input checked name="shipping" type="radio" value="standard">
-            <span>Giao hàng tiêu chuẩn (30.000 VNĐ) - Dự kiến nhận hàng trong 5-7 ngày</span>
-        </label>
-
-        <label class="shipping-option">
-            <input name="shipping" type="radio" value="express">
-            <span>Giao hàng nhanh (50.000 VNĐ) - Dự kiến nhận hàng trong 1-3 ngày</span>
-        </label>
-
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
+</main>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
 
-    <!-- BÊN PHẢI -->
-    <div class="cart-right">
-        <h3>Thanh toán</h3>
-        <div class="cart-checkout">
-            <span>Tạm tính:</span>
-            <span class="cart-subtotal"><fmt:formatNumber value="${subtotal}" type="number"/>₫</span>
-        </div>
-        <div class="cart-summary-item">
-            <span>Phí vận chuyển:</span>
-            <span class="cart-shipping-fee">30.000₫</span>
-        </div>
-        <div class="cart-summary-item total">
-            <span>Tổng cộng:</span>
-            <span class="cart-total-amount">0₫</span>
-        </div>
-        <c:if test="${not empty cartItems}">
-            <a href="${pageContext.request.contextPath}/checkout" class="checkout-btn">Tiếp tục thanh toán</a>
-            <form action="${pageContext.request.contextPath}/cart/clear" method="post" style="margin-top: 10px;">
-                <button type="submit" class="clear-cart-btn danger" onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')">
-                    <i class="fa-solid fa-trash-can"></i> Xóa toàn bộ giỏ hàng
-                </button>
-            </form>
-        </c:if>
-    </div>
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
 </div>
 
 <jsp:include page="/layout/footer.jsp"/>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const contextPath = '${pageContext.request.contextPath}';
-    const subtotalFromServer = ${subtotal != null ? subtotal : 0};
 
-    function calculateSubtotal() {
-        let subtotal = 0;
-        document.querySelectorAll('.cart-product-item').forEach(item => {
-            const price = parseFloat(item.getAttribute('data-price')) || 0;
-            const quantityInput = item.querySelector('input[name="quantity"]');
-            const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
-            subtotal += price * quantity;
-        });
-        document.querySelector('.cart-subtotal').textContent = subtotal.toLocaleString('vi-VN') + '₫';
-        return subtotal;
+    // Show toast notification
+    function showToast(message, type) {
+        type = type || 'success';
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast toast-' + type;
+
+        let iconClass = 'check';
+        if (type === 'error') iconClass = 'times';
+        else if (type === 'warning') iconClass = 'exclamation';
+
+        toast.innerHTML = '<div class="toast-icon"><i class="fas fa-' + iconClass + '"></i></div>' +
+            '<span class="toast-message">' + message + '</span>' +
+            '<button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
+        container.appendChild(toast);
+        setTimeout(function () {
+            toast.remove();
+        }, 4000);
     }
 
-    // CẬP NHẬT PHÍ SHIP + TỔNG TIỀN
-    function updateTotal() {
-        const shippingRadio = document.querySelector('input[name="shipping"]:checked');
-        let shippingFee = 30000; // Mặc định giao hàng tiêu chuẩn
-
-        if (shippingRadio) {
-            const shipping = shippingRadio.value;
-            if (shipping === 'standard') shippingFee = 30000;
-            if (shipping === 'express') shippingFee = 50000;
-        }
-
-        document.querySelector('.cart-shipping-fee').textContent = shippingFee.toLocaleString('vi-VN') + '₫';
-
-        const subtotal = calculateSubtotal();
-        const total = subtotal + shippingFee;
-        document.querySelector('.cart-total-amount').textContent = total.toLocaleString('vi-VN') + '₫';
+    // Show/hide loading
+    function showLoading() {
+        document.getElementById('loadingOverlay').classList.add('show');
     }
 
-    // LẮNG NGHE SỰ KIỆN THAY ĐỔI PHƯƠNG THỨC VẬN CHUYỂN
-    document.querySelectorAll('input[name="shipping"]').forEach(radio => {
-        radio.addEventListener('change', updateTotal);
-    });
+    function hideLoading() {
+        document.getElementById('loadingOverlay').classList.remove('show');
+    }
 
-    // Xử lý nút tăng/giảm số lượng
-    document.querySelectorAll('.cart-product-item').forEach(item => {
-        const minusBtn = item.querySelector('.minus');
-        const plusBtn = item.querySelector('.plus');
-        const quantityInput = item.querySelector('input[name="quantity"]');
-        const form = item.querySelector('.quantity-form');
-
-        if (minusBtn && quantityInput) {
-            minusBtn.addEventListener('click', function() {
-                let value = parseInt(quantityInput.value) || 1;
-                if (value > 1) {
-                    quantityInput.value = value - 1;
-                    updateTotal();
-                    // Auto submit form sau khi thay đổi
-                    if (form) form.submit();
-                }
-            });
+    // Update quantity
+    function updateQuantity(variantId, quantity) {
+        if (quantity < 1) {
+            if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
+                document.querySelector('form[action*="remove"] input[value="' + variantId + '"]').closest('form').submit();
+            }
+            return;
         }
 
-        if (plusBtn && quantityInput) {
-            plusBtn.addEventListener('click', function() {
-                let value = parseInt(quantityInput.value) || 1;
-                const max = parseInt(quantityInput.getAttribute('max')) || 999;
-                if (value < max) {
-                    quantityInput.value = value + 1;
-                    updateTotal();
-                    // Auto submit form sau khi thay đổi
-                    if (form) form.submit();
-                }
-            });
+        showLoading();
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = contextPath + '/cart/update';
+
+        const variantInput = document.createElement('input');
+        variantInput.type = 'hidden';
+        variantInput.name = 'variantId';
+        variantInput.value = variantId;
+
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'hidden';
+        quantityInput.name = 'quantity';
+        quantityInput.value = quantity;
+
+        form.appendChild(variantInput);
+        form.appendChild(quantityInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    // Apply coupon
+    function applyCoupon() {
+        const code = document.getElementById('couponCode').value.trim();
+        const messageEl = document.getElementById('couponMessage');
+
+        if (!code) {
+            messageEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Vui lòng nhập mã giảm giá';
+            messageEl.className = 'coupon-message error';
+            messageEl.style.display = 'flex';
+            return;
         }
 
-        if (quantityInput) {
-            quantityInput.addEventListener('change', function() {
-                updateTotal();
-                if (form) form.submit();
-            });
-        }
-    });
+        messageEl.innerHTML = '<i class="fas fa-times-circle"></i> Mã giảm giá không hợp lệ';
+        messageEl.className = 'coupon-message error';
+        messageEl.style.display = 'flex';
+    }
 
-    // LẦN ĐẦU TẢI TRANG -> TÍNH LUÔN
-    updateTotal();
+    // Check for messages from server
+    <c:if test="${not empty sessionScope.cartMessage}">
+    showToast('${sessionScope.cartMessage}', 'success');
+    </c:if>
+
+    <c:if test="${not empty sessionScope.cartError}">
+    showToast('${sessionScope.cartError}', 'error');
+    </c:if>
+
+    <c:if test="${not empty sessionScope.errorMessage}">
+    showToast('${sessionScope.errorMessage}', 'error');
+    </c:if>
 </script>
 </body>
 </html>
-
 
