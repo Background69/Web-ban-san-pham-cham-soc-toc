@@ -242,39 +242,37 @@
     <div class="categories-container" id="categories-container">
         <h2 class="container-title">Danh Mục Sản Phẩm</h2>
         <div class="categories-grid stagger-fade">
-            <a class="category-item"
-               href="${pageContext.request.contextPath}/products?category=dau-goi">
-                <div class="category-icon"><i class="fas fa-shower"></i></div>
-                <h3>Dầu Gội</h3>
-                <p>Làm sạch và nuôi dưỡng tóc từ gốc</p>
-            </a>
-            <a class="category-item" href="${pageContext.request.contextPath}/products?category=dau-xa">
-                <div class="category-icon"><i class="fas fa-spray-can"></i></div>
-                <h3>Dầu Xả</h3>
-                <p>Mềm mượt, dễ chải</p>
-            </a>
-            <a class="category-item" href="${pageContext.request.contextPath}/products?category=kem-u">
-                <div class="category-icon"><i class="fas fa-heart"></i></div>
-                <h3>Kem Ủ Tóc</h3>
-                <p>Phục hồi tóc hư tổn sâu</p>
-            </a>
-            <a class="category-item" href="${pageContext.request.contextPath}/products?category=serum">
-                <div class="category-icon"><i class="fas fa-flask"></i></div>
-                <h3>Serum Dưỡng</h3>
-                <p>Dưỡng chất tinh tuý cho tóc</p>
-            </a>
-            <a class="category-item"
-               href="${pageContext.request.contextPath}/products?category=tri-gau">
-                <div class="category-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3>Trị Gàu & Rụng Tóc</h3>
-                <p>Giải pháp toàn diện cho tóc</p>
-            </a>
-            <a class="category-item"
-               href="${pageContext.request.contextPath}/products?category=sap-gel">
-                <div class="category-icon"><i class="fas fa-wind"></i></div>
-                <h3>Tạo Kiểu</h3>
-                <p>Sáp, gel, gôm tạo kiểu</p>
-            </a>
+            <c:forEach var="category" items="${topCategories}">
+                <a class="category-item"
+                   href="${pageContext.request.contextPath}/products?category=${category.categorySlug}">
+                    <div class="category-icon">
+                        <c:choose>
+                            <c:when test="${category.categorySlug == 'dau-goi'}"><i
+                                    class="fas fa-shower"></i></c:when>
+                            <c:when test="${category.categorySlug == 'dau-xa'}"><i
+                                    class="fas fa-spray-can"></i></c:when>
+                            <c:when test="${category.categorySlug == 'kem-u'}"><i
+                                    class="fas fa-heart"></i></c:when>
+                            <c:when test="${category.categorySlug == 'serum'}"><i
+                                    class="fas fa-flask"></i></c:when>
+                            <c:when test="${category.categorySlug == 'tri-gau'}"><i
+                                    class="fas fa-shield-alt"></i></c:when>
+                            <c:when test="${category.categorySlug == 'sap-gel'}"><i
+                                    class="fas fa-wind"></i></c:when>
+                            <c:when test="${category.categorySlug == 'tinh-dau'}"><i
+                                    class="fas fa-tint"></i></c:when>
+                            <c:when test="${category.categorySlug == 'phu-kien'}"><i
+                                    class="fas fa-tools"></i></c:when>
+                            <c:when test="${category.categorySlug == 'may-say'}"><i
+                                    class="fas fa-fan"></i></c:when>
+                            <c:when test="${category.categorySlug == 'may-uon'}"><i
+                                    class="fas fa-magic"></i></c:when>
+                            <c:otherwise><i class="fas fa-box"></i></c:otherwise>
+                        </c:choose>
+                    </div>
+                    <h3>${category.categoryName}</h3>
+                </a>
+            </c:forEach>
         </div>
     </div>
 
