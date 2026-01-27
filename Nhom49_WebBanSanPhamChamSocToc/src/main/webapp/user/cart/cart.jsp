@@ -3,15 +3,18 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ hàng - HairGlow</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cart.css">
 </head>
+
 <body>
 <jsp:include page="/layout/header.jsp"/>
 
@@ -37,7 +40,8 @@
                     </div>
                     <h2 class="cart-empty-title">Giỏ hàng trống</h2>
                     <p class="cart-empty-text">
-                        Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản phẩm chăm sóc tóc tuyệt vời của
+                        Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản phẩm chăm sóc tóc
+                        tuyệt vời của
                         chúng tôi!
                     </p>
                     <a href="${pageContext.request.contextPath}/store" class="cart-empty-btn">
@@ -64,13 +68,14 @@
                         <c:forEach var="item" items="${cartItems}">
                             <div class="cart-item" data-variant-id="${item.variant.variantId}">
                                 <div class="cart-item-image">
-                                    <img src="${pageContext.request.contextPath}/static/images/products/${not empty item.imageUrl ? item.imageUrl : 'default-product.png'}"
+                                    <img src="${pageContext.request.contextPath}/static/${not empty item.imageUrl ? item.imageUrl : 'images/default-product.png'}"
                                          alt="${item.product.productName}"
                                          onerror="this.src='${pageContext.request.contextPath}/static/images/default-product.png'">
                                 </div>
                                 <div class="cart-item-details">
                                     <h3 class="cart-item-name">
-                                        <a href="${pageContext.request.contextPath}/product/${item.product.productId}">
+                                        <a
+                                                href="${pageContext.request.contextPath}/product/${item.product.productId}">
                                                 ${item.product.productName}
                                         </a>
                                     </h3>
@@ -78,32 +83,36 @@
                                         <i class="fas fa-cube"></i> ${item.variant.variantName}
                                     </p>
                                     <div class="cart-item-price">
-                                        <span class="cart-item-current-price">
-                                            <fmt:formatNumber
-                                                    value="${item.variant.salePrice != null ? item.variant.salePrice : item.variant.originalPrice}"
-                                                    type="number"/>đ
-                                        </span>
-                                        <c:if test="${item.variant.salePrice != null && item.variant.salePrice < item.variant.originalPrice}">
-                                            <span class="cart-item-original-price">
-                                                <fmt:formatNumber value="${item.variant.originalPrice}" type="number"/>đ
-                                            </span>
+                                                        <span class="cart-item-current-price">
+                                                            <fmt:formatNumber
+                                                                    value="${item.variant.salePrice != null ? item.variant.salePrice : item.variant.originalPrice}"
+                                                                    type="number"/>đ
+                                                        </span>
+                                        <c:if
+                                                test="${item.variant.salePrice != null && item.variant.salePrice < item.variant.originalPrice}">
+                                                            <span class="cart-item-original-price">
+                                                                <fmt:formatNumber value="${item.variant.originalPrice}"
+                                                                                  type="number"/>đ
+                                                            </span>
                                             <span class="cart-item-discount">
-                                                -<fmt:formatNumber
-                                                    value="${(1 - item.variant.salePrice / item.variant.originalPrice) * 100}"
-                                                    maxFractionDigits="0"/>%
-                                            </span>
+                                                                -
+                                                                <fmt:formatNumber
+                                                                        value="${(1 - item.variant.salePrice / item.variant.originalPrice) * 100}"
+                                                                        maxFractionDigits="0"/>%
+                                                            </span>
                                         </c:if>
                                     </div>
                                     <c:choose>
                                         <c:when test="${item.variant.stockQuantity > 0}">
-                                            <span class="cart-item-stock">
-                                                <i class="fas fa-check-circle"></i> Còn ${item.variant.stockQuantity} sản phẩm
-                                            </span>
+                                                            <span class="cart-item-stock">
+                                                                <i class="fas fa-check-circle"></i> Còn
+                                                                ${item.variant.stockQuantity} sản phẩm
+                                                            </span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="cart-item-stock out-of-stock">
-                                                <i class="fas fa-times-circle"></i> Hết hàng
-                                            </span>
+                                                            <span class="cart-item-stock out-of-stock">
+                                                                <i class="fas fa-times-circle"></i> Hết hàng
+                                                            </span>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -111,15 +120,17 @@
                                     <div class="quantity-control">
                                         <button type="button" class="quantity-btn"
                                                 onclick="updateQuantity(${item.variant.variantId}, ${item.quantity - 1})"
-                                            ${item.quantity <= 1 ? 'disabled' : ''}>
+                                            ${item.quantity <=1 ? 'disabled' : '' }>
                                             <i class="fas fa-minus"></i>
                                         </button>
-                                        <input type="number" class="quantity-input" value="${item.quantity}" min="1"
+                                        <input type="number" class="quantity-input"
+                                               value="${item.quantity}" min="1"
                                                max="${item.variant.stockQuantity}"
                                                onchange="updateQuantity(${item.variant.variantId}, this.value)">
                                         <button type="button" class="quantity-btn"
                                                 onclick="updateQuantity(${item.variant.variantId}, ${item.quantity + 1})"
-                                            ${item.quantity >= item.variant.stockQuantity ? 'disabled' : ''}>
+                                            ${item.quantity>= item.variant.stockQuantity ? 'disabled' :
+                                                    ''}>
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
@@ -128,10 +139,12 @@
                                                 value="${(item.variant.salePrice != null ? item.variant.salePrice : item.variant.originalPrice) * item.quantity}"
                                                 type="number"/>đ
                                     </div>
-                                    <form action="${pageContext.request.contextPath}/cart/remove" method="post"
-                                          style="display: inline;">
-                                        <input type="hidden" name="variantId" value="${item.variant.variantId}">
-                                        <button type="submit" class="cart-item-remove" title="Xóa sản phẩm">
+                                    <form action="${pageContext.request.contextPath}/cart/remove"
+                                          method="post" style="display: inline;">
+                                        <input type="hidden" name="variantId"
+                                               value="${item.variant.variantId}">
+                                        <button type="submit" class="cart-item-remove"
+                                                title="Xóa sản phẩm">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -146,22 +159,14 @@
                             <h2 class="order-summary-title">Tóm tắt đơn hàng</h2>
                         </div>
                         <div class="order-summary-body">
-                            <!-- Coupon Form -->
-                            <div class="coupon-form">
-                                <div class="coupon-input-group">
-                                    <input type="text" class="coupon-input" placeholder="Nhập mã giảm giá"
-                                           id="couponCode">
-                                    <button type="button" class="coupon-btn" onclick="applyCoupon()">Áp dụng</button>
-                                </div>
-                                <div class="coupon-message" id="couponMessage" style="display: none;"></div>
-                            </div>
 
                             <!-- Price Breakdown -->
                             <div class="price-breakdown">
                                 <div class="price-row">
                                     <span class="price-label">Tạm tính (${cartCount} sản phẩm)</span>
-                                    <span class="price-value"><fmt:formatNumber value="${subtotal}"
-                                                                                type="number"/>đ</span>
+                                    <span class="price-value">
+                                                        <fmt:formatNumber value="${subtotal}" type="number"/>đ
+                                                    </span>
                                 </div>
                                 <div class="price-row">
                                     <span class="price-label">Phí vận chuyển</span>
@@ -169,8 +174,9 @@
                                 </div>
                                 <div class="price-row total">
                                     <span class="price-label">Tổng cộng</span>
-                                    <span class="price-value"><fmt:formatNumber value="${subtotal}"
-                                                                                type="number"/>đ</span>
+                                    <span class="price-value">
+                                                        <fmt:formatNumber value="${subtotal}" type="number"/>đ
+                                                    </span>
                                 </div>
                             </div>
 
@@ -280,22 +286,6 @@
         form.submit();
     }
 
-    // Apply coupon
-    function applyCoupon() {
-        const code = document.getElementById('couponCode').value.trim();
-        const messageEl = document.getElementById('couponMessage');
-
-        if (!code) {
-            messageEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Vui lòng nhập mã giảm giá';
-            messageEl.className = 'coupon-message error';
-            messageEl.style.display = 'flex';
-            return;
-        }
-
-        messageEl.innerHTML = '<i class="fas fa-times-circle"></i> Mã giảm giá không hợp lệ';
-        messageEl.className = 'coupon-message error';
-        messageEl.style.display = 'flex';
-    }
 
     // Check for messages from server
     <c:if test="${not empty sessionScope.cartMessage}">
@@ -311,5 +301,5 @@
     </c:if>
 </script>
 </body>
-</html>
 
+</html>

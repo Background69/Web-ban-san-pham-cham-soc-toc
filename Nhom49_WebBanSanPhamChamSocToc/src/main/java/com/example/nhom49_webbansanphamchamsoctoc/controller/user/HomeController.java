@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "HomeController", urlPatterns = {"/home", ""})
+@WebServlet(name = "HomeController", urlPatterns = { "/home", "" })
 /**
  * Lớp HomeController.
  */
@@ -35,7 +35,6 @@ public class HomeController extends HttpServlet {
         brandService = new BrandService();
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,8 +44,8 @@ public class HomeController extends HttpServlet {
         // Lấy on-sale products cho Flash Sale
         List<Product> saleProducts = productService.getOnSaleProducts();
         request.setAttribute("saleProducts", saleProducts);
-        // Lấy categories cho navigation
-        request.setAttribute("categories", categoryDAO.findAll());
+        // Lấy top 8 categories có nhiều sản phẩm nhất cho trang chủ
+        request.setAttribute("topCategories", categoryDAO.findTopByProductCount(8));
 
         // Lấy brands cho section thương hiệu
         request.setAttribute("brands", brandService.getAllBrands());

@@ -14,8 +14,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(urlPatterns = {
-        "/admin/category",
-        "/admin/category/add",
+        "/admin/categories",
+        "/admin/category/form",
+        "/admin/category/edit",
         "/admin/category/save",
         "/admin/category/edit",
         "/admin/category/delete"
@@ -29,18 +30,18 @@ public class CategoryManagementController extends HttpServlet {
         categoryService = new CategoryService();
     }
 
+
+    // ====== GET ======
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String path = request.getServletPath();
 
-        if ("/admin/category".equals(path)) {
-            List<Category> categories = categoryService.getAllCategories();
-            request.setAttribute("categories", categories);
-            request.getRequestDispatcher("/admin/category/list.jsp").forward(request, response);
-            return;
-        }
+        switch (path) {
+            case "/admin/categories":
+                listCategory(request, response);
+                break;
 
         if ("/admin/category/add".equals(path)) {
             request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
@@ -71,11 +72,10 @@ public class CategoryManagementController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws ServletException, IOException {
 
-        if (!"/admin/category/save".equals(request.getServletPath())) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+        if ("/admin/category/save".equals(request.getServletPath())) {
+            saveCategory(request, response);
         }
 
         request.setCharacterEncoding("UTF-8");
@@ -134,7 +134,7 @@ public class CategoryManagementController extends HttpServlet {
             return;
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/category");
+        response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 
     private int parseIntSafe(String s) {
@@ -145,7 +145,8 @@ public class CategoryManagementController extends HttpServlet {
         }
     }
 
-    private String trimOrEmpty(String s) {
-        return s == null ? "" : s.trim();
+        int id = Integer.parseInt(request.getParameter("id"));
+        categoryDAO.delete(id);
+        response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 }
