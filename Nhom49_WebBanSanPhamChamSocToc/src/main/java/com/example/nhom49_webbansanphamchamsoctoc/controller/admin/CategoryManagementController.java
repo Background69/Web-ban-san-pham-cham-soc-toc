@@ -15,10 +15,9 @@ import java.util.List;
 
 @WebServlet(urlPatterns = {
         "/admin/categories",
-        "/admin/category/form",
+        "/admin/category/add",
         "/admin/category/edit",
         "/admin/category/save",
-        "/admin/category/edit",
         "/admin/category/delete"
 })
 public class CategoryManagementController extends HttpServlet {
@@ -30,18 +29,16 @@ public class CategoryManagementController extends HttpServlet {
         categoryService = new CategoryService();
     }
 
-
-    // ====== GET ======
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String path = request.getServletPath();
 
-        switch (path) {
-            case "/admin/categories":
-                listCategory(request, response);
-                break;
+        if ("/admin/categories".equals(path)) {
+            listCategory(request, response);
+            return;
+        }
 
         if ("/admin/category/add".equals(path)) {
             request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
@@ -52,18 +49,22 @@ public class CategoryManagementController extends HttpServlet {
             int id = parseIntSafe(request.getParameter("id"));
             if (id > 0) {
                 Category c = categoryService.getCategoryById(id);
-                request.setAttribute("category", c);
-                request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
-                return;
+                if (c != null) {
+                    request.setAttribute("category", c);
+                    request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
+                    return;
+                }
             }
-            response.sendRedirect(request.getContextPath() + "/admin/category");
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
             return;
         }
 
         if ("/admin/category/delete".equals(path)) {
             int id = parseIntSafe(request.getParameter("id"));
-            if (id > 0) categoryService.deleteCategory(id);
-            response.sendRedirect(request.getContextPath() + "/admin/category");
+            if (id > 0) {
+                categoryService.deleteCategory(id);
+            }
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
             return;
         }
 
@@ -74,11 +75,13 @@ public class CategoryManagementController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if ("/admin/category/save".equals(request.getServletPath())) {
-            saveCategory(request, response);
-        }
-
         request.setCharacterEncoding("UTF-8");
+        String path = request.getServletPath();
+
+        if (!"/admin/category/save".equals(path)) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
         String idStr = trimOrEmpty(request.getParameter("id"));
         String name = trimOrEmpty(request.getParameter("categoryName"));
@@ -86,13 +89,15 @@ public class CategoryManagementController extends HttpServlet {
 
         if (name.isEmpty() || name.length() > 100) {
             String msg = URLEncoder.encode("Tên danh mục không hợp lệ", StandardCharsets.UTF_8);
-            response.sendRedirect(request.getContextPath() + "/admin/category/add?error=" + msg);
+            String back = idStr.isEmpty() ? "/admin/category/add" : ("/admin/category/edit?id=" + idStr);
+            response.sendRedirect(request.getContextPath() + back + "&error=" + msg);
             return;
         }
 
         if (slug.isEmpty() || slug.length() > 120) {
             String msg = URLEncoder.encode("Slug không hợp lệ", StandardCharsets.UTF_8);
-            response.sendRedirect(request.getContextPath() + "/admin/category/add?error=" + msg);
+            String back = idStr.isEmpty() ? "/admin/category/add" : ("/admin/category/edit?id=" + idStr);
+            response.sendRedirect(request.getContextPath() + back + "&error=" + msg);
             return;
         }
 
@@ -108,19 +113,19 @@ public class CategoryManagementController extends HttpServlet {
                 return;
             }
 
-            response.sendRedirect(request.getContextPath() + "/admin/category");
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
             return;
         }
 
         int id = parseIntSafe(idStr);
         if (id <= 0) {
-            response.sendRedirect(request.getContextPath() + "/admin/category");
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
             return;
         }
 
         Category exist = categoryService.getCategoryById(id);
         if (exist == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/category");
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
             return;
         }
 
@@ -137,16 +142,26 @@ public class CategoryManagementController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 
+    private void listCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        List<Category> categories = categoryService.getAllCategories();
+        request.setAttribute("categories", categories);
+        request.getRequestDispatcher("/admin/category/list.jsp").forward(request, response);
+    }
+
     private int parseIntSafe(String s) {
         try {
+            if (s == null) return -1;
+            s = s.trim();
+            if (s.isEmpty()) return -1;
             return Integer.parseInt(s);
         } catch (Exception e) {
             return -1;
         }
     }
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        categoryDAO.delete(id);
-        response.sendRedirect(request.getContextPath() + "/admin/categories");
+    private String trimOrEmpty(String s) {
+        return s == null ? "" : s.trim();
     }
 }
