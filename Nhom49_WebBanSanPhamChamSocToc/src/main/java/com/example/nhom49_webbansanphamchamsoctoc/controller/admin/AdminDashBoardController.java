@@ -41,7 +41,7 @@ public class AdminDashBoardController extends HttpServlet {
             request.setAttribute("totalProducts", productDAO.countAll());
             request.setAttribute("totalUsers", userDAO.findAll().size());
             request.setAttribute("totalOrders", orderDAO.findAll().size());
-            request.setAttribute("pendingOrders", orderDAO.countByStatus("pending"));
+            request.setAttribute("totalRevenue", orderDAO.totalRevenue());
 
             // Đơn hàng gần nhất (CHỈ SET 1 LẦN)
             request.setAttribute("recentOrders", orderDAO.findRecentOrder(5));
