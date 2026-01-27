@@ -288,9 +288,11 @@ public class OrderDAO implements IDAO<Order> {
                         .bind("userId", userId)
                         .bind("productId", productId)
                         .mapTo(Integer.class)
-                        .one()
+                        .findFirst()
+                        .orElse(0)
         ) > 0;
     }
+
     public boolean hasUserPurchasedProductPending(int userId, int productId) {
         String sql = """
         SELECT COUNT(*)
@@ -306,8 +308,10 @@ public class OrderDAO implements IDAO<Order> {
                         .bind("userId", userId)
                         .bind("productId", productId)
                         .mapTo(Integer.class)
-                        .one()
-        ) > 0;
+                        .findFirst()
+                        .orElse(0) > 0
+        );
+
     }
     public BigDecimal getTotalSpendingByUser(int userId) {
         String sql = """
@@ -321,7 +325,9 @@ public class OrderDAO implements IDAO<Order> {
                 handle.createQuery(sql)
                         .bind("userId", userId)
                         .mapTo(BigDecimal.class)
-                        .one()
+                        .findFirst()
+                        .orElse(BigDecimal.ZERO)
+
         );
     }
     public List<Order> findByUserIdWithLimit(int userId, int limit) {
@@ -505,7 +511,9 @@ public class OrderDAO implements IDAO<Order> {
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
                         .mapTo(Integer.class)
-                        .one()
+                        .findFirst()
+                        .orElse(0)
+
         );
     }
     public long totalRevenue(){
@@ -513,7 +521,8 @@ public class OrderDAO implements IDAO<Order> {
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
                         .mapTo(Long.class)
-                        .one()
+                        .findFirst()
+                        .orElse(0L)
         );
     }
 
