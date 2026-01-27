@@ -58,7 +58,7 @@
             <div class="card">
                 <h3>Doanh Thu</h3>
                 <p class="number">
-                    <fmt:formatNumber value="${pendingOrders}" type="number"/> ₫
+                    <fmt:formatNumber value="${totalRevenue}" type="number"/> ₫
                 </p>
             </div>
         </div>
