@@ -86,7 +86,7 @@ public class ResetPasswordController extends HttpServlet {
         String hashed = PasswordUtil.hashPassword(newPassword);
         userDAO.updatePassword(user.getUserId(), hashed);
         userDAO.saveResetToken(user.getUserId(), null, null);
-
+        req.getSession().setAttribute("success", "Đổi mật khẩu thành công, vui lòng đăng nhập.");
         resp.sendRedirect(req.getContextPath() + "/auth/login");
     }
 }

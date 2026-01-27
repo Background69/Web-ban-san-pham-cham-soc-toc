@@ -7,15 +7,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${brand.brandName} - HairGlow</title>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-<!-- Header -->
+
 <jsp:include page="/layout/header.jsp"/>
 
-<!-- Brand Banner -->
 <section class="brand-banner section-animate">
     <div class="brand-banner-overlay"></div>
     <div class="brand-banner-content">
@@ -26,17 +26,27 @@
             <span class="separator">›</span>
             <span class="current">${brand.brandName}</span>
         </nav>
+
         <div class="brand-banner-info">
+
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
-                        <img src="${brand.logoUrl}" alt="Logo ${brand.brandName}">
+                        <%-- DB: images/brands/xxx.png  -> File: static/assets/images/brands/xxx.png --%>
+                        <img
+                                src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
+                                alt="Logo ${brand.brandName}"
+                                onerror="this.onerror=null;
+                                         this.remove();
+                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';"
+                        >
                     </c:when>
                     <c:otherwise>
                         <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>
                     </c:otherwise>
                 </c:choose>
             </div>
+
             <div class="brand-text">
                 <h1>${brand.brandName}</h1>
                 <p class="brand-tagline">${brand.shortDescription}</p>
@@ -47,12 +57,13 @@
                     <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản phẩm</span>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
 
 <main class="brand-detail-main page-animate">
-    <!-- Brand Info Section -->
+
     <div class="brand-info-section section-animate">
         <c:if test="${not empty brand.fullDescription}">
             <div class="brand-description-card">
@@ -61,7 +72,6 @@
             </div>
         </c:if>
 
-        <!-- Category Stats -->
         <c:if test="${not empty categoryStats}">
             <div class="brand-stats">
                 <h3><i class="fas fa-chart-pie"></i> Danh mục sản phẩm</h3>
@@ -77,15 +87,15 @@
         </c:if>
     </div>
 
-    <!-- Products Section -->
     <section class="brand-products-section">
         <div class="brand-products-header">
             <h2>Sản phẩm của ${brand.brandName}</h2>
             <div class="product-filter-tags">
                 <button class="product-filter-tag active" data-category="all">Tất cả</button>
                 <c:forEach var="category" items="${categories}">
-                    <button class="product-filter-tag"
-                            data-category="${category.categorySlug}">${category.categoryName}</button>
+                    <button class="product-filter-tag" data-category="${category.categorySlug}">
+                            ${category.categoryName}
+                    </button>
                 </c:forEach>
             </div>
         </div>
@@ -94,90 +104,73 @@
             <c:forEach var="product" items="${products}">
                 <div class="product-item"
                      data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
+
                     <div class="product-img">
                         <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                             <c:choose>
                                 <c:when test="${not empty product.primaryImage}">
-                                    <img src="${pageContext.request.contextPath}/static/images/${product.primaryImage.imageUrl}"
-                                         alt="${product.productName}" class="product-image">
+                                    <%-- DB: images/products/xxx.jpg -> File: static/assets/images/products/xxx.jpg --%>
+                                    <img
+                                            src="${pageContext.request.contextPath}/static/assets/${product.primaryImage.imageUrl}"
+                                            alt="${product.productName}"
+                                            class="product-image"
+                                            onerror="this.onerror=null;
+                                                    this.src='${pageContext.request.contextPath}/static/assets/images/no-image.png';"
+                                    >
                                 </c:when>
                                 <c:otherwise>
-                                    <img src="${pageContext.request.contextPath}/static/images/no-image.png"
-                                         alt="${product.productName}" class="product-image">
+                                    <img
+                                            src="${pageContext.request.contextPath}/static/assets/images/no-image.png"
+                                            alt="${product.productName}"
+                                            class="product-image"
+                                    >
                                 </c:otherwise>
                             </c:choose>
                         </a>
+
                         <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
                             <span class="badge-discount">-${product.defaultVariant.discountPercent}%</span>
                         </c:if>
                     </div>
+
                     <div class="product-body">
                         <h3 class="product-title">
-                            <a href="${pageContext.request.contextPath}/product/${product.productSlug}">${product.productName}</a>
+                            <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                    ${product.productName}
+                            </a>
                         </h3>
+
                         <div class="product-small-details">
-                            <p><span>${brand.brandName}</span> •
-                                <span>${product.category != null ? product.category.categoryName : ''}</span></p>
+                            <p>
+                                <span>${brand.brandName}</span> •
+                                <span>${product.category != null ? product.category.categoryName : ''}</span>
+                            </p>
                         </div>
-                        <div class="product-rating">
-                            <div class="rating-stars">
-                                <c:forEach begin="1" end="5" var="i">
-                                    <c:choose>
-                                        <c:when test="${i <= product.averageRating}">
-                                            <i class="fas fa-star"></i>
-                                        </c:when>
-                                        <c:when test="${i - 0.5 <= product.averageRating}">
-                                            <i class="fas fa-star-half-alt"></i>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <i class="far fa-star"></i>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                            </div>
-                            <p class="review-count">(${product.reviewCount})</p>
-                        </div>
+
                         <div class="product-price">
                             <c:if test="${product.defaultVariant != null}">
                                 <p class="price-current">
-                                    <fmt:formatNumber value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
-                                                      type="currency" currencySymbol="" maxFractionDigits="0"/>₫
+                                    <fmt:formatNumber
+                                            value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                            type="number"/>₫
                                 </p>
-                                <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                    <p class="price-old">
-                                        <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
-                                                          type="currency" currencySymbol="" maxFractionDigits="0"/>₫
-                                    </p>
-                                </c:if>
                             </c:if>
                         </div>
-                        <c:if test="${product.onSale && product.stockQuantity > 0}">
-                            <div class="stock-progress">
-                                <div class="stock-progress-bar">
-                                    <div class="stock-progress-fill"
-                                         style="width: ${product.soldPercent}%"></div>
-                                </div>
-                                <div class="stock-progress-text">
-                                    Đã bán ${product.soldQuantity}/${product.stockQuantity}
-                                </div>
-                            </div>
-                        </c:if>
+
                         <div class="product-actions">
-                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
-                                thêm</a>
-                            <form action="${pageContext.request.contextPath}/cart/add" method="post"
-                                  class="add-cart-form">
+                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem thêm</a>
+                            <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-cart-form">
                                 <input type="hidden" name="productId" value="${product.productId}">
                                 <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn primary">Thêm vào giỏ</button>
                             </form>
                         </div>
                     </div>
+
                 </div>
             </c:forEach>
         </div>
 
-        <!-- Empty State -->
         <c:if test="${empty products}">
             <div class="empty-state">
                 <i class="fas fa-box-open"></i>
@@ -186,18 +179,15 @@
             </div>
         </c:if>
 
-        <!-- Pagination -->
         <c:if test="${totalPages > 1}">
             <jsp:include page="/layout/pagination.jsp"/>
         </c:if>
     </section>
 </main>
 
-<!-- Footer -->
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
-    // Filter products by category
     document.querySelectorAll('.product-filter-tag').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.product-filter-tag').forEach(b => b.classList.remove('active'));
@@ -214,6 +204,6 @@
         });
     });
 </script>
+
 </body>
 </html>
-
