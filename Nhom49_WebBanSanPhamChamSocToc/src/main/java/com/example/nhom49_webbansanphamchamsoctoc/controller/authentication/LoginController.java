@@ -61,7 +61,7 @@ public class LoginController extends HttpServlet {
         SessionUtil.setCurrentUser(session, user);
         session.setMaxInactiveInterval(30 * 60);
         if ("Admin".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/admin");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         String safeRedirect = normalizeRedirect(redirect);
