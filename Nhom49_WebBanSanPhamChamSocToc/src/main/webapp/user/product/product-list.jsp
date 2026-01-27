@@ -96,17 +96,14 @@
                     <div class="price-range">
                         <select name="priceRange" onchange="document.getElementById('filterForm').submit()">
                             <option value="">Tất cả</option>
-                            <option value="0-200000" ${param.priceRange == '0-200000' ? 'selected' : ''}>Dưới 200.000₫
-                            </option>
+                            <option value="0-200000" ${param.priceRange == '0-200000' ? 'selected' : ''}>Dưới 200.000₫</option>
                             <option value="200000-500000" ${param.priceRange == '200000-500000' ? 'selected' : ''}>
                                 200.000₫ - 500.000₫
                             </option>
                             <option value="500000-1000000" ${param.priceRange == '500000-1000000' ? 'selected' : ''}>
                                 500.000₫ - 1.000.000₫
                             </option>
-                            <option value="1000000-" ${param.priceRange == '1000000-' ? 'selected' : ''}>Trên
-                                1.000.000₫
-                            </option>
+                            <option value="1000000-" ${param.priceRange == '1000000-' ? 'selected' : ''}>Trên 1.000.000₫</option>
                         </select>
                     </div>
                 </div>
@@ -142,20 +139,15 @@
                     <label>Sắp xếp:</label>
                     <select name="sort" onchange="window.location.href=this.value">
                         <option value="${pageContext.request.contextPath}/products?${queryString}&sort=newest"
-                        ${param.sort == 'newest' || empty param.sort ? 'selected' : ''}>Mới nhất
-                        </option>
+                        ${param.sort == 'newest' || empty param.sort ? 'selected' : ''}>Mới nhất</option>
                         <option value="${pageContext.request.contextPath}/products?${queryString}&sort=price-asc"
-                        ${param.sort == 'price-asc' ? 'selected' : ''}>Giá thấp đến cao
-                        </option>
+                        ${param.sort == 'price-asc' ? 'selected' : ''}>Giá thấp đến cao</option>
                         <option value="${pageContext.request.contextPath}/products?${queryString}&sort=price-desc"
-                        ${param.sort == 'price-desc' ? 'selected' : ''}>Giá cao đến thấp
-                        </option>
+                        ${param.sort == 'price-desc' ? 'selected' : ''}>Giá cao đến thấp</option>
                         <option value="${pageContext.request.contextPath}/products?${queryString}&sort=rating"
-                        ${param.sort == 'rating' ? 'selected' : ''}>Đánh giá cao
-                        </option>
+                        ${param.sort == 'rating' ? 'selected' : ''}>Đánh giá cao</option>
                         <option value="${pageContext.request.contextPath}/products?${queryString}&sort=bestseller"
-                        ${param.sort == 'bestseller' ? 'selected' : ''}>Bán chạy
-                        </option>
+                        ${param.sort == 'bestseller' ? 'selected' : ''}>Bán chạy</option>
                     </select>
                 </div>
             </div>
@@ -169,16 +161,19 @@
                                 <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
                                     <div class="product-badge">-${product.defaultVariant.discountPercent}%</div>
                                 </c:if>
+
                                 <div class="product-img">
                                     <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                         <img alt="${product.productName}" class="product-image"
-                                             src="${pageContext.request.contextPath}/static/images/${product.primaryImage != null ? product.primaryImage.imageUrl : 'default-product.png'}">
+                                             src="${pageContext.request.contextPath}/static/assets/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
                                     </a>
                                 </div>
+
                                 <div class="product-body">
                                     <h3 class="product-title">
                                         <a href="${pageContext.request.contextPath}/product/${product.productSlug}">${product.productName}</a>
                                     </h3>
+
                                     <div class="product-small-details">
                                         <p>
                                             <span>${product.brand != null ? product.brand.brandName : ''}</span>
@@ -187,6 +182,7 @@
                                             <c:if test="${not empty product.origin}"> • ${product.origin}</c:if>
                                         </p>
                                     </div>
+
                                     <div class="product-rating">
                                         <div class="rating-stars">
                                             <c:forEach begin="1" end="5" var="i">
@@ -195,6 +191,7 @@
                                         </div>
                                         <span class="review-count">(${product.reviewCount})</span>
                                     </div>
+
                                     <div class="product-price">
                                         <c:if test="${product.defaultVariant != null}">
                                             <span class="price-current">
@@ -203,29 +200,28 @@
                                                         type="number"/>₫
                                             </span>
                                             <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                                <span class="price-old"><fmt:formatNumber
-                                                        value="${product.defaultVariant.originalPrice}"
-                                                        type="number"/>₫</span>
+                                                <span class="price-old">
+                                                    <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>₫
+                                                </span>
                                             </c:if>
                                         </c:if>
                                     </div>
+
                                     <c:if test="${product.onSale && product.stockQuantity > 0}">
                                         <div class="stock-progress">
                                             <div class="stock-progress-bar">
-                                                <div class="stock-progress-fill"
-                                                     style="width: ${product.soldPercent}%"></div>
+                                                <div class="stock-progress-fill" style="width: ${product.soldPercent}%"></div>
                                             </div>
                                             <div class="stock-progress-text">
                                                 Đã bán ${product.soldQuantity}/${product.stockQuantity}
                                             </div>
                                         </div>
                                     </c:if>
+
                                     <div class="product-actions">
                                         <a class="btn btn-outline"
-                                           href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
-                                            thêm</a>
-                                        <button class="btn btn-primary add-to-cart"
-                                                data-product-id="${product.productId}">
+                                           href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem thêm</a>
+                                        <button class="btn btn-primary add-to-cart" data-product-id="${product.productId}">
                                             <i class="fas fa-cart-plus"></i> Thêm
                                         </button>
                                     </div>
@@ -242,8 +238,7 @@
                         <i class="fas fa-search"></i>
                         <h3>Không tìm thấy sản phẩm</h3>
                         <p>Vui lòng thử lại với từ khóa khác hoặc xóa bộ lọc</p>
-                        <a href="${pageContext.request.contextPath}/products" class="btn btn-primary">Xem tất cả sản
-                            phẩm</a>
+                        <a href="${pageContext.request.contextPath}/products" class="btn btn-primary">Xem tất cả sản phẩm</a>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -284,6 +279,3 @@
 </script>
 </body>
 </html>
-
-
-
