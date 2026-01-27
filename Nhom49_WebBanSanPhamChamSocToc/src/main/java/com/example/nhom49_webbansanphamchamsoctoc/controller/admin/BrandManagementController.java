@@ -24,28 +24,12 @@ public class BrandManagementController extends HttpServlet {
     public void init() {
         brandDAO = new BrandDAO();
     }
-        // Kiểm tra xem phải là Admin hay không
-    private boolean checkAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return false;
-        }
-
-        User user = (User) session.getAttribute("currentUser");
-        if (!"Admin".equalsIgnoreCase(user.getRole())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
-            return false;
-        }
-        return true;
-    }
-
     // ================== GET ==================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        if (!checkAdmin(request, response)) return;
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         String path = request.getServletPath();
 
@@ -73,10 +57,13 @@ public class BrandManagementController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (!checkAdmin(request, response)) return;
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         if ("/admin/brand/save".equals(request.getServletPath())) {
             saveBrand(request, response);
+        }if ("/admin/brand/delete".equals(request.getServletPath())){
+            deleteBrand(request,response);
         }
     }
 
@@ -109,7 +96,7 @@ public class BrandManagementController extends HttpServlet {
     }
 
     private void saveBrand(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
 
         String idStr = request.getParameter("id");
 
@@ -121,13 +108,28 @@ public class BrandManagementController extends HttpServlet {
         brand.setShortDescription(request.getParameter("shortDescription"));
         brand.setFullDescription(request.getParameter("fullDescription"));
 
+        if (brand.getBrandName()==null|| brand.getBrandName().trim().isEmpty()) {
+            request.setAttribute("branderror","Tên thương hiệu không được để trống");
+            request.setAttribute("brand",brand);
+            request.getRequestDispatcher("/admin/brand/form.jsp").forward(request,response);
+            return;
+        }
+        try{
         if (idStr == null || idStr.isEmpty()) {
-            // ADD
+          // ADD
             brandDAO.insert(brand);
         } else {
             // UPDATE
             brand.setBrandId(Integer.parseInt(idStr));
             brandDAO.update(brand);
+        }
+    } catch (Exception e){
+            e.printStackTrace();
+            request.setAttribute("branderror", "Không thể lưu thương hiệu");
+            request.setAttribute("brand", brand);
+            request.getRequestDispatcher("/admin/brand/form.jsp").forward(request, response);
+            return;
+
         }
 
         response.sendRedirect(request.getContextPath() + "/admin/brand");
