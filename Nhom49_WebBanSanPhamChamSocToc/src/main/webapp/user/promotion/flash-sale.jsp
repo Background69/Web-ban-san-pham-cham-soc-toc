@@ -1,21 +1,25 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flash Sale - HairGlow</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_super-deal.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/static/css/user/style_for_super-deal.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/flash-sale-card.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
+
 <body>
 <!-- Header -->
-<jsp:include page="/src/main/webapp/layout/header.jsp"/>
+<jsp:include page="/layout/header.jsp"/>
 
 <main class="page-animate">
     <!-- Flash Sale Banner -->
@@ -49,14 +53,16 @@
                 <c:forEach var="product" items="${saleProducts}">
                     <div class="product-item"
                          data-category="${product.defaultVariant != null && product.defaultVariant.discountPercent >= 30 ? 'flash-sale' : 'sale'}">
-                        <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
-                            <div class="flash-sale-badge">-${product.defaultVariant.discountPercent}%</div>
+                        <c:if
+                                test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                            <div class="flash-sale-badge">-${product.defaultVariant.discountPercent}%
+                            </div>
                         </c:if>
 
                         <div class="product-img">
                             <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                 <img alt="${product.productName}" class="product-image"
-                                     src="${pageContext.request.contextPath}/static/images/${product.primaryImage != null ? product.primaryImage.imageUrl : 'default-product.png'}">
+                                     src="${pageContext.request.contextPath}/static/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
                             </a>
                         </div>
 
@@ -70,19 +76,23 @@
                                                 value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
                                                 type="number"/>₫
                                     </p>
-                                    <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                    <c:if
+                                            test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
                                         <p class="price-old">
-                                            <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
-                                                              type="number"/>₫
+                                            <fmt:formatNumber
+                                                    value="${product.defaultVariant.originalPrice}"
+                                                    type="number"/>₫
                                         </p>
-                                        <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                        <p class="badge-discount">
+                                            -${product.defaultVariant.discountPercent}%</p>
                                     </c:if>
                                 </c:if>
                             </div>
 
                             <div class="product">
                                 <a class="btn"
-                                   href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem thêm</a>
+                                   href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
+                                    thêm</a>
                                 <a class="btn primary add-to-cart" href="#"
                                    data-product-id="${product.productId}">Thêm vào giỏ</a>
                             </div>
@@ -118,28 +128,34 @@
                     <c:set var="startPage" value="1"/>
                 </c:if>
                 <c:set var="prevPage" value="${currentPage > 1 ? currentPage - 1 : 1}"/>
-                <c:set var="nextPage" value="${currentPage < totalPages ? currentPage + 1 : totalPages}"/>
+                <c:set var="nextPage"
+                       value="${currentPage < totalPages ? currentPage + 1 : totalPages}"/>
                 <nav class="flash-sale-pagination" aria-label="Flash sale pagination">
                     <ul class="flash-pagination-list">
                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                            <a class="page-link" href="${pageContext.request.requestURI}?page=${prevPage}">Previous</a>
+                            <a class="page-link"
+                               href="${pageContext.request.requestURI}?page=${prevPage}">Previous</a>
                         </li>
                         <c:if test="${startPage > 1}">
                             <li class="page-item">
-                                <a class="page-link" href="${pageContext.request.requestURI}?page=1">1</a>
+                                <a class="page-link"
+                                   href="${pageContext.request.requestURI}?page=1">1</a>
                             </li>
                             <c:if test="${startPage > 2}">
-                                <li class="page-item ellipsis"><span class="page-ellipsis">...</span></li>
+                                <li class="page-item ellipsis"><span class="page-ellipsis">...</span>
+                                </li>
                             </c:if>
                         </c:if>
                         <c:forEach var="i" begin="${startPage}" end="${endPage}">
                             <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                <a class="page-link" href="${pageContext.request.requestURI}?page=${i}">${i}</a>
+                                <a class="page-link"
+                                   href="${pageContext.request.requestURI}?page=${i}">${i}</a>
                             </li>
                         </c:forEach>
                         <c:if test="${endPage < totalPages}">
                             <c:if test="${endPage < totalPages - 1}">
-                                <li class="page-item ellipsis"><span class="page-ellipsis">...</span></li>
+                                <li class="page-item ellipsis"><span class="page-ellipsis">...</span>
+                                </li>
                             </c:if>
                             <li class="page-item">
                                 <a class="page-link"
@@ -147,7 +163,8 @@
                             </li>
                         </c:if>
                         <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                            <a class="page-link" href="${pageContext.request.requestURI}?page=${nextPage}">Next</a>
+                            <a class="page-link"
+                               href="${pageContext.request.requestURI}?page=${nextPage}">Next</a>
                         </li>
                     </ul>
                 </nav>
@@ -159,7 +176,8 @@
                     <i class="fas fa-tags"></i>
                     <h3>Chưa có khuyến mãi nào</h3>
                     <p>Hãy quay lại sau để xem các ưu đãi mới nhất!</p>
-                    <a href="${pageContext.request.contextPath}/products" class="btn-primary">Xem tất cả sản phẩm</a>
+                    <a href="${pageContext.request.contextPath}/products" class="btn-primary">Xem tất cả
+                        sản phẩm</a>
                 </div>
             </c:if>
         </div>
@@ -181,12 +199,13 @@
                                 <h3>${combo.name}</h3>
                                 <p>${combo.description}</p>
                                 <div class="combo-price">
-                                    <span class="current-price">
-                                        <fmt:formatNumber value="${combo.comboPrice}" type="number"/>?
-                                    </span>
+                                                    <span class="current-price">
+                                                        <fmt:formatNumber value="${combo.comboPrice}" type="number"/>?
+                                                    </span>
                                     <span class="original-price">
-                                        <fmt:formatNumber value="${combo.originalPrice}" type="number"/>?
-                                    </span>
+                                                        <fmt:formatNumber value="${combo.originalPrice}"
+                                                                          type="number"/>?
+                                                    </span>
                                 </div>
                                 <button class="combo-btn">Mua combo</button>
                             </div>
@@ -199,7 +218,7 @@
 </main>
 
 <!-- Footer -->
-<jsp:include page="/src/main/webapp/layout/footer.jsp"/>
+<jsp:include page="/layout/footer.jsp"/>
 
 <script>
     // Countdown timer - đếm ngược đến cuối ngày
@@ -251,6 +270,5 @@
     });
 </script>
 </body>
+
 </html>
-
-

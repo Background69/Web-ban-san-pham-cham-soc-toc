@@ -1,22 +1,26 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HairGlow | Sản phẩm chăm sóc tóc</title>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap"
-          rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap"
+            rel="stylesheet">
 
     <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <!-- CSS Files -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/animation.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css">
 </head>
 
 
@@ -149,23 +153,29 @@
         </div>
 
         <div class="flash-sale-slider-container">
-            <button class="flash-sale-nav prev" id="flash-sale-prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="flash-sale-nav prev" id="flash-sale-prev"><i
+                    class="fas fa-chevron-left"></i></button>
             <div class="flash-sale-slider">
                 <div class="flash-sale-track stagger-fade" id="flash-sale-track">
                     <c:forEach var="product" items="${saleProducts}">
                         <div class="product-item flash-sale-item">
                             <div class="product-img">
-                                <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
-                                    <div class="flash-sale-badge">-${product.defaultVariant.discountPercent}%</div>
+                                <c:if
+                                        test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                                    <div class="flash-sale-badge">
+                                        -${product.defaultVariant.discountPercent}%
+                                    </div>
                                 </c:if>
-                                <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                <a
+                                        href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                     <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/images/${product.primaryImage != null ? product.primaryImage.imageUrl : 'default-product.png'}">
+                                         src="${pageContext.request.contextPath}/static/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
                                 </a>
                             </div>
                             <div class="product-body">
                                 <h3 class="product-title">
-                                    <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                    <a
+                                            href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                             ${product.productName}
                                     </a>
                                 </h3>
@@ -177,10 +187,15 @@
                                                         value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
                                                         type="number"/>₫
                                             </p>
-                                            <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                                <p class="price-old"><fmt:formatNumber
-                                                        value="${product.defaultVariant.originalPrice}" type="number"/>₫</p>
-                                                <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                            <c:if
+                                                    test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                                <p class="price-old">
+                                                    <fmt:formatNumber
+                                                            value="${product.defaultVariant.originalPrice}"
+                                                            type="number"/>₫
+                                                </p>
+                                                <p class="badge-discount">
+                                                    -${product.defaultVariant.discountPercent}%</p>
                                             </c:if>
                                         </c:if>
                                     </div>
@@ -195,13 +210,18 @@
                                             </div>
                                         </div>
                                     </c:if>
-                                    <form class="action-buttons" action="${pageContext.request.contextPath}/cart/add" method="post">
-                                        <input type="hidden" name="productId" value="${product.productId}">
+                                    <form class="action-buttons"
+                                          action="${pageContext.request.contextPath}/cart/add"
+                                          method="post">
+                                        <input type="hidden" name="productId"
+                                               value="${product.productId}">
                                         <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" name="action" value="add_to_cart" class="btn btn-outline-cart">
+                                        <button type="submit" name="action" value="add_to_cart"
+                                                class="btn btn-outline-cart">
                                             <i class="fas fa-cart-plus"></i> Thêm vào giỏ
                                         </button>
-                                        <button type="submit" name="action" value="buy_now" class="btn btn-buy-now">
+                                        <button type="submit" name="action" value="buy_now"
+                                                class="btn btn-buy-now">
                                             Mua ngay
                                         </button>
                                     </form>
@@ -211,7 +231,8 @@
                     </c:forEach>
                 </div>
             </div>
-            <button class="flash-sale-nav next" id="flash-sale-next"><i class="fas fa-chevron-right"></i></button>
+            <button class="flash-sale-nav next" id="flash-sale-next"><i
+                    class="fas fa-chevron-right"></i></button>
         </div>
     </div>
 </section>
@@ -221,7 +242,8 @@
     <div class="categories-container" id="categories-container">
         <h2 class="container-title">Danh Mục Sản Phẩm</h2>
         <div class="categories-grid stagger-fade">
-            <a class="category-item" href="${pageContext.request.contextPath}/products?category=dau-goi">
+            <a class="category-item"
+               href="${pageContext.request.contextPath}/products?category=dau-goi">
                 <div class="category-icon"><i class="fas fa-shower"></i></div>
                 <h3>Dầu Gội</h3>
                 <p>Làm sạch và nuôi dưỡng tóc từ gốc</p>
@@ -241,12 +263,14 @@
                 <h3>Serum Dưỡng</h3>
                 <p>Dưỡng chất tinh tuý cho tóc</p>
             </a>
-            <a class="category-item" href="${pageContext.request.contextPath}/products?category=tri-gau">
+            <a class="category-item"
+               href="${pageContext.request.contextPath}/products?category=tri-gau">
                 <div class="category-icon"><i class="fas fa-shield-alt"></i></div>
                 <h3>Trị Gàu & Rụng Tóc</h3>
                 <p>Giải pháp toàn diện cho tóc</p>
             </a>
-            <a class="category-item" href="${pageContext.request.contextPath}/products?category=sap-gel">
+            <a class="category-item"
+               href="${pageContext.request.contextPath}/products?category=sap-gel">
                 <div class="category-icon"><i class="fas fa-wind"></i></div>
                 <h3>Tạo Kiểu</h3>
                 <p>Sáp, gel, gôm tạo kiểu</p>
@@ -263,7 +287,7 @@
                     <div class="product-img">
                         <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                             <img alt="${product.productName}" class="product-image"
-                                 src="${pageContext.request.contextPath}/static/images/${product.primaryImage != null ? product.primaryImage.imageUrl : 'default-product.png'}">
+                                 src="${pageContext.request.contextPath}/static/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
                         </a>
                     </div>
                     <div class="product-body">
@@ -271,20 +295,21 @@
                         <div class="product-small-details">
                             <p>
                                 <span>${product.brand != null ? product.brand.brandName : ''}</span>
-                                • <span>${product.category != null ? product.category.categoryName : ''}</span>
+                                • <span>${product.category != null ? product.category.categoryName :
+                                    ''}</span>
                                 • ${product.origin}
                             </p>
                         </div>
                         <div class="product-rating">
                             <div class="rating-stars">
-                                <span class="stars">
-                                    <c:forEach begin="1" end="5" var="i">
-                                        <c:choose>
-                                            <c:when test="${i <= product.averageRating}">★</c:when>
-                                            <c:otherwise>☆</c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                </span>
+                                                <span class="stars">
+                                                    <c:forEach begin="1" end="5" var="i">
+                                                        <c:choose>
+                                                            <c:when test="${i <= product.averageRating}">★</c:when>
+                                                            <c:otherwise>☆</c:otherwise>
+                                                        </c:choose>
+                                                    </c:forEach>
+                                                </span>
                             </div>
                             <p class="review-count">(${product.reviewCount})</p>
                         </div>
@@ -295,10 +320,15 @@
                                             value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
                                             type="number"/>₫
                                 </p>
-                                <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                    <p class="price-old"><fmt:formatNumber
-                                            value="${product.defaultVariant.originalPrice}" type="number"/>₫</p>
-                                    <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                <c:if
+                                        test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                    <p class="price-old">
+                                        <fmt:formatNumber
+                                                value="${product.defaultVariant.originalPrice}"
+                                                type="number"/>₫
+                                    </p>
+                                    <p class="badge-discount">
+                                        -${product.defaultVariant.discountPercent}%</p>
                                 </c:if>
                             </c:if>
                         </div>
@@ -314,9 +344,11 @@
                             </div>
                         </c:if>
                         <div class="product product-actions">
-                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
+                            <a class="btn"
+                               href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
                                 thêm</a>
-                            <a class="btn primary add-to-cart" href="#" data-product-id="${product.productId}">Thêm vào
+                            <a class="btn primary add-to-cart" href="#"
+                               data-product-id="${product.productId}">Thêm vào
                                 giỏ</a>
                         </div>
                     </div>
@@ -328,21 +360,31 @@
     <!-- Brands Container -->
     <div class="brands-container" id="brands-container">
         <h2 class="container-title">Thương Hiệu Uy Tín</h2>
-        <div class="brands-grid stagger-fade">
-            <c:forEach var="brand" items="${brands}">
-                <a class="brand-item" href="${pageContext.request.contextPath}/products?brand=${brand.brandSlug}">
-                    <c:choose>
-                        <c:when test="${not empty brand.logoUrl}">
-                            <img src="${pageContext.request.contextPath}/static/images/${brand.logoUrl}"
-                                 alt="${brand.brandName}">
-                        </c:when>
-                        <c:otherwise>
-                            ${brand.brandName}
-                        </c:otherwise>
-                    </c:choose>
-                </a>
+        <div class="brands-grid brands-grid-compact stagger-fade">
+            <c:forEach var="brand" items="${brands}" varStatus="status">
+                <c:if test="${status.index < 12}">
+                    <a class="brand-item"
+                       href="${pageContext.request.contextPath}/products?brand=${brand.brandSlug}">
+                        <c:choose>
+                            <c:when test="${not empty brand.logoUrl}">
+                                <img src="${pageContext.request.contextPath}/static/${brand.logoUrl}"
+                                     alt="${brand.brandName}">
+                            </c:when>
+                            <c:otherwise>
+                                ${brand.brandName}
+                            </c:otherwise>
+                        </c:choose>
+                    </a>
+                </c:if>
             </c:forEach>
         </div>
+        <c:if test="${brands.size() > 12}">
+            <div class="brands-view-more">
+                <a href="${pageContext.request.contextPath}/brands" class="btn btn-outline-primary">
+                    <i class="fas fa-th-large"></i> Xem tất cả thương hiệu
+                </a>
+            </div>
+        </c:if>
     </div>
 </main>
 
@@ -573,5 +615,5 @@
     }); // End DOMContentLoaded
 </script>
 </body>
-</html>
 
+</html>
