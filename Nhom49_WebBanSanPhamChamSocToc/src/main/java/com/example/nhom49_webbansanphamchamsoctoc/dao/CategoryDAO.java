@@ -62,7 +62,7 @@ public class CategoryDAO implements IDAO<Category> {
      */
     @Override
     public List<Category> findAll() {
-        String sql = "SELECT * FROM categories ORDER BY category_name";
+        String sql = "SELECT * FROM categories ORDER BY category_id ASC";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
                         .map((rs, ctx) -> mapCategory(rs))
