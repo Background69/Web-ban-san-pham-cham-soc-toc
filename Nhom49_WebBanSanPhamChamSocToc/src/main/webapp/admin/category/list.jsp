@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý danh mục</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 </head>
 <body>
 <div class="container">
@@ -16,12 +17,12 @@
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/category">Quản lý danh mục</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
         </ul>
 
@@ -34,32 +35,24 @@
             <a class="btn-add" href="${pageContext.request.contextPath}/admin/category/add">+ Thêm danh mục</a>
         </div>
 
-        <c:if test="${not empty param.error}">
-            <div class="alert">${param.error}</div>
-        </c:if>
-
-        <table class="product-table">
-            <tr>
-                <th>ID</th>
-                <th>Tên danh mục</th>
-                <th>Slug</th>
-                <th>Hành động</th>
-            </tr>
-
-            <c:forEach var="c" items="${categories}">
-                <tr>
-                    <td>${c.categoryId}</td>
-                    <td>${c.categoryName}</td>
-                    <td>${c.categorySlug}</td>
-                    <td>
-                        <a href="${pageContext.request.contextPath}/admin/category/edit?id=${c.categoryId}">✏ Sửa</a>
-                        |
-                        <a href="${pageContext.request.contextPath}/admin/category/delete?id=${c.categoryId}"
-                           onclick="return confirm('Xóa danh mục này?')">🗑 Xóa</a>
-                    </td>
-                </tr>
-            </c:forEach>
-        </table>
+    <c:forEach var="category" items="${categories}">
+        <tr>
+            <td>${category.categoryId}</td>
+            <td>${category.categoryName}</td>
+            <td>${category.categorySlug}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/admin/category/edit?id=${c.categoryId}">
+                    ✏ Sửa
+                </a>
+                |
+                <a href="${pageContext.request.contextPath}/admin/category/delete?id=${c.categoryId}"
+                   onclick="return confirm('Xóa danh mục này?')">
+                    🗑 Xóa
+                </a>
+            </td>
+        </tr>
+    </c:forEach>
+</table>
     </main>
 </div>
 </body>
