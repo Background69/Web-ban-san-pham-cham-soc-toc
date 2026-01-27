@@ -10,8 +10,6 @@
 </head>
 <body>
 <div class="container">
-
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
             <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
@@ -28,23 +26,14 @@
             <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
         </ul>
 
-        <a class="view-site" href="${pageContext.request.contextPath}/index">
-            Quay lại Website
-        </a>
+        <a class="view-site" href="${pageContext.request.contextPath}/index">Quay lại Website</a>
     </aside>
 
     <main class="content">
         <div class="header">
             <h1>Quản lý danh mục</h1>
-            <button class="btn-add" onclick="openModal()">+ Thêm danh mục </button>
+            <a class="btn-add" href="${pageContext.request.contextPath}/admin/category/add">+ Thêm danh mục</a>
         </div>
-<table class="product-table">
-    <tr>
-        <th>ID</th>
-        <th>Tên danh mục</th>
-        <th>Slug</th>
-        <th>Hành động</th>
-    </tr>
 
     <c:forEach var="category" items="${categories}">
         <tr>
