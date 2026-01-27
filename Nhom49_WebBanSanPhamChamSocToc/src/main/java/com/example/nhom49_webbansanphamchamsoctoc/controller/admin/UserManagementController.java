@@ -48,7 +48,7 @@ public class UserManagementController extends HttpServlet {
         /* ===================== LIST (default) ===================== */
         List<User> users = userDAO.findAll();
         request.setAttribute("users", users);
-        request.getRequestDispatcher("/admin/user/list.jsp")
+        request.getRequestDispatcher("/admin/users/list.jsp")
                 .forward(request, response);
     }
 
