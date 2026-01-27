@@ -27,7 +27,7 @@ public class UserManagementController extends HttpServlet {
 
         // Check login
         if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 
@@ -54,7 +54,7 @@ public class UserManagementController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             User user = userDAO.findById(id);
             request.setAttribute("user", user);
-            request.getRequestDispatcher("/view/admin/users/user-detail.jsp")
+            request.getRequestDispatcher("/admin/users/detail.jsp")
                     .forward(request, response);
             return;
         }
@@ -62,7 +62,7 @@ public class UserManagementController extends HttpServlet {
         /* ===================== LIST (default) ===================== */
         List<User> users = userDAO.findAll();
         request.setAttribute("users", users);
-        request.getRequestDispatcher("/view/admin/users/user-list.jsp")
+        request.getRequestDispatcher("/admin/user/list.jsp")
                 .forward(request, response);
     }
 

@@ -36,7 +36,10 @@
     <main class="content">
         <div class="header">
             <h1>Quản lý thương hiệu</h1>
-            <button class="btn-add" onclick="openModal()">+ Thêm thương hiệu </button>
+            <a class="btn-add"
+               href="${pageContext.request.contextPath}/admin/brand/form">
+                + Thêm thương hiệu
+            </a>
         </div>
         <table class="product-table">
             <thead>
@@ -51,9 +54,9 @@
             <tbody>
             <c:forEach var="b" items="${brands}">
                 <tr>
-                    <td>${b.id}</td>
-                    <td>${b.name}</td>
-                    <td>${b.description}</td>
+                    <td>${b.brandId}</td>
+                    <td>${b.brandName}</td>
+                    <td>${b.shortDescription}</td>
                     <td>
                         <a class="edit"
                            href="${pageContext.request.contextPath}/admin/brand/edit?id=${b.id}">
