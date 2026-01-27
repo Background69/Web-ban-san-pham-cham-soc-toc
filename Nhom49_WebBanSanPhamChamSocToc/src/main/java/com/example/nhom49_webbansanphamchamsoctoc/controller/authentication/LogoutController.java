@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "LogoutController", value = "/Logout")
+@WebServlet(name = "LogoutController", urlPatterns = { "/auth/logout", "/Logout" })
 public class LogoutController extends HttpServlet {
 
     private AuthenticationService authService;
