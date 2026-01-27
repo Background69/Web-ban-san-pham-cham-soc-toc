@@ -38,4 +38,3 @@
     </form>
 </div>
 
-<%@ include file="../layout/footer.jsp" %>

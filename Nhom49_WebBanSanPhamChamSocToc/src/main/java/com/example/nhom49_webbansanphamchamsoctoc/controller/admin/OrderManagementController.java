@@ -12,23 +12,12 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "OrderManagementController", value = "/OrderManagementController")
+@WebServlet(name = "OrderManagementController", value = "/admin/orders")
 public class OrderManagementController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         OrderDAO orderDAO = new OrderDAO();
-        //Nếu chưa đăng nhập chuyển sang trang đăng nhập
-        if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-        User currentUser = (User) session.getAttribute("currentUser");
-        //Check có phải role Admin hay không
-        if (!"Admin".equalsIgnoreCase(currentUser.getRole())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
-            return;
-        }
         // Cập nhật trạng thái của đơn hàng
         String action = request.getParameter("action");
         if ("updateStatus".equals(action)) {
@@ -36,9 +25,10 @@ public class OrderManagementController extends HttpServlet {
             String status = request.getParameter("status");
             orderDAO.updateStatus(orderId, status);
             response.sendRedirect(request.getContextPath() + "/admin/orders");
+            return;
         }
         //Xoá đơn hàng
-        if ("detele".equals(action)){
+        if ("delete".equals(action)){
             int orderId = Integer.parseInt(request.getParameter("id"));
             orderDAO.delete(orderId);
             response.sendRedirect(request.getContextPath() + "/admin/orders");
@@ -47,7 +37,7 @@ public class OrderManagementController extends HttpServlet {
         //Danh sách đơn hàng
         List<Order> orders = orderDAO.findAll();
         request.setAttribute("orders",orders);
-        request.getRequestDispatcher("view/admin/ordermanagent.jsp")
+        request.getRequestDispatcher("/admin/order/list.jsp")
                 .forward(request,response);
     }
     @Override

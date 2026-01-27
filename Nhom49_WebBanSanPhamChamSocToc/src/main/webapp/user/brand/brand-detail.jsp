@@ -1,79 +1,17 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${brand.brandName} - HairGlow</title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-    <style>
-        /* ===== BRAND DETAIL - FORCE 4 COLUMN GRID ===== */
-        .brand-detail-main {
-            max-width: 1400px;
-            margin: 40px auto 60px;
-            padding: 0 20px;
-        }
-
-        .brand-products-section .product-grid {
-            display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 24px !important;
-            margin-top: 30px !important;
-        }
-
-        .brand-products-section .product-item {
-            width: 100% !important;
-            max-width: none !important;
-            min-width: 0 !important;
-        }
-
-        .brand-products-section .product-img {
-            aspect-ratio: 1 / 1;
-        }
-
-        .brand-products-section .product-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @media (max-width: 1199px) {
-            .brand-products-section .product-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 20px !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .brand-products-section .product-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 16px !important;
-            }
-        }
-
-        @media (max-width: 575px) {
-            .brand-detail-main {
-                padding: 0 12px;
-            }
-
-            .brand-products-section .product-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 12px !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
-
 <body>
 
 <jsp:include page="/layout/header.jsp"/>
@@ -90,7 +28,6 @@
         </nav>
 
         <div class="brand-banner-info">
-
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
@@ -115,11 +52,9 @@
                     <c:if test="${not empty brand.origin}">
                         <span class="meta-item"><i class="fas fa-globe"></i> ${brand.origin}</span>
                     </c:if>
-                    <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản
-                                            phẩm</span>
+                    <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản phẩm</span>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -149,11 +84,9 @@
         </c:if>
     </div>
 
-    <!-- Products Section -->
-    <section class="brand-products-section store-page">
+    <section class="brand-products-section">
         <div class="brand-products-header">
             <h2>Sản phẩm của ${brand.brandName}</h2>
-            <p class="product-count">${totalProducts} sản phẩm</p>
             <div class="product-filter-tags">
                 <button class="product-filter-tag active" data-category="all">Tất cả</button>
                 <c:forEach var="category" items="${categories}">
@@ -258,17 +191,38 @@
                                 </div>
                             </div>
                         </div>
-                    </c:forEach>
+
+                        <div class="product-price">
+                            <c:if test="${product.defaultVariant != null}">
+                                <p class="price-current">
+                                    <fmt:formatNumber
+                                            value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                            type="number"/>₫
+                                </p>
+                            </c:if>
+                        </div>
+
+                        <div class="product-actions">
+                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem thêm</a>
+                            <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-cart-form">
+                                <input type="hidden" name="productId" value="${product.productId}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn primary">Thêm vào giỏ</button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
-            </c:when>
-            <c:otherwise>
-                <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <h3>Chưa có sản phẩm nào</h3>
-                    <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
-                </div>
-            </c:otherwise>
-        </c:choose>
+            </c:forEach>
+        </div>
+
+        <c:if test="${empty products}">
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <h3>Chưa có sản phẩm nào</h3>
+                <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
+            </div>
+        </c:if>
 
         <c:if test="${totalPages > 1}">
             <jsp:include page="/layout/pagination.jsp"/>
@@ -279,9 +233,6 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
-    // ===== ADD TO CART - Đã được xử lý trong header.jsp =====
-
-    // Filter products by category
     document.querySelectorAll('.product-filter-tag').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.product-filter-tag').forEach(b => b.classList.remove('active'));

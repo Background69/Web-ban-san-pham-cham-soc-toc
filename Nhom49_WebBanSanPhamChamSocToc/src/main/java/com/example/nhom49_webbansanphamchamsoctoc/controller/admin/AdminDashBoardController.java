@@ -17,7 +17,7 @@ import java.io.IOException;
  * Servlet hiển thị Admin Dashboard
  * GET /admin: Dashboard với thống kê
  */
-@WebServlet(name = "AdminDashBoardController", urlPatterns = {"/admin", "/admin/"})
+@WebServlet(name = "AdminDashBoardController", urlPatterns = {"/admin/dashboard"})
 public class AdminDashBoardController extends HttpServlet {
     //UserDAO userDAO = new UserDAO();
     //ProductDAO productDAO = new ProductDAO();
@@ -36,16 +36,23 @@ public class AdminDashBoardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Thống kê
-        request.setAttribute("totalProducts", productDAO.countAll());
-        request.setAttribute("totalUsers", userDAO.findAll().size());
-        request.setAttribute("totalOrders", orderDAO.findAll().size());
-        request.setAttribute("pendingOrders", orderDAO.findByStatus("pending").size());
+        try {
+            // Thống kê
+            request.setAttribute("totalProducts", productDAO.countAll());
+            request.setAttribute("totalUsers", userDAO.findAll().size());
+            request.setAttribute("totalOrders", orderDAO.findAll().size());
+            request.setAttribute("totalRevenue", orderDAO.totalRevenue());
 
-        // Recent orders
-        var allOrders = orderDAO.findAll();
-        request.setAttribute("recentOrders", allOrders.size() > 5 ? allOrders.subList(0, 5) : allOrders);
+            // Đơn hàng gần nhất (CHỈ SET 1 LẦN)
+            request.setAttribute("recentOrders", orderDAO.findRecentOrder(5));
 
-        request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("dashboardError", "Không tải được dữ liệu");
+        }
+
+        request.getRequestDispatcher("/admin/dashboard.jsp")
+                .forward(request, response);
     }
+
 }

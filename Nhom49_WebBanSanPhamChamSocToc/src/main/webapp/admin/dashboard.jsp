@@ -22,11 +22,11 @@
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
 
@@ -45,15 +45,15 @@
         <div class="cards">
             <div class="card">
                 <h3>Tổng Sản Phẩm</h3>
-                <p class="number">${productCount}</p>
+                <p class="number">${totalProducts}</p>
             </div>
             <div class="card">
                 <h3>Tổng Người Dùng</h3>
-                <p class="number">${userCount}</p>
+                <p class="number">${totalUsers}</p>
             </div>
             <div class="card">
                 <h3>Tổng Đơn Hàng</h3>
-                <p class="number">${orderCount}</p>
+                <p class="number">${totalOrders}</p>
             </div>
             <div class="card">
                 <h3>Doanh Thu</h3>
