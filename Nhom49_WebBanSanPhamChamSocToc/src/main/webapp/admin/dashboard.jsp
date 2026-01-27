@@ -45,20 +45,20 @@
         <div class="cards">
             <div class="card">
                 <h3>Tổng Sản Phẩm</h3>
-                <p class="number">${productCount}</p>
+                <p class="number">${totalProducts}</p>
             </div>
             <div class="card">
                 <h3>Tổng Người Dùng</h3>
-                <p class="number">${userCount}</p>
+                <p class="number">${totalUsers}</p>
             </div>
             <div class="card">
                 <h3>Tổng Đơn Hàng</h3>
-                <p class="number">${orderCount}</p>
+                <p class="number">${totalOrders}</p>
             </div>
             <div class="card">
                 <h3>Doanh Thu</h3>
                 <p class="number">
-                    <fmt:formatNumber value="${totalRevenue}" type="number"/> ₫
+                    <fmt:formatNumber value="${pendingOrders}" type="number"/> ₫
                 </p>
             </div>
         </div>
