@@ -1,79 +1,17 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${brand.brandName} - HairGlow</title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-    <style>
-        /* ===== BRAND DETAIL - FORCE 4 COLUMN GRID ===== */
-        .brand-detail-main {
-            max-width: 1400px;
-            margin: 40px auto 60px;
-            padding: 0 20px;
-        }
-
-        .brand-products-section .product-grid {
-            display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 24px !important;
-            margin-top: 30px !important;
-        }
-
-        .brand-products-section .product-item {
-            width: 100% !important;
-            max-width: none !important;
-            min-width: 0 !important;
-        }
-
-        .brand-products-section .product-img {
-            aspect-ratio: 1 / 1;
-        }
-
-        .brand-products-section .product-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @media (max-width: 1199px) {
-            .brand-products-section .product-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 20px !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .brand-products-section .product-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 16px !important;
-            }
-        }
-
-        @media (max-width: 575px) {
-            .brand-detail-main {
-                padding: 0 12px;
-            }
-
-            .brand-products-section .product-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 12px !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
-
 <body>
 
 <jsp:include page="/layout/header.jsp"/>
@@ -90,7 +28,6 @@
         </nav>
 
         <div class="brand-banner-info">
-
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
@@ -116,11 +53,9 @@
                     <c:if test="${not empty brand.origin}">
                         <span class="meta-item"><i class="fas fa-globe"></i> ${brand.origin}</span>
                     </c:if>
-                    <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản
-                                            phẩm</span>
+                    <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản phẩm</span>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -150,11 +85,9 @@
         </c:if>
     </div>
 
-    <!-- Products Section -->
-    <section class="brand-products-section store-page">
+    <section class="brand-products-section">
         <div class="brand-products-header">
             <h2>Sản phẩm của ${brand.brandName}</h2>
-            <p class="product-count">${totalProducts} sản phẩm</p>
             <div class="product-filter-tags">
                 <button class="product-filter-tag active" data-category="all">Tất cả</button>
                 <c:forEach var="category" items="${categories}">
@@ -165,111 +98,104 @@
             </div>
         </div>
 
-        <c:choose>
-            <c:when test="${not empty products}">
-                <div class="product-grid stagger-fade">
-                    <c:forEach var="product" items="${products}">
-                        <div class="product-item"
-                             data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
-                            <div class="product-img">
-                                <a
-                                        href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                    <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/images/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'default-product.png'}">
-                                </a>
-                            </div>
-                            <div class="product-body">
-                                <h3 class="product-title">${product.productName}</h3>
-                                <div class="product-small-details">
-                                    <p>
-                                                            <span>${product.brand != null ? product.brand.brandName :
-                                                                    ''}</span>
-                                        • <span>${product.category != null ?
-                                            product.category.categoryName : ''}</span>
-                                        • ${product.origin}
-                                    </p>
-                                </div>
-                                <div class="product-rating">
-                                    <div class="rating-stars">
-                                                            <span class="stars">
-                                                                <c:forEach begin="1" end="5" var="i">
-                                                                    <c:choose>
-                                                                        <c:when test="${i <= product.averageRating}">★
-                                                                        </c:when>
-                                                                        <c:otherwise>☆</c:otherwise>
-                                                                    </c:choose>
-                                                                </c:forEach>
-                                                            </span>
-                                    </div>
-                                    <p class="review-count">(${product.reviewCount})</p>
-                                </div>
-                                <c:if test="${not empty product.hairConditions}">
-                                    <div class="product-tags">
-                                        <c:forEach var="condition" items="${product.hairConditions}"
-                                                   varStatus="status">
-                                            <c:if test="${status.index < 2}">
-                                                                    <span
-                                                                            class="tag-chip">${condition.conditionName}</span>
-                                            </c:if>
-                                        </c:forEach>
-                                        <c:if test="${fn:length(product.hairConditions) > 2}">
-                                                                <span
-                                                                        class="tag-chip more">+${fn:length(product.hairConditions)
-                                                                        - 2}</span>
-                                        </c:if>
-                                    </div>
-                                </c:if>
-                                <div class="product-price">
-                                    <c:if test="${product.defaultVariant != null}">
-                                        <p class="price-current">
-                                            <fmt:formatNumber
-                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
-                                                    type="number"/>₫
-                                        </p>
-                                        <c:if
-                                                test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                            <p class="price-old">
-                                                <fmt:formatNumber
-                                                        value="${product.defaultVariant.originalPrice}"
-                                                        type="number"/>₫
-                                            </p>
-                                            <p class="badge-discount">
-                                                -${product.defaultVariant.discountPercent}%</p>
-                                        </c:if>
-                                    </c:if>
-                                </div>
-                                <c:if test="${product.onSale && product.stockQuantity > 0}">
-                                    <div class="stock-progress">
-                                        <div class="stock-progress-bar">
-                                            <div class="stock-progress-fill"
-                                                 style="width: ${product.soldPercent}%"></div>
-                                        </div>
-                                        <div class="stock-progress-text">
-                                            Đã bán ${product.soldQuantity}/${product.stockQuantity}
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <div class="product product-actions">
-                                    <a class="btn"
-                                       href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
-                                        thêm</a>
-                                    <a class="btn primary add-to-cart" href="#"
-                                       data-product-id="${product.productId}">Thêm vào
-                                        giỏ</a>
-                                </div>
-                            </div>
+        <div class="brand-products-grid stagger-fade">
+            <c:forEach var="product" items="${products}">
+                <div class="product-item"
+                     data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
+
+                    <div class="product-img">
+                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                            <c:choose>
+                                <c:when test="${not empty product.primaryImage and not empty product.primaryImage.imageUrl}">
+                                    <%-- Xử lý mọi trường hợp imageUrl trong DB --%>
+                                    <c:set var="rawImg" value="${product.primaryImage.imageUrl}" />
+
+                                    <%-- Nếu DB có / ở đầu thì bỏ đi (vd: /images/products/a.jpg) --%>
+                                    <c:choose>
+                                        <c:when test="${rawImg.startsWith('/')}">
+                                            <c:set var="rawImg" value="${rawImg.substring(1)}" />
+                                        </c:when>
+                                    </c:choose>
+
+                                    <%-- Nếu DB đã lưu dạng images/... thì dùng luôn.
+                                         Nếu chỉ lưu tên file (vd: a.jpg) thì tự ghép vào images/products/ --%>
+                                    <c:choose>
+                                        <c:when test="${rawImg.startsWith('images/')}">
+                                            <c:set var="imgPath" value="${pageContext.request.contextPath}/static/assets/${rawImg}" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:set var="imgPath" value="${pageContext.request.contextPath}/static/assets/images/products/${rawImg}" />
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                    <img
+                                            src="${imgPath}"
+                                            alt="${product.productName}"
+                                            class="product-image"
+                                            onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/assets/images/no-image.png';"
+                                    >
+                                </c:when>
+
+                                <c:otherwise>
+                                    <img
+                                            src="${pageContext.request.contextPath}/static/assets/images/no-image.png"
+                                            alt="${product.productName}"
+                                            class="product-image"
+                                    >
+                                </c:otherwise>
+                            </c:choose>
+                        </a>
+
+                        <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                            <span class="badge-discount">-${product.defaultVariant.discountPercent}%</span>
+                        </c:if>
+                    </div>
+
+                    <div class="product-body">
+                        <h3 class="product-title">
+                            <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                    ${product.productName}
+                            </a>
+                        </h3>
+
+                        <div class="product-small-details">
+                            <p>
+                                <span>${brand.brandName}</span> •
+                                <span>${product.category != null ? product.category.categoryName : ''}</span>
+                            </p>
                         </div>
-                    </c:forEach>
+
+                        <div class="product-price">
+                            <c:if test="${product.defaultVariant != null}">
+                                <p class="price-current">
+                                    <fmt:formatNumber
+                                            value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                            type="number"/>₫
+                                </p>
+                            </c:if>
+                        </div>
+
+                        <div class="product-actions">
+                            <a class="btn" href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem thêm</a>
+                            <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-cart-form">
+                                <input type="hidden" name="productId" value="${product.productId}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn primary">Thêm vào giỏ</button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
-            </c:when>
-            <c:otherwise>
-                <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <h3>Chưa có sản phẩm nào</h3>
-                    <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
-                </div>
-            </c:otherwise>
-        </c:choose>
+            </c:forEach>
+        </div>
+
+        <c:if test="${empty products}">
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <h3>Chưa có sản phẩm nào</h3>
+                <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
+            </div>
+        </c:if>
 
         <c:if test="${totalPages > 1}">
             <jsp:include page="/layout/pagination.jsp"/>
@@ -280,9 +206,6 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
-    // ===== ADD TO CART - Đã được xử lý trong header.jsp =====
-
-    // Filter products by category
     document.querySelectorAll('.product-filter-tag').forEach(btn => {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.product-filter-tag').forEach(b => b.classList.remove('active'));
@@ -301,5 +224,4 @@
 </script>
 
 </body>
-
 </html>
