@@ -165,7 +165,7 @@
                                 <div class="product-img">
                                     <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                         <img alt="${product.productName}" class="product-image"
-                                             src="${pageContext.request.contextPath}/static/assets/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
+                                             src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
                                     </a>
                                 </div>
 
@@ -278,4 +278,5 @@
     });
 </script>
 </body>
+
 </html>

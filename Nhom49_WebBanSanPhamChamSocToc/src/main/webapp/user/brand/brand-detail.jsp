@@ -31,14 +31,13 @@
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
-                        <%-- DB: images/brands/xxx.png  -> File: static/assets/images/brands/xxx.png --%>
-                        <img
-                                src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                                alt="Logo ${brand.brandName}"
-                                onerror="this.onerror=null;
+                        <%-- DB: images/brands/xxx.png -> File: static/assets/images/brands/xxx.png
+                            --%>
+                        <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
+                             alt="Logo ${brand.brandName}"
+                             onerror="this.onerror=null;
                                          this.remove();
-                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';"
-                        >
+                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';">
                     </c:when>
                     <c:otherwise>
                         <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>
@@ -98,71 +97,99 @@
             </div>
         </div>
 
-        <div class="brand-products-grid stagger-fade">
-            <c:forEach var="product" items="${products}">
-                <div class="product-item"
-                     data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
-
-                    <div class="product-img">
-                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                            <c:choose>
-                                <c:when test="${not empty product.primaryImage and not empty product.primaryImage.imageUrl}">
-                                    <%-- Xử lý mọi trường hợp imageUrl trong DB --%>
-                                    <c:set var="rawImg" value="${product.primaryImage.imageUrl}" />
-
-                                    <%-- Nếu DB có / ở đầu thì bỏ đi (vd: /images/products/a.jpg) --%>
-                                    <c:choose>
-                                        <c:when test="${rawImg.startsWith('/')}">
-                                            <c:set var="rawImg" value="${rawImg.substring(1)}" />
-                                        </c:when>
-                                    </c:choose>
-
-                                    <%-- Nếu DB đã lưu dạng images/... thì dùng luôn.
-                                         Nếu chỉ lưu tên file (vd: a.jpg) thì tự ghép vào images/products/ --%>
-                                    <c:choose>
-                                        <c:when test="${rawImg.startsWith('images/')}">
-                                            <c:set var="imgPath" value="${pageContext.request.contextPath}/static/assets/${rawImg}" />
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:set var="imgPath" value="${pageContext.request.contextPath}/static/assets/images/products/${rawImg}" />
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                    <img
-                                            src="${imgPath}"
-                                            alt="${product.productName}"
-                                            class="product-image"
-                                            onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/assets/images/no-image.png';"
-                                    >
-                                </c:when>
-
-                                <c:otherwise>
-                                    <img
-                                            src="${pageContext.request.contextPath}/static/assets/images/no-image.png"
-                                            alt="${product.productName}"
-                                            class="product-image"
-                                    >
-                                </c:otherwise>
-                            </c:choose>
-                        </a>
-
-                        <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
-                            <span class="badge-discount">-${product.defaultVariant.discountPercent}%</span>
-                        </c:if>
-                    </div>
-
-                    <div class="product-body">
-                        <h3 class="product-title">
-                            <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                    ${product.productName}
-                            </a>
-                        </h3>
-
-                        <div class="product-small-details">
-                            <p>
-                                <span>${brand.brandName}</span> •
-                                <span>${product.category != null ? product.category.categoryName : ''}</span>
-                            </p>
+        <c:choose>
+            <c:when test="${not empty products}">
+                <div class="product-grid stagger-fade">
+                    <c:forEach var="product" items="${products}">
+                        <div class="product-item"
+                             data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
+                            <div class="product-img">
+                                <a
+                                        href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                    <img alt="${product.productName}" class="product-image"
+                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
+                                </a>
+                            </div>
+                            <div class="product-body">
+                                <h3 class="product-title">${product.productName}</h3>
+                                <div class="product-small-details">
+                                    <p>
+                                                            <span>${product.brand != null ? product.brand.brandName :
+                                                                    ''}</span>
+                                        • <span>${product.category != null ?
+                                            product.category.categoryName : ''}</span>
+                                        • ${product.origin}
+                                    </p>
+                                </div>
+                                <div class="product-rating">
+                                    <div class="rating-stars">
+                                                            <span class="stars">
+                                                                <c:forEach begin="1" end="5" var="i">
+                                                                    <c:choose>
+                                                                        <c:when test="${i <= product.averageRating}">★
+                                                                        </c:when>
+                                                                        <c:otherwise>☆</c:otherwise>
+                                                                    </c:choose>
+                                                                </c:forEach>
+                                                            </span>
+                                    </div>
+                                    <p class="review-count">(${product.reviewCount})</p>
+                                </div>
+                                <c:if test="${not empty product.hairConditions}">
+                                    <div class="product-tags">
+                                        <c:forEach var="condition" items="${product.hairConditions}"
+                                                   varStatus="status">
+                                            <c:if test="${status.index < 2}">
+                                                                    <span
+                                                                            class="tag-chip">${condition.conditionName}</span>
+                                            </c:if>
+                                        </c:forEach>
+                                        <c:if test="${fn:length(product.hairConditions) > 2}">
+                                                                <span
+                                                                        class="tag-chip more">+${fn:length(product.hairConditions)
+                                                                        - 2}</span>
+                                        </c:if>
+                                    </div>
+                                </c:if>
+                                <div class="product-price">
+                                    <c:if test="${product.defaultVariant != null}">
+                                        <p class="price-current">
+                                            <fmt:formatNumber
+                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                    type="number"/>₫
+                                        </p>
+                                        <c:if
+                                                test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                            <p class="price-old">
+                                                <fmt:formatNumber
+                                                        value="${product.defaultVariant.originalPrice}"
+                                                        type="number"/>₫
+                                            </p>
+                                            <p class="badge-discount">
+                                                -${product.defaultVariant.discountPercent}%</p>
+                                        </c:if>
+                                    </c:if>
+                                </div>
+                                <c:if test="${product.onSale && product.stockQuantity > 0}">
+                                    <div class="stock-progress">
+                                        <div class="stock-progress-bar">
+                                            <div class="stock-progress-fill"
+                                                 style="width: ${product.soldPercent}%"></div>
+                                        </div>
+                                        <div class="stock-progress-text">
+                                            Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <div class="product product-actions">
+                                    <a class="btn"
+                                       href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
+                                        thêm</a>
+                                    <a class="btn primary add-to-cart" href="#"
+                                       data-product-id="${product.productId}">Thêm vào
+                                        giỏ</a>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="product-price">
@@ -224,4 +251,5 @@
 </script>
 
 </body>
+
 </html>
