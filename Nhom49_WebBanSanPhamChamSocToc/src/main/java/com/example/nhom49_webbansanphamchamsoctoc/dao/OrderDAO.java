@@ -4,7 +4,9 @@ import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import org.jdbi.v3.core.Jdbi;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -271,6 +273,98 @@ public class OrderDAO implements IDAO<Order> {
                         .orElse(0)
         );
     }
+    public boolean hasUserPurchasedProduct(int userId, int productId) {
+        String sql = """
+        SELECT COUNT(*)
+        FROM orders o
+        JOIN order_items oi ON o.order_id = oi.order_id
+        WHERE o.user_id = :userId
+          AND oi.product_id = :productId
+          AND o.order_status = 'Hoàn thành'
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one()
+        ) > 0;
+    }
+    public boolean hasUserPurchasedProductPending(int userId, int productId) {
+        String sql = """
+        SELECT COUNT(*)
+        FROM orders o
+        JOIN order_items oi ON o.order_id = oi.order_id
+        WHERE o.user_id = :userId
+          AND oi.product_id = :productId
+          AND o.order_status <> 'Hoàn thành'
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one()
+        ) > 0;
+    }
+    public BigDecimal getTotalSpendingByUser(int userId) {
+        String sql = """
+        SELECT COALESCE(SUM(total_amount), 0)
+        FROM orders
+        WHERE user_id = :userId
+          AND order_status = 'Hoàn thành'
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .mapTo(BigDecimal.class)
+                        .one()
+        );
+    }
+    public List<Order> findByUserIdWithLimit(int userId, int limit) {
+        String sql = """
+        SELECT *
+        FROM orders
+        WHERE user_id = :userId
+        ORDER BY created_at DESC
+        LIMIT :limit
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .bind("limit", limit)
+                        .map((rs, ctx) -> mapOrder(rs))
+                        .list()
+        );
+    }
+    public Map<String, Integer> getOrderCountsByStatus(int userId) {
+        String sql = """
+        SELECT order_status, COUNT(*) AS total
+        FROM orders
+        WHERE user_id = :userId
+        GROUP BY order_status
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("userId", userId)
+                        .mapToMap()
+                        .stream()
+                        .collect(
+                                java.util.stream.Collectors.toMap(
+                                        row -> (String) row.get("order_status"),
+                                        row -> ((Number) row.get("total")).intValue()
+                                )
+                        )
+        );
+    }
+
+
+
 
 
     // Management methods
