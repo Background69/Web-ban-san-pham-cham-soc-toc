@@ -113,7 +113,7 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
                         .bind("wardName", address.getWardName())
                         .bind("specificAddress", address.getSpecificAddress())
                         .bind("note", address.getNote())
-                        .bind("isDefault", address.isDefault())
+                        .bind("isDefault", address.isDefaultAddress())
                         .executeAndReturnGeneratedKeys("address_id")
                         .mapTo(Integer.class)
                         .findFirst()
@@ -145,7 +145,7 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
                         .bind("wardName", address.getWardName())
                         .bind("specificAddress", address.getSpecificAddress())
                         .bind("note", address.getNote())
-                        .bind("isDefault", address.isDefault())
+                        .bind("isDefault", address.isDefaultAddress())
                         .bind("addressId", address.getAddressId())
                         .execute()
         );
@@ -213,7 +213,7 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         address.setWardName(rs.getString("ward_name"));
         address.setSpecificAddress(rs.getString("specific_address"));
         address.setNote(rs.getString("note"));
-        address.setDefault(rs.getBoolean("is_default"));
+        address.setDefaultAddress(rs.getBoolean("is_default"));
         address.setCreatedAt(rs.getTimestamp("created_at"));
         return address;
     }

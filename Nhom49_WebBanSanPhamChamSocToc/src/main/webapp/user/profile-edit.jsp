@@ -1,132 +1,264 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chỉnh sửa hồ sơ</title>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+        <!DOCTYPE html>
+        <html lang="vi">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/user.css?v=1">
-</head>
-<body>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Chỉnh sửa hồ sơ - HairGlow</title>
 
-<jsp:include page="/layout/header.jsp"/>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/profile.css">
+        </head>
 
-<main class="py-5" style="background:#f5f5f5;">
-    <div class="container">
-        <div class="row g-4">
-            <!-- SIDEBAR -->
-            <div class="col-12 col-md-3">
-                <div class="p-3 bg-white rounded-3 shadow-sm">
-                    <h5 class="mb-3 fw-bold">Tài khoản của tôi</h5>
-                    <ul class="list-unstyled mb-0 d-grid gap-2">
-                        <li>
-                            <a class="text-decoration-none d-block px-3 py-2 rounded-2 bg-success-subtle fw-semibold"
-                               href="${pageContext.request.contextPath}/profile">
-                                Hồ sơ
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none d-block px-3 py-2 rounded-2"
-                               href="${pageContext.request.contextPath}/profile/addresses">
-                                Địa chỉ
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none d-block px-3 py-2 rounded-2"
-                               href="${pageContext.request.contextPath}/orders">
-                                Đơn hàng
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-decoration-none d-block px-3 py-2 rounded-2"
-                               href="${pageContext.request.contextPath}/profile/change-password">
-                                Đổi mật khẩu
-                            </a>
-                        </li>
-                    </ul>
+        <body class="profile-page">
+
+            <jsp:include page="/layout/header.jsp" />
+
+            <main class="profile-container">
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <a href="${pageContext.request.contextPath}/profile" class="tab-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Tổng quan</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/profile/orders" class="tab-link">
+                        <i class="fas fa-box"></i>
+                        <span>Đơn hàng</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/profile/addresses" class="tab-link">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Địa chỉ</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/profile/reviews" class="tab-link">
+                        <i class="fas fa-star"></i>
+                        <span>Đánh giá</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/profile/change-password" class="tab-link">
+                        <i class="fas fa-lock"></i>
+                        <span>Bảo mật</span>
+                    </a>
                 </div>
-            </div>
 
-            <!-- CONTENT -->
-            <div class="col-12 col-md-9">
-                <div class="bg-white rounded-3 shadow-sm p-4">
-                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
-                        <div>
-                            <h3 class="fw-bold mb-1">Chỉnh sửa hồ sơ</h3>
-                            <p class="text-muted mb-0">Cập nhật thông tin cá nhân của bạn</p>
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <div class="tab-content-header">
+                        <h3 class="tab-content-title">
+                            <i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ
+                        </h3>
+                    </div>
+
+                    <c:if test="${not empty success}">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>${success}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>${error}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </c:if>
+
+                    <!-- Avatar Upload Section -->
+                    <div class="profile-form mb-4" style="padding-bottom: 20px; border-bottom: 1px solid #dee2e6;">
+                        <h5 class="mb-3"><i class="fas fa-camera me-2"></i>Ảnh đại diện</h5>
+                        <div class="d-flex align-items-center gap-4">
+                            <div class="avatar-preview position-relative"
+                                style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                                <c:choose>
+                                    <c:when test="${not empty user.avatar && user.avatar != 'avatar/avatar.jpg'}">
+                                        <img src="${user.avatar}" alt="Avatar" id="avatarPreview"
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fas fa-user" id="defaultAvatarIcon"
+                                            style="font-size: 48px; color: white;"></i>
+                                        <img src="" alt="Avatar" id="avatarPreview"
+                                            style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div>
+                                <form action="${pageContext.request.contextPath}/profile/avatar" method="post"
+                                    enctype="multipart/form-data" id="avatarForm">
+                                    <input type="file" name="avatar" id="avatarFile"
+                                        accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;"
+                                        onchange="previewAvatar(this)">
+                                    <button type="button" class="btn-profile btn-profile-outline"
+                                        onclick="document.getElementById('avatarFile').click()">
+                                        <i class="fas fa-upload me-1"></i> Chọn ảnh
+                                    </button>
+                                    <button type="submit" class="btn-profile btn-profile-primary ms-2" id="uploadBtn"
+                                        style="display: none;">
+                                        <i class="fas fa-save me-1"></i> Lưu avatar
+                                    </button>
+                                </form>
+                                <div class="form-hint mt-2">Chấp nhận: JPG, PNG, GIF, WebP. Tối đa 2MB.</div>
+                            </div>
                         </div>
                     </div>
 
-                    <hr class="my-4">
-
-                    <c:if test="${not empty success}">
-                        <div class="alert alert-success">${success}</div>
-                    </c:if>
-                    <c:if test="${not empty error}">
-                        <div class="alert alert-danger">${error}</div>
-                    </c:if>
-
-                    <form action="${pageContext.request.contextPath}/profile/edit" method="post"
-                          enctype="multipart/form-data">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label for="email" class="form-label fw-semibold">Email</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                       value="${user.email}" disabled>
+                    <!-- Profile Edit Form -->
+                    <div class="profile-form">
+                        <form action="${pageContext.request.contextPath}/profile/edit" method="post">
+                            <div class="form-group">
+                                <label class="form-label" for="email">
+                                    <i class="fas fa-envelope me-1"></i> Email
+                                </label>
+                                <input type="email" class="form-control" id="email" value="${user.email}" disabled>
+                                <div class="form-hint">
+                                    <i class="fas fa-lock me-1"></i> Email không thể thay đổi
+                                </div>
                             </div>
 
-                            <div class="col-12 col-md-6">
-                                <label for="username" class="form-label fw-semibold">Tên đăng nhập</label>
+                            <div class="form-group">
+                                <label class="form-label" for="username">
+                                    <i class="fas fa-user me-1"></i> Tên đăng nhập
+                                </label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                       value="${user.username}" required>
+                                    value="${user.username}" required minlength="3" maxlength="50"
+                                    pattern="[a-zA-Z0-9_]+" oninput="validateUsername(this)">
+                                <div class="form-hint" id="usernameHint">
+                                    Chỉ chứa chữ cái, số và dấu gạch dưới (_)
+                                </div>
                             </div>
 
-                            <div class="col-12 col-md-6">
-                                <label for="phone" class="form-label fw-semibold">Số điện thoại</label>
-                                <input type="text" class="form-control" id="phone" name="phone"
-                                       value="${user.phone}" required>
+                            <div class="form-group">
+                                <label class="form-label" for="phone">
+                                    <i class="fas fa-phone me-1"></i> Số điện thoại
+                                </label>
+                                <input type="tel" class="form-control" id="phone" name="phone" value="${user.phone}"
+                                    pattern="[0-9]{10,11}" placeholder="VD: 0912345678" oninput="validatePhone(this)">
+                                <div class="form-hint" id="phoneHint">
+                                    Nhập số điện thoại 10-11 chữ số
+                                </div>
                             </div>
 
-                            <div class="col-12">
-                                <label for="avatar" class="form-label fw-semibold">Ảnh đại diện</label>
-                                <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
-
-                                <c:if test="${not empty user.avatar}">
-                                    <div class="mt-3 d-flex align-items-center gap-3">
-                                        <span class="text-muted">Ảnh hiện tại:</span>
-                                        <img src="${user.avatar}" alt="Avatar"
-                                             style="width: 70px; height: 70px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd;">
-                                    </div>
-                                </c:if>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-shield-alt me-1"></i> Phương thức đăng nhập
+                                </label>
+                                <div class="d-flex align-items-center gap-2 p-3 bg-light rounded">
+                                    <c:choose>
+                                        <c:when test="${user.authProvider == 'GOOGLE'}">
+                                            <i class="fab fa-google text-danger" style="font-size: 24px;"></i>
+                                            <span>Đăng nhập bằng Google</span>
+                                            <span class="profile-badge badge-success ms-auto">
+                                                <i class="fas fa-check"></i> Đã liên kết
+                                            </span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fas fa-envelope text-primary" style="font-size: 24px;"></i>
+                                            <span>Đăng nhập bằng Email/Mật khẩu</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
 
-                            <div class="col-12 d-flex justify-content-end gap-2 pt-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa-solid fa-floppy-disk me-1"></i> Lưu thay đổi
+                            <div class="form-actions">
+                                <button type="submit" class="btn-profile btn-profile-primary">
+                                    <i class="fas fa-save me-1"></i> Lưu thay đổi
                                 </button>
-                                <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary">
+                                <a href="${pageContext.request.contextPath}/profile"
+                                    class="btn-profile btn-profile-outline">
                                     Hủy
                                 </a>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </main>
 
-        </div>
-    </div>
-</main>
+            <jsp:include page="/layout/footer.jsp" />
 
-<jsp:include page="/layout/footer.jsp"/>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                function validateUsername(input) {
+                    const hint = document.getElementById('usernameHint');
+                    const value = input.value;
+                    const isValid = /^[a-zA-Z0-9_]+$/.test(value) && value.length >= 3;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/main.js"></script>
+                    if (value.length === 0) {
+                        input.classList.remove('is-valid', 'is-invalid');
+                        hint.innerHTML = 'Chỉ chứa chữ cái, số và dấu gạch dưới (_)';
+                        hint.style.color = '';
+                    } else if (isValid) {
+                        input.classList.add('is-valid');
+                        input.classList.remove('is-invalid');
+                        hint.innerHTML = '<i class="fas fa-check-circle me-1"></i> Hợp lệ';
+                        hint.style.color = '#10b981';
+                    } else {
+                        input.classList.add('is-invalid');
+                        input.classList.remove('is-valid');
+                        hint.innerHTML = '<i class="fas fa-times-circle me-1"></i> Không hợp lệ (chỉ chứa chữ, số, _)';
+                        hint.style.color = '#ef4444';
+                    }
+                }
 
-</body>
-</html>
+                function validatePhone(input) {
+                    const hint = document.getElementById('phoneHint');
+                    const value = input.value;
+                    const isValid = /^[0-9]{10,11}$/.test(value);
 
+                    if (value.length === 0) {
+                        input.classList.remove('is-valid', 'is-invalid');
+                        hint.innerHTML = 'Nhập số điện thoại 10-11 chữ số';
+                        hint.style.color = '';
+                    } else if (isValid) {
+                        input.classList.add('is-valid');
+                        input.classList.remove('is-invalid');
+                        hint.innerHTML = '<i class="fas fa-check-circle me-1"></i> Hợp lệ';
+                        hint.style.color = '#10b981';
+                    } else {
+                        input.classList.add('is-invalid');
+                        input.classList.remove('is-valid');
+                        hint.innerHTML = '<i class="fas fa-times-circle me-1"></i> Số điện thoại không hợp lệ';
+                        hint.style.color = '#ef4444';
+                    }
+                }
+
+                // Preview avatar before upload
+                function previewAvatar(input) {
+                    const file = input.files[0];
+                    if (!file) return;
+
+                    // Validate file type
+                    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Vui lòng chọn file ảnh hợp lệ (JPG, PNG, GIF, WebP)');
+                        input.value = '';
+                        return;
+                    }
+
+                    // Validate file size (max 2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('File ảnh không được vượt quá 2MB');
+                        input.value = '';
+                        return;
+                    }
+
+                    // Preview image
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const preview = document.getElementById('avatarPreview');
+                        const defaultIcon = document.getElementById('defaultAvatarIcon');
+
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        if (defaultIcon) defaultIcon.style.display = 'none';
+
+                        // Show upload button
+                        document.getElementById('uploadBtn').style.display = 'inline-flex';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            </script>
+
+        </body>
+
+        </html>

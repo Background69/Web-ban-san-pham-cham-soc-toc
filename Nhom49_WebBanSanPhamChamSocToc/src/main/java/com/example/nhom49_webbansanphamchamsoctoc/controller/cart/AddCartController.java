@@ -18,7 +18,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@WebServlet(name = "AddCartController", urlPatterns = {"/cart/add"})
+@WebServlet(name = "AddCartController", urlPatterns = { "/cart/add" })
 public class AddCartController extends HttpServlet {
     private CartService cartService;
     private ProductVariantDAO variantDAO;
@@ -35,7 +35,15 @@ public class AddCartController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
         User currentUser = SessionUtil.getCurrentUser(session);
+
+        // Kiểm tra AJAX
+        boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+
         if (currentUser == null) {
+            if (isAjax) {
+                sendJsonResponse(response, false, "Vui lòng đăng nhập để thêm vào giỏ hàng", 0);
+                return;
+            }
             response.sendRedirect(buildLoginRedirect(request));
             return;
         }
@@ -61,17 +69,28 @@ public class AddCartController extends HttpServlet {
         if (variantId > 0) {
             success = cartService.addToCart(session, variantId, quantity);
             if (!success) {
-                message = "Khong the them san pham vao gio.";
+                message = "Không thể thêm sản phẩm vào giỏ.";
             }
         } else {
-            message = "San pham khong hop le.";
+            message = "Sản phẩm không hợp lệ.";
+        }
+
+        // Handle AJAX response
+        if (isAjax) {
+            int cartCount = cartService.getCartCount(session);
+            if (success) {
+                sendJsonResponse(response, true, "Đã thêm sản phẩm vào giỏ hàng", cartCount);
+            } else {
+                sendJsonResponse(response, false, message != null ? message : "Không thể thêm sản phẩm", cartCount);
+            }
+            return;
         }
 
         if (success) {
-            SessionUtil.setSuccessMessage(session, "Da them san pham vao gio.");
+            SessionUtil.setSuccessMessage(session, "Đã thêm sản phẩm vào giỏ.");
         } else {
             SessionUtil.setErrorMessage(session,
-                    message != null ? message : "Khong the them san pham vao gio.");
+                    message != null ? message : "Không thể thêm sản phẩm vào giỏ.");
         }
 
         if (success && buyNow) {
@@ -79,6 +98,25 @@ public class AddCartController extends HttpServlet {
             return;
         }
         response.sendRedirect(request.getContextPath() + "/cart");
+    }
+
+    private void sendJsonResponse(HttpServletResponse response, boolean success, String message, int cartCount)
+            throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        String json = String.format("{\"success\":%b,\"message\":\"%s\",\"cartCount\":%d}",
+                success, escapeJson(message), cartCount);
+        response.getWriter().write(json);
+    }
+
+    private String escapeJson(String text) {
+        if (text == null)
+            return "";
+        return text.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 
     private int parsePositiveInt(String value, int fallback) {
