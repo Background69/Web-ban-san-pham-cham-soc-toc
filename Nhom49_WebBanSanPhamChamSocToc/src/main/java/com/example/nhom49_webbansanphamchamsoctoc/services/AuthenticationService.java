@@ -18,6 +18,7 @@ public class AuthenticationService {
     public AuthenticationService() {
         this.userDAO = new UserDAO();
     }
+
     public String getLastError() {
         return lastError;
     }
@@ -127,12 +128,8 @@ public class AuthenticationService {
             session.invalidate();
         }
     }
-
-
-
     public boolean isActiveUser(User user) {
         return user != null && user.isActive();
     }
-
 }
 
