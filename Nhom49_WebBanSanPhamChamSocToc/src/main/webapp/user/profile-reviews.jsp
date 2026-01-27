@@ -229,7 +229,8 @@
                 <div class="profile-avatar">
                     <c:choose>
                         <c:when test="${not empty user.avatar && user.avatar != 'avatar/avatar.jpg'}">
-                            <img src="${user.avatar}" alt="Avatar">
+                            <img src="${pageContext.request.contextPath}/static/${user.avatar}"
+                                 alt="Avatar">
                         </c:when>
                         <c:otherwise>
                             <i class="fas fa-user default-avatar-icon"></i>
