@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -28,7 +28,6 @@
         </nav>
 
         <div class="brand-banner-info">
-
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
@@ -57,7 +56,6 @@
                     <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản phẩm</span>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -108,16 +106,36 @@
                     <div class="product-img">
                         <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                             <c:choose>
-                                <c:when test="${not empty product.primaryImage}">
-                                    <%-- DB: images/products/xxx.jpg -> File: static/assets/images/products/xxx.jpg --%>
+                                <c:when test="${not empty product.primaryImage and not empty product.primaryImage.imageUrl}">
+                                    <%-- Xử lý mọi trường hợp imageUrl trong DB --%>
+                                    <c:set var="rawImg" value="${product.primaryImage.imageUrl}" />
+
+                                    <%-- Nếu DB có / ở đầu thì bỏ đi (vd: /images/products/a.jpg) --%>
+                                    <c:choose>
+                                        <c:when test="${rawImg.startsWith('/')}">
+                                            <c:set var="rawImg" value="${rawImg.substring(1)}" />
+                                        </c:when>
+                                    </c:choose>
+
+                                    <%-- Nếu DB đã lưu dạng images/... thì dùng luôn.
+                                         Nếu chỉ lưu tên file (vd: a.jpg) thì tự ghép vào images/products/ --%>
+                                    <c:choose>
+                                        <c:when test="${rawImg.startsWith('images/')}">
+                                            <c:set var="imgPath" value="${pageContext.request.contextPath}/static/assets/${rawImg}" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:set var="imgPath" value="${pageContext.request.contextPath}/static/assets/images/products/${rawImg}" />
+                                        </c:otherwise>
+                                    </c:choose>
+
                                     <img
-                                            src="${pageContext.request.contextPath}/static/assets/${product.primaryImage.imageUrl}"
+                                            src="${imgPath}"
                                             alt="${product.productName}"
                                             class="product-image"
-                                            onerror="this.onerror=null;
-                                                    this.src='${pageContext.request.contextPath}/static/assets/images/no-image.png';"
+                                            onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/assets/images/no-image.png';"
                                     >
                                 </c:when>
+
                                 <c:otherwise>
                                     <img
                                             src="${pageContext.request.contextPath}/static/assets/images/no-image.png"

@@ -45,12 +45,12 @@
                 <c:choose>
                     <c:when test="${not empty product.primaryImage}">
                         <img id="main-product-image" class="product-image"
-                             src="${pageContext.request.contextPath}/static/images/${product.primaryImage.imageUrl}"
+                             src="${pageContext.request.contextPath}/static/assets/${product.primaryImage.imageUrl}"
                              alt="${product.productName}">
                     </c:when>
                     <c:otherwise>
                         <img id="main-product-image" class="product-image"
-                             src="${pageContext.request.contextPath}/static/images/default-product.png"
+                             src="${pageContext.request.contextPath}/static/assets/images/default-product.png"
                              alt="${product.productName}">
                     </c:otherwise>
                 </c:choose>
@@ -60,10 +60,10 @@
                 <div class="thumbnail-images">
                     <c:forEach var="image" items="${product.images}" varStatus="status">
                         <img class="thumbnail ${status.first ? 'active' : ''}"
-                             src="${pageContext.request.contextPath}/static/images/${image.imageUrl}"
-                             data-full="${pageContext.request.contextPath}/static/images/${image.imageUrl}"
+                             src="${pageContext.request.contextPath}/static/assets/${image.imageUrl}"
+                             data-full="${pageContext.request.contextPath}/static/assets/${image.imageUrl}"
                              alt="${product.productName}"
-                             onclick="changeMainImage('${pageContext.request.contextPath}/static/images/${image.imageUrl}', this)">
+                             onclick="changeMainImage('${pageContext.request.contextPath}/static/assets/${image.imageUrl}', this)">
                     </c:forEach>
                 </div>
             </c:if>
@@ -178,8 +178,7 @@
                     <c:if test="${product.stockQuantity > 0}">
                         <div class="stock-progress">
                             <div class="stock-progress-bar">
-                                <div class="stock-progress-fill"
-                                     style="width: ${product.soldPercent}%"></div>
+                                <div class="stock-progress-fill" style="width: ${product.soldPercent}%"></div>
                             </div>
                             <div class="stock-progress-text">
                                 Đã bán ${product.soldQuantity}/${product.stockQuantity}
@@ -191,10 +190,8 @@
 
             <!-- Action Buttons -->
             <div class="product-section-btn">
-                <form id="add-to-cart-form" action="${pageContext.request.contextPath}/cart/add" method="post"
-                      style="flex:1;">
-                    <input type="hidden" name="variantId" id="selectedVariantId"
-                           value="${product.defaultVariant.variantId}">
+                <form id="add-to-cart-form" action="${pageContext.request.contextPath}/cart/add" method="post" style="flex:1;">
+                    <input type="hidden" name="variantId" id="selectedVariantId" value="${product.defaultVariant.variantId}">
                     <input type="hidden" name="quantity" id="cartQuantity" value="1">
                     <input type="hidden" name="action" id="cartAction" value="add_to_cart">
 
@@ -227,6 +224,7 @@
                         <p>${product.fullDescription}</p>
                     </c:if>
                 </div>
+
                 <div class="specs-section">
                     <h3>Thông số sản phẩm</h3>
                     <div class="specs-table-wrap">
@@ -297,7 +295,6 @@
 
             <!-- Reviews Tab -->
             <div class="detail-page-content" id="reviews">
-                <!-- Review Summary -->
                 <div class="review-summary">
                     <div class="rating-overview">
                         <div class="rating-big">
@@ -311,6 +308,7 @@
                         <div class="total-reviews">${reviewCount} đánh giá</div>
                     </div>
                 </div>
+
                 <c:if test="${not empty sessionScope.reviewSuccess}">
                     <div class="review-alert success">${sessionScope.reviewSuccess}</div>
                     <c:remove var="reviewSuccess" scope="session"/>
@@ -319,7 +317,7 @@
                     <div class="review-alert error">${sessionScope.reviewError}</div>
                     <c:remove var="reviewError" scope="session"/>
                 </c:if>
-                <!-- Write Review Form -->
+
                 <c:if test="${not empty sessionScope.user}">
                     <div class="write-review">
                         <h3>Viết đánh giá của bạn</h3>
@@ -346,13 +344,10 @@
                 </c:if>
                 <c:if test="${empty sessionScope.user}">
                     <div class="login-to-review">
-                        <p>Vui lòng <a
-                                href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng
-                            nhập</a> để viết đánh giá.</p>
+                        <p>Vui lòng <a href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng nhập</a> để viết đánh giá.</p>
                     </div>
                 </c:if>
 
-                <!-- Review List -->
                 <div class="reviews-list">
                     <c:forEach var="review" items="${reviews}">
                         <div class="review-item">
@@ -396,13 +391,10 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
-
     function changeMainImage(src, thumbnailEl) {
         const mainImg = document.getElementById('main-product-image');
-        if (mainImg) {
-            mainImg.src = src;
-        }
-        // Update active thumbnail
+        if (mainImg) mainImg.src = src;
+
         if (thumbnailEl) {
             document.querySelectorAll('.thumbnail-images .thumbnail').forEach(t => t.classList.remove('active'));
             thumbnailEl.classList.add('active');
@@ -433,41 +425,27 @@
         });
     }
 
-
     document.querySelectorAll('.variant-btn').forEach(btn => {
         btn.addEventListener('click', function () {
-            // Remove active from all variants
             document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
-            // Get variant data
             const variantId = this.dataset.variantId;
             const salePrice = parseFloat(this.dataset.salePrice);
             const originalPrice = parseFloat(this.dataset.originalPrice);
             const stock = parseInt(this.dataset.stock || "0");
 
-            // Calculate discount percent
             let discountPercent = 0;
             if (originalPrice > salePrice) {
                 discountPercent = Math.round(((originalPrice - salePrice) / originalPrice) * 100);
             }
 
-            // Update hidden input
             const selectedVariantInput = document.getElementById('selectedVariantId');
-            if (selectedVariantInput) {
-                selectedVariantInput.value = variantId;
-            }
+            if (selectedVariantInput) selectedVariantInput.value = variantId;
 
-            // ===== UPDATE PRICE DISPLAY =====
             updatePriceDisplay(salePrice, originalPrice, discountPercent);
-
-            // ===== UPDATE STOCK =====
             updateStockDisplay(stock);
-
-            // ===== UPDATE QUANTITY INPUT =====
             updateQuantityControls(stock);
-
-            // ===== UPDATE BUTTONS STATE =====
             updateButtonsState(stock);
         });
     });
@@ -477,13 +455,9 @@
         const priceOldEl = document.querySelector('.price-old');
         const discountEl = document.querySelector('.discount-percent');
 
-        if (priceCurrentEl) {
-            priceCurrentEl.textContent = formatNumber(salePrice) + '₫';
-        }
+        if (priceCurrentEl) priceCurrentEl.textContent = formatNumber(salePrice) + '₫';
 
-        // Show/hide old price and discount
         if (originalPrice > salePrice) {
-            // Có giảm giá
             if (priceOldEl) {
                 priceOldEl.textContent = formatNumber(originalPrice) + '₫';
                 priceOldEl.style.display = 'inline';
@@ -493,51 +467,40 @@
                 discountEl.style.display = 'inline';
             }
         } else {
-            // Không giảm giá
-            if (priceOldEl) {
-                priceOldEl.style.display = 'none';
-            }
-            if (discountEl) {
-                discountEl.style.display = 'none';
-            }
+            if (priceOldEl) priceOldEl.style.display = 'none';
+            if (discountEl) discountEl.style.display = 'none';
         }
     }
 
     function updateStockDisplay(stock) {
         const stockLine = document.querySelector('.stock-line');
         if (stockLine) {
-            if (stock > 0) {
-                stockLine.innerHTML = '<span class="in-stock">Còn ' + stock + ' sản phẩm</span>';
-            } else {
-                stockLine.innerHTML = '<span class="out-of-stock">Hết hàng</span>';
-            }
+            if (stock > 0) stockLine.innerHTML = '<span class="in-stock">Còn ' + stock + ' sản phẩm</span>';
+            else stockLine.innerHTML = '<span class="out-of-stock">Hết hàng</span>';
         }
     }
 
     function updateQuantityControls(stock) {
-        if (qtyInput) {
-            qtyInput.setAttribute('max', stock);
+        if (!qtyInput) return;
 
-            // Reset quantity về 1 nếu stock mới < quantity hiện tại
-            const currentQty = parseInt(qtyInput.value) || 1;
-            if (currentQty > stock) {
-                qtyInput.value = stock > 0 ? 1 : 0;
-                if (cartQty) cartQty.value = qtyInput.value;
-            }
+        qtyInput.setAttribute('max', stock);
 
-            // Disable/enable quantity buttons
-            if (stock <= 0) {
-                qtyInput.disabled = true;
-                if (minusBtn) minusBtn.disabled = true;
-                if (plusBtn) plusBtn.disabled = true;
-            } else {
-                qtyInput.disabled = false;
-                if (minusBtn) minusBtn.disabled = false;
-                if (plusBtn) plusBtn.disabled = false;
-            }
+        const currentQty = parseInt(qtyInput.value) || 1;
+        if (currentQty > stock) {
+            qtyInput.value = stock > 0 ? 1 : 0;
+            if (cartQty) cartQty.value = qtyInput.value;
+        }
+
+        if (stock <= 0) {
+            qtyInput.disabled = true;
+            if (minusBtn) minusBtn.disabled = true;
+            if (plusBtn) plusBtn.disabled = true;
+        } else {
+            qtyInput.disabled = false;
+            if (minusBtn) minusBtn.disabled = false;
+            if (plusBtn) plusBtn.disabled = false;
         }
     }
-
 
     function updateButtonsState(stock) {
         const addToCartBtn = document.querySelector('.btn-add-cart');
@@ -568,7 +531,6 @@
         }
     }
 
-
     function formatNumber(num) {
         return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -583,12 +545,8 @@
         const activeButton = document.querySelector('.detail-page-btn[data-tab="' + tabId + '"]');
         const activeContent = document.getElementById(tabId);
 
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
-        if (activeContent) {
-            activeContent.classList.add('active');
-        }
+        if (activeButton) activeButton.classList.add('active');
+        if (activeContent) activeContent.classList.add('active');
     }
 
     if (tabButtons.length && tabContents.length) {
@@ -597,25 +555,19 @@
                 const tabId = this.dataset.tab;
                 if (tabId) {
                     setActiveTab(tabId);
-                    if (history.replaceState) {
-                        history.replaceState(null, '', '#' + tabId);
-                    } else {
-                        window.location.hash = tabId;
-                    }
+                    if (history.replaceState) history.replaceState(null, '', '#' + tabId);
+                    else window.location.hash = tabId;
                 }
             });
         });
 
         const hashTab = window.location.hash ? window.location.hash.substring(1) : '';
-        if (hashTab) {
-            setActiveTab(hashTab);
-        } else {
+        if (hashTab) setActiveTab(hashTab);
+        else {
             const defaultActive = document.querySelector('.detail-page-btn.active');
             if (!defaultActive) {
                 const firstTab = tabButtons[0];
-                if (firstTab && firstTab.dataset.tab) {
-                    setActiveTab(firstTab.dataset.tab);
-                }
+                if (firstTab && firstTab.dataset.tab) setActiveTab(firstTab.dataset.tab);
             }
         }
     }
@@ -628,17 +580,13 @@
             const form = document.getElementById('add-to-cart-form');
             const actionInput = document.getElementById('cartAction');
             if (!form) return;
-            if (actionInput) {
-                actionInput.value = 'buy_now';
-            }
+
+            if (actionInput) actionInput.value = 'buy_now';
             form.submit();
-            if (actionInput) {
-                actionInput.value = 'add_to_cart';
-            }
+            if (actionInput) actionInput.value = 'add_to_cart';
         });
     }
 </script>
-
 
 </body>
 </html>
