@@ -25,7 +25,8 @@
             <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
         </ul>
 
-        <a class="view-site" href="${pageContext.request.contextPath}/index">Quay lại Website</a>
+        <a class="view-site" href="${pageContext.request.contextPath}/">Quay lại Website</a>
+
     </aside>
 
     <main class="content">
