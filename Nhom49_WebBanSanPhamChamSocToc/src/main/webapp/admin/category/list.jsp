@@ -4,7 +4,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý thương hiệu</title>
+    <title>Quản lý danh mục</title>
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 </head>
@@ -20,11 +20,11 @@
 
         <ul class="menu">
             <li ><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
-            <li ><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
-            <li ><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
         </ul>
 
@@ -46,11 +46,11 @@
         <th>Hành động</th>
     </tr>
 
-    <c:forEach var="c" items="${categories}">
+    <c:forEach var="category" items="${categories}">
         <tr>
-            <td>${c.categoryId}</td>
-            <td>${c.categoryName}</td>
-            <td>${c.categorySlug}</td>
+            <td>${category.categoryId}</td>
+            <td>${category.categoryName}</td>
+            <td>${category.categorySlug}</td>
             <td>
                 <a href="${pageContext.request.contextPath}/admin/category/edit?id=${c.categoryId}">
                     ✏ Sửa
