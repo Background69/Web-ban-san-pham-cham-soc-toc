@@ -495,6 +495,33 @@ public class OrderService {
         }
         return true;
     }
+
+    /**
+     * Lấy tổng chi tiêu của user
+     */
+    public BigDecimal getTotalSpendingByUser(int userId) {
+        return orderDao.getTotalSpendingByUser(userId);
+    }
+
+    /**
+     * Lấy danh sách đơn hàng gần đây của user
+     */
+    public List<Order> getRecentOrdersByUser(int userId, int limit) {
+        List<Order> orders = orderDao.findByUserIdWithLimit(userId, limit);
+        // Load order items for each order
+        for (Order order : orders) {
+            List<OrderItem> items = orderItemDao.findByOrderId(order.getOrderId());
+            order.setOrderItems(items);
+        }
+        return orders;
+    }
+
+    /**
+     * Lấy số lượng đơn hàng theo từng status
+     */
+    public Map<String, Integer> getOrderCountsByStatus(int userId) {
+        return orderDao.getOrderCountsByStatus(userId);
+    }
 }
 
 

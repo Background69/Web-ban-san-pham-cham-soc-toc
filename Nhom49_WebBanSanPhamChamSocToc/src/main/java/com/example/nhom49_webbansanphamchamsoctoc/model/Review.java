@@ -76,4 +76,33 @@ public class Review {
         this.createdAt = createdAt;
     }
 
+    // --- Product info for My Reviews display (populated via JOIN) ---
+    private String productName;
+    private String productSlug;
+    private String productImageUrl;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductSlug() {
+        return productSlug;
+    }
+
+    public void setProductSlug(String productSlug) {
+        this.productSlug = productSlug;
+    }
+
+    public String getProductImageUrl() {
+        return productImageUrl;
+    }
+
+    public void setProductImageUrl(String productImageUrl) {
+        this.productImageUrl = productImageUrl;
+    }
+
 }

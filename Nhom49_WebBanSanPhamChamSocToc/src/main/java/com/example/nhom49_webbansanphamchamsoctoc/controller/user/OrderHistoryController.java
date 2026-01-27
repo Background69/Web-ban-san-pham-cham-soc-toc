@@ -1,46 +1,28 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import com.example.nhom49_webbansanphamchamsoctoc.services.OrderService;
-import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Controller này chỉ redirect /orders -> /profile/orders
+ * Để giữ backward compatibility với các link cũ
+ */
 @WebServlet(name = "OrderHistoryController", urlPatterns = {"/orders"})
 public class OrderHistoryController extends HttpServlet {
-    private OrderService orderService;
-
-    @Override
-    public void init() throws ServletException {
-        orderService = new OrderService();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        User user = SessionUtil.getCurrentUser(session);
-
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=/orders");
-            return;
-        }
-
+        // Redirect tới profile orders với các query params nếu có
         String status = request.getParameter("status");
+        String redirectUrl = request.getContextPath() + "/profile/orders";
         if (status != null && !status.isEmpty()) {
-            request.setAttribute("orders",
-                    orderService.getOrdersByUserAndStatus(user.getUserId(), status.toUpperCase()));
-        } else {
-            request.setAttribute("orders", orderService.getOrdersByUser(user.getUserId()));
+            redirectUrl += "?status=" + status;
         }
-        request.setAttribute("status", status);
-
-        request.getRequestDispatcher("/user/order/history.jsp").forward(request, response);
+        response.sendRedirect(redirectUrl);
     }
 }
