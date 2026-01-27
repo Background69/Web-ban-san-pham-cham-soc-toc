@@ -41,7 +41,6 @@
 
 <main class="brands-main page-animate">
 
-    <!-- Filter -->
     <div class="filter-section">
         <h3><i class="fas fa-filter"></i> Lọc theo xuất xứ</h3>
         <div class="filter-tags stagger-fade">
@@ -52,20 +51,14 @@
         </div>
     </div>
 
-    <!-- Brands grid -->
     <div class="brands-grid stagger-fade">
         <c:forEach var="brand" items="${brands}">
             <div class="brand-item"
                  data-origin="${not empty brand.origin ? brand.origin.toLowerCase() : 'unknown'}">
-
-                <!-- Logo -->
                 <div class="brand-logo">
                     <c:choose>
                         <c:when test="${not empty brand.logoUrl}">
-                            <!--
-                            DB: images/brands/sunsilk.png
-                            Thực tế: /static/assets/images/brands/sunsilk.png
-                            -->
+
                             <img
                                     src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
                                     alt="Logo ${brand.brandName}"
@@ -102,7 +95,6 @@
         </c:forEach>
     </div>
 
-    <!-- Empty -->
     <c:if test="${empty brands}">
         <div class="empty-state">
             <i class="fas fa-box-open"></i>

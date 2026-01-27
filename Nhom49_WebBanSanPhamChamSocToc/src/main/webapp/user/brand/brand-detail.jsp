@@ -29,7 +29,6 @@
 
         <div class="brand-banner-info">
 
-            <!-- ✅ Brand logo -->
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
@@ -106,7 +105,6 @@
                 <div class="product-item"
                      data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
 
-                    <!-- ✅ Product image -->
                     <div class="product-img">
                         <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                             <c:choose>
