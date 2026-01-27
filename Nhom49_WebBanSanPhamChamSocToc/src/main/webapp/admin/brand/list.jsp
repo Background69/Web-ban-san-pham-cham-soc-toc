@@ -19,12 +19,12 @@
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li ><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
-            <li ><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
+            <li ><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
         </ul>
 
@@ -37,7 +37,7 @@
         <div class="header">
             <h1>Quản lý thương hiệu</h1>
             <a class="btn-add"
-               href="${pageContext.request.contextPath}/admin/brand/form">
+               href="${pageContext.request.contextPath}/admin/brands/form">
                 + Thêm thương hiệu
             </a>
         </div>
@@ -59,11 +59,12 @@
                     <td>${b.shortDescription}</td>
                     <td>
                         <a class="edit"
-                           href="${pageContext.request.contextPath}/admin/brand/edit?id=${b.id}">
+                           href="${pageContext.request.contextPath}/admin/brands/edit?id=${b.brandId}">
                             Sửa
                         </a>
+
                         <a class="delete"
-                           href="${pageContext.request.contextPath}/admin/brand/delete?id=${b.id}"
+                           href="${pageContext.request.contextPath}/admin/brands/delete?id=${b.brandId}"
                            onclick="return confirm('Xóa thương hiệu này?')">
                             Xóa
                         </a>
