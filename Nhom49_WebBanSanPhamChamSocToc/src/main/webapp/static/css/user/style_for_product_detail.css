@@ -979,6 +979,76 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid #fecdd3;
 }
 
+/* Review Notice - Verified Purchase States */
+.review-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.review-notice i {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.review-notice p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.review-notice a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.review-notice a:hover {
+    text-decoration: none;
+}
+
+.review-notice.info {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+.review-notice.success {
+    background: #ecfdf3;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.review-notice.warning {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.btn-edit-review {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    padding: 8px 16px;
+    background: var(--brand);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-edit-review:hover {
+    background: #1a3d2e;
+    color: white;
+    text-decoration: none;
+}
+
 .write-review h3 {
     font-size: 18px;
     font-weight: 700;
