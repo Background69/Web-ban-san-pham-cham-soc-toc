@@ -25,20 +25,6 @@ public class UserManagementController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        // Check login
-        if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login");
-            return;
-        }
-
-        User currentUser = (User) session.getAttribute("currentUser");
-
-        // Check role
-        if (!"Admin".equalsIgnoreCase(currentUser.getRole())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
-            return;
-        }
-
         String action = request.getParameter("action");
 
         /* ===================== DELETE ===================== */

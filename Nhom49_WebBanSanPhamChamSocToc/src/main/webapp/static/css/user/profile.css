@@ -1048,10 +1048,21 @@
     font-weight: 500;
 }
 
-.strength-text.weak { color: var(--error); }
-.strength-text.fair { color: var(--warning); }
-.strength-text.good { color: var(--info); }
-.strength-text.strong { color: var(--success); }
+.strength-text.weak {
+    color: var(--error);
+}
+
+.strength-text.fair {
+    color: var(--warning);
+}
+
+.strength-text.good {
+    color: var(--info);
+}
+
+.strength-text.strong {
+    color: var(--success);
+}
 
 .password-requirements {
     margin-top: 15px;
@@ -1306,8 +1317,12 @@
 }
 
 @keyframes skeleton-loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 .skeleton-avatar {
