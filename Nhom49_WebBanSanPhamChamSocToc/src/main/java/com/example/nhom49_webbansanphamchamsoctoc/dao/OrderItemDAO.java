@@ -20,7 +20,6 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-
     /**
      * Tim all.
      *
@@ -29,11 +28,9 @@ public class OrderItemDAO implements IDAO<OrderItem> {
     @Override
     public List<OrderItem> findAll() {
         String sql = "SELECT * FROM order_items";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .map((rs, ctx) -> mapOrderItem(rs))
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .map((rs, ctx) -> mapOrderItem(rs))
+                .list());
     }
 
     /**
@@ -43,13 +40,14 @@ public class OrderItemDAO implements IDAO<OrderItem> {
      * @return Kết quả xử lý của phương thức.
      */
     public List<OrderItem> findByOrderId(int orderId) {
-        String sql = "SELECT * FROM order_items WHERE order_id = :orderId";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("orderId", orderId)
-                        .map((rs, ctx) -> mapOrderItem(rs))
-                        .list()
-        );
+        String sql = "SELECT oi.*, " +
+                "(SELECT pi.image_url FROM product_images pi WHERE pi.product_id = oi.product_id AND pi.is_primary = 1 LIMIT 1) as product_image "
+                +
+                "FROM order_items oi WHERE oi.order_id = :orderId";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderId", orderId)
+                .map((rs, ctx) -> mapOrderItemWithImage(rs))
+                .list());
     }
 
     /**
@@ -61,13 +59,11 @@ public class OrderItemDAO implements IDAO<OrderItem> {
     @Override
     public OrderItem findById(int id) {
         String sql = "SELECT * FROM order_items WHERE order_item_id = :id";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("id", id)
-                        .map((rs, ctx) -> mapOrderItem(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("id", id)
+                .map((rs, ctx) -> mapOrderItem(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     /**
@@ -80,23 +76,20 @@ public class OrderItemDAO implements IDAO<OrderItem> {
     public int insert(OrderItem item) {
         String sql = "INSERT INTO order_items (order_id, product_id, variant_id, product_name, " +
                 "variant_name, quantity, unit_price, total_price) VALUES (:orderId, :productId, :variantId, :productName, :variantName, :quantity, :unitPrice, :totalPrice)";
-        return jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("orderId", item.getOrderId())
-                        .bind("productId", item.getProductId())
-                        .bind("variantId", item.getVariantId())
-                        .bind("productName", item.getProductName())
-                        .bind("variantName", item.getVariantName())
-                        .bind("quantity", item.getQuantity())
-                        .bind("unitPrice", item.getUnitPrice())
-                        .bind("totalPrice", item.getTotalPrice())
-                        .executeAndReturnGeneratedKeys("order_item_id")
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(-1)
-        );
+        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderId", item.getOrderId())
+                .bind("productId", item.getProductId())
+                .bind("variantId", item.getVariantId())
+                .bind("productName", item.getProductName())
+                .bind("variantName", item.getVariantName())
+                .bind("quantity", item.getQuantity())
+                .bind("unitPrice", item.getUnitPrice())
+                .bind("totalPrice", item.getTotalPrice())
+                .executeAndReturnGeneratedKeys("order_item_id")
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(-1));
     }
-
 
     /**
      * Them batch.
@@ -139,14 +132,12 @@ public class OrderItemDAO implements IDAO<OrderItem> {
     @Override
     public boolean update(OrderItem item) {
         String sql = "UPDATE order_items SET quantity = :quantity, unit_price = :unitPrice, total_price = :totalPrice WHERE order_item_id = :orderItemId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("quantity", item.getQuantity())
-                        .bind("unitPrice", item.getUnitPrice())
-                        .bind("totalPrice", item.getTotalPrice())
-                        .bind("orderItemId", item.getOrderItemId())
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("quantity", item.getQuantity())
+                .bind("unitPrice", item.getUnitPrice())
+                .bind("totalPrice", item.getTotalPrice())
+                .bind("orderItemId", item.getOrderItemId())
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -159,11 +150,9 @@ public class OrderItemDAO implements IDAO<OrderItem> {
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM order_items WHERE order_item_id = :orderItemId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("orderItemId", id)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderItemId", id)
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -175,11 +164,9 @@ public class OrderItemDAO implements IDAO<OrderItem> {
      */
     public boolean deleteByOrderId(int orderId) {
         String sql = "DELETE FROM order_items WHERE order_id = :orderId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("orderId", orderId)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderId", orderId)
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -200,6 +187,23 @@ public class OrderItemDAO implements IDAO<OrderItem> {
         item.setQuantity(rs.getInt("quantity"));
         item.setUnitPrice(rs.getBigDecimal("unit_price"));
         item.setTotalPrice(rs.getBigDecimal("total_price"));
+        return item;
+    }
+
+    /**
+     * Map order item kèm theo product image.
+     *
+     * @param rs Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    private OrderItem mapOrderItemWithImage(java.sql.ResultSet rs) throws java.sql.SQLException {
+        OrderItem item = mapOrderItem(rs);
+        try {
+            String productImage = rs.getString("product_image");
+            item.setProductImage(productImage);
+        } catch (java.sql.SQLException e) {
+            // Column may not exist in some queries
+        }
         return item;
     }
 }

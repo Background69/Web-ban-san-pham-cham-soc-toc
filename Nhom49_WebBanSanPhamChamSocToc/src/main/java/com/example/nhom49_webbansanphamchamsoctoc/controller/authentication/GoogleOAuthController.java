@@ -119,34 +119,31 @@ public class GoogleOAuthController extends HttpServlet {
             GoogleOAuthService.GoogleUserInfo googleUser =
                     googleOAuthService.handleCallback(authorizationCode);
 
-            User user = userService.findByGoogleId(googleUser.getGoogleId());
+            // Tìm hoặc tạo user mới từ thông tin Google
+            User user = userService.findOrCreateGoogleUser(googleUser);
+
             if (user == null) {
-                user = userService.getUserByEmail(googleUser.getEmail());
+                log("Không thể tạo user từ Google OAuth");
+                response.sendRedirect(contextPath + "/auth/login?error=oauth_user_creation_failed");
+                return;
             }
 
-            if (user != null && !user.isActive()) {
+            if (!user.isActive()) {
                 response.sendRedirect(contextPath + "/auth/login?error=account_inactive");
                 return;
             }
 
-            if (user != null) {
-                authService.setCurrentUser(session, user);
+            // Đăng nhập thành công
+            authService.setCurrentUser(session, user);
 
-                String redirectUrl = (String) session.getAttribute("redirect_after_login");
-                session.removeAttribute("redirect_after_login");
+            String redirectUrl = (String) session.getAttribute("redirect_after_login");
+            session.removeAttribute("redirect_after_login");
 
-                if (redirectUrl != null && !redirectUrl.isEmpty()) {
-                    response.sendRedirect(contextPath + redirectUrl);
-                } else {
-                    response.sendRedirect(contextPath + "/");
-                }
-                return;
+            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                response.sendRedirect(contextPath + redirectUrl);
+            } else {
+                response.sendRedirect(contextPath + "/");
             }
-
-            session.setAttribute("google_email", googleUser.getEmail());
-            session.setAttribute("google_id", googleUser.getGoogleId());
-            session.setAttribute("google_name", googleUser.getName());
-            response.sendRedirect(contextPath + "/complete-profile");
 
         } catch (Exception e) {
             log("Google OAuth processing error: " + e.getMessage(), e);

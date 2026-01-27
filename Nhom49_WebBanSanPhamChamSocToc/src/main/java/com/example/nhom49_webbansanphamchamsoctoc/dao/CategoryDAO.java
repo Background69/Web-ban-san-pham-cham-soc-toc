@@ -29,13 +29,11 @@ public class CategoryDAO implements IDAO<Category> {
     @Override
     public Category findById(int id) {
         String sql = "SELECT * FROM categories WHERE category_id = :categoryId";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("categoryId", id)
-                        .map((rs, ctx) -> mapCategory(rs))  // Map ResultSet sang Category object
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("categoryId", id)
+                .map((rs, ctx) -> mapCategory(rs)) // Map ResultSet sang Category object
+                .findFirst()
+                .orElse(null));
     }
 
     /**
@@ -46,13 +44,11 @@ public class CategoryDAO implements IDAO<Category> {
      */
     public Category findBySlug(String slug) {
         String sql = "SELECT * FROM categories WHERE category_slug = :categorySlug";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("categorySlug", slug)
-                        .map((rs, ctx) -> mapCategory(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("categorySlug", slug)
+                .map((rs, ctx) -> mapCategory(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     /**
@@ -62,12 +58,10 @@ public class CategoryDAO implements IDAO<Category> {
      */
     @Override
     public List<Category> findAll() {
-        String sql = "SELECT * FROM categories ORDER BY category_name";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .map((rs, ctx) -> mapCategory(rs))
-                        .list()
-        );
+        String sql = "SELECT * FROM categories ORDER BY category_id ASC";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .map((rs, ctx) -> mapCategory(rs))
+                .list());
     }
 
     /**
@@ -79,15 +73,13 @@ public class CategoryDAO implements IDAO<Category> {
     @Override
     public int insert(Category category) {
         String sql = "INSERT INTO categories (category_name, category_slug) VALUES (:categoryName, :categorySlug)";
-        return jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("categoryName", category.getCategoryName())
-                        .bind("categorySlug", category.getCategorySlug())
-                        .executeAndReturnGeneratedKeys("category_id")  // Trả về ID tự động tăng
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(-1)
-        );
+        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("categoryName", category.getCategoryName())
+                .bind("categorySlug", category.getCategorySlug())
+                .executeAndReturnGeneratedKeys("category_id") // Trả về ID tự động tăng
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(-1));
     }
 
     /**
@@ -99,14 +91,28 @@ public class CategoryDAO implements IDAO<Category> {
     @Override
     public boolean update(Category category) {
         String sql = "UPDATE categories SET category_name = :categoryName, category_slug = :categorySlug, updated_at = CURRENT_TIMESTAMP WHERE category_id = :categoryId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("categoryName", category.getCategoryName())
-                        .bind("categorySlug", category.getCategorySlug())
-                        .bind("categoryId", category.getCategoryId())
-                        .execute()
-        );
-        return rowsAffected > 0;  // Trả về true nếu có ít nhất 1 row bị ảnh hưởng
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("categoryName", category.getCategoryName())
+                .bind("categorySlug", category.getCategorySlug())
+                .bind("categoryId", category.getCategoryId())
+                .execute());
+        return rowsAffected > 0; // Trả về true nếu có ít nhất 1 row bị ảnh hưởng
+    }
+
+    /**
+     * Lấy top categories sắp xếp theo số lượng sản phẩm giảm dần.
+     */
+    public List<Category> findTopByProductCount(int limit) {
+        String sql = "SELECT c.*, COUNT(p.product_id) as product_count " +
+                "FROM categories c " +
+                "LEFT JOIN products p ON c.category_id = p.category_id " +
+                "GROUP BY c.category_id " +
+                "ORDER BY product_count DESC " +
+                "LIMIT :limit";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("limit", limit)
+                .map((rs, ctx) -> mapCategory(rs))
+                .list());
     }
 
     /**
@@ -118,11 +124,9 @@ public class CategoryDAO implements IDAO<Category> {
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM categories WHERE category_id = :categoryId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("categoryId", id)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("categoryId", id)
+                .execute());
         return rowsAffected > 0;
     }
 

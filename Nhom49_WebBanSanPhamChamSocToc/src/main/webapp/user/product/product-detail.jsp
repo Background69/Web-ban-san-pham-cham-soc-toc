@@ -51,12 +51,12 @@
                 <c:choose>
                     <c:when test="${not empty product.primaryImage}">
                         <img id="main-product-image" class="product-image"
-                             src="${pageContext.request.contextPath}/static/images/${product.primaryImage.imageUrl}"
+                             src="${pageContext.request.contextPath}/static/${product.primaryImage.imageUrl}"
                              alt="${product.productName}">
                     </c:when>
                     <c:otherwise>
                         <img id="main-product-image" class="product-image"
-                             src="${pageContext.request.contextPath}/static/images/default-product.png"
+                             src="${pageContext.request.contextPath}/static/assets/images/default-product.png"
                              alt="${product.productName}">
                     </c:otherwise>
                 </c:choose>
@@ -66,10 +66,10 @@
                 <div class="thumbnail-images">
                     <c:forEach var="image" items="${product.images}" varStatus="status">
                         <img class="thumbnail ${status.first ? 'active' : ''}"
-                             src="${pageContext.request.contextPath}/static/images/${image.imageUrl}"
-                             data-full="${pageContext.request.contextPath}/static/images/${image.imageUrl}"
+                             src="${pageContext.request.contextPath}/static/${image.imageUrl}"
+                             data-full="${pageContext.request.contextPath}/static/${image.imageUrl}"
                              alt="${product.productName}"
-                             onclick="changeMainImage('${pageContext.request.contextPath}/static/images/${image.imageUrl}', this)">
+                             onclick="changeMainImage('${pageContext.request.contextPath}/static/${image.imageUrl}', this)">
                     </c:forEach>
                 </div>
             </c:if>
@@ -237,6 +237,7 @@
                         <p>${product.fullDescription}</p>
                     </c:if>
                 </div>
+
                 <div class="specs-section">
                     <h3>Thông số sản phẩm</h3>
                     <div class="specs-table-wrap">
@@ -310,7 +311,6 @@
 
             <!-- Reviews Tab -->
             <div class="detail-page-content" id="reviews">
-                <!-- Review Summary -->
                 <div class="review-summary">
                     <div class="rating-overview">
                         <div class="rating-big">
@@ -325,6 +325,7 @@
                         <div class="total-reviews">${reviewCount} đánh giá</div>
                     </div>
                 </div>
+
                 <c:if test="${not empty sessionScope.reviewSuccess}">
                     <div class="review-alert success">${sessionScope.reviewSuccess}</div>
                     <c:remove var="reviewSuccess" scope="session"/>
@@ -333,90 +334,69 @@
                     <div class="review-alert error">${sessionScope.reviewError}</div>
                     <c:remove var="reviewError" scope="session"/>
                 </c:if>
-                <!-- Write Review Form -->
+
                 <c:choose>
-                    <%-- Not logged in --%>
-                    <c:when test="${empty sessionScope.user}">
-                        <div class="login-to-review">
-                            <div class="review-notice info">
-                                <i class="fas fa-info-circle"></i>
-                                <p>Vui lòng <a
-                                        href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng
-                                    nhập</a> để viết đánh giá.</p>
-                            </div>
-                        </div>
+                    <c:when test="${not empty sessionScope.user}">
+                        <c:choose>
+                            <c:when test="${canReviewStatus == 'CAN_REVIEW'}">
+                                <div class="write-review">
+                                    <h3>Viết đánh giá của bạn</h3>
+                                    <form action="${pageContext.request.contextPath}/review"
+                                          method="post" class="review-form">
+                                        <input type="hidden" name="productId"
+                                               value="${product.productId}">
+                                        <div class="rating-input">
+                                            <label>Đánh giá:</label>
+                                            <div class="star-rating">
+                                                <c:forEach begin="1" end="5" var="i">
+                                                    <input type="radio" name="rating" value="${6-i}"
+                                                           id="star${6-i}" required>
+                                                    <label for="star${6-i}">★</label>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                                        <div class="review-content-input">
+                                            <label for="reviewContent">Nội dung:</label>
+                                            <textarea name="content" id="reviewContent" rows="4"
+                                                      placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
+                                                      required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Gửi đánh
+                                            giá
+                                        </button>
+                                    </form>
+                                </div>
+                            </c:when>
+                            <c:when test="${canReviewStatus == 'ALREADY_REVIEWED'}">
+                                <div class="login-to-review">
+                                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Bạn
+                                        đã đánh giá sản phẩm này.</p>
+                                </div>
+                            </c:when>
+                            <c:when test="${canReviewStatus == 'ORDER_PENDING'}">
+                                <div class="login-to-review">
+                                    <p><i class="fas fa-clock" style="color: #ffc107;"></i> Đơn hàng của
+                                        bạn đang được xử lý. Vui lòng đợi đơn hàng hoàn thành để đánh
+                                        giá.</p>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="login-to-review">
+                                    <p><i class="fas fa-shopping-bag" style="color: #6c757d;"></i> Bạn
+                                        cần mua sản phẩm này để có thể đánh giá.</p>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </c:when>
-
-                    <%-- Already reviewed --%>
-                    <c:when test="${canReviewStatus == 'ALREADY_REVIEWED'}">
-                        <div class="already-reviewed">
-                            <div class="review-notice success">
-                                <i class="fas fa-check-circle"></i>
-                                <p>Bạn đã đánh giá sản phẩm này.</p>
-                                <a href="${pageContext.request.contextPath}/profile/reviews"
-                                   class="btn-edit-review">
-                                    <i class="fas fa-pen"></i> Xem đánh giá của bạn
-                                </a>
-                            </div>
-                        </div>
-                    </c:when>
-
-                    <%-- Need to complete order first --%>
-                    <c:when test="${canReviewStatus == 'ORDER_NOT_COMPLETED'}">
-                        <div class="need-delivery">
-                            <div class="review-notice warning">
-                                <i class="fas fa-truck"></i>
-                                <p>Bạn cần nhận hàng thành công trước khi đánh giá sản phẩm
-                                    này.</p>
-                            </div>
-                        </div>
-                    </c:when>
-
-                    <%-- Need to purchase first --%>
-                    <c:when test="${canReviewStatus == 'NOT_PURCHASED'}">
-                        <div class="need-purchase">
-                            <div class="review-notice warning">
-                                <i class="fas fa-shopping-cart"></i>
-                                <p>Bạn cần mua sản phẩm trước khi đánh giá.</p>
-                            </div>
-                        </div>
-                    </c:when>
-
-                    <%-- Can review - show form --%>
                     <c:otherwise>
-                        <div class="write-review">
-                            <h3>Viết đánh giá của bạn</h3>
-                            <form action="${pageContext.request.contextPath}/review"
-                                  method="post" class="review-form">
-                                <input type="hidden" name="productId"
-                                       value="${product.productId}">
-                                <div class="rating-input">
-                                    <label>Đánh giá:</label>
-                                    <div class="star-rating">
-                                        <c:forEach begin="1" end="5" var="i">
-                                            <input type="radio" name="rating"
-                                                   value="${6-i}" id="star${6-i}"
-                                                   required>
-                                            <label for="star${6-i}">★</label>
-                                        </c:forEach>
-                                    </div>
-                                </div>
-                                <div class="review-content-input">
-                                    <label for="reviewContent">Nội dung:</label>
-                                    <textarea name="content" id="reviewContent"
-                                              rows="4"
-                                              placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
-                                              required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Gửi
-                                    đánh giá
-                                </button>
-                            </form>
+                        <div class="login-to-review">
+                            <p>Vui lòng <a
+                                    href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng
+                                nhập</a> để viết đánh giá.</p>
                         </div>
                     </c:otherwise>
                 </c:choose>
 
-                <!-- Review List -->
                 <div class="reviews-list">
                     <c:forEach var="review" items="${reviews}">
                         <div class="review-item">
@@ -462,13 +442,10 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
-
     function changeMainImage(src, thumbnailEl) {
         const mainImg = document.getElementById('main-product-image');
-        if (mainImg) {
-            mainImg.src = src;
-        }
-        // Update active thumbnail
+        if (mainImg) mainImg.src = src;
+
         if (thumbnailEl) {
             document.querySelectorAll('.thumbnail-images .thumbnail').forEach(t => t.classList.remove('active'));
             thumbnailEl.classList.add('active');
@@ -499,41 +476,27 @@
         });
     }
 
-
     document.querySelectorAll('.variant-btn').forEach(btn => {
         btn.addEventListener('click', function () {
-            // Remove active from all variants
             document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
-            // Get variant data
             const variantId = this.dataset.variantId;
             const salePrice = parseFloat(this.dataset.salePrice);
             const originalPrice = parseFloat(this.dataset.originalPrice);
             const stock = parseInt(this.dataset.stock || "0");
 
-            // Calculate discount percent
             let discountPercent = 0;
             if (originalPrice > salePrice) {
                 discountPercent = Math.round(((originalPrice - salePrice) / originalPrice) * 100);
             }
 
-            // Update hidden input
             const selectedVariantInput = document.getElementById('selectedVariantId');
-            if (selectedVariantInput) {
-                selectedVariantInput.value = variantId;
-            }
+            if (selectedVariantInput) selectedVariantInput.value = variantId;
 
-            // ===== UPDATE PRICE DISPLAY =====
             updatePriceDisplay(salePrice, originalPrice, discountPercent);
-
-            // ===== UPDATE STOCK =====
             updateStockDisplay(stock);
-
-            // ===== UPDATE QUANTITY INPUT =====
             updateQuantityControls(stock);
-
-            // ===== UPDATE BUTTONS STATE =====
             updateButtonsState(stock);
         });
     });
@@ -543,13 +506,9 @@
         const priceOldEl = document.querySelector('.price-old');
         const discountEl = document.querySelector('.discount-percent');
 
-        if (priceCurrentEl) {
-            priceCurrentEl.textContent = formatNumber(salePrice) + '₫';
-        }
+        if (priceCurrentEl) priceCurrentEl.textContent = formatNumber(salePrice) + '₫';
 
-        // Show/hide old price and discount
         if (originalPrice > salePrice) {
-            // Có giảm giá
             if (priceOldEl) {
                 priceOldEl.textContent = formatNumber(originalPrice) + '₫';
                 priceOldEl.style.display = 'inline';
@@ -559,51 +518,40 @@
                 discountEl.style.display = 'inline';
             }
         } else {
-            // Không giảm giá
-            if (priceOldEl) {
-                priceOldEl.style.display = 'none';
-            }
-            if (discountEl) {
-                discountEl.style.display = 'none';
-            }
+            if (priceOldEl) priceOldEl.style.display = 'none';
+            if (discountEl) discountEl.style.display = 'none';
         }
     }
 
     function updateStockDisplay(stock) {
         const stockLine = document.querySelector('.stock-line');
         if (stockLine) {
-            if (stock > 0) {
-                stockLine.innerHTML = '<span class="in-stock">Còn ' + stock + ' sản phẩm</span>';
-            } else {
-                stockLine.innerHTML = '<span class="out-of-stock">Hết hàng</span>';
-            }
+            if (stock > 0) stockLine.innerHTML = '<span class="in-stock">Còn ' + stock + ' sản phẩm</span>';
+            else stockLine.innerHTML = '<span class="out-of-stock">Hết hàng</span>';
         }
     }
 
     function updateQuantityControls(stock) {
-        if (qtyInput) {
-            qtyInput.setAttribute('max', stock);
+        if (!qtyInput) return;
 
-            // Reset quantity về 1 nếu stock mới < quantity hiện tại
-            const currentQty = parseInt(qtyInput.value) || 1;
-            if (currentQty > stock) {
-                qtyInput.value = stock > 0 ? 1 : 0;
-                if (cartQty) cartQty.value = qtyInput.value;
-            }
+        qtyInput.setAttribute('max', stock);
 
-            // Disable/enable quantity buttons
-            if (stock <= 0) {
-                qtyInput.disabled = true;
-                if (minusBtn) minusBtn.disabled = true;
-                if (plusBtn) plusBtn.disabled = true;
-            } else {
-                qtyInput.disabled = false;
-                if (minusBtn) minusBtn.disabled = false;
-                if (plusBtn) plusBtn.disabled = false;
-            }
+        const currentQty = parseInt(qtyInput.value) || 1;
+        if (currentQty > stock) {
+            qtyInput.value = stock > 0 ? 1 : 0;
+            if (cartQty) cartQty.value = qtyInput.value;
+        }
+
+        if (stock <= 0) {
+            qtyInput.disabled = true;
+            if (minusBtn) minusBtn.disabled = true;
+            if (plusBtn) plusBtn.disabled = true;
+        } else {
+            qtyInput.disabled = false;
+            if (minusBtn) minusBtn.disabled = false;
+            if (plusBtn) plusBtn.disabled = false;
         }
     }
-
 
     function updateButtonsState(stock) {
         const addToCartBtn = document.querySelector('.btn-add-cart');
@@ -634,7 +582,6 @@
         }
     }
 
-
     function formatNumber(num) {
         return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -649,12 +596,8 @@
         const activeButton = document.querySelector('.detail-page-btn[data-tab="' + tabId + '"]');
         const activeContent = document.getElementById(tabId);
 
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
-        if (activeContent) {
-            activeContent.classList.add('active');
-        }
+        if (activeButton) activeButton.classList.add('active');
+        if (activeContent) activeContent.classList.add('active');
     }
 
     if (tabButtons.length && tabContents.length) {
@@ -663,25 +606,19 @@
                 const tabId = this.dataset.tab;
                 if (tabId) {
                     setActiveTab(tabId);
-                    if (history.replaceState) {
-                        history.replaceState(null, '', '#' + tabId);
-                    } else {
-                        window.location.hash = tabId;
-                    }
+                    if (history.replaceState) history.replaceState(null, '', '#' + tabId);
+                    else window.location.hash = tabId;
                 }
             });
         });
 
         const hashTab = window.location.hash ? window.location.hash.substring(1) : '';
-        if (hashTab) {
-            setActiveTab(hashTab);
-        } else {
+        if (hashTab) setActiveTab(hashTab);
+        else {
             const defaultActive = document.querySelector('.detail-page-btn.active');
             if (!defaultActive) {
                 const firstTab = tabButtons[0];
-                if (firstTab && firstTab.dataset.tab) {
-                    setActiveTab(firstTab.dataset.tab);
-                }
+                if (firstTab && firstTab.dataset.tab) setActiveTab(firstTab.dataset.tab);
             }
         }
     }
@@ -694,89 +631,13 @@
             const form = document.getElementById('add-to-cart-form');
             const actionInput = document.getElementById('cartAction');
             if (!form) return;
-            if (actionInput) {
-                actionInput.value = 'buy_now';
-            }
+
+            if (actionInput) actionInput.value = 'buy_now';
             form.submit();
-            if (actionInput) {
-                actionInput.value = 'add_to_cart';
-            }
-        });
-    }
-
-    // ===== AJAX ADD TO CART =====
-    const addToCartForm = document.getElementById('add-to-cart-form');
-    if (addToCartForm) {
-        addToCartForm.addEventListener('submit', function (e) {
-            const actionInput = document.getElementById('cartAction');
-            // Nếu là buy_now thì submit form bình thường
-            if (actionInput && actionInput.value === 'buy_now') {
-                return true;
-            }
-
-            // Ngăn form submit thường
-            e.preventDefault();
-
-            const btn = this.querySelector('.btn-add-cart');
-            if (!btn || btn.disabled) return;
-
-            // Lấy dữ liệu từ form
-            const variantId = document.getElementById('selectedVariantId').value;
-            const quantity = document.getElementById('cartQuantity').value || 1;
-
-            // Disable button và hiển thị loading
-            const originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang thêm...';
-
-            // Gọi AJAX
-            fetch('${pageContext.request.contextPath}/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: 'variantId=' + variantId + '&quantity=' + quantity
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Cập nhật cart count trong header
-                        if (typeof HairGlow !== 'undefined' && HairGlow.updateCartCount) {
-                            HairGlow.updateCartCount(data.cartCount);
-                        }
-                        // Hiển thị toast thành công
-                        if (typeof HairGlow !== 'undefined' && HairGlow.showToast) {
-                            HairGlow.showToast('Thành công!', data.message || 'Đã thêm sản phẩm vào giỏ hàng');
-                        } else {
-                            alert('Đã thêm sản phẩm vào giỏ hàng!');
-                        }
-                    } else {
-                        // Hiển thị toast lỗi
-                        if (typeof HairGlow !== 'undefined' && HairGlow.showToast) {
-                            HairGlow.showToast('Lỗi', data.message || 'Không thể thêm sản phẩm', true);
-                        } else {
-                            alert(data.message || 'Có lỗi xảy ra!');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Add to cart error:', error);
-                    if (typeof HairGlow !== 'undefined' && HairGlow.showToast) {
-                        HairGlow.showToast('Lỗi', 'Có lỗi xảy ra, vui lòng thử lại', true);
-                    } else {
-                        alert('Có lỗi xảy ra!');
-                    }
-                })
-                .finally(() => {
-                    // Restore button
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
-                });
+            if (actionInput) actionInput.value = 'add_to_cart';
         });
     }
 </script>
-
 
 </body>
 

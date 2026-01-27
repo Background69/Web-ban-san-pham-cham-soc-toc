@@ -1,4 +1,3 @@
-
 <aside class="sidebar">
     <div class="logo">
         <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" alt="logo">
