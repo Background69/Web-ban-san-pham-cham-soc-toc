@@ -10,11 +10,11 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {
-        "/admin/brand",
-        "/admin/brand/form",
-        "/admin/brand/save",
-        "/admin/brand/edit",
-        "/admin/brand/delete"
+        "/admin/brands",
+        "/admin/brands/form",
+        "/admin/brands/save",
+        "/admin/brands/edit",
+        "/admin/brands/delete"
 })
 public class BrandManagementController extends HttpServlet {
 
@@ -34,19 +34,19 @@ public class BrandManagementController extends HttpServlet {
         String path = request.getServletPath();
 
         switch (path) {
-            case "/admin/brand":
+            case "/admin/brands":
                 listBrand(request, response);
                 break;
 
-            case "/admin/brand/form":
+            case "/admin/brands/form":
                 showForm(request, response);
                 break;
 
-            case "/admin/brand/edit":
+            case "/admin/brands/edit":
                 editBrand(request, response);
                 break;
 
-            case "/admin/brand/delete":
+            case "/admin/brands/delete":
                 deleteBrand(request, response);
                 break;
         }
@@ -60,10 +60,8 @@ public class BrandManagementController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        if ("/admin/brand/save".equals(request.getServletPath())) {
+        if ("/admin/brands/save".equals(request.getServletPath())) {
             saveBrand(request, response);
-        }if ("/admin/brand/delete".equals(request.getServletPath())){
-            deleteBrand(request,response);
         }
     }
 
@@ -132,7 +130,7 @@ public class BrandManagementController extends HttpServlet {
 
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/brand");
+        response.sendRedirect(request.getContextPath() + "/admin/brands");
     }
 
     private void deleteBrand(HttpServletRequest request, HttpServletResponse response)
@@ -140,6 +138,6 @@ public class BrandManagementController extends HttpServlet {
 
         int id = Integer.parseInt(request.getParameter("id"));
         brandDAO.delete(id);
-        response.sendRedirect(request.getContextPath() + "/admin/brand");
+        response.sendRedirect(request.getContextPath() + "/admin/brands");
     }
 }

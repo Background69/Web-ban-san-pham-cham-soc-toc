@@ -10,7 +10,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {
-        "/admin/category",
+        "/admin/categories",
         "/admin/category/form",
         "/admin/category/edit",
         "/admin/category/save",
@@ -25,33 +25,16 @@ public class CategoryManagementController extends HttpServlet {
         categoryDAO = new CategoryDAO();
     }
 
-    // ====== CHECK LOGIN + ROLE ======
-    private boolean checkAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return false;
-        }
-
-        User user = (User) session.getAttribute("currentUser");
-        if (!"Admin".equalsIgnoreCase(user.getRole())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
-            return false;
-        }
-        return true;
-    }
 
     // ====== GET ======
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (!checkAdmin(request, response)) return;
-
         String path = request.getServletPath();
 
         switch (path) {
-            case "/admin/category":
+            case "/admin/categories":
                 listCategory(request, response);
                 break;
 
@@ -73,8 +56,6 @@ public class CategoryManagementController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        if (!checkAdmin(request, response)) return;
 
         if ("/admin/category/save".equals(request.getServletPath())) {
             saveCategory(request, response);
@@ -125,7 +106,7 @@ public class CategoryManagementController extends HttpServlet {
             categoryDAO.update(category);
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/category");
+        response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 
     private void deleteCategory(HttpServletRequest request, HttpServletResponse response)
@@ -133,6 +114,6 @@ public class CategoryManagementController extends HttpServlet {
 
         int id = Integer.parseInt(request.getParameter("id"));
         categoryDAO.delete(id);
-        response.sendRedirect(request.getContextPath() + "/admin/category");
+        response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 }

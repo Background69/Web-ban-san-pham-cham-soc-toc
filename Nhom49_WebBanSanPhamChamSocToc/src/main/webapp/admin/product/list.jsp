@@ -70,7 +70,7 @@
             <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
             <li class="active"><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
 
