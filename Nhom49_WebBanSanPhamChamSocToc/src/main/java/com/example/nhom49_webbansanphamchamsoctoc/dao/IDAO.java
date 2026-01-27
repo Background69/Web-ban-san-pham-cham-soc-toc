@@ -2,7 +2,8 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import java.util.List;
 
-public interface IDAO<T> {
+public interface
+IDAO<T> {
     // tìm theo id
     T findById(int id);
 

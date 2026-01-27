@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${brand.brandName} - HairGlow</title>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/static/css/user/style_for_brand-detail.css">
@@ -74,10 +75,9 @@
 </head>
 
 <body>
-<!-- Header -->
+
 <jsp:include page="/layout/header.jsp"/>
 
-<!-- Brand Banner -->
 <section class="brand-banner section-animate">
     <div class="brand-banner-overlay"></div>
     <div class="brand-banner-content">
@@ -88,17 +88,27 @@
             <span class="separator">›</span>
             <span class="current">${brand.brandName}</span>
         </nav>
+
         <div class="brand-banner-info">
+
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
-                        <img src="${brand.logoUrl}" alt="Logo ${brand.brandName}">
+                        <%-- DB: images/brands/xxx.png  -> File: static/assets/images/brands/xxx.png --%>
+                        <img
+                                src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
+                                alt="Logo ${brand.brandName}"
+                                onerror="this.onerror=null;
+                                         this.remove();
+                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';"
+                        >
                     </c:when>
                     <c:otherwise>
                         <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>
                     </c:otherwise>
                 </c:choose>
             </div>
+
             <div class="brand-text">
                 <h1>${brand.brandName}</h1>
                 <p class="brand-tagline">${brand.shortDescription}</p>
@@ -110,12 +120,13 @@
                                             phẩm</span>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
 
 <main class="brand-detail-main page-animate">
-    <!-- Brand Info Section -->
+
     <div class="brand-info-section section-animate">
         <c:if test="${not empty brand.fullDescription}">
             <div class="brand-description-card">
@@ -124,7 +135,6 @@
             </div>
         </c:if>
 
-        <!-- Category Stats -->
         <c:if test="${not empty categoryStats}">
             <div class="brand-stats">
                 <h3><i class="fas fa-chart-pie"></i> Danh mục sản phẩm</h3>
@@ -148,8 +158,9 @@
             <div class="product-filter-tags">
                 <button class="product-filter-tag active" data-category="all">Tất cả</button>
                 <c:forEach var="category" items="${categories}">
-                    <button class="product-filter-tag"
-                            data-category="${category.categorySlug}">${category.categoryName}</button>
+                    <button class="product-filter-tag" data-category="${category.categorySlug}">
+                            ${category.categoryName}
+                    </button>
                 </c:forEach>
             </div>
         </div>
@@ -260,14 +271,12 @@
             </c:otherwise>
         </c:choose>
 
-        <!-- Pagination -->
         <c:if test="${totalPages > 1}">
             <jsp:include page="/layout/pagination.jsp"/>
         </c:if>
     </section>
 </main>
 
-<!-- Footer -->
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
@@ -290,6 +299,7 @@
         });
     });
 </script>
+
 </body>
 
 </html>
