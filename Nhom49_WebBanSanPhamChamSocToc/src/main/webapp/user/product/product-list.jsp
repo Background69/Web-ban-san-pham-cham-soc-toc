@@ -364,7 +364,7 @@
                                     <a
                                             href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                         <img alt="${product.productName}" class="product-image"
-                                             src="${pageContext.request.contextPath}/static/images/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'default-product.png'}">
+                                             src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
                                     </a>
                                 </div>
                                 <div class="product-body">
@@ -459,4 +459,5 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 </body>
+
 </html>
