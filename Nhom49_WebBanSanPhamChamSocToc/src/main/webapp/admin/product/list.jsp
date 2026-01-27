@@ -66,12 +66,14 @@
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+
         </ul>
 
         <a class="view-site" href="${pageContext.request.contextPath}/index">
@@ -94,8 +96,13 @@
                 <th>ID</th>
                 <th>Ảnh</th>
                 <th>Tên</th>
-                <th>Giá</th>
+                <th>Slug</th>
+                <th>Thương hiệu</th>
                 <th>Danh mục</th>
+                <th>Xuất xứ</th>
+                <th>Giá</th>
+                <th>Tồn kho</th>
+                <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
             </thead>
@@ -104,25 +111,52 @@
             <c:forEach var="p" items="${products}">
                 <tr>
                     <td>#P${p.productId}</td>
+
                     <td>
-                        <img class="thumb"
-                             src="${pageContext.request.contextPath}/uploads/${p.image}">
+                        <c:if test="${not empty p.primaryImageUrl}">
+                            <img class="thumb"
+                                 src="${pageContext.request.contextPath}/uploads/${p.primaryImageUrl}">
+                        </c:if>
                     </td>
-                    <td>${p.name}</td>
-                    <td>
-                        <fmt:formatNumber value="${p.price}" type="number"/> ₫
-                    </td>
+
+                    <td>${p.productName}</td>
+                    <td>${p.productSlug}</td>
+                    <td>${p.brandName}</td>
                     <td>${p.categoryName}</td>
+                    <td>${p.origin}</td>
+
                     <td>
-                        <a href="#">Sửa</a> |
-                        <a href="#" onclick="return confirm('Xóa sản phẩm?')">Xóa</a>
+                        <fmt:formatNumber value="${p.finalPrice}" type="number"/> ₫
+                    </td>
+
+                    <td>${p.remainingStock}</td>
+
+                    <td>
+                        <c:choose>
+                            <c:when test="${p.remainingStock > 0}">
+                                <span style="color:green;font-weight:bold">Còn hàng</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span style="color:red;font-weight:bold">Hết hàng</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+
+                    <td>
+                        <a href="${pageContext.request.contextPath}/admin/products?action=edit&id=${p.productId}">
+                            Sửa
+                        </a> |
+                        <a href="${pageContext.request.contextPath}/admin/products?action=delete&id=${p.productId}"
+                           onclick="return confirm('Xóa sản phẩm?')">
+                            Xóa
+                        </a>
                     </td>
                 </tr>
             </c:forEach>
 
             <c:if test="${empty products}">
                 <tr>
-                    <td colspan="6" style="text-align:center">Không có sản phẩm</td>
+                    <td colspan="11" style="text-align:center">Không có sản phẩm</td>
                 </tr>
             </c:if>
             </tbody>
@@ -131,31 +165,48 @@
     </main>
 </div>
 
-<!-- ===== MODAL FORM ===== -->
+<!-- ===== MODAL ADD PRODUCT ===== -->
 <div id="productModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
 
         <h2>Thêm sản phẩm</h2>
 
-        <form action="${pageContext.request.contextPath}/admin/product/list.jsp" method="post"
+        <form action="${pageContext.request.contextPath}/admin/products"
+              method="post"
               enctype="multipart/form-data">
+
             <input type="hidden" name="action" value="create">
 
             <label>Tên sản phẩm</label>
             <input type="text" name="name" required>
 
-            <label>Giá</label>
-            <input type="number" name="price" required>
+            <label>Slug</label>
+            <input type="text" name="slug">
+
+            <label>Xuất xứ</label>
+            <input type="text" name="origin">
 
             <label>Danh mục</label>
             <select name="categoryId">
                 <c:forEach var="c" items="${categories}">
-                    <option value="${c.id}">${c.name}</option>
+                    <option value="${c.categoryId}">${c.categoryName}</option>
                 </c:forEach>
             </select>
 
-            <label>Ảnh</label>
+            <label>Giá gốc</label>
+            <input type="number" name="originalprice" required>
+
+            <label>Giá sale</label>
+            <input type="number" name="SalePrice">
+
+            <label>Mô tả ngắn</label>
+            <textarea name="shortDescription"></textarea>
+
+            <label>Mô tả chi tiết</label>
+            <textarea name="fullDescription"></textarea>
+
+            <label>Ảnh sản phẩm</label>
             <input type="file" name="image">
 
             <br><br>

@@ -25,18 +25,6 @@ public class ProductManagementController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
-        User currentUser = (User) session.getAttribute("currentUser");
-
-        if (!"Admin".equalsIgnoreCase(currentUser.getRole())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập");
-            return;
-        }
-
         String action = request.getParameter("action");
 
         // ===== DELETE =====
@@ -49,7 +37,7 @@ public class ProductManagementController extends HttpServlet {
 
         // ===== OPEN CREATE FORM =====
         if ("create".equals(action)) {
-            request.getRequestDispatcher("/view/admin/products/product-form.jsp")
+            request.getRequestDispatcher("admin/products/form.jsp")
                     .forward(request, response);
             return;
         }
@@ -60,7 +48,7 @@ public class ProductManagementController extends HttpServlet {
             Product product = productDAO.findById(id);
             request.setAttribute("product", product);
 
-            request.getRequestDispatcher("/view/admin/products/product-form.jsp")
+            request.getRequestDispatcher("/admin/products/form.jsp")
                     .forward(request, response);
             return;
         }
@@ -69,7 +57,7 @@ public class ProductManagementController extends HttpServlet {
         List<Product> products = productDAO.findAll();
         request.setAttribute("products", products);
 
-        request.getRequestDispatcher("/view/admin/products/product-list.jsp")
+        request.getRequestDispatcher("/admin/product/list.jsp")
                 .forward(request, response);
     }
 
