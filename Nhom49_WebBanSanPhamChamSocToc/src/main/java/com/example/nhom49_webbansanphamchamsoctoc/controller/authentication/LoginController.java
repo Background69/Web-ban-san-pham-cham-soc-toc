@@ -59,9 +59,7 @@ public class LoginController extends HttpServlet {
 
         HttpSession session = request.getSession(true);
         SessionUtil.setCurrentUser(session, user);
-        session.setMaxInactiveInterval(30 * 60); // 30 phút
-
-        // Admin
+        session.setMaxInactiveInterval(30 * 60);
         if ("Admin".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/admin");
             return;
