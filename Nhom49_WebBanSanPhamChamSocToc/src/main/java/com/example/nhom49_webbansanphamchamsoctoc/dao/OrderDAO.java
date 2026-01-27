@@ -7,7 +7,6 @@ import org.jdbi.v3.core.Jdbi;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 /**
  * Lớp OrderDao.
  */
@@ -27,12 +26,10 @@ public class OrderDAO implements IDAO<Order> {
      */
     public OrderDAO() {
         this.jdbi = JDBIConnector.getInstance();
-        Integer maxId = jdbi.withHandle(handle ->
-                handle.createQuery("SELECT MAX(order_id) FROM orders")
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(100)
-        );
+        Integer maxId = jdbi.withHandle(handle -> handle.createQuery("SELECT MAX(order_id) FROM orders")
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(100));
         if (maxId != null) {
             orderCounter.set(maxId);
         }
@@ -47,13 +44,11 @@ public class OrderDAO implements IDAO<Order> {
     @Override
     public Order findById(int id) {
         String sql = "SELECT * FROM orders WHERE order_id = :orderId";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("orderId", id)
-                        .map((rs, ctx) -> mapOrder(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderId", id)
+                .map((rs, ctx) -> mapOrder(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     /**
@@ -64,13 +59,10 @@ public class OrderDAO implements IDAO<Order> {
     @Override
     public List<Order> findAll() {
         String sql = "SELECT * FROM orders ORDER BY created_at DESC";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .map((rs, ctx) -> mapOrder(rs))
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .map((rs, ctx) -> mapOrder(rs))
+                .list());
     }
-
 
     /**
      * Them .
@@ -83,25 +75,23 @@ public class OrderDAO implements IDAO<Order> {
         String sql = "INSERT INTO orders (order_code, user_id, shipping_address_id, shipping_full_name, " +
                 "shipping_phone, shipping_address, shipping_method, shipping_fee, payment_method, " +
                 "subtotal, total_amount, order_status) VALUES (:orderCode, :userId, :shippingAddressId, :shippingFullName, :shippingPhone, :shippingAddress, :shippingMethod, :shippingFee, :paymentMethod, :subtotal, :totalAmount, :orderStatus)";
-        return jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("orderCode", order.getOrderCode())
-                        .bind("userId", order.getUserId())
-                        .bind("shippingAddressId", order.getShippingAddressId())
-                        .bind("shippingFullName", order.getShippingFullName())
-                        .bind("shippingPhone", order.getShippingPhone())
-                        .bind("shippingAddress", order.getShippingAddress())
-                        .bind("shippingMethod", order.getShippingMethod())
-                        .bind("shippingFee", order.getShippingFee())
-                        .bind("paymentMethod", order.getPaymentMethod())
-                        .bind("subtotal", order.getSubtotal())
-                        .bind("totalAmount", order.getTotalAmount())
-                        .bind("orderStatus", order.getOrderStatus() != null ? order.getOrderStatus() : "pending")
-                        .executeAndReturnGeneratedKeys("order_id")
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(-1)
-        );
+        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderCode", order.getOrderCode())
+                .bind("userId", order.getUserId())
+                .bind("shippingAddressId", order.getShippingAddressId())
+                .bind("shippingFullName", order.getShippingFullName())
+                .bind("shippingPhone", order.getShippingPhone())
+                .bind("shippingAddress", order.getShippingAddress())
+                .bind("shippingMethod", order.getShippingMethod())
+                .bind("shippingFee", order.getShippingFee())
+                .bind("paymentMethod", order.getPaymentMethod())
+                .bind("subtotal", order.getSubtotal())
+                .bind("totalAmount", order.getTotalAmount())
+                .bind("orderStatus", order.getOrderStatus() != null ? order.getOrderStatus() : "pending")
+                .executeAndReturnGeneratedKeys("order_id")
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(-1));
     }
 
     /**
@@ -112,23 +102,23 @@ public class OrderDAO implements IDAO<Order> {
      */
     @Override
     public boolean update(Order order) {
-        String sql = "UPDATE orders SET shipping_full_name = :shippingFullName, shipping_phone = :shippingPhone, shipping_address = :shippingAddress, " +
-                "shipping_method = :shippingMethod, shipping_fee = :shippingFee, payment_method = :paymentMethod, subtotal = :subtotal, " +
+        String sql = "UPDATE orders SET shipping_full_name = :shippingFullName, shipping_phone = :shippingPhone, shipping_address = :shippingAddress, "
+                +
+                "shipping_method = :shippingMethod, shipping_fee = :shippingFee, payment_method = :paymentMethod, subtotal = :subtotal, "
+                +
                 "total_amount = :totalAmount, order_status = :orderStatus WHERE order_id = :orderId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("shippingFullName", order.getShippingFullName())
-                        .bind("shippingPhone", order.getShippingPhone())
-                        .bind("shippingAddress", order.getShippingAddress())
-                        .bind("shippingMethod", order.getShippingMethod())
-                        .bind("shippingFee", order.getShippingFee())
-                        .bind("paymentMethod", order.getPaymentMethod())
-                        .bind("subtotal", order.getSubtotal())
-                        .bind("totalAmount", order.getTotalAmount())
-                        .bind("orderStatus", order.getOrderStatus())
-                        .bind("orderId", order.getOrderId())
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("shippingFullName", order.getShippingFullName())
+                .bind("shippingPhone", order.getShippingPhone())
+                .bind("shippingAddress", order.getShippingAddress())
+                .bind("shippingMethod", order.getShippingMethod())
+                .bind("shippingFee", order.getShippingFee())
+                .bind("paymentMethod", order.getPaymentMethod())
+                .bind("subtotal", order.getSubtotal())
+                .bind("totalAmount", order.getTotalAmount())
+                .bind("orderStatus", order.getOrderStatus())
+                .bind("orderId", order.getOrderId())
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -141,11 +131,9 @@ public class OrderDAO implements IDAO<Order> {
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM orders WHERE order_id = :orderId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("orderId", id)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderId", id)
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -159,12 +147,10 @@ public class OrderDAO implements IDAO<Order> {
      */
     public List<Order> findByUserId(int userId) {
         String sql = "SELECT * FROM orders WHERE user_id = :userId ORDER BY created_at DESC";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("userId", userId)
-                        .map((rs, ctx) -> mapOrder(rs))
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .map((rs, ctx) -> mapOrder(rs))
+                .list());
     }
 
     /**
@@ -175,22 +161,19 @@ public class OrderDAO implements IDAO<Order> {
      */
     public Order findByOrderCode(String orderCode) {
         String sql = "SELECT * FROM orders WHERE order_code = :orderCode";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("orderCode", orderCode)
-                        .map((rs, ctx) -> mapOrder(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderCode", orderCode)
+                .map((rs, ctx) -> mapOrder(rs))
+                .findFirst()
+                .orElse(null));
     }
-    public List<Order> findRecentOrder(int limit){
-        String sql= "SELECT * FROM orders ORDER BY created_at DESC LIMIT ?";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind(0,limit)
-                        .map((rs,ctx)->mapOrder(rs))
-                        .list()
-        );
+
+    public List<Order> findRecentOrder(int limit) {
+        String sql = "SELECT * FROM orders ORDER BY created_at DESC LIMIT ?";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind(0, limit)
+                .map((rs, ctx) -> mapOrder(rs))
+                .list());
     }
 
     /**
@@ -201,12 +184,10 @@ public class OrderDAO implements IDAO<Order> {
      */
     public List<Order> findByStatus(String status) {
         String sql = "SELECT * FROM orders WHERE order_status = :orderStatus ORDER BY created_at DESC";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("orderStatus", status)
-                        .map((rs, ctx) -> mapOrder(rs))
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderStatus", status)
+                .map((rs, ctx) -> mapOrder(rs))
+                .list());
     }
 
     /**
@@ -218,13 +199,11 @@ public class OrderDAO implements IDAO<Order> {
      */
     public List<Order> findByUserIdAndStatus(int userId, String status) {
         String sql = "SELECT * FROM orders WHERE user_id = :userId AND UPPER(order_status) = :orderStatus ORDER BY created_at DESC";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("userId", userId)
-                        .bind("orderStatus", status.toUpperCase())
-                        .map((rs, ctx) -> mapOrder(rs))
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .bind("orderStatus", status.toUpperCase())
+                .map((rs, ctx) -> mapOrder(rs))
+                .list());
     }
 
     /**
@@ -235,13 +214,11 @@ public class OrderDAO implements IDAO<Order> {
      */
     public int countByUserId(int userId) {
         String sql = "SELECT COUNT(*) FROM orders WHERE user_id = :userId";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("userId", userId)
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(0)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0));
     }
 
     /**
@@ -253,16 +230,13 @@ public class OrderDAO implements IDAO<Order> {
      */
     public int countByUserIdAndStatus(int userId, String status) {
         String sql = "SELECT COUNT(*) FROM orders WHERE user_id = :userId AND UPPER(order_status) = :orderStatus";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("userId", userId)
-                        .bind("orderStatus", status.toUpperCase())
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(0)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .bind("orderStatus", status.toUpperCase())
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0));
     }
-
 
     // Management methods
 
@@ -270,17 +244,15 @@ public class OrderDAO implements IDAO<Order> {
      * Cập nhật status.
      *
      * @param orderId Tham số đầu vào.
-     * @param status Tham số đầu vào.
+     * @param status  Tham số đầu vào.
      * @return Kết quả xử lý của phương thức.
      */
     public boolean updateStatus(int orderId, String status) {
         String sql = "UPDATE orders SET order_status = :orderStatus WHERE order_id = :orderId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("orderStatus", status)
-                        .bind("orderId", orderId)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderStatus", status)
+                .bind("orderId", orderId)
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -301,21 +273,18 @@ public class OrderDAO implements IDAO<Order> {
      */
     public boolean existsByOrderCode(String orderCode) {
         String sql = "SELECT COUNT(*) FROM orders WHERE order_code = :orderCode";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("orderCode", orderCode)
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(0) > 0
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderCode", orderCode)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
     }
-
 
     /**
      * Lấy daily stats.
      *
      * @param startDate Tham số đầu vào.
-     * @param endDate Tham số đầu vào.
+     * @param endDate   Tham số đầu vào.
      * @return Kết quả xử lý của phương thức.
      */
     public java.util.Map<String, Object> getDailyStats(java.util.Date startDate, java.util.Date endDate) {
@@ -331,32 +300,30 @@ public class OrderDAO implements IDAO<Order> {
                 "FROM orders WHERE created_at >= :startDate AND created_at < :endDate " +
                 "AND order_status NOT IN ('cancelled')";
 
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("startDate", startDate)
-                        .bind("endDate", endDate)
-                        .map((rs, ctx) -> {
-                            java.util.Map<String, Object> result = new java.util.HashMap<>();
-                            java.math.BigDecimal revenue = rs.getBigDecimal("revenue");
-                            result.put("revenue", revenue != null ? revenue : java.math.BigDecimal.ZERO);
-                            result.put("orders", rs.getInt("orders"));
-                            return result;
-                        })
-                        .findFirst()
-                        .orElseGet(() -> {
-                            java.util.Map<String, Object> defaultResult = new java.util.HashMap<>();
-                            defaultResult.put("revenue", java.math.BigDecimal.ZERO);
-                            defaultResult.put("orders", 0);
-                            return defaultResult;
-                        })
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("startDate", startDate)
+                .bind("endDate", endDate)
+                .map((rs, ctx) -> {
+                    java.util.Map<String, Object> result = new java.util.HashMap<>();
+                    java.math.BigDecimal revenue = rs.getBigDecimal("revenue");
+                    result.put("revenue", revenue != null ? revenue : java.math.BigDecimal.ZERO);
+                    result.put("orders", rs.getInt("orders"));
+                    return result;
+                })
+                .findFirst()
+                .orElseGet(() -> {
+                    java.util.Map<String, Object> defaultResult = new java.util.HashMap<>();
+                    defaultResult.put("revenue", java.math.BigDecimal.ZERO);
+                    defaultResult.put("orders", 0);
+                    return defaultResult;
+                }));
     }
 
     /**
      * Lấy stats.
      *
      * @param startDate Tham số đầu vào.
-     * @param endDate Tham số đầu vào.
+     * @param endDate   Tham số đầu vào.
      * @return Kết quả xử lý của phương thức.
      */
     public java.util.Map<String, Object> getStats(java.util.Date startDate, java.util.Date endDate) {
@@ -367,10 +334,11 @@ public class OrderDAO implements IDAO<Order> {
      * Lấy revenue by promotion.
      *
      * @param startDate Tham số đầu vào.
-     * @param endDate Tham số đầu vào.
+     * @param endDate   Tham số đầu vào.
      * @return Kết quả xử lý của phương thức.
      */
-    public java.util.List<java.util.Map<String, Object>> getRevenueByPromotion(java.util.Date startDate, java.util.Date endDate) {
+    public java.util.List<java.util.Map<String, Object>> getRevenueByPromotion(java.util.Date startDate,
+            java.util.Date endDate) {
         String sql = "SELECT p.promotion_id, p.promotion_name, p.promotion_type, " +
                 "COALESCE(SUM(oi.total_price), 0) AS revenue " +
                 "FROM promotions p " +
@@ -382,40 +350,132 @@ public class OrderDAO implements IDAO<Order> {
                 "GROUP BY p.promotion_id, p.promotion_name, p.promotion_type " +
                 "ORDER BY revenue DESC";
 
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("startDate", startDate)
-                        .bind("endDate", endDate)
-                        .map((rs, ctx) -> {
-                            java.util.Map<String, Object> row = new java.util.HashMap<>();
-                            row.put("promotionId", rs.getInt("promotion_id"));
-                            row.put("promotionName", rs.getString("promotion_name"));
-                            row.put("promotionType", rs.getString("promotion_type"));
-                            row.put("revenue", rs.getBigDecimal("revenue"));
-                            return row;
-                        })
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("startDate", startDate)
+                .bind("endDate", endDate)
+                .map((rs, ctx) -> {
+                    java.util.Map<String, Object> row = new java.util.HashMap<>();
+                    row.put("promotionId", rs.getInt("promotion_id"));
+                    row.put("promotionName", rs.getString("promotion_name"));
+                    row.put("promotionType", rs.getString("promotion_type"));
+                    row.put("revenue", rs.getBigDecimal("revenue"));
+                    return row;
+                })
+                .list());
     }
+
     public int countOrders() {
         String sql = "SELECT COUNT(*) FROM orders";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .mapTo(Integer.class)
-                        .one()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .mapTo(Integer.class)
+                .one());
     }
-    public long totalRevenue(){
+
+    public long totalRevenue() {
         String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE status='Hoàn thành'";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .mapTo(Long.class)
-                        .one()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .mapTo(Long.class)
+                .one());
     }
 
+    /**
+     * Lấy tổng chi tiêu của user (chỉ tính đơn hoàn thành)
+     */
+    public java.math.BigDecimal getTotalSpendingByUser(int userId) {
+        String sql = "SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE user_id = :userId AND order_status = 'COMPLETED'";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .mapTo(java.math.BigDecimal.class)
+                .one());
+    }
 
-    // Helper method;
+    /**
+     * Lấy đơn hàng gần đây của user với limit
+     */
+    public java.util.List<Order> findByUserIdWithLimit(int userId, int limit) {
+        String sql = "SELECT * FROM orders WHERE user_id = :userId ORDER BY created_at DESC LIMIT :limit";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .bind("limit", limit)
+                .map((rs, ctx) -> mapOrder(rs))
+                .list());
+    }
+
+    /**
+     * Lấy số lượng đơn hàng theo status của user
+     */
+    public java.util.Map<String, Integer> getOrderCountsByStatus(int userId) {
+        String sql = "SELECT order_status, COUNT(*) as count FROM orders WHERE user_id = :userId GROUP BY order_status";
+        java.util.Map<String, Integer> counts = new java.util.HashMap<>();
+
+        // Initialize all statuses with 0
+        counts.put("ALL", 0);
+        counts.put("PENDING", 0);
+        counts.put("CONFIRMED", 0);
+        counts.put("SHIPPING", 0);
+        counts.put("COMPLETED", 0);
+        counts.put("CANCELLED", 0);
+
+        jdbi.useHandle(handle -> {
+            handle.createQuery(sql)
+                    .bind("userId", userId)
+                    .map((rs, ctx) -> {
+                        String status = rs.getString("order_status");
+                        int count = rs.getInt("count");
+                        if (status != null) {
+                            counts.put(status.toUpperCase(), count);
+                            counts.put("ALL", counts.get("ALL") + count);
+                        }
+                        return null;
+                    })
+                    .list();
+        });
+
+        return counts;
+    }
+
+    /**
+     * Kiểm tra xem user đã mua và nhận sản phẩm này chưa (đơn hàng COMPLETED)
+     *
+     * @param userId    ID của user
+     * @param productId ID của sản phẩm
+     * @return true nếu user đã có đơn hàng COMPLETED chứa sản phẩm này
+     */
+    public boolean hasUserPurchasedProduct(int userId, int productId) {
+        String sql = "SELECT COUNT(*) FROM orders o " +
+                "INNER JOIN order_items oi ON o.order_id = oi.order_id " +
+                "WHERE o.user_id = :userId " +
+                "AND oi.product_id = :productId " +
+                "AND UPPER(o.order_status) = 'COMPLETED'";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .bind("productId", productId)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
+    }
+
+    /**
+     * Kiểm tra xem user đã mua sản phẩm nhưng chưa nhận hàng (đơn hàng chưa
+     * COMPLETED)
+     *
+     * @param userId    ID của user
+     * @param productId ID của sản phẩm
+     * @return true nếu user đã có đơn hàng chứa sản phẩm nhưng chưa COMPLETED
+     */
+    public boolean hasUserPurchasedProductPending(int userId, int productId) {
+        String sql = "SELECT COUNT(*) FROM orders o " +
+                "INNER JOIN order_items oi ON o.order_id = oi.order_id " +
+                "WHERE o.user_id = :userId " +
+                "AND oi.product_id = :productId " +
+                "AND UPPER(o.order_status) IN ('PENDING', 'CONFIRMED', 'SHIPPING')";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .bind("productId", productId)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
+    }
 
     // Helper method
     /**
@@ -429,7 +489,8 @@ public class OrderDAO implements IDAO<Order> {
         order.setOrderId(rs.getInt("order_id"));
         order.setOrderCode(rs.getString("order_code"));
         order.setUserId(rs.getObject("user_id") != null ? rs.getInt("user_id") : null);
-        order.setShippingAddressId(rs.getObject("shipping_address_id") != null ? rs.getInt("shipping_address_id") : null);
+        order.setShippingAddressId(
+                rs.getObject("shipping_address_id") != null ? rs.getInt("shipping_address_id") : null);
         order.setShippingFullName(rs.getString("shipping_full_name"));
         order.setShippingPhone(rs.getString("shipping_phone"));
         order.setShippingAddress(rs.getString("shipping_address"));

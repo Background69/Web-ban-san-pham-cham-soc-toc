@@ -1,5 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
+import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ReviewDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Review;
@@ -11,13 +12,13 @@ public class ReviewService {
 
     private final ReviewDAO reviewDAO;
     private final ProductDAO productDAO;
-
+    private final OrderDAO orderDAO;
 
     public ReviewService() {
         this.reviewDAO = new ReviewDAO();
         this.productDAO = new ProductDAO();
+        this.orderDAO = new OrderDAO();
     }
-
 
     /**
      * Lấy reviews by product.
@@ -31,6 +32,13 @@ public class ReviewService {
      */
     public List<Review> getReviewsByUser(int userId) {
         return reviewDAO.findByUserId(userId);
+    }
+
+    /**
+     * Lấy reviews của user kèm thông tin sản phẩm (cho trang My Reviews).
+     */
+    public List<Review> getUserReviewsWithProduct(int userId) {
+        return reviewDAO.findByUserIdWithProduct(userId);
     }
 
     /**
@@ -94,6 +102,36 @@ public class ReviewService {
     }
 
     /**
+     * Cập nhật review với kiểm tra ownership.
+     *
+     * @param reviewId ID của review
+     * @param userId   ID của user (phải là chủ review)
+     * @param rating   Rating mới
+     * @param content  Nội dung mới
+     * @return true nếu cập nhật thành công
+     */
+    public boolean updateReviewByUser(int reviewId, int userId, int rating, String content) {
+        if (!isValidRating(rating) || content == null || content.trim().isEmpty()) {
+            return false;
+        }
+
+        Review review = reviewDAO.findById(reviewId);
+        if (review == null || review.getUserId() == null || review.getUserId() != userId) {
+            return false;
+        }
+
+        review.setRating(rating);
+        review.setContent(content.trim());
+
+        boolean updated = reviewDAO.update(review);
+        if (updated) {
+            updateProductRating(review.getProductId());
+        }
+
+        return updated;
+    }
+
+    /**
      * Xóa review.
      */
     public boolean deleteReview(int reviewId) {
@@ -105,6 +143,27 @@ public class ReviewService {
         boolean deleted = reviewDAO.delete(reviewId);
         if (deleted) {
             // Update product rating
+            updateProductRating(review.getProductId());
+        }
+
+        return deleted;
+    }
+
+    /**
+     * Xóa review với kiểm tra ownership.
+     *
+     * @param reviewId ID của review
+     * @param userId   ID của user (phải là chủ review)
+     * @return true nếu xóa thành công
+     */
+    public boolean deleteReviewByUser(int reviewId, int userId) {
+        Review review = reviewDAO.findById(reviewId);
+        if (review == null || review.getUserId() == null || review.getUserId() != userId) {
+            return false;
+        }
+
+        boolean deleted = reviewDAO.delete(reviewId);
+        if (deleted) {
             updateProductRating(review.getProductId());
         }
 
@@ -142,7 +201,6 @@ public class ReviewService {
         productDAO.updateRating(productId, avgRating, reviewCount);
     }
 
-
     /**
      * Lấy review by id.
      */
@@ -154,9 +212,41 @@ public class ReviewService {
      * Kiểm tra user reviewed product.
      */
     public boolean hasUserReviewedProduct(int productId, int userId) {
-        List<Review> userReviews = reviewDAO.findByUserId(userId);
-        return userReviews.stream()
-                .anyMatch(review -> review.getProductId() == productId);
+        return reviewDAO.existsByUserIdAndProductId(userId, productId);
+    }
+
+    /**
+     * Lấy review của user cho một sản phẩm.
+     */
+    public Review getUserReviewForProduct(int userId, int productId) {
+        return reviewDAO.findByUserIdAndProductId(userId, productId);
+    }
+
+    /**
+     * Kiểm tra user có thể review sản phẩm không.
+     *
+     * @param userId    ID của user
+     * @param productId ID của sản phẩm
+     * @return null nếu có thể review, ngược lại trả về thông báo lỗi
+     */
+    public String canUserReviewProduct(int userId, int productId) {
+        // Kiểm tra đã review chưa
+        if (reviewDAO.existsByUserIdAndProductId(userId, productId)) {
+            return "ALREADY_REVIEWED";
+        }
+
+        // Kiểm tra đã mua và nhận hàng thành công chưa
+        if (orderDAO.hasUserPurchasedProduct(userId, productId)) {
+            return null; // Có thể review
+        }
+
+        // Kiểm tra đã đặt hàng nhưng chưa nhận
+        if (orderDAO.hasUserPurchasedProductPending(userId, productId)) {
+            return "ORDER_NOT_COMPLETED";
+        }
+
+        // Chưa từng mua
+        return "NOT_PURCHASED";
     }
 
     /**

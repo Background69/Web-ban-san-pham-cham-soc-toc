@@ -20,7 +20,7 @@ public class ShippingAddress {
     private String wardName;
     private String specificAddress;
     private String note;
-    private boolean isDefault;
+    private boolean defaultAddress;
     private Timestamp createdAt;
 
     // Constructors
@@ -132,12 +132,12 @@ public class ShippingAddress {
         this.note = note;
     }
 
-    public boolean isDefault() {
-        return isDefault;
+    public boolean isDefaultAddress() {
+        return defaultAddress;
     }
 
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
+    public void setDefaultAddress(boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 
     public Timestamp getCreatedAt() {

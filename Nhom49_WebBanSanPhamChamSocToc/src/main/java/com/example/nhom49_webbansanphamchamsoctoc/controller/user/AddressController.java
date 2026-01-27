@@ -112,7 +112,7 @@ public class AddressController extends HttpServlet {
         address.setWardName(wardName);
         address.setSpecificAddress(addressLine);
         address.setNote(note);
-        address.setDefault(true);
+        address.setDefaultAddress(true);
 
         boolean success;
         ShippingAddress existingAddress = getSingleAddress(user.getUserId());
@@ -193,7 +193,7 @@ public class AddressController extends HttpServlet {
         ShippingAddress fallback = addresses.get(0);
         if (fallback != null) {
             shippingService.setDefaultAddress(userId, fallback.getAddressId());
-            fallback.setDefault(true);
+            fallback.setDefaultAddress(true);
         }
         return fallback;
     }
