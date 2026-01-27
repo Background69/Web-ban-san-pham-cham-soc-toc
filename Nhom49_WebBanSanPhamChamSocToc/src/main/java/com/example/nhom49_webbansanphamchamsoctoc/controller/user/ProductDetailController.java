@@ -1,6 +1,5 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
-
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ReviewService;
@@ -24,7 +23,6 @@ public class ProductDetailController extends HttpServlet {
         productService = new ProductService();
         reviewService = new ReviewService();
     }
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,6 +57,14 @@ public class ProductDetailController extends HttpServlet {
         request.setAttribute("reviewCount", reviewService.countReviewsByProduct(product.getProductId()));
         request.setAttribute("ratingStats", reviewService.getRatingStatistics(product.getProductId()));
         request.setAttribute("relatedProducts", relatedProducts);
+
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            com.example.nhom49_webbansanphamchamsoctoc.model.User user = (com.example.nhom49_webbansanphamchamsoctoc.model.User) session
+                    .getAttribute("user");
+            String canReviewStatus = reviewService.canUserReviewProduct(user.getUserId(), product.getProductId());
+            request.setAttribute("canReviewStatus", canReviewStatus);
+        }
 
         request.getRequestDispatcher("/user/product/product-detail.jsp").forward(request, response);
     }
