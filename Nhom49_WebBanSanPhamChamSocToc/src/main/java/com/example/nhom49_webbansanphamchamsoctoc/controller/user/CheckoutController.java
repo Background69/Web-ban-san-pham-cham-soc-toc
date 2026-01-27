@@ -1,12 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
-import com.example.nhom49_webbansanphamchamsoctoc.model.Cart;
-import com.example.nhom49_webbansanphamchamsoctoc.model.CartItem;
-import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
-import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.model.*;
 import com.example.nhom49_webbansanphamchamsoctoc.services.CartService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.OrderService;
+import com.example.nhom49_webbansanphamchamsoctoc.services.PaymentService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ShippingService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
@@ -18,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +25,14 @@ public class CheckoutController extends HttpServlet {
     private OrderService orderService;
     private ShippingService shippingService;
     private CartService cartService;
+    private PaymentService paymentService;
 
     @Override
     public void init() throws ServletException {
         orderService = new OrderService();
         shippingService = new ShippingService();
         cartService = new CartService();
+        paymentService = new PaymentService();
     }
 
     @Override
@@ -118,6 +119,40 @@ public class CheckoutController extends HttpServlet {
 
         Map<Integer, Integer> cartMap = cart.toVariantQuantityMap();
 
+        // Check nếu phương thức thanh toán cần QR
+        if ("bank_transfer".equalsIgnoreCase(paymentMethod) || "momo".equalsIgnoreCase(paymentMethod)) {
+            // Tính toán tiền
+            List<CartItem> cartItems = cartService.getCartItems(session);
+            BigDecimal subtotal = cartService.calculateSubtotal(cartItems);
+            BigDecimal shippingFee = "express".equalsIgnoreCase(shippingMethod) ? new BigDecimal("50000") : new BigDecimal("30000");
+            BigDecimal totalAmount = subtotal.add(shippingFee);
+
+            // Tạo giao dịch
+            PaymentTransaction transaction = paymentService.createTransaction(
+                user.getUserId(), totalAmount, paymentMethod
+            );
+
+            if (transaction != null) {
+                // Lưu data
+                Map<String, Object> orderData = new HashMap<>();
+                orderData.put("address", address);
+                orderData.put("shippingMethod", shippingMethod);
+                orderData.put("paymentMethod", paymentMethod);
+
+                session.setAttribute("orderTempId", transaction.getOrderTempId());
+                session.setAttribute("orderData", orderData);
+
+                // Di chuyển đến trang QR
+                response.sendRedirect(request.getContextPath() + "/payment/qr");
+                return;
+            } else {
+                request.setAttribute("error", "Không thể tạo giao dịch thanh toán. Vui lòng thử lại.");
+                doGet(request, response);
+                return;
+            }
+        }
+
+        // COD
         Order order = orderService.createOrder(
                 user.getUserId(),
                 cartMap,
