@@ -152,7 +152,6 @@ public class OrderDAO implements IDAO<Order> {
                 .map((rs, ctx) -> mapOrder(rs))
                 .list());
     }
-
     /**
      * Tim by order code.
      *

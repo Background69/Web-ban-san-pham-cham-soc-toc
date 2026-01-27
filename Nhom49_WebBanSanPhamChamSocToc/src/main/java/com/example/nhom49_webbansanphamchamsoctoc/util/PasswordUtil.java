@@ -7,8 +7,6 @@ import org.mindrot.jbcrypt.BCrypt;
  * Sử dụng BCrypt để bảo mật
  */
 public class PasswordUtil {
-
-    // BCrypt work factor (cost) - càng cao càng an toàn nhưng chậm hơn
     private static final int BCRYPT_ROUNDS = 12;
 
     /**

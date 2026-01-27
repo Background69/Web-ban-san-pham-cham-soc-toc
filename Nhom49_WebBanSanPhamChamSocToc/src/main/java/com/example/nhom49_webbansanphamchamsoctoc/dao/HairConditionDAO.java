@@ -23,7 +23,6 @@ public class HairConditionDAO implements IDAO<HairCondition> {
                 .findFirst()
                 .orElse(null));
     }
-
     @Override
     public List<HairCondition> findAll() {
         String sql = "SELECT condition_id, condition_name, condition_slug FROM hair_conditions";
