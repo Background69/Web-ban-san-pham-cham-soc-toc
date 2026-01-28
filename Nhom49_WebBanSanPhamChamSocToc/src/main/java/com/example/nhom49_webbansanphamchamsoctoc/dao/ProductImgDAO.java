@@ -6,72 +6,174 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-public class ProductImgDAO {
+/**
+ * Lớp ProductImageDao.
+ */
+public class ProductImgDAO implements IDAO<ProductImage> {
 
     private final Jdbi jdbi;
 
+    /**
+     * Thực hiện product image dao.
+     */
     public ProductImgDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    public int insert(ProductImage img) {
-        String sql = "INSERT INTO product_images (product_id, image_url, is_primary) VALUES (:productId, :imageUrl, :isPrimary)";
-        return jdbi.withHandle(handle -> handle.createUpdate(sql)
-                .bind("productId", img.getProductId())
-                .bind("imageUrl", img.getImageUrl())
-                .bind("isPrimary", img.isPrimary() ? 1 : 0)
-                .executeAndReturnGeneratedKeys("image_id")
-                .mapTo(Integer.class)
-                .findFirst()
-                .orElse(-1));
+
+    /**
+     * Tim all.
+     *
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public List<ProductImage> findAll() {
+        String sql = "SELECT * FROM product_images";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs, ctx) -> mapImage(rs))
+                        .list()
+        );
     }
 
+    /**
+     * Tim by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    public List<ProductImage> findByProductId(int productId) {
+        String sql = "SELECT * FROM product_images WHERE product_id = :productId ORDER BY is_primary DESC";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .map((rs, ctx) -> mapImage(rs))
+                        .list()
+        );
+    }
+
+    /**
+     * Tim primary by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    public ProductImage findPrimaryByProductId(int productId) {
+        String sql = "SELECT * FROM product_images WHERE product_id = :productId AND is_primary = true LIMIT 1";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .map((rs, ctx) -> mapImage(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+    /**
+     * Tim by id.
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public ProductImage findById(int id) {
+        String sql = "SELECT * FROM product_images WHERE image_id = :id";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("id", id)
+                        .map((rs, ctx) -> mapImage(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
+
+    /**
+     * Them .
+     *
+     * @param image Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public int insert(ProductImage image) {
+        String sql = "INSERT INTO product_images (product_id, image_url, is_primary) VALUES (:productId, :imageUrl, :isPrimary)";
+        return jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("productId", image.getProductId())
+                        .bind("imageUrl", image.getImageUrl())
+                        .bind("isPrimary", image.isPrimary())
+                        .executeAndReturnGeneratedKeys("image_id")
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(-1)
+        );
+    }
+
+    /**
+     * Cập nhật .
+     *
+     * @param image Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public boolean update(ProductImage image) {
+        String sql = "UPDATE product_images SET image_url = :imageUrl, is_primary = :isPrimary WHERE image_id = :imageId";
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("imageUrl", image.getImageUrl())
+                        .bind("isPrimary", image.isPrimary())
+                        .bind("imageId", image.getImageId())
+                        .execute()
+        );
+        return rowsAffected > 0;
+    }
+
+    /**
+     * Xóa .
+     *
+     * @param id Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    @Override
+    public boolean delete(int id) {
+        String sql = "DELETE FROM product_images WHERE image_id = :imageId";
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("imageId", id)
+                        .execute()
+        );
+        return rowsAffected > 0;
+    }
+
+    /**
+     * Xóa by product id.
+     *
+     * @param productId Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
     public boolean deleteByProductId(int productId) {
         String sql = "DELETE FROM product_images WHERE product_id = :productId";
-        int rows = jdbi.withHandle(handle -> handle.createUpdate(sql)
-                .bind("productId", productId)
-                .execute());
-        return rows > 0;
+        int rowsAffected = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("productId", productId)
+                        .execute()
+        );
+        return rowsAffected > 0;
     }
 
-    public boolean setAllNonPrimary(int productId) {
-        String sql = "UPDATE product_images SET is_primary = 0 WHERE product_id = :productId";
-        int rows = jdbi.withHandle(handle -> handle.createUpdate(sql)
-                .bind("productId", productId)
-                .execute());
-        return rows >= 0;
-    }
-
-    public List<ProductImage> findByProductId(int productId) {
-        String sql = "SELECT image_id, product_id, image_url, is_primary FROM product_images " +
-                "WHERE product_id = :productId ORDER BY is_primary DESC, image_id DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("productId", productId)
-                .map((rs, ctx) -> {
-                    ProductImage img = new ProductImage();
-                    img.setImageId(rs.getInt("image_id"));
-                    img.setProductId(rs.getInt("product_id"));
-                    img.setImageUrl(rs.getString("image_url"));
-                    img.setPrimary(rs.getInt("is_primary") == 1);
-                    return img;
-                })
-                .list());
-    }
-
-    public ProductImage findPrimaryByProductId(int productId) {
-        String sql = "SELECT image_id, product_id, image_url, is_primary FROM product_images " +
-                "WHERE product_id = :productId AND is_primary = 1 ORDER BY image_id DESC LIMIT 1";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("productId", productId)
-                .map((rs, ctx) -> {
-                    ProductImage img = new ProductImage();
-                    img.setImageId(rs.getInt("image_id"));
-                    img.setProductId(rs.getInt("product_id"));
-                    img.setImageUrl(rs.getString("image_url"));
-                    img.setPrimary(rs.getInt("is_primary") == 1);
-                    return img;
-                })
-                .findFirst()
-                .orElse(null));
+    /**
+     * Thực hiện map image.
+     *
+     * @param rs Tham số đầu vào.
+     * @return Kết quả xử lý của phương thức.
+     */
+    private ProductImage mapImage(java.sql.ResultSet rs) throws java.sql.SQLException {
+        ProductImage image = new ProductImage();
+        image.setImageId(rs.getInt("image_id"));
+        image.setProductId(rs.getInt("product_id"));
+        image.setImageUrl(rs.getString("image_url"));
+        image.setPrimary(rs.getBoolean("is_primary"));
+        image.setCreatedAt(rs.getTimestamp("created_at"));
+        return image;
     }
 }
