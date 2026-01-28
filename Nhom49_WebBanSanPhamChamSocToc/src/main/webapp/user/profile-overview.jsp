@@ -116,13 +116,6 @@
             <div class="stat-value">${stats.totalAddresses != null ? stats.totalAddresses : 0}</div>
             <div class="stat-label">Địa chỉ</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon icon-points">
-                <i class="fas fa-star"></i>
-            </div>
-            <div class="stat-value">${stats.loyaltyPoints != null ? stats.loyaltyPoints : 0}</div>
-            <div class="stat-label">Điểm tích lũy</div>
-        </div>
     </div>
 
     <!-- Tab Navigation -->

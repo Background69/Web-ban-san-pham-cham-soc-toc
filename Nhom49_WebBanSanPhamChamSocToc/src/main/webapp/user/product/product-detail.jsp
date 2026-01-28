@@ -373,7 +373,7 @@
                                         đã đánh giá sản phẩm này.</p>
                                 </div>
                             </c:when>
-                            <c:when test="${canReviewStatus == 'ORDER_PENDING'}">
+                            <c:when test="${canReviewStatus == 'ORDER_NOT_COMPLETED'}">
                                 <div class="login-to-review">
                                     <p><i class="fas fa-clock" style="color: #ffc107;"></i> Đơn hàng của
                                         bạn đang được xử lý. Vui lòng đợi đơn hàng hoàn thành để đánh

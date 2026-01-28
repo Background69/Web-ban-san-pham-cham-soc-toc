@@ -11,15 +11,67 @@
         </c:choose>
     </title>
     <style>
-        body{font-family:Arial,sans-serif;background:#f6f7fb;margin:0}
-        .wrap{max-width:720px;margin:60px auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-        h2{margin:0 0 16px}
-        label{display:block;margin:12px 0 6px}
-        input{width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:10px;outline:none}
-        input:focus{border-color:#6b8e23}
-        .actions{margin-top:18px;display:flex;gap:10px;justify-content:flex-end}
-        .btn{padding:10px 14px;border-radius:10px;border:1px solid #ccc;background:#fff;cursor:pointer;text-decoration:none;color:#111;display:inline-flex;align-items:center;gap:6px}
-        .btn.primary{background:#6b8e23;border-color:#6b8e23;color:#fff}
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            margin: 0
+        }
+
+        .wrap {
+            max-width: 720px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08)
+        }
+
+        h2 {
+            margin: 0 0 16px
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none
+        }
+
+        input:focus {
+            border-color: #6b8e23
+        }
+
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end
+        }
+
+        .btn {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            color: #111;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .btn.primary {
+            background: #6b8e23;
+            border-color: #6b8e23;
+            color: #fff
+        }
     </style>
 </head>
 <body>

@@ -17,7 +17,8 @@ import java.util.List;
 @WebServlet(name = "OrderManagementController", value = "/admin/orders")
 public class OrderManagementController extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         OrderDAO orderDAO = new OrderDAO();
         // Cập nhật trạng thái của đơn hàng
@@ -26,11 +27,17 @@ public class OrderManagementController extends HttpServlet {
             int orderId = Integer.parseInt(request.getParameter("id"));
             String status = request.getParameter("status");
             orderDAO.updateStatus(orderId, status);
-            response.sendRedirect(request.getContextPath() + "/admin/orders");
+            // Nếu gọi từ trang detail, redirect về detail
+            String from = request.getParameter("from");
+            if ("detail".equals(from)) {
+                response.sendRedirect(request.getContextPath() + "/admin/orders?action=detail&id=" + orderId);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/admin/orders");
+            }
             return;
         }
-        //Xoá đơn hàng
-        if ("delete".equals(action)){
+        // Xoá đơn hàng
+        if ("delete".equals(action)) {
             int orderId = Integer.parseInt(request.getParameter("id"));
             orderDAO.delete(orderId);
             response.sendRedirect(request.getContextPath() + "/admin/orders");
@@ -50,14 +57,16 @@ public class OrderManagementController extends HttpServlet {
             return;
         }
 
-        //Danh sách đơn hàng
+        // Danh sách đơn hàng
         List<Order> orders = orderDAO.findAll();
-        request.setAttribute("orders",orders);
+        request.setAttribute("orders", orders);
         request.getRequestDispatcher("/admin/order/list.jsp")
-                .forward(request,response);
+                .forward(request, response);
     }
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
     }
 }

@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -397,8 +398,17 @@
                                     <c:choose>
                                         <c:when
                                                 test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                                            <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
-                                                 alt="Avatar" class="user-avatar">
+                                            <c:choose>
+                                                <c:when
+                                                        test="${sessionScope.currentUser.avatar.startsWith('http')}">
+                                                    <img src="${sessionScope.currentUser.avatar}"
+                                                         alt="Avatar" class="user-avatar">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
+                                                         alt="Avatar" class="user-avatar">
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="default-avatar">
@@ -420,8 +430,17 @@
                                         <c:choose>
                                             <c:when
                                                     test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                                                <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
-                                                     alt="Avatar">
+                                                <c:choose>
+                                                    <c:when
+                                                            test="${sessionScope.currentUser.avatar.startsWith('http')}">
+                                                        <img src="${sessionScope.currentUser.avatar}"
+                                                             alt="Avatar">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
+                                                             alt="Avatar">
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="default-avatar-large">
