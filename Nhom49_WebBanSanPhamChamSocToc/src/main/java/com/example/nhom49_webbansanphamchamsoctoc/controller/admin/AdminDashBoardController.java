@@ -10,21 +10,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 import java.io.IOException;
 
 /**
  * Servlet hiển thị Admin Dashboard
  * GET /admin: Dashboard với thống kê
  */
-@WebServlet(name = "AdminDashBoardController", urlPatterns = {"/admin/dashboard"})
+@WebServlet(name = "AdminDashBoardController", urlPatterns = { "/admin/dashboard" })
 public class AdminDashBoardController extends HttpServlet {
-    //UserDAO userDAO = new UserDAO();
-    //ProductDAO productDAO = new ProductDAO();
-    //OrderDAO orderDAO = new OrderDAO();
+    // UserDAO userDAO = new UserDAO();
+    // ProductDAO productDAO = new ProductDAO();
+    // OrderDAO orderDAO = new OrderDAO();
     private UserDAO userDAO;
     private ProductDAO productDAO;
     private OrderDAO orderDAO;
+
     @Override
     public void init() throws ServletException {
         productDAO = new ProductDAO();
@@ -32,15 +32,14 @@ public class AdminDashBoardController extends HttpServlet {
         orderDAO = new OrderDAO();
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             // Thống kê
             request.setAttribute("totalProducts", productDAO.countAll());
-            request.setAttribute("totalUsers", userDAO.findAll().size());
-            request.setAttribute("totalOrders", orderDAO.findAll().size());
+            request.setAttribute("totalUsers", userDAO.countAll());
+            request.setAttribute("totalOrders", orderDAO.countOrders());
             request.setAttribute("totalRevenue", orderDAO.totalRevenue());
 
             // Đơn hàng gần nhất (CHỈ SET 1 LẦN)

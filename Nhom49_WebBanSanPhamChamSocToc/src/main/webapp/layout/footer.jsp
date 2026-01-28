@@ -120,8 +120,10 @@
         <div class="footer-bottom-content">
             <p><i class="far fa-copyright me-1"></i>2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
             <div class="footer-bottom-links">
-                <a href="${pageContext.request.contextPath}/terms"><i class="fas fa-file-contract me-1"></i>Điều khoản sử dụng</a>
-                <a href="${pageContext.request.contextPath}/privacy"><i class="fas fa-user-shield me-1"></i>Chính sách bảo mật</a>
+                <a href="${pageContext.request.contextPath}/terms"><i class="fas fa-file-contract me-1"></i>Điều khoản
+                    sử dụng</a>
+                <a href="${pageContext.request.contextPath}/privacy"><i class="fas fa-user-shield me-1"></i>Chính sách
+                    bảo mật</a>
             </div>
         </div>
     </div>

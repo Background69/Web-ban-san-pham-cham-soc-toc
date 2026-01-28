@@ -63,6 +63,9 @@ public class ProductDetailController extends HttpServlet {
             com.example.nhom49_webbansanphamchamsoctoc.model.User user = (com.example.nhom49_webbansanphamchamsoctoc.model.User) session
                     .getAttribute("user");
             String canReviewStatus = reviewService.canUserReviewProduct(user.getUserId(), product.getProductId());
+            if (canReviewStatus == null) {
+                canReviewStatus = "CAN_REVIEW";
+            }
             request.setAttribute("canReviewStatus", canReviewStatus);
         }
 

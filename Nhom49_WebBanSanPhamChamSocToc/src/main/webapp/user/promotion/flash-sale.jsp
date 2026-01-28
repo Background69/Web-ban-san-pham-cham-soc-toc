@@ -134,12 +134,12 @@
                     <ul class="flash-pagination-list">
                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                             <a class="page-link"
-                               href="${pageContext.request.requestURI}?page=${prevPage}">Previous</a>
+                               href="${pageContext.request.contextPath}/flash-sale?page=${prevPage}">Trước</a>
                         </li>
                         <c:if test="${startPage > 1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="${pageContext.request.requestURI}?page=1">1</a>
+                                   href="${pageContext.request.contextPath}/flash-sale?page=1">1</a>
                             </li>
                             <c:if test="${startPage > 2}">
                                 <li class="page-item ellipsis"><span class="page-ellipsis">...</span>
@@ -149,7 +149,7 @@
                         <c:forEach var="i" begin="${startPage}" end="${endPage}">
                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                 <a class="page-link"
-                                   href="${pageContext.request.requestURI}?page=${i}">${i}</a>
+                                   href="${pageContext.request.contextPath}/flash-sale?page=${i}">${i}</a>
                             </li>
                         </c:forEach>
                         <c:if test="${endPage < totalPages}">
@@ -159,12 +159,12 @@
                             </c:if>
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="${pageContext.request.requestURI}?page=${totalPages}">${totalPages}</a>
+                                   href="${pageContext.request.contextPath}/flash-sale?page=${totalPages}">${totalPages}</a>
                             </li>
                         </c:if>
                         <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
                             <a class="page-link"
-                               href="${pageContext.request.requestURI}?page=${nextPage}">Next</a>
+                               href="${pageContext.request.contextPath}/flash-sale?page=${nextPage}">Sau</a>
                         </li>
                     </ul>
                 </nav>
