@@ -11,21 +11,50 @@ import java.util.List;
 
 public class PromotionDAO implements IDAO<Promotion> {
     private final Jdbi jdbi = JDBIConnector.getInstance();
+
     @Override
     public Promotion findById(int id) {
-        String sql = "SELECT * FROM promotion WHERE id=: id";
+        String sql = """
+            SELECT
+                promotion_id,
+                promotion_name,
+                promotion_type,
+                discount_percent,
+                badge_text,
+                NULLIF(start_date, '0000-00-00 00:00:00') AS start_date,
+                NULLIF(end_date,   '0000-00-00 00:00:00') AS end_date,
+                is_active,
+                NULLIF(created_at, '0000-00-00 00:00:00') AS created_at
+            FROM promotions
+            WHERE promotion_id = :id
+            """;
+
         return jdbi.withHandle(handle ->
-                 handle.createQuery(sql)
-                         .bind("id", id)
-                         .map((rs, ctx)->mapPromotion(rs))
-                         .findFirst()
-                         .orElse(null)
+                handle.createQuery(sql)
+                        .bind("id", id)
+                        .map((rs, ctx) -> mapPromotion(rs))
+                        .findFirst()
+                        .orElse(null)
         );
     }
 
     @Override
     public List<Promotion> findAll() {
-        String sql = "SELECT * FROM promotions";
+        String sql = """
+            SELECT
+                promotion_id,
+                promotion_name,
+                promotion_type,
+                discount_percent,
+                badge_text,
+                NULLIF(start_date, '0000-00-00 00:00:00') AS start_date,
+                NULLIF(end_date,   '0000-00-00 00:00:00') AS end_date,
+                is_active,
+                NULLIF(created_at, '0000-00-00 00:00:00') AS created_at
+            FROM promotions
+            ORDER BY promotion_id DESC
+            """;
+
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
                         .map((rs, ctx) -> mapPromotion(rs))
@@ -36,13 +65,17 @@ public class PromotionDAO implements IDAO<Promotion> {
     @Override
     public int insert(Promotion entity) {
         String sql = """
-                INSERT INTO promotions
-                (discount_percent, start_date, end_date, is_active)
-                VALUES (:discount, :start, :end, :active)
-                """;
+            INSERT INTO promotions
+            (promotion_name, promotion_type, discount_percent, badge_text, start_date, end_date, is_active)
+            VALUES (:name, :type, :percent, :badge, :start, :end, :active)
+            """;
+
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-                        .bind("discount", entity.getDiscountPercent())
+                        .bind("name", entity.getPromotionName())
+                        .bind("type", entity.getPromotionType())
+                        .bind("percent", entity.getDiscountPercent())
+                        .bind("badge", entity.getBadgeText())
                         .bind("start", entity.getStartDate())
                         .bind("end", entity.getEndDate())
                         .bind("active", entity.isActive())
@@ -53,18 +86,23 @@ public class PromotionDAO implements IDAO<Promotion> {
     @Override
     public boolean update(Promotion entity) {
         String sql = """
-                UPDATE promotions
-                SET 
-                    discount_percent = :discount,
-                    start_date = :start,
-                    end_date = :end,
-                    is_active = :active
-                WHERE promotion_id = :id
-                """;
+            UPDATE promotions SET
+                promotion_name = :name,
+                promotion_type = :type,
+                discount_percent = :percent,
+                badge_text = :badge,
+                start_date = :start,
+                end_date = :end,
+                is_active = :active
+            WHERE promotion_id = :id
+            """;
+
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
-
-                        .bind("discount", entity.getDiscountPercent())
+                        .bind("name", entity.getPromotionName())
+                        .bind("type", entity.getPromotionType())
+                        .bind("percent", entity.getDiscountPercent())
+                        .bind("badge", entity.getBadgeText())
                         .bind("start", entity.getStartDate())
                         .bind("end", entity.getEndDate())
                         .bind("active", entity.isActive())
@@ -84,21 +122,24 @@ public class PromotionDAO implements IDAO<Promotion> {
         );
         return rows > 0;
     }
+
     private Promotion mapPromotion(ResultSet rs) throws SQLException {
         Promotion p = new Promotion();
         p.setPromotionId(rs.getInt("promotion_id"));
-        p.setDiscountPercent(rs.getInt("discount_percent"));
+        p.setPromotionName(rs.getString("promotion_name"));
+        p.setPromotionType(rs.getString("promotion_type"));
+        p.setDiscountPercent((Integer) rs.getObject("discount_percent"));
+        p.setBadgeText(rs.getString("badge_text"));
+        p.setActive(rs.getBoolean("is_active"));
 
         Timestamp start = rs.getTimestamp("start_date");
         Timestamp end = rs.getTimestamp("end_date");
+        Timestamp created = rs.getTimestamp("created_at");
 
         p.setStartDate(start != null ? start.toLocalDateTime() : null);
         p.setEndDate(end != null ? end.toLocalDateTime() : null);
-
-        p.setActive(rs.getBoolean("is_active"));
-        p.setCreatedAt(Timestamp.valueOf(rs.getTimestamp("created_at").toLocalDateTime()));
+        p.setCreatedAt(created);
 
         return p;
     }
-
 }
