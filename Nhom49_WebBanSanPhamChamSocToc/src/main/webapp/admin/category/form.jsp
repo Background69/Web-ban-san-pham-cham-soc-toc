@@ -96,7 +96,7 @@
         <input type="text" name="categorySlug" value="${category.categorySlug}" required maxlength="120">
 
         <div class="actions">
-            <a class="btn" href="${pageContext.request.contextPath}/admin/category">⬅ Quay lại</a>
+            <a class="btn" href="${pageContext.request.contextPath}/admin/categories">⬅ Quay lại</a>
             <button class="btn primary" type="submit">💾 Lưu</button>
         </div>
     </form>
