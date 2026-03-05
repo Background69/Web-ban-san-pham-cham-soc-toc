@@ -119,12 +119,11 @@
                                 <div class="cart-item-actions">
                                     <div class="quantity-control">
                                         <button type="button" class="quantity-btn"
-                                                onclick="updateQuantity(${item.variant.variantId}, ${item.quantity - 1})"
-                                            ${item.quantity <=1 ? 'disabled' : '' }>
+                                                onclick="updateQuantity(${item.variant.variantId}, ${item.quantity - 1})">
                                             <i class="fas fa-minus"></i>
                                         </button>
                                         <input type="number" class="quantity-input"
-                                               value="${item.quantity}" min="1"
+                                               value="${item.quantity}" min="0"
                                                max="${item.variant.stockQuantity}"
                                                onchange="updateQuantity(${item.variant.variantId}, this.value)">
                                         <button type="button" class="quantity-btn"

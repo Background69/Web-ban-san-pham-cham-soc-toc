@@ -151,9 +151,23 @@
                                     <c:if test="${loop.index < 2}">
                                         <div class="order-item">
                                             <div class="order-item-image">
-                                                <img src="${pageContext.request.contextPath}/static/${not empty item.productImage ? item.productImage : 'images/default-product.png'}"
-                                                     alt="${item.productName}"
-                                                     onerror="this.src='${pageContext.request.contextPath}/static/images/default-product.png'">
+                                                <c:choose>
+                                                    <c:when test="${empty item.productImage}">
+                                                        <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png"
+                                                             alt="${item.productName}">
+                                                    </c:when>
+                                                    <c:when
+                                                            test="${item.productImage.startsWith('http')}">
+                                                        <img src="${item.productImage}"
+                                                             alt="${item.productName}"
+                                                             onerror="this.src='${pageContext.request.contextPath}/static/assets/icons/LOGO.png'">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${pageContext.request.contextPath}/static/${item.productImage}"
+                                                             alt="${item.productName}"
+                                                             onerror="this.src='${pageContext.request.contextPath}/static/assets/icons/LOGO.png'">
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </div>
                                             <div class="order-item-info">
                                                 <span class="order-item-name">${item.productName}</span>

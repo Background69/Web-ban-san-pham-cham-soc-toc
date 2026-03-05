@@ -3,11 +3,11 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>Quản lý người dùng</title>
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 </head>
 
 <body>
@@ -21,13 +21,14 @@
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li ><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/users">Quản lý người
+                dùng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm giá</a></li>
         </ul>
 
         <a class="view-site" href="${pageContext.request.contextPath}/index">
@@ -62,7 +63,8 @@
                     <td>${user.phone}</td>
                     <td>${user.role}</td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin/users?action=detail&id=${user.userId}">
+                        <a
+                                href="${pageContext.request.contextPath}/admin/users?action=detail&id=${user.userId}">
                             Chi tiết
                         </a>
                     </td>
@@ -79,4 +81,5 @@
     </main>
 </div>
 </body>
+
 </html>

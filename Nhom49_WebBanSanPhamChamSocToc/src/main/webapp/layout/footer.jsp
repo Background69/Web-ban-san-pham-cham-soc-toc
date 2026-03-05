@@ -89,23 +89,6 @@
                     </div>
                 </div>
 
-                <!-- Payment methods -->
-                <div class="payment">
-                    <h4><i class="fas fa-credit-card me-2"></i>Thanh toán</h4>
-                    <div class="payment-methods">
-                        <a class="logo-tile"><img alt="Visa"
-                                                  src="${pageContext.request.contextPath}/static/assets/icons/VisaIcon.svg"></a>
-                        <a class="logo-tile"><img alt="MasterCard"
-                                                  src="${pageContext.request.contextPath}/static/assets/icons/MasterCardIcon.svg"></a>
-                        <a class="logo-tile"><img alt="Napas"
-                                                  src="${pageContext.request.contextPath}/static/assets/icons/NapasIcon.svg"></a>
-                        <a class="logo-tile"><img alt="VNPay"
-                                                  src="${pageContext.request.contextPath}/static/assets/icons/VNPayIcon.png"></a>
-                        <a class="logo-tile"><img alt="MoMo"
-                                                  src="${pageContext.request.contextPath}/static/assets/icons/MoMoIcon.svg"></a>
-                    </div>
-                </div>
-
                 <!-- Badges -->
                 <div class="mt-3">
                     <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Chính hãng 100%</span>
@@ -120,8 +103,10 @@
         <div class="footer-bottom-content">
             <p><i class="far fa-copyright me-1"></i>2025 Khoa Công Nghệ Thông Tin. Tất cả quyền được bảo lưu.</p>
             <div class="footer-bottom-links">
-                <a href="${pageContext.request.contextPath}/terms"><i class="fas fa-file-contract me-1"></i>Điều khoản sử dụng</a>
-                <a href="${pageContext.request.contextPath}/privacy"><i class="fas fa-user-shield me-1"></i>Chính sách bảo mật</a>
+                <a href="${pageContext.request.contextPath}/terms"><i class="fas fa-file-contract me-1"></i>Điều khoản
+                    sử dụng</a>
+                <a href="${pageContext.request.contextPath}/privacy"><i class="fas fa-user-shield me-1"></i>Chính sách
+                    bảo mật</a>
             </div>
         </div>
     </div>

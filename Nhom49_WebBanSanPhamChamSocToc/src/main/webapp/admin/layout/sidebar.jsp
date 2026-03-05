@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 
 <style>
     .sidebar {
@@ -78,27 +78,27 @@
 
     <ul class="menu">
         <li class="${activeMenu == 'dashboard' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Dashboard</a>
+            <a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
         </li>
 
         <li class="${activeMenu == 'users' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/user/list.jsp">Quản lý người dùng</a>
+            <a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a>
         </li>
 
         <li class="${activeMenu == 'categories' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/category/list.jsp">Quản lý danh mục</a>
+            <a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a>
         </li>
 
         <li class="${activeMenu == 'brands' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/brand/list.jsp">Quản lý thương hiệu</a>
+            <a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a>
         </li>
 
         <li class="${activeMenu == 'products' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/product/list.jsp">Quản lý sản phẩm</a>
+            <a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a>
         </li>
 
         <li class="${activeMenu == 'orders' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/order/list.jsp">Quản lý đơn hàng</a>
+            <a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a>
         </li>
 
         <!-- ✅ FLASH SALE: ĐI QUA CONTROLLER -->
@@ -109,7 +109,7 @@
         </li>
     </ul>
 
-    <a class="view-site" href="${pageContext.request.contextPath}/index">
+    <a class="view-site" href="${pageContext.request.contextPath}/">
         Quay lại Website
     </a>
 </aside>

@@ -11,43 +11,68 @@
           href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
 
     <style>
-        .form-card{
-            background:#fff;
-            border-radius:14px;
-            padding:20px;
-            max-width:720px;
-            box-shadow:0 8px 30px rgba(0,0,0,.06)
+        .form-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            max-width: 720px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .06)
         }
-        .form-row{
-            display:flex;
-            flex-direction:column;
-            gap:6px;
-            margin-bottom:14px
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px
         }
-        .form-row label{font-weight:700}
+
+        .form-row label {
+            font-weight: 700
+        }
+
         .form-row input,
-        .form-row select{
-            padding:10px 12px;
-            border:1px solid #cfcfcf;
-            border-radius:10px
+        .form-row select {
+            padding: 10px 12px;
+            border: 1px solid #cfcfcf;
+            border-radius: 10px
         }
-        .actions{
-            display:flex;
-            gap:10px;
-            margin-top:14px;
-            flex-wrap:wrap
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap
         }
-        .btn{
-            border:none;
-            border-radius:10px;
-            padding:10px 14px;
-            font-weight:700;
-            cursor:pointer
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 700;
+            cursor: pointer
         }
-        .btn-primary{background:#2e7d32;color:#fff}
-        .btn-soft{background:#eeeeee;color:#000;text-decoration:none}
-        .btn-danger{background:#ffebee;color:#b71c1c}
-        .note{font-size:13px;color:#666;margin-top:6px}
+
+        .btn-primary {
+            background: #2e7d32;
+            color: #fff
+        }
+
+        .btn-soft {
+            background: #eeeeee;
+            color: #000;
+            text-decoration: none
+        }
+
+        .btn-danger {
+            background: #ffebee;
+            color: #b71c1c
+        }
+
+        .note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 6px
+        }
     </style>
 </head>
 
@@ -96,7 +121,8 @@
                     <div class="form-row">
                         <label>Vai trò</label>
                         <select name="role">
-                            <option value="Khách hàng" ${user.role == 'Khách hàng' ? 'selected' : ''}>Khách hàng</option>
+                            <option value="Khách hàng" ${user.role == 'Khách hàng' ? 'selected' : ''}>Khách hàng
+                            </option>
                             <option value="Admin" ${user.role == 'Admin' ? 'selected' : ''}>Admin</option>
                         </select>
                         <div class="note">Đổi vai trò sẽ ảnh hưởng quyền truy cập.</div>
