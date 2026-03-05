@@ -93,16 +93,10 @@
     <!-- Statistics Cards -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-icon icon-orders">
-                <i class="fas fa-box"></i>
-            </div>
             <div class="stat-value">${stats.totalOrders != null ? stats.totalOrders : 0}</div>
             <div class="stat-label">Đơn hàng</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon icon-spending">
-                <i class="fas fa-wallet"></i>
-            </div>
             <div class="stat-value">
                 <fmt:formatNumber value="${stats.totalSpending != null ? stats.totalSpending : 0}"
                                   type="number" maxFractionDigits="0"/>đ
@@ -110,9 +104,6 @@
             <div class="stat-label">Chi tiêu</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon icon-addresses">
-                <i class="fas fa-map-marker-alt"></i>
-            </div>
             <div class="stat-value">${stats.totalAddresses != null ? stats.totalAddresses : 0}</div>
             <div class="stat-label">Địa chỉ</div>
         </div>

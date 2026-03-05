@@ -434,7 +434,7 @@
         <div class="info-grid">
             <!-- Customer Info -->
             <div class="info-card">
-                <h3><span class="icon">👤</span> Thông tin khách hàng</h3>
+                <h3>Thông tin khách hàng</h3>
                 <div class="info-row">
                     <span class="info-label">Họ tên</span>
                     <span class="info-value">${order.shippingFullName}</span>
@@ -451,7 +451,7 @@
 
             <!-- Order Info -->
             <div class="info-card">
-                <h3><span class="icon">📋</span> Thông tin đơn hàng</h3>
+                <h3> Thông tin đơn hàng</h3>
                 <div class="info-row">
                     <span class="info-label">Mã đơn</span>
                     <span class="info-value">${order.orderCode}</span>
@@ -503,12 +503,9 @@
                                                      src="${pageContext.request.contextPath}/static/${item.productImage}"
                                                      alt="${item.productName}"
                                                      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                                                <div class="product-img-placeholder"
-                                                     style="display:none">📷
-                                                </div>
                                             </c:when>
                                             <c:otherwise>
-                                                <div class="product-img-placeholder">📷</div>
+                                                <div class="product-img-placeholder"></div>
                                             </c:otherwise>
                                         </c:choose>
                                         <div class="product-info">
@@ -570,7 +567,6 @@
                 </c:when>
                 <c:otherwise>
                     <div class="empty-state">
-                        <div class="icon">📦</div>
                         <p>Không có sản phẩm trong đơn hàng này</p>
                     </div>
                 </c:otherwise>

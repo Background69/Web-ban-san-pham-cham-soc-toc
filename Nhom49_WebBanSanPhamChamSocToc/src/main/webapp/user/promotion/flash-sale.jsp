@@ -27,20 +27,6 @@
         <div class="flash-content">
             <h1>FLASH SALE SIÊU ƯU ĐÃI</h1>
             <p>Giảm đến 70% - Số lượng có hạn</p>
-            <div class="countdown" id="countdown">
-                <div class="time-box">
-                    <span id="hours">02</span>
-                    <small>Gi?</small>
-                </div>
-                <div class="time-box">
-                    <span id="minutes">15</span>
-                    <small>Phút</small>
-                </div>
-                <div class="time-box">
-                    <span id="seconds">30</span>
-                    <small>Giây</small>
-                </div>
-            </div>
         </div>
     </div>
 

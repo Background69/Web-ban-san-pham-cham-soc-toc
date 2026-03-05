@@ -174,27 +174,29 @@
                         <button type="button" class="qty-btn plus">+</button>
                     </div>
 
-                    <div class="stock-line">
-                        <c:choose>
-                            <c:when test="${product.defaultVariant.stockQuantity > 0}">
+                    <c:if test="${product.onSale}">
+                        <div class="stock-line">
+                            <c:choose>
+                                <c:when test="${product.defaultVariant.stockQuantity > 0}">
                                                 <span class="in-stock">Còn ${product.defaultVariant.stockQuantity} sản
                                                     phẩm</span>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="out-of-stock">Hết hàng</span>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                    <c:if test="${product.stockQuantity > 0}">
-                        <div class="stock-progress">
-                            <div class="stock-progress-bar">
-                                <div class="stock-progress-fill" style="width: ${product.soldPercent}%">
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="out-of-stock">Hết hàng</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        <c:if test="${product.stockQuantity > 0}">
+                            <div class="stock-progress">
+                                <div class="stock-progress-bar">
+                                    <div class="stock-progress-fill" style="width: ${product.soldPercent}%">
+                                    </div>
+                                </div>
+                                <div class="stock-progress-text">
+                                    Đã bán ${product.soldQuantity}/${product.stockQuantity}
                                 </div>
                             </div>
-                            <div class="stock-progress-text">
-                                Đã bán ${product.soldQuantity}/${product.stockQuantity}
-                            </div>
-                        </div>
+                        </c:if>
                     </c:if>
                 </div>
             </div>
