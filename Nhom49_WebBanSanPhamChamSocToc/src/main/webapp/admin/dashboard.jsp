@@ -83,36 +83,40 @@
                             <fmt:formatNumber value="${order.totalAmount}" type="number"/> ₫
                         </td>
                         <td>
-                            <c:set var="statusText" value="${order.orderStatus}"/>
-                            <c:set var="statusClass" value="${order.orderStatus}"/>
+                            <c:set var="rawStatus" value="${order.orderStatus}"/>
+                            <c:set var="normalizedStatus"
+                                   value="${rawStatus != null ? rawStatus.toLowerCase() : ''}"/>
+                            <c:set var="statusText" value="${rawStatus}"/>
+                            <c:set var="statusClass" value="unknown"/>
                             <c:choose>
-                                <c:when
-                                        test="${order.orderStatus eq 'pending' or order.orderStatus eq 'PENDING'}">
+                                <c:when test="${normalizedStatus eq 'pending'}">
                                     <c:set var="statusText" value="Chờ xử lý"/>
                                     <c:set var="statusClass" value="pending"/>
                                 </c:when>
-                                <c:when
-                                        test="${order.orderStatus eq 'confirmed' or order.orderStatus eq 'CONFIRMED'}">
+                                <c:when test="${normalizedStatus eq 'confirmed'}">
                                     <c:set var="statusText" value="Đã xác nhận"/>
                                     <c:set var="statusClass" value="confirmed"/>
                                 </c:when>
-                                <c:when
-                                        test="${order.orderStatus eq 'processing' or order.orderStatus eq 'PROCESSING'}">
+                                <c:when test="${normalizedStatus eq 'processing'}">
                                     <c:set var="statusText" value="Đang xử lý"/>
                                     <c:set var="statusClass" value="processing"/>
                                 </c:when>
-                                <c:when
-                                        test="${order.orderStatus eq 'shipping' or order.orderStatus eq 'SHIPPING'}">
+                                <c:when test="${normalizedStatus eq 'shipping'}">
                                     <c:set var="statusText" value="Đang giao"/>
                                     <c:set var="statusClass" value="shipping"/>
                                 </c:when>
                                 <c:when
-                                        test="${order.orderStatus eq 'delivered' or order.orderStatus eq 'DELIVERED' or order.orderStatus eq 'completed' or order.orderStatus eq 'COMPLETED'}">
+                                        test="${normalizedStatus eq 'delivered'
+                                        or normalizedStatus eq 'completed'
+                                        or normalizedStatus eq 'done'
+                                        or normalizedStatus eq 'hoàn thành'
+                                        or normalizedStatus eq 'hoan thanh'}">
                                     <c:set var="statusText" value="Hoàn thành"/>
-                                    <c:set var="statusClass" value="delivered"/>
+                                    <c:set var="statusClass" value="completed"/>
                                 </c:when>
                                 <c:when
-                                        test="${order.orderStatus eq 'cancelled' or order.orderStatus eq 'CANCELLED'}">
+                                        test="${normalizedStatus eq 'cancelled'
+                                        or normalizedStatus eq 'canceled'}">
                                     <c:set var="statusText" value="Đã hủy"/>
                                     <c:set var="statusClass" value="cancelled"/>
                                 </c:when>

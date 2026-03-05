@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 
 public class AuthenticationService {
 
-    private static final int VERIFICATION_TOKEN_EXPIRY_HOURS = 24;
     private final UserDAO userDAO;
     private String lastError;
 
