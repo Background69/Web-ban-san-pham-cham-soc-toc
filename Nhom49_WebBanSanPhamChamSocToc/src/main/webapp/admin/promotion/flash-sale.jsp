@@ -1,290 +1,480 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:set var="activeMenu" value="flash-sale"/>
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý khuyến mãi</title>
+    <title>Quản lý Flash Sale | HairGlow Admin</title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        .modal{display:none;position:fixed;z-index:9999;inset:0;background:rgba(0,0,0,.45)}
-        .modal-content{background:#fff;width:min(760px,92vw);margin:60px auto;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-        .modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #eee;background:#fff}
-        .modal-title{font-size:22px;font-weight:800;margin:0}
-        .close{background:transparent;border:none;font-size:22px;cursor:pointer;line-height:1;padding:6px 10px}
-        .modal-body{max-height:calc(90vh - 120px);overflow-y:auto;padding:18px 20px 20px}
-        .modal-footer{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid #eee;background:#fff}
-        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
-        .form-group{display:flex;flex-direction:column;gap:6px}
-        .form-group label{font-weight:700}
-        .form-group input,.form-group select{width:100%;padding:10px 12px;border:1px solid #cfcfcf;border-radius:8px;outline:none}
-        .span-2{grid-column:span 2}
-        .btn{border:none;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
-        .btn-primary{background:#2e7d32;color:#fff}
-        .btn-secondary{background:#e0e0e0;color:#111}
-        .badge{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:800;font-size:12px}
-        .badge-on{background:#e7f7ea;color:#1b5e20}
-        .badge-off{background:#ffebee;color:#b71c1c}
-        @media (max-width:720px){
-            .modal-content{margin:30px auto}
-            .form-grid{grid-template-columns:1fr}
-            .span-2{grid-column:span 1}
+        .flash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .flash-header h1 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flash-header h1 i {
+            color: #ff5722;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 24px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .count {
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        /* Product Table */
+        .sale-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .sale-table th,
+        .sale-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sale-table th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .sale-table .thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .sale-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #ff5722;
+            color: white;
+        }
+
+        .stock-low {
+            color: #f44336;
+            font-weight: 600;
+        }
+
+        .stock-ok {
+            color: #4caf50;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: #fff;
+            width: min(700px, 92vw);
+            max-height: 80vh;
+            margin: 60px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            background: linear-gradient(135deg, #ff5722, #ff9800);
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Product checkbox list */
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-item:hover {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+
+        .product-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .product-item .thumb {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .product-item .info {
+            flex: 1;
+        }
+
+        .product-item .name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .product-item .price {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff5722, #ff9800);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-danger {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #ff5722, #ff9800);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+
+            .sale-table th:nth-child(4),
+            .sale-table td:nth-child(4),
+            .sale-table th:nth-child(5),
+            .sale-table td:nth-child(5) {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
 <div class="container">
-    <jsp:include page="/admin/layout/sidebar.jsp" />
+    <jsp:include page="/admin/layout/sidebar.jsp"/>
 
     <main class="content">
-        <div class="header">
-            <h1>Quản lý khuyến mãi</h1>
-            <button class="btn-add" type="button" onclick="openCreate()">+ Thêm khuyến mãi</button>
+        <div class="flash-header">
+            <h1> Quản lý Flash Sale</h1>
+            <button class="btn-add" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> Thêm sản phẩm vào Sale
+            </button>
         </div>
 
-        <table class="product-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên</th>
-                <th>Loại</th>
-                <th>Giảm (%)</th>
-                <th>Badge</th>
-                <th>Bắt đầu</th>
-                <th>Kết thúc</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-            </thead>
+        <div class="section-title">
 
-            <tbody>
-            <c:forEach var="p" items="${promotions}">
-                <tr>
-                    <td>#PM${p.promotionId}</td>
-                    <td><c:out value="${p.promotionName}"/></td>
-                    <td><c:out value="${p.promotionType}"/></td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${p.discountPercent != null}">${p.discountPercent}%</c:when>
-                            <c:otherwise>-</c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td><c:out value="${p.badgeText}"/></td>
-                    <td><c:out value="${p.startDate}"/></td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${p.endDate != null}"><c:out value="${p.endDate}"/></c:when>
-                            <c:otherwise>-</c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${p.active}">
-                                <span class="badge badge-on">Active</span>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="badge badge-off">Inactive</span>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
+            Sản phẩm đang Sale
+            <span class="count">${saleProducts.size()} sản phẩm</span>
+        </div>
 
-                    <td>
-                        <!-- Nút sửa: dùng data-* để lấy dữ liệu, không cần jsEscape -->
-                        <button type="button"
-                                class="btn"
-                                style="background:#eeeeee"
-                                data-id="${p.promotionId}"
-                                data-name="<c:out value='${p.promotionName}'/>"
-                                data-type="<c:out value='${p.promotionType}'/>"
-                                data-percent="${p.discountPercent}"
-                                data-badge="<c:out value='${p.badgeText}'/>"
-                                data-start="${p.startDate}"
-                                data-end="${p.endDate}"
-                                data-active="${p.active}"
-                                onclick="openEdit(this)">
-                            Sửa
-                        </button>
-
-                        <form action="${pageContext.request.contextPath}/admin/flash-sale"
-                              method="post"
-                              style="display:inline"
-                              onsubmit="return confirm('Xóa khuyến mãi này?')">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="promotionId" value="${p.promotionId}">
-                            <button type="submit" class="btn" style="background:#ffebee;color:#b71c1c">Xóa</button>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-
-            <c:if test="${empty promotions}">
-                <tr>
-                    <td colspan="9" style="text-align:center">Không có khuyến mãi</td>
-                </tr>
-            </c:if>
-            </tbody>
-        </table>
+        <c:choose>
+            <c:when test="${not empty saleProducts}">
+                <table class="sale-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá gốc</th>
+                        <th>Giá sale</th>
+                        <th>Tồn kho</th>
+                        <th>Thương hiệu</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="p" items="${saleProducts}">
+                        <tr>
+                            <td>#P${p.productId}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty p.primaryImageUrl}">
+                                        <img class="thumb"
+                                             src="${pageContext.request.contextPath}/static/${p.primaryImageUrl}"
+                                             alt="">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="thumb"
+                                             src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png"
+                                             alt="">
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <strong>
+                                    <c:out value="${p.productName}"/>
+                                </strong>
+                                <span class="sale-badge">SALE</span>
+                            </td>
+                            <td>
+                                <c:if
+                                        test="${p.defaultVariant != null && p.defaultVariant.originalPrice != null}">
+                                    <fmt:formatNumber value="${p.defaultVariant.originalPrice}"
+                                                      type="number"/> ₫
+                                </c:if>
+                            </td>
+                            <td style="color:#ff5722;font-weight:700">
+                                <c:if
+                                        test="${p.defaultVariant != null && p.defaultVariant.salePrice != null && p.defaultVariant.salePrice > 0}">
+                                    <fmt:formatNumber value="${p.defaultVariant.salePrice}"
+                                                      type="number"/> ₫
+                                </c:if>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${p.remainingStock <= 5}">
+                                        <span class="stock-low">${p.remainingStock}</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="stock-ok">${p.remainingStock}</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:out value="${p.brandName}"/>
+                            </td>
+                            <td>
+                                <form action="${pageContext.request.contextPath}/admin/flash-sale"
+                                      method="post" style="display:inline"
+                                      onsubmit="return confirm('Xóa sản phẩm này khỏi Flash Sale?')">
+                                    <input type="hidden" name="action" value="removeFromSale">
+                                    <input type="hidden" name="productId" value="${p.productId}">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-times"></i> Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </c:when>
+            <c:otherwise>
+                <div class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <p>Chưa có sản phẩm nào trong Flash Sale</p>
+                    <button class="btn btn-primary" onclick="openAddModal()" style="margin-top:16px">
+                        <i class="fas fa-plus"></i> Thêm sản phẩm ngay
+                    </button>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </main>
 </div>
 
-<!-- CREATE MODAL -->
-<div id="createModal" class="modal" onclick="backdropClose(event,'createModal')">
-    <div class="modal-content">
+<!-- Add Products Modal -->
+<div id="addModal" class="modal" onclick="backdropClose(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
-            <h2 class="modal-title">Thêm khuyến mãi</h2>
-            <button class="close" type="button" onclick="closeModal('createModal')">×</button>
+            <h2 class="modal-title"> Thêm sản phẩm vào Flash Sale</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
         </div>
 
-        <form action="${pageContext.request.contextPath}/admin/flash-sale" method="post" style="margin:0;">
-            <input type="hidden" name="action" value="add">
+        <form action="${pageContext.request.contextPath}/admin/flash-sale" method="post">
+            <input type="hidden" name="action" value="addToSale">
 
             <div class="modal-body">
-                <div class="form-grid">
-                    <div class="form-group span-2">
-                        <label>Tên khuyến mãi</label>
-                        <input type="text" name="promotionName" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Loại</label>
-                        <select name="promotionType" required>
-                            <option value="flash-sale">flash-sale</option>
-                            <option value="percent">percent</option>
-                            <option value="fixed">fixed</option>
-                            <option value="combo">combo</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Giảm (%)</label>
-                        <input type="number" name="discountPercent" min="0" max="100">
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Badge</label>
-                        <input type="text" name="badgeText">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Bắt đầu</label>
-                        <input type="datetime-local" name="startDate">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kết thúc</label>
-                        <input type="datetime-local" name="endDate">
-                    </div>
-
-                    <div class="form-group span-2" style="display:flex;flex-direction:row;align-items:center;gap:10px">
-                        <input id="c_active" type="checkbox" name="isActive" checked>
-                        <label for="c_active" style="margin:0;font-weight:800">Active</label>
-                    </div>
-                </div>
+                <c:choose>
+                    <c:when test="${not empty nonSaleProducts}">
+                        <p style="margin-bottom:16px;color:#666">Chọn sản phẩm để thêm vào Flash Sale:
+                        </p>
+                        <div class="product-list">
+                            <c:forEach var="p" items="${nonSaleProducts}">
+                                <label class="product-item">
+                                    <input type="checkbox" name="productIds" value="${p.productId}">
+                                    <c:choose>
+                                        <c:when test="${not empty p.primaryImageUrl}">
+                                            <img class="thumb"
+                                                 src="${pageContext.request.contextPath}/static/${p.primaryImageUrl}"
+                                                 alt="">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img class="thumb"
+                                                 src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png"
+                                                 alt="">
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <div class="info">
+                                        <div class="name">
+                                            <c:out value="${p.productName}"/>
+                                        </div>
+                                        <div class="price">
+                                            <c:if
+                                                    test="${p.defaultVariant != null && p.defaultVariant.originalPrice != null}">
+                                                <fmt:formatNumber
+                                                        value="${p.defaultVariant.originalPrice}"
+                                                        type="number"/> ₫
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                </label>
+                            </c:forEach>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle" style="color:#4caf50"></i>
+                            <p>Tất cả sản phẩm đã được thêm vào Flash Sale!</p>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" onclick="closeModal('createModal')">Hủy</button>
-                <button class="btn btn-primary" type="submit">Lưu</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- EDIT MODAL -->
-<div id="editModal" class="modal" onclick="backdropClose(event,'editModal')">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 class="modal-title">Sửa khuyến mãi</h2>
-            <button class="close" type="button" onclick="closeModal('editModal')">×</button>
-        </div>
-
-        <form action="${pageContext.request.contextPath}/admin/flash-sale" method="post" style="margin:0;">
-            <input type="hidden" name="action" value="update">
-            <input type="hidden" name="promotionId" id="e_id">
-
-            <div class="modal-body">
-                <div class="form-grid">
-                    <div class="form-group span-2">
-                        <label>Tên khuyến mãi</label>
-                        <input type="text" name="promotionName" id="e_name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Loại</label>
-                        <select name="promotionType" id="e_type" required>
-                            <option value="flash-sale">flash-sale</option>
-                            <option value="percent">percent</option>
-                            <option value="fixed">fixed</option>
-                            <option value="combo">combo</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Giảm (%)</label>
-                        <input type="number" name="discountPercent" id="e_percent" min="0" max="100">
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Badge</label>
-                        <input type="text" name="badgeText" id="e_badge">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Bắt đầu</label>
-                        <input type="datetime-local" name="startDate" id="e_start">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kết thúc</label>
-                        <input type="datetime-local" name="endDate" id="e_end">
-                    </div>
-
-                    <div class="form-group span-2" style="display:flex;flex-direction:row;align-items:center;gap:10px">
-                        <input id="e_active" type="checkbox" name="isActive">
-                        <label for="e_active" style="margin:0;font-weight:800">Active</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" onclick="closeModal('editModal')">Hủy</button>
-                <button class="btn btn-primary" type="submit">Lưu</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                <c:if test="${not empty nonSaleProducts}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Thêm vào Sale
+                    </button>
+                </c:if>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function openCreate(){document.getElementById("createModal").style.display="block";}
-    function closeModal(id){document.getElementById(id).style.display="none";}
-    function backdropClose(e,id){if(e.target && e.target.classList.contains("modal")) closeModal(id);}
-    document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeModal("createModal");closeModal("editModal");}});
-
-    function toLocal(s){
-        if(!s || s==="null") return "";
-        if(s.includes("T")) return s.substring(0,16);
-        if(s.includes(" ")) return s.replace(" ","T").substring(0,16);
-        return "";
+    function openAddModal() {
+        document.getElementById('addModal').style.display = 'block';
     }
 
-    function openEdit(btn){
-        const d = btn.dataset;
-        document.getElementById("e_id").value = d.id || "";
-        document.getElementById("e_name").value = d.name || "";
-        document.getElementById("e_type").value = d.type || "flash-sale";
-        document.getElementById("e_percent").value = (d.percent && d.percent !== "null") ? d.percent : "";
-        document.getElementById("e_badge").value = d.badge || "";
-        document.getElementById("e_start").value = toLocal(d.start);
-        document.getElementById("e_end").value = toLocal(d.end);
-        document.getElementById("e_active").checked = (d.active === "true");
-        document.getElementById("editModal").style.display="block";
+    function closeModal() {
+        document.getElementById('addModal').style.display = 'none';
     }
+
+    function backdropClose(e) {
+        if (e.target.classList.contains('modal')) {
+            closeModal();
+        }
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
 </script>
 
 </body>
+
 </html>

@@ -3,6 +3,7 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +31,9 @@
             color: #fff;
         }
 
-        .btn-add:hover { opacity: 0.9; }
+        .btn-add:hover {
+            opacity: 0.9;
+        }
 
         .category-table {
             width: 100%;
@@ -58,10 +61,17 @@
             font-weight: 700;
         }
 
-        .actions a.edit { color: #1a73e8; }
-        .actions a.delete { color: #d93025; }
+        .actions a.edit {
+            color: #1a73e8;
+        }
 
-        .actions a + a { margin-left: 10px; }
+        .actions a.delete {
+            color: #d93025;
+        }
+
+        .actions a + a {
+            margin-left: 10px;
+        }
 
         .slug-badge {
             display: inline-block;
@@ -90,8 +100,9 @@
             <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh
+                mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm giá</a></li>
         </ul>
 
         <a class="view-site" href="${pageContext.request.contextPath}/index">
@@ -104,7 +115,8 @@
 
         <div class="header">
             <h1>Quản lý danh mục</h1>
-            <a class="btn-add" href="${pageContext.request.contextPath}/admin/category/add">+ Thêm danh mục</a>
+            <a class="btn-add" href="${pageContext.request.contextPath}/admin/category/add">+ Thêm danh
+                mục</a>
         </div>
 
         <table class="category-table">
@@ -150,4 +162,5 @@
     </main>
 </div>
 </body>
+
 </html>

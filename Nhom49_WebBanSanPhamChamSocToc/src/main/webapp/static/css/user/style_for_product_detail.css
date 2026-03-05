@@ -8,7 +8,7 @@
     --text-muted: #475569;
     --border: #e2e8f0;
     --card: #ffffff;
-    --shadow: 0 12px 32px rgba(0,0,0,0.08);
+    --shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
 body {
@@ -636,9 +636,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes successPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .btn-add-cart.loading::after {
@@ -653,7 +659,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .add-to-cart-notification {
@@ -1355,8 +1363,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 /* ========== RESPONSIVE ========== */

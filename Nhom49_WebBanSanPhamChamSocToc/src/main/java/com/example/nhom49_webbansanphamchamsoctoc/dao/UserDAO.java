@@ -16,103 +16,101 @@ public class UserDAO implements IDAO<User> {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-
     @Override
     public List<User> findAll() {
         String sql = "SELECT * FROM users ORDER BY created_at DESC";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .map((rs, ctx) -> mapUser(rs))
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .map((rs, ctx) -> mapUser(rs))
+                .list());
+    }
+
+    /**
+     * Đếm tổng số người dùng
+     */
+    public int countAll() {
+        String sql = "SELECT COUNT(*) FROM users";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0));
     }
 
     @Override
     public int insert(User user) {
-        String sql = "INSERT INTO users (email, username, password, phone, avatar, role, is_active, google_id, auth_provider, reset_token_expiry) " +
+        String sql = "INSERT INTO users (email, username, password, phone, avatar, role, is_active, google_id, auth_provider, reset_token_expiry) "
+                +
                 "VALUES (:email, :username, :password, :phone, :avatar, :role, :isActive, :googleId, :authProvider, :resetTokenExpiry)";
-        return jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("email", user.getEmail())
-                        .bind("username", user.getUsername())
-                        .bind("password", user.getPassword())
-                        .bind("phone", user.getPhone())
-                        .bind("avatar", user.getAvatar() != null ? user.getAvatar() : "avatar/avatar.jpg")
-                        .bind("role", user.getRole() != null ? user.getRole() : "Khách hàng")
-                        .bind("isActive", user.isActive())
-                        .bind("googleId", user.getGoogleId())
-                        .bind("authProvider", user.getAuthProvider())
-                        .bind("resetTokenExpiry", user.getResetTokenExpiry())
-                        .executeAndReturnGeneratedKeys("user_id")
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(-1)
-        );
+        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("email", user.getEmail())
+                .bind("username", user.getUsername())
+                .bind("password", user.getPassword())
+                .bind("phone", user.getPhone())
+                .bind("avatar", user.getAvatar() != null ? user.getAvatar() : "avatar/avatar.jpg")
+                .bind("role", user.getRole() != null ? user.getRole() : "Khách hàng")
+                .bind("isActive", user.isActive())
+                .bind("googleId", user.getGoogleId())
+                .bind("authProvider", user.getAuthProvider())
+                .bind("resetTokenExpiry", user.getResetTokenExpiry())
+                .executeAndReturnGeneratedKeys("user_id")
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(-1));
     }
 
     @Override
     public boolean update(User user) {
-        String sql = "UPDATE users SET email = :email, username = :username, phone = :phone, avatar = :avatar, role = :role, is_active = :isActive " +
+        String sql = "UPDATE users SET email = :email, username = :username, phone = :phone, avatar = :avatar, role = :role, is_active = :isActive "
+                +
                 "WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("email", user.getEmail())
-                        .bind("username", user.getUsername())
-                        .bind("phone", user.getPhone())
-                        .bind("avatar", user.getAvatar())
-                        .bind("role", user.getRole())
-                        .bind("isActive", user.isActive())
-                        .bind("userId", user.getUserId())
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("email", user.getEmail())
+                .bind("username", user.getUsername())
+                .bind("phone", user.getPhone())
+                .bind("avatar", user.getAvatar())
+                .bind("role", user.getRole())
+                .bind("isActive", user.isActive())
+                .bind("userId", user.getUserId())
+                .execute());
         return rowsAffected > 0;
     }
 
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM users WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("userId", id)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("userId", id)
+                .execute());
         return rowsAffected > 0;
     }
 
     @Override
     public User findById(int id) {
         String sql = "SELECT * FROM users WHERE user_id = :id";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("id", id)
-                        .map((rs, ctx) -> mapUser(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("id", id)
+                .map((rs, ctx) -> mapUser(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     // Authentication methods
 
     public User findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = :email";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("email", email)
-                        .map((rs, ctx) -> mapUser(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("email", email)
+                .map((rs, ctx) -> mapUser(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     public User findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = :username";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("username", username)
-                        .map((rs, ctx) -> mapUser(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("username", username)
+                .map((rs, ctx) -> mapUser(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     public User authenticate(String emailOrUsername, String password) {
@@ -129,24 +127,20 @@ public class UserDAO implements IDAO<User> {
 
     public boolean existsByEmail(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE email = :email";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("email", email)
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(0) > 0
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("email", email)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
     }
 
     public boolean existsByUsername(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = :username";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("username", username)
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(0) > 0
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("username", username)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
     }
 
     public boolean existsByPhone(String phone) {
@@ -154,13 +148,11 @@ public class UserDAO implements IDAO<User> {
             return false;
         }
         String sql = "SELECT COUNT(*) FROM users WHERE phone = :phone";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("phone", phone.trim())
-                        .mapTo(Integer.class)
-                        .findFirst()
-                        .orElse(0) > 0
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("phone", phone.trim())
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
     }
 
     // Google OAuth methods
@@ -170,23 +162,19 @@ public class UserDAO implements IDAO<User> {
             return null;
         }
         String sql = "SELECT * FROM users WHERE google_id = :googleId";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("googleId", googleId)
-                        .map((rs, ctx) -> mapUser(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("googleId", googleId)
+                .map((rs, ctx) -> mapUser(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     public boolean updateGoogleId(int userId, String googleId) {
         String sql = "UPDATE users SET google_id = :googleId WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("googleId", googleId)
-                        .bind("userId", userId)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("googleId", googleId)
+                .bind("userId", userId)
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -194,56 +182,46 @@ public class UserDAO implements IDAO<User> {
 
     public List<User> findByRole(String role) {
         String sql = "SELECT * FROM users WHERE role = :role ORDER BY created_at DESC";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("role", role)
-                        .map((rs, ctx) -> mapUser(rs))
-                        .list()
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("role", role)
+                .map((rs, ctx) -> mapUser(rs))
+                .list());
     }
 
     public boolean updateActiveStatus(int userId, boolean isActive) {
         String sql = "UPDATE users SET is_active = :isActive WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("isActive", isActive)
-                        .bind("userId", userId)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("isActive", isActive)
+                .bind("userId", userId)
+                .execute());
         return rowsAffected > 0;
     }
 
     public boolean updateRole(int userId, String role) {
         String sql = "UPDATE users SET role = :role WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("role", role)
-                        .bind("userId", userId)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("role", role)
+                .bind("userId", userId)
+                .execute());
         return rowsAffected > 0;
     }
 
     public boolean updatePassword(int userId, String hashedPassword) {
         String sql = "UPDATE users SET password = :password, reset_token = NULL, reset_token_expiry = NULL WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("password", hashedPassword)
-                        .bind("userId", userId)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("password", hashedPassword)
+                .bind("userId", userId)
+                .execute());
         return rowsAffected > 0;
     }
 
     public boolean saveResetToken(int userId, String tokenHash, java.sql.Timestamp expiry) {
         String sql = "UPDATE users SET reset_token = :resetToken, reset_token_expiry = :resetTokenExpiry WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("resetToken", tokenHash)
-                        .bind("resetTokenExpiry", expiry)
-                        .bind("userId", userId)
-                        .execute()
-        );
+        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("resetToken", tokenHash)
+                .bind("resetTokenExpiry", expiry)
+                .bind("userId", userId)
+                .execute());
         return rowsAffected > 0;
     }
 
@@ -252,13 +230,11 @@ public class UserDAO implements IDAO<User> {
             return null;
         }
         String sql = "SELECT * FROM users WHERE reset_token = :resetToken";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .bind("resetToken", tokenHash)
-                        .map((rs, ctx) -> mapUser(rs))
-                        .findFirst()
-                        .orElse(null)
-        );
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("resetToken", tokenHash)
+                .map((rs, ctx) -> mapUser(rs))
+                .findFirst()
+                .orElse(null));
     }
 
     // Helper method to map ResultSet to User
