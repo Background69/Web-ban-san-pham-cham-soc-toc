@@ -1,6 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
-import jakarta.mail.*;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
@@ -44,10 +48,7 @@ public class EmailService {
             }
         });
 
-        session.setDebug(true);
-
-        System.out.println("MAIL USER = " + EMAIL_USERNAME);
-        System.out.println("MAIL PASS LEN = " + EMAIL_PASSWORD.length());
+        session.setDebug(false);
     }
 
     public boolean sendPasswordResetEmail(String toEmail, String resetLink) {
