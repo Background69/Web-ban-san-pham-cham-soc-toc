@@ -5,6 +5,8 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductImgDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.CategoryDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.BrandDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Brand;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductImage;
@@ -19,6 +21,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Service class cho Product business logic
@@ -85,6 +88,15 @@ public class ProductService {
 
     public List<Product> getProductsByBrand(int brandId) {
         List<Product> products = productDAO.findByBrand(brandId);
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
+    /**
+     * Lấy sản phẩm liên quan theo category, loại trừ sản phẩm hiện tại
+     */
+    public List<Product> getRelatedProducts(int productId, int categoryId, int limit) {
+        List<Product> products = productDAO.findRelatedProducts(productId, categoryId, limit);
         enrichProductsWithBasicDetails(products);
         return products;
     }
@@ -319,12 +331,6 @@ public class ProductService {
         return (int) Math.ceil((double) totalProducts / pageSize);
     }
 
-    /**
-     * Lấy product images.
-     *
-     * @param productId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<ProductImage> getProductImages(int productId) {
         return imageDAO.findByProductId(productId);
     }
@@ -385,6 +391,13 @@ public class ProductService {
         }
         List<Integer> productIds = products.stream().map(Product::getProductId).toList();
         Map<Integer, Integer> remainingStockMap = variantDAO.getTotalStockByProductIds(productIds);
+
+        // Batch tải hàng loạt categories và brands (đừng xóa mới tối ưu xong)
+        Map<Integer, Category> categoryMap = categoryDAO.findAll()
+                .stream().collect(Collectors.toMap(Category::getCategoryId, c -> c));
+        Map<Integer, Brand> brandMap = brandDAO.findAll()
+                .stream().collect(Collectors.toMap(Brand::getBrandId, b -> b));
+
         for (Product product : products) {
             ProductImage primaryImage = imageDAO.findPrimaryByProductId(product.getProductId());
             if (primaryImage != null) {
@@ -398,14 +411,14 @@ public class ProductService {
             }
 
             if (product.getCategoryId() != null) {
-                var category = categoryDAO.findById(product.getCategoryId());
+                Category category = categoryMap.get(product.getCategoryId());
                 if (category != null) {
                     product.setCategory(category);
                     product.setCategoryName(category.getCategoryName());
                 }
             }
             if (product.getBrandId() != null) {
-                var brand = brandDAO.findById(product.getBrandId());
+                Brand brand = brandMap.get(product.getBrandId());
                 if (brand != null) {
                     product.setBrand(brand);
                     product.setBrandName(brand.getBrandName());

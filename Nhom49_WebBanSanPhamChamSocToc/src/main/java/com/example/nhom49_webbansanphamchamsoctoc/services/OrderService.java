@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Lớp OrderService.
- */
 public class OrderService {
 
     private final OrderDAO orderDao;
@@ -28,9 +25,6 @@ public class OrderService {
     private final ShippingService shippingService;
     private String lastError;
 
-    /**
-     * Thực hiện order service.
-     */
     public OrderService() {
         this.orderDao = new OrderDAO();
         this.orderItemDao = new OrderItemDAO();
@@ -40,14 +34,6 @@ public class OrderService {
     }
 
     // Constructor for testing
-    /**
-     * Khởi tạo OrderService với cac DAO (phuc vu test).
-     *
-     * @param orderDao     DAO đơn hàng.
-     * @param orderItemDao DAO chỉ tiet đơn hàng.
-     * @param variantDao   DAO bien the sản phẩm.
-     * @param productDao   DAO sản phẩm.
-     */
     public OrderService(OrderDAO orderDao, OrderItemDAO orderItemDao,
                         ProductVariantDAO variantDao, ProductDAO productDao) {
         this.orderDao = orderDao;
@@ -57,24 +43,12 @@ public class OrderService {
         this.shippingService = new ShippingService();
     }
 
-    /**
-     * Lấy last error.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
     public String getLastError() {
         return lastError;
     }
 
     /**
-     * Tạo đơn hàng từ giỏ hàng và thong tin giao hàng.
-     *
-     * @param userId         ID nguoi dung.
-     * @param cartItems      Map bien the và số lượng.
-     * @param address        Địa chỉ giao hàng.
-     * @param shippingMethod Phương thức giao hàng.
-     * @param paymentMethod  Phương thức thanh toán.
-     * @return Đơn hàng đã tao hoặc null nếu thất bại.
+     * Tạo đơn hàng từ giỏ hàng và thông tin giao hàng.
      */
     public Order createOrder(int userId, Map<Integer, Integer> cartItems,
                              ShippingAddress address, String shippingMethod, String paymentMethod) {
@@ -155,12 +129,6 @@ public class OrderService {
         return null;
     }
 
-    /**
-     * Kiểm tra hop le stock for order.
-     *
-     * @param cartItems Map<variantId, quantity>
-     * @return List các thông báo lỗi (rỗng nếu tất cả hợp lệ)
-     */
     private List<String> validateStockForOrder(Map<Integer, Integer> cartItems) {
         List<String> errors = new ArrayList<>();
 
@@ -189,34 +157,16 @@ public class OrderService {
 
     // Order calculation methods
 
-    /**
-     * Thực hiện calculate subtotal.
-     *
-     * @param items Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public BigDecimal calculateSubtotal(List<OrderItem> items) {
         return items.stream()
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    /**
-     * Thực hiện calculate total.
-     *
-     * @param subtotal Tham số đầu vào.
-     * @param shippingFee Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public BigDecimal calculateTotal(BigDecimal subtotal, BigDecimal shippingFee) {
         return subtotal.add(shippingFee != null ? shippingFee : BigDecimal.ZERO);
     }
 
-    /**
-     * Sinh order code.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
     public String generateOrderCode() {
         String code;
         do {
@@ -227,24 +177,12 @@ public class OrderService {
 
     // Order query methods
 
-    /**
-     * Lấy orders by user.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getOrdersByUser(int userId) {
         List<Order> orders = orderDao.findByUserId(userId);
         enrichOrdersWithItems(orders);
         return orders;
     }
 
-    /**
-     * Lấy order by id.
-     *
-     * @param orderId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public Order getOrderById(int orderId) {
         Order order = orderDao.findById(orderId);
         if (order != null) {
@@ -253,12 +191,6 @@ public class OrderService {
         return order;
     }
 
-    /**
-     * Lấy order by code.
-     *
-     * @param orderCode Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public Order getOrderByCode(String orderCode) {
         Order order = orderDao.findByOrderCode(orderCode);
         if (order != null) {
@@ -267,11 +199,6 @@ public class OrderService {
         return order;
     }
 
-    /**
-     * Lấy all orders.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getAllOrders() {
         List<Order> orders = orderDao.findAll();
         enrichOrdersWithItems(orders);
@@ -279,48 +206,22 @@ public class OrderService {
     }
 
 
-    /**
-     * Lấy orders by status.
-     *
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getOrdersByStatus(String status) {
         List<Order> orders = orderDao.findByStatus(status);
         enrichOrdersWithItems(orders);
         return orders;
     }
 
-    /**
-     * Lấy orders by user and status.
-     *
-     * @param userId Tham số đầu vào.
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getOrdersByUserAndStatus(int userId, String status) {
         List<Order> orders = orderDao.findByUserIdAndStatus(userId, status);
         enrichOrdersWithItems(orders);
         return orders;
     }
 
-    /**
-     * Dem orders by user.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public int countOrdersByUser(int userId) {
         return orderDao.countByUserId(userId);
     }
 
-    /**
-     * Dem orders by user and status.
-     *
-     * @param userId Tham số đầu vào.
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public int countOrdersByUserAndStatus(int userId, String status) {
         return orderDao.countByUserIdAndStatus(userId, status);
     }
@@ -329,10 +230,6 @@ public class OrderService {
 
     /**
      * Cập nhật trạng thái đơn hàng.
-     *
-     * @param orderId ID đơn hàng cần cập nhật.
-     * @param status Trạng thái mới của đơn hàng.
-     * @return true nếu cập nhật thành công, false nếu thất bại.
      */
     public boolean updateOrderStatus(int orderId, String status) {
         if (!isValidOrderStatus(status)) {
@@ -354,10 +251,7 @@ public class OrderService {
     }
 
     /**
-     * Hủy đơn hàng.
-     *
-     * @param orderId ID đơn hàng cần hủy.
-     * @return true nếu hủy thành công, false nếu thất bại.
+     * Hủy đơn hàng và hoàn trả stock.
      */
     public boolean cancelOrder(int orderId) {
         Order order = orderDao.findById(orderId);
@@ -374,9 +268,18 @@ public class OrderService {
             return false;
         }
 
-        return updateOrderStatus(orderId, "cancelled");
+        boolean cancelled = updateOrderStatus(orderId, "cancelled");
+        if (cancelled) {
+            // Hoàn trả stock cho từng item
+            List<OrderItem> items = orderItemDao.findByOrderId(orderId);
+            for (OrderItem item : items) {
+                if (item.getVariantId() != null) {
+                    variantDao.incrementStock(item.getVariantId(), item.getQuantity());
+                }
+            }
+        }
+        return cancelled;
     }
-
 
     private List<OrderItem> convertCartToOrderItems(Map<Integer, Integer> cartItems) {
         List<OrderItem> orderItems = new ArrayList<>();
@@ -412,12 +315,6 @@ public class OrderService {
         return orderItems;
     }
 
-    /**
-     * Thực hiện enrich order with items.
-     *
-     * @param order Tham số đầu vào.
-     * @return Không trả về giá trị.
-     */
     private void enrichOrderWithItems(Order order) {
         if (order != null) {
             List<OrderItem> items = orderItemDao.findByOrderId(order.getOrderId());
@@ -425,25 +322,12 @@ public class OrderService {
         }
     }
 
-
-    /**
-     * Thực hiện enrich orders with items.
-     *
-     * @param orders Tham số đầu vào.
-     * @return Không trả về giá trị.
-     */
     private void enrichOrdersWithItems(List<Order> orders) {
         for (Order order : orders) {
             enrichOrderWithItems(order);
         }
     }
 
-    /**
-     * Kiểm tra valid order status.
-     *
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     private boolean isValidOrderStatus(String status) {
         return status != null &&
                 (status.equals("pending") || status.equals("confirmed") ||
@@ -451,13 +335,6 @@ public class OrderService {
                         status.equals("cancelled"));
     }
 
-
-    /**
-     * Lấy order status display name.
-     *
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public String getOrderStatusDisplayName(String status) {
         switch (status) {
             case "pending":
@@ -475,12 +352,6 @@ public class OrderService {
         }
     }
 
-    /**
-     * Thực hiện decrement stock.
-     *
-     * @param orderItems Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     private boolean decrementStock(List<OrderItem> orderItems) {
         if (orderItems == null || orderItems.isEmpty()) {
             return true;
@@ -496,16 +367,10 @@ public class OrderService {
         return true;
     }
 
-    /**
-     * Lấy tổng chi tiêu của user
-     */
     public BigDecimal getTotalSpendingByUser(int userId) {
         return orderDao.getTotalSpendingByUser(userId);
     }
 
-    /**
-     * Lấy danh sách đơn hàng gần đây của user
-     */
     public List<Order> getRecentOrdersByUser(int userId, int limit) {
         List<Order> orders = orderDao.findByUserIdWithLimit(userId, limit);
         // Load order items for each order
@@ -516,14 +381,8 @@ public class OrderService {
         return orders;
     }
 
-    /**
-     * Lấy số lượng đơn hàng theo từng status
-     */
     public Map<String, Integer> getOrderCountsByStatus(int userId) {
         return orderDao.getOrderCountsByStatus(userId);
     }
 }
-
-
-
 
