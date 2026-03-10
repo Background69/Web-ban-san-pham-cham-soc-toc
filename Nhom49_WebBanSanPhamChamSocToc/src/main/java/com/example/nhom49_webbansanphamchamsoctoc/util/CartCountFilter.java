@@ -3,7 +3,12 @@ package com.example.nhom49_webbansanphamchamsoctoc.util;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.CartService;
 
-import jakarta.servlet.*;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +34,17 @@ public class CartCountFilter implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String uri = httpRequest.getRequestURI();
+
+        // Skip mấy cái ảnh để tránh load lâu (đừng xóa)
+        if (uri.contains("/static/") || uri.endsWith(".css")
+                || uri.endsWith(".js") || uri.endsWith(".png")
+                || uri.endsWith(".jpg") || uri.endsWith(".ico")
+                || uri.endsWith(".svg") || uri.endsWith(".woff2")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         HttpSession session = httpRequest.getSession(false);
 
         // Chỉ xử lý nếu đã có session và user đã đăng nhập
