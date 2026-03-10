@@ -11,26 +11,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Lớp ProductDao.
- */
 public class ProductDAO implements IDAO<Product> {
 
     private final Jdbi jdbi;
 
-    /**
-     * Thực hiện product dao.
-     */
     public ProductDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    /**
-     * Tim by slug.
-     *
-     * @param slug Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public Product findBySlug(String slug) {
         String sql = "SELECT * FROM products WHERE product_slug = :productSlug";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -40,12 +28,6 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(null));
     }
 
-    /**
-     * Tim by id.
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     @Override
     public Product findById(int id) {
         String sql = "SELECT * FROM products WHERE product_id = :id";
@@ -259,6 +241,19 @@ public class ProductDAO implements IDAO<Product> {
         String sql = "SELECT * FROM products WHERE brand_id = :brandId ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("brandId", brandId)
+                .map((rs, ctx) -> mapProduct(rs))
+                .list());
+    }
+
+    /**
+     * Lấy sản phẩm liên quan theo category, loại trừ sản phẩm hiện tại
+     */
+    public List<Product> findRelatedProducts(int productId, int categoryId, int limit) {
+        String sql = "SELECT * FROM products WHERE category_id = :categoryId AND product_id != :productId ORDER BY RAND() LIMIT :limit";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("categoryId", categoryId)
+                .bind("productId", productId)
+                .bind("limit", limit)
                 .map((rs, ctx) -> mapProduct(rs))
                 .list());
     }
