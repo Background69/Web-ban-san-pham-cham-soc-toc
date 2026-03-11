@@ -83,7 +83,7 @@ public class HairConditionDAO implements IDAO<HairCondition> {
     public boolean delete(int id) {
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
-                        "DELETE FROM hair_conditions WHERE conditon_id =:id")
+                        "DELETE FROM hair_conditions WHERE condition_id =:id")
                         .bind("id",id)
                         .execute()
         );

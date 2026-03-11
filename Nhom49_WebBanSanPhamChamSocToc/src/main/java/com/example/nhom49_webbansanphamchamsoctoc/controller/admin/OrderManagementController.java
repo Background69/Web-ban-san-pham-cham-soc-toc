@@ -2,14 +2,14 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderItemDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OrderItem;
-import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,12 +19,15 @@ public class OrderManagementController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
         OrderDAO orderDAO = new OrderDAO();
         // Cập nhật trạng thái của đơn hàng
         String action = request.getParameter("action");
         if ("updateStatus".equals(action)) {
-            int orderId = Integer.parseInt(request.getParameter("id"));
+            Integer orderId = ValidationUtil.parseIntSafe(request.getParameter("id"));
+            if (orderId == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+                return;
+            }
             String status = request.getParameter("status");
             orderDAO.updateStatus(orderId, status);
             // Nếu gọi từ trang detail, redirect về detail
@@ -38,13 +41,21 @@ public class OrderManagementController extends HttpServlet {
         }
         // Xoá đơn hàng
         if ("delete".equals(action)) {
-            int orderId = Integer.parseInt(request.getParameter("id"));
+            Integer orderId = ValidationUtil.parseIntSafe(request.getParameter("id"));
+            if (orderId == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+                return;
+            }
             orderDAO.delete(orderId);
             response.sendRedirect(request.getContextPath() + "/admin/orders");
             return;
         }
         if ("detail".equals(action)) {
-            int orderId = Integer.parseInt(request.getParameter("id"));
+            Integer orderId = ValidationUtil.parseIntSafe(request.getParameter("id"));
+            if (orderId == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+                return;
+            }
             OrderItemDAO orderItemDAO = new OrderItemDAO();
             Order order = orderDAO.findById(orderId);
             List<OrderItem> orderItems = orderItemDAO.findByOrderId(orderId);
@@ -67,6 +78,6 @@ public class OrderManagementController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
 }
