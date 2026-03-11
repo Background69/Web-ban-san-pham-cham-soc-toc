@@ -5,9 +5,11 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.services.BrandService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,7 +79,7 @@ public class BrandController extends HttpServlet {
             return;
         }
 
-        // Lấy sản phẩm của thương hiệu
+        // Lấy sản phẩm của thương hiệu với phân trang từ DB
         int page = 1;
         int pageSize = 12;
         try {
@@ -89,19 +91,16 @@ public class BrandController extends HttpServlet {
             page = 1;
         }
 
-        List<Product> allBrandProducts = productService.getProductsByBrand(brand.getBrandId());
-
-        int totalProducts = allBrandProducts.size();
+        int totalProducts = productService.countProductsByBrand(brand.getBrandId());
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
         if (totalPages > 0 && page > totalPages) {
             page = totalPages;
         }
 
-        int fromIndex = Math.max(0, (page - 1) * pageSize);
-        int toIndex = Math.min(fromIndex + pageSize, allBrandProducts.size());
-        List<Product> products = fromIndex >= allBrandProducts.size()
-                ? List.of()
-                : allBrandProducts.subList(fromIndex, toIndex);
+        List<Product> products = productService.getProductsByBrand(brand.getBrandId(), page, pageSize);
+
+        // Lấy tất cả sản phẩm brand để tính category stats
+        List<Product> allBrandProducts = productService.getProductsByBrand(brand.getBrandId());
         Map<Integer, Category> categoryMap = new LinkedHashMap<>();
         Map<String, Integer> categoryStats = new LinkedHashMap<>();
         for (Product product : allBrandProducts) {

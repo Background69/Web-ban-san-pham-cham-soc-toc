@@ -5,11 +5,12 @@ import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ReviewService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @WebServlet(name = "ProductDetailController", value = "/product/*")
@@ -45,10 +46,11 @@ public class ProductDetailController extends HttpServlet {
             return;
         }
 
-        List<Product> candidates = new ArrayList<>(productService.getAllProducts());
-        candidates.removeIf(item -> item.getProductId() == product.getProductId() || item.isOnSale());
-        Collections.shuffle(candidates);
-        List<Product> relatedProducts = candidates.size() > 4 ? candidates.subList(0, 4) : candidates;
+        List<Product> relatedProducts = productService.getRelatedProducts(
+                product.getProductId(),
+                product.getCategoryId() != null ? product.getCategoryId() : 0,
+                4
+        );
 
         // Lấy reviews của sản phẩm
         request.setAttribute("product", product);
