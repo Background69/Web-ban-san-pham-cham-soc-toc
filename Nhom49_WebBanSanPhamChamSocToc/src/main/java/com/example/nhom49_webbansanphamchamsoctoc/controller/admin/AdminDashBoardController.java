@@ -18,9 +18,6 @@ import java.io.IOException;
  */
 @WebServlet(name = "AdminDashBoardController", urlPatterns = { "/admin/dashboard" })
 public class AdminDashBoardController extends HttpServlet {
-    // UserDAO userDAO = new UserDAO();
-    // ProductDAO productDAO = new ProductDAO();
-    // OrderDAO orderDAO = new OrderDAO();
     private UserDAO userDAO;
     private ProductDAO productDAO;
     private OrderDAO orderDAO;

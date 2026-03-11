@@ -2,9 +2,12 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.UserService;
+import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +29,11 @@ public class UserManagementController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("detail".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
+            Integer id = ValidationUtil.parseIntSafe(request.getParameter("id"));
+            if (id == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+                return;
+            }
             User user = userService.getUserById(id);
             request.setAttribute("user", user);
             request.getRequestDispatcher("/admin/user/detail.jsp")
@@ -44,8 +51,6 @@ public class UserManagementController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-
         String action = request.getParameter("action");
         if (action == null) {
             response.sendRedirect(request.getContextPath() + "/admin/users");
@@ -53,7 +58,11 @@ public class UserManagementController extends HttpServlet {
         }
 
         if ("update-profile".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
+            Integer id = ValidationUtil.parseIntSafe(request.getParameter("id"));
+            if (id == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+                return;
+            }
 
             String username = request.getParameter("username");
             String email = request.getParameter("email");
@@ -74,7 +83,11 @@ public class UserManagementController extends HttpServlet {
         }
 
         if ("delete".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
+            Integer id = ValidationUtil.parseIntSafe(request.getParameter("id"));
+            if (id == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+                return;
+            }
             userService.toggleUserActive(id);
             response.sendRedirect(request.getContextPath() + "/admin/users");
         }
