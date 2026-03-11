@@ -75,7 +75,6 @@ public class CategoryManagementController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
 
         if (!"/admin/category/save".equals(path)) {

@@ -23,7 +23,6 @@ public class RemoveCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(true);
 
         int variantId = parsePositiveInt(request.getParameter("variantId"), 0);
