@@ -76,7 +76,7 @@ public class OrderDAO implements IDAO<Order> {
     public int insert(Order order) {
         String sql = "INSERT INTO orders (order_code, user_id, shipping_address_id, shipping_full_name, " +
                 "shipping_phone, shipping_address, shipping_method, shipping_fee, payment_method, " +
-                "subtotal, total_amount, order_status) VALUES (:orderCode, :userId, :shippingAddressId, :shippingFullName, :shippingPhone, :shippingAddress, :shippingMethod, :shippingFee, :paymentMethod, :subtotal, :totalAmount, :orderStatus)";
+                "subtotal, total_amount, order_status, note) VALUES (:orderCode, :userId, :shippingAddressId, :shippingFullName, :shippingPhone, :shippingAddress, :shippingMethod, :shippingFee, :paymentMethod, :subtotal, :totalAmount, :orderStatus, :note)";
         return jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("orderCode", order.getOrderCode())
                 .bind("userId", order.getUserId())
@@ -90,6 +90,7 @@ public class OrderDAO implements IDAO<Order> {
                 .bind("subtotal", order.getSubtotal())
                 .bind("totalAmount", order.getTotalAmount())
                 .bind("orderStatus", order.getOrderStatus() != null ? order.getOrderStatus() : "pending")
+                .bind("note", order.getNote())
                 .executeAndReturnGeneratedKeys("order_id")
                 .mapTo(Integer.class)
                 .findFirst()
@@ -108,7 +109,7 @@ public class OrderDAO implements IDAO<Order> {
                 +
                 "shipping_method = :shippingMethod, shipping_fee = :shippingFee, payment_method = :paymentMethod, subtotal = :subtotal, "
                 +
-                "total_amount = :totalAmount, order_status = :orderStatus WHERE order_id = :orderId";
+                "total_amount = :totalAmount, order_status = :orderStatus, note = :note WHERE order_id = :orderId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("shippingFullName", order.getShippingFullName())
                 .bind("shippingPhone", order.getShippingPhone())
@@ -119,6 +120,7 @@ public class OrderDAO implements IDAO<Order> {
                 .bind("subtotal", order.getSubtotal())
                 .bind("totalAmount", order.getTotalAmount())
                 .bind("orderStatus", order.getOrderStatus())
+                .bind("note", order.getNote())
                 .bind("orderId", order.getOrderId())
                 .execute());
         return rowsAffected > 0;
@@ -507,7 +509,9 @@ public class OrderDAO implements IDAO<Order> {
         order.setSubtotal(rs.getBigDecimal("subtotal"));
         order.setTotalAmount(rs.getBigDecimal("total_amount"));
         order.setOrderStatus(rs.getString("order_status"));
+        order.setNote(rs.getString("note"));
         order.setCreatedAt(rs.getTimestamp("created_at"));
+        order.setUpdatedAt(rs.getTimestamp("updated_at"));
         return order;
     }
 }
