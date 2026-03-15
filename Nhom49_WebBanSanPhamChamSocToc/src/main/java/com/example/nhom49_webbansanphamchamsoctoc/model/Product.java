@@ -20,6 +20,8 @@ public class Product {
     private int stockQuantity;
     private boolean isFeatured;
     private boolean isOnSale;
+    private boolean isDeleted;
+    private Timestamp deletedAt;
     private BigDecimal averageRating;
     private int reviewCount;
     private Timestamp createdAt;
@@ -158,6 +160,22 @@ public class Product {
 
     public void setOnSale(boolean onSale) {
         isOnSale = onSale;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Timestamp getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Timestamp deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public BigDecimal getAverageRating() {

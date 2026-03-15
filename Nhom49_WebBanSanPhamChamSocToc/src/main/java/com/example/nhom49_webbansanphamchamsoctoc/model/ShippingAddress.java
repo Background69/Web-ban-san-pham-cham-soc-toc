@@ -20,8 +20,9 @@ public class ShippingAddress {
     private String wardName;
     private String specificAddress;
     private String note;
-    private boolean defaultAddress;
+    private boolean isDefault;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructors
     public ShippingAddress() {
@@ -133,11 +134,19 @@ public class ShippingAddress {
     }
 
     public boolean isDefaultAddress() {
-        return defaultAddress;
+        return isDefault;
     }
 
     public void setDefaultAddress(boolean defaultAddress) {
-        this.defaultAddress = defaultAddress;
+        this.isDefault = defaultAddress;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 
     public Timestamp getCreatedAt() {
@@ -146,6 +155,14 @@ public class ShippingAddress {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

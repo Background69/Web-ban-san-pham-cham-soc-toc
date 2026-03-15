@@ -14,6 +14,7 @@ public class Review {
     private int rating; // 1-5 sao
     private String content;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructors
     public Review() {
@@ -74,6 +75,14 @@ public class Review {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     // --- Product info for My Reviews display (populated via JOIN) ---
