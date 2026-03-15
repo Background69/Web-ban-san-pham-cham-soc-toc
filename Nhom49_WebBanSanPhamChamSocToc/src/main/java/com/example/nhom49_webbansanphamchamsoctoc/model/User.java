@@ -1,6 +1,7 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class User {
     private int userId;
@@ -13,8 +14,9 @@ public class User {
     private boolean isActive;
     private String authProvider; // LOCAL, GOOGLE
     private String resetToken;
-    private Timestamp resetTokenExpiry;
+    private LocalDateTime resetTokenExpiry;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
     private String googleId; // Google OAuth ID
 
     public User() {
@@ -113,11 +115,11 @@ public class User {
         this.resetToken = resetToken;
     }
 
-    public Timestamp getResetTokenExpiry() {
+    public LocalDateTime getResetTokenExpiry() {
         return resetTokenExpiry;
     }
 
-    public void setResetTokenExpiry(Timestamp resetTokenExpiry) {
+    public void setResetTokenExpiry(LocalDateTime resetTokenExpiry) {
         this.resetTokenExpiry = resetTokenExpiry;
     }
 
@@ -127,6 +129,14 @@ public class User {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getGoogleId() {

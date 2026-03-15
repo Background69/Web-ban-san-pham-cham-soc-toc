@@ -19,6 +19,7 @@ public class Promotion {
     private LocalDateTime endDate;
     private boolean isActive;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructors
     public Promotion() {
@@ -103,6 +104,14 @@ public class Promotion {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }
