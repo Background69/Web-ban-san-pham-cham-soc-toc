@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
 
 import java.util.List;
@@ -214,23 +213,43 @@ public class ProductService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        Promotion bestPromotion = promotions.stream()
-                .filter(Promotion::isActive)
-                .filter(p -> p.getStartDate() != null && p.getEndDate() != null)
-                .filter(p -> now.isAfter(p.getStartDate()) && now.isBefore(p.getEndDate()))
-                .filter(p -> p.getDiscountPercent() != null && p.getDiscountPercent() > 0)
-                .max(Comparator.comparing(Promotion::getDiscountPercent))
-                .orElse(null);
+        BigDecimal bestFinalPrice = originalPrice;
+        Promotion bestPromotion = null;
+
+        for (Promotion promotion : promotions) {
+            if (!promotion.isActive() || promotion.getStartDate() == null || promotion.getEndDate() == null) {
+                continue;
+            }
+            if (!now.isAfter(promotion.getStartDate()) || !now.isBefore(promotion.getEndDate())) {
+                continue;
+            }
+
+            BigDecimal candidateFinalPrice = originalPrice;
+            if ("fixed".equalsIgnoreCase(promotion.getPromotionType())
+                    && promotion.getDiscountValue() != null) {
+                candidateFinalPrice = originalPrice.subtract(promotion.getDiscountValue());
+                if (candidateFinalPrice.compareTo(BigDecimal.ZERO) < 0) {
+                    candidateFinalPrice = BigDecimal.ZERO;
+                }
+            } else if (promotion.getDiscountPercent() != null && promotion.getDiscountPercent() > 0) {
+                BigDecimal disc = originalPrice
+                        .multiply(BigDecimal.valueOf(promotion.getDiscountPercent()))
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                candidateFinalPrice = originalPrice.subtract(disc);
+            } else {
+                continue;
+            }
+
+            if (candidateFinalPrice.compareTo(bestFinalPrice) < 0) {
+                bestFinalPrice = candidateFinalPrice;
+                bestPromotion = promotion;
+            }
+        }
 
         if (bestPromotion != null) {
-            int discountPercent = bestPromotion.getDiscountPercent();
-            BigDecimal discount = originalPrice.multiply(BigDecimal.valueOf(discountPercent))
-                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-            BigDecimal finalPrice = originalPrice.subtract(discount);
-
-            product.setFinalPrice(finalPrice);
+            product.setFinalPrice(bestFinalPrice);
             product.setActivePromotion(bestPromotion);
-            return finalPrice;
+            return bestFinalPrice;
         }
 
         product.setFinalPrice(originalPrice);
@@ -318,9 +337,7 @@ public class ProductService {
      * Xóa product.
      */
     public boolean deleteProduct(int productId) {
-        variantDAO.deleteByProductId(productId);
-        imageDAO.deleteByProductId(productId);
-        return productDAO.delete(productId);
+        return productDAO.softDelete(productId);
     }
 
     /**

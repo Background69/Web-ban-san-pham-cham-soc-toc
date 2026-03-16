@@ -48,6 +48,10 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         );
     }
 
+    public ProductVariant findDefault(int productId) {
+        return findDefaultByProductId(productId);
+    }
+
     public Map<Integer, Integer> getTotalStockByProductIds(List<Integer> productIds) {
         if (productIds == null || productIds.isEmpty()) {
             return Map.of();
@@ -151,6 +155,10 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         return rowsAffected > 0;
     }
 
+    public boolean decreaseStock(int variantId, int quantity) {
+        return decrementStock(variantId, quantity);
+    }
+
     /**
      * Hoàn trả stock khi hủy đơn hàng
      */
@@ -179,6 +187,8 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         variant.setDiscountPercent(rs.getInt("discount_percent"));
         variant.setStockQuantity(rs.getInt("stock_quantity"));
         variant.setDefault(rs.getBoolean("is_default"));
+        variant.setCreatedAt(rs.getTimestamp("created_at"));
+        variant.setUpdatedAt(rs.getTimestamp("updated_at"));
         return variant;
     }
 }

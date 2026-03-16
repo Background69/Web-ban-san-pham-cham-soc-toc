@@ -177,19 +177,19 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
      * @return Kết quả xử lý của phương thức.
      */
     public boolean setDefault(int userId, int addressId) {
-        // First, unset all defaults for this user
-        String unsetSql = "UPDATE shipping_addresses SET is_default = false WHERE user_id = :userId";
-        jdbi.withHandle(handle -> handle.createUpdate(unsetSql).bind("userId", userId).execute());
+        return jdbi.inTransaction(handle -> {
+            String unsetSql = "UPDATE shipping_addresses SET is_default = false WHERE user_id = :userId";
+            handle.createUpdate(unsetSql)
+                    .bind("userId", userId)
+                    .execute();
 
-        // Then set the new default
-        String setSql = "UPDATE shipping_addresses SET is_default = true WHERE address_id = :addressId AND user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(setSql)
-                        .bind("addressId", addressId)
-                        .bind("userId", userId)
-                        .execute()
-        );
-        return rowsAffected > 0;
+            String setSql = "UPDATE shipping_addresses SET is_default = true WHERE address_id = :addressId AND user_id = :userId";
+            int rowsAffected = handle.createUpdate(setSql)
+                    .bind("addressId", addressId)
+                    .bind("userId", userId)
+                    .execute();
+            return rowsAffected > 0;
+        });
     }
 
     /**
@@ -215,6 +215,7 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         address.setNote(rs.getString("note"));
         address.setDefaultAddress(rs.getBoolean("is_default"));
         address.setCreatedAt(rs.getTimestamp("created_at"));
+        address.setUpdatedAt(rs.getTimestamp("updated_at"));
         return address;
     }
 }
