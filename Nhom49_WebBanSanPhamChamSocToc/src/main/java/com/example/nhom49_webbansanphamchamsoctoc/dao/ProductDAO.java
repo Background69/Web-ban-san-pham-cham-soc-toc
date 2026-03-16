@@ -20,7 +20,7 @@ public class ProductDAO implements IDAO<Product> {
     }
 
     public Product findBySlug(String slug) {
-        String sql = "SELECT * FROM products WHERE product_slug = :productSlug";
+        String sql = "SELECT * FROM products WHERE product_slug = :productSlug AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("productSlug", slug)
                 .map((rs, ctx) -> mapProduct(rs))
@@ -30,7 +30,7 @@ public class ProductDAO implements IDAO<Product> {
 
     @Override
     public Product findById(int id) {
-        String sql = "SELECT * FROM products WHERE product_id = :id";
+        String sql = "SELECT * FROM products WHERE product_id = :id AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("id", id)
                 .map((rs, ctx) -> mapProduct(rs))
@@ -67,6 +67,7 @@ public class ProductDAO implements IDAO<Product> {
                 LEFT JOIN product_promotions pp ON p.product_id = pp.product_id
                 LEFT JOIN promotions pr ON pp.promotion_id = pr.promotion_id
                 WHERE p.product_id = :productId
+                  AND p.is_deleted = FALSE
                 """;
 
         return jdbi.withHandle(handle -> {
@@ -137,7 +138,7 @@ public class ProductDAO implements IDAO<Product> {
      */
     @Override
     public List<Product> findAll() {
-        String sql = "SELECT * FROM products ORDER BY created_at DESC";
+        String sql = "SELECT * FROM products WHERE is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .map((rs, ctx) -> mapProduct(rs))
                 .list());
@@ -215,6 +216,13 @@ public class ProductDAO implements IDAO<Product> {
         return rowsAffected > 0;
     }
 
+    public boolean softDelete(int id) {
+        String sql = "UPDATE products SET is_deleted = TRUE, deleted_at = NOW() WHERE product_id = :id";
+        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("id", id)
+                .execute() > 0);
+    }
+
     // Query methods
 
     /**
@@ -224,7 +232,7 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public List<Product> findByCategory(int categoryId) {
-        String sql = "SELECT * FROM products WHERE category_id = :categoryId ORDER BY created_at DESC";
+        String sql = "SELECT * FROM products WHERE category_id = :categoryId AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("categoryId", categoryId)
                 .map((rs, ctx) -> mapProduct(rs))
@@ -238,7 +246,7 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public List<Product> findByBrand(int brandId) {
-        String sql = "SELECT * FROM products WHERE brand_id = :brandId ORDER BY created_at DESC";
+        String sql = "SELECT * FROM products WHERE brand_id = :brandId AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("brandId", brandId)
                 .map((rs, ctx) -> mapProduct(rs))
@@ -249,7 +257,7 @@ public class ProductDAO implements IDAO<Product> {
      * Lấy sản phẩm liên quan theo category, loại trừ sản phẩm hiện tại
      */
     public List<Product> findRelatedProducts(int productId, int categoryId, int limit) {
-        String sql = "SELECT * FROM products WHERE category_id = :categoryId AND product_id != :productId ORDER BY RAND() LIMIT :limit";
+        String sql = "SELECT * FROM products WHERE category_id = :categoryId AND product_id != :productId AND is_deleted = FALSE ORDER BY RAND() LIMIT :limit";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("categoryId", categoryId)
                 .bind("productId", productId)
@@ -265,7 +273,7 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public List<Product> search(String keyword) {
-        String sql = "SELECT * FROM products WHERE product_name LIKE :searchPattern OR short_description LIKE :searchPattern "
+        String sql = "SELECT * FROM products WHERE (product_name LIKE :searchPattern OR short_description LIKE :searchPattern) AND is_deleted = FALSE "
                 +
                 "ORDER BY created_at DESC";
         String searchPattern = "%" + keyword + "%";
@@ -281,7 +289,7 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public List<Product> findFeatured() {
-        String sql = "SELECT * FROM products WHERE is_featured = true ORDER BY created_at DESC";
+        String sql = "SELECT * FROM products WHERE is_featured = true AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .map((rs, ctx) -> mapProduct(rs))
                 .list());
@@ -297,6 +305,7 @@ public class ProductDAO implements IDAO<Product> {
                     GROUP BY oi.product_id
                 ) sold ON sold.product_id = p.product_id
                 WHERE p.is_on_sale = false
+                  AND p.is_deleted = false
                 ORDER BY COALESCE(p.average_rating, 0) DESC, sold_quantity DESC
                 LIMIT :limit
                 """;
@@ -312,14 +321,14 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public List<Product> findOnSale() {
-        String sql = "SELECT * FROM products WHERE is_on_sale = true ORDER BY created_at DESC";
+        String sql = "SELECT * FROM products WHERE is_on_sale = true AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .map((rs, ctx) -> mapProduct(rs))
                 .list());
     }
 
     public List<Product> findOnSale(int limit, int offset) {
-        String sql = "SELECT * FROM products WHERE is_on_sale = true ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        String sql = "SELECT * FROM products WHERE is_on_sale = true AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("limit", limit)
                 .bind("offset", offset)
@@ -328,7 +337,7 @@ public class ProductDAO implements IDAO<Product> {
     }
 
     public int countOnSale() {
-        String sql = "SELECT COUNT(*) FROM products WHERE is_on_sale = true";
+        String sql = "SELECT COUNT(*) FROM products WHERE is_on_sale = true AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .mapTo(Integer.class)
                 .findFirst()
@@ -343,7 +352,7 @@ public class ProductDAO implements IDAO<Product> {
     public List<Product> findFlashSale() {
         String sql = "SELECT p.* FROM products p " +
                 "JOIN product_variants pv ON p.product_id = pv.product_id " +
-                "WHERE pv.is_default = true AND pv.original_price > 0 " +
+                "WHERE pv.is_default = true AND pv.original_price > 0 AND p.is_deleted = FALSE " +
                 "AND ((pv.original_price - pv.sale_price) / pv.original_price * 100) > 30 " +
                 "ORDER BY p.created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -361,7 +370,7 @@ public class ProductDAO implements IDAO<Product> {
      */
     public List<Product> findByBrandWithPagination(int brandId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        String sql = "SELECT * FROM products WHERE brand_id = :brandId ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
+        String sql = "SELECT * FROM products WHERE brand_id = :brandId AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("brandId", brandId)
                 .bind("pageSize", pageSize)
@@ -377,7 +386,7 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public int countByBrand(int brandId) {
-        String sql = "SELECT COUNT(*) FROM products WHERE brand_id = :brandId";
+        String sql = "SELECT COUNT(*) FROM products WHERE brand_id = :brandId AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("brandId", brandId)
                 .mapTo(Integer.class)
@@ -396,7 +405,7 @@ public class ProductDAO implements IDAO<Product> {
      */
     public List<Product> findWithPagination(int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        String sql = "SELECT * FROM products ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
+        String sql = "SELECT * FROM products WHERE is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("pageSize", pageSize)
                 .bind("offset", offset)
@@ -414,7 +423,7 @@ public class ProductDAO implements IDAO<Product> {
      */
     public List<Product> findByCategoryWithPagination(int categoryId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        String sql = "SELECT * FROM products WHERE category_id = :categoryId ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
+        String sql = "SELECT * FROM products WHERE category_id = :categoryId AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("categoryId", categoryId)
                 .bind("pageSize", pageSize)
@@ -429,7 +438,7 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public int countAll() {
-        String sql = "SELECT COUNT(*) FROM products";
+        String sql = "SELECT COUNT(*) FROM products WHERE is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .mapTo(Integer.class)
                 .findFirst()
@@ -443,7 +452,7 @@ public class ProductDAO implements IDAO<Product> {
      * @return Kết quả xử lý của phương thức.
      */
     public int countByCategory(int categoryId) {
-        String sql = "SELECT COUNT(*) FROM products WHERE category_id = :categoryId";
+        String sql = "SELECT COUNT(*) FROM products WHERE category_id = :categoryId AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("categoryId", categoryId)
                 .mapTo(Integer.class)
@@ -453,7 +462,7 @@ public class ProductDAO implements IDAO<Product> {
 
     public List<Product> findByFilters(String search, Integer categoryId, Integer brandId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE is_deleted = FALSE");
         Map<String, Object> params = new HashMap<>();
 
         if (search != null && !search.trim().isEmpty()) {
@@ -483,7 +492,7 @@ public class ProductDAO implements IDAO<Product> {
     }
 
     public int countByFilters(String search, Integer categoryId, Integer brandId) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE is_deleted = FALSE");
         Map<String, Object> params = new HashMap<>();
 
         if (search != null && !search.trim().isEmpty()) {
@@ -548,6 +557,8 @@ public class ProductDAO implements IDAO<Product> {
         product.setStockQuantity(rs.getInt("stock_quantity"));
         product.setFeatured(rs.getBoolean("is_featured"));
         product.setOnSale(rs.getBoolean("is_on_sale"));
+        product.setDeleted(rs.getBoolean("is_deleted"));
+        product.setDeletedAt(rs.getTimestamp("deleted_at"));
         product.setAverageRating(rs.getBigDecimal("average_rating"));
         product.setReviewCount(rs.getInt("review_count"));
         product.setCreatedAt(rs.getTimestamp("created_at"));
