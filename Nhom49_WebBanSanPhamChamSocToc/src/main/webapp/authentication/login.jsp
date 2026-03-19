@@ -1,3 +1,4 @@
+<%@ page import="java.nio.charset.StandardCharsets" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
@@ -9,8 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập - HairGlow</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/login.css">
 </head>
@@ -67,7 +67,7 @@
                 <div class="social-login">
                     <a class="google-btn"
                        href="${pageContext.request.contextPath}/auth/google<%=
-        redirect.isEmpty() ? "" : "?redirect=" + java.net.URLEncoder.encode(redirect, "UTF-8")
+        redirect.isEmpty() ? "" : "?redirect=" + java.net.URLEncoder.encode(redirect, StandardCharsets.UTF_8)
    %>">
                         <img src="${pageContext.request.contextPath}/static/assets/icons/Google.png" alt="Google">
                         <span>Đăng nhập bằng Google</span>
