@@ -181,11 +181,7 @@ public class CartItem implements Serializable {
         return product != null ? product.getProductId() : 0;
     }
 
-    /**
-     * Tạo chuỗi mô tả doi tuong.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public String toString() {
         return "CartItem{" +
