@@ -1,20 +1,18 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 public class User {
     private int userId;
     private String email;
     private String username;
+    private String fullName;
     private String password;
     private String phone;
     private String avatar;
     private String role; // 'Admin' or 'Khach hang'
     private boolean isActive;
     private String authProvider; // LOCAL, GOOGLE
-    private String resetToken;
-    private LocalDateTime resetTokenExpiry;
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private String googleId; // Google OAuth ID
@@ -22,11 +20,12 @@ public class User {
     public User() {
     }
 
-    public User(int userId, String email, String username, String password, String phone,
+    public User(int userId, String email, String username, String fullName, String password, String phone,
                 String avatar, String role, boolean isActive, Timestamp createdAt) {
         this.userId = userId;
         this.email = email;
         this.username = username;
+        this.fullName = fullName;
         this.password = password;
         this.phone = phone;
         this.avatar = avatar;
@@ -57,6 +56,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getPassword() {
@@ -107,22 +114,6 @@ public class User {
         this.authProvider = authProvider;
     }
 
-    public String getResetToken() {
-        return resetToken;
-    }
-
-    public void setResetToken(String resetToken) {
-        this.resetToken = resetToken;
-    }
-
-    public LocalDateTime getResetTokenExpiry() {
-        return resetTokenExpiry;
-    }
-
-    public void setResetTokenExpiry(LocalDateTime resetTokenExpiry) {
-        this.resetTokenExpiry = resetTokenExpiry;
-    }
-
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -157,6 +148,7 @@ public class User {
                 "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", role='" + role + '\'' +

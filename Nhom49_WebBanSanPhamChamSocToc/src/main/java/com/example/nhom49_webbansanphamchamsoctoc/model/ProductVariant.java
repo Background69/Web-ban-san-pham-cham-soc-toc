@@ -11,6 +11,7 @@ public class ProductVariant {
     private int variantId;
     private int productId;
     private String variantName;
+    private String sku;
     private BigDecimal originalPrice;
     private BigDecimal salePrice;
     private int discountPercent;
@@ -46,6 +47,14 @@ public class ProductVariant {
 
     public void setVariantName(String variantName) {
         this.variantName = variantName;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public BigDecimal getOriginalPrice() {
@@ -120,6 +129,7 @@ public class ProductVariant {
                 "variantId=" + variantId +
                 ", productId=" + productId +
                 ", variantName='" + variantName + '\'' +
+                ", sku='" + sku + '\'' +
                 ", originalPrice=" + originalPrice +
                 ", salePrice=" + salePrice +
                 ", discountPercent=" + discountPercent +

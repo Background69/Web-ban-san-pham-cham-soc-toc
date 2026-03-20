@@ -17,6 +17,8 @@ public class Product {
     private String origin;
     private String shortDescription;
     private String fullDescription;
+    private String ingredients;
+    private String usageInstructions;
     private int stockQuantity;
     private boolean isFeatured;
     private boolean isOnSale;
@@ -53,9 +55,9 @@ public class Product {
     }
 
     public Product(int productId, String productName, String productSlug, Integer brandId, Integer categoryId,
-            String origin, String shortDescription, String fullDescription, int stockQuantity,
-            boolean isFeatured, boolean isOnSale, BigDecimal averageRating, int reviewCount,
-            Timestamp createdAt, Timestamp updatedAt) {
+                   String origin, String shortDescription, String fullDescription, int stockQuantity,
+                   boolean isFeatured, boolean isOnSale, BigDecimal averageRating, int reviewCount,
+                   Timestamp createdAt, Timestamp updatedAt) {
         this.productId = productId;
         this.productName = productName;
         this.productSlug = productSlug;
@@ -136,6 +138,22 @@ public class Product {
 
     public void setFullDescription(String fullDescription) {
         this.fullDescription = fullDescription;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getUsageInstructions() {
+        return usageInstructions;
+    }
+
+    public void setUsageInstructions(String usageInstructions) {
+        this.usageInstructions = usageInstructions;
     }
 
     public int getStockQuantity() {
@@ -323,10 +341,6 @@ public class Product {
         this.activePromotion = activePromotion;
     }
 
-    public void setDefaultVariant(ProductVariant defaultVariant) {
-        this.defaultVariant = defaultVariant;
-    }
-
     // Helper methods
     public ProductImage getPrimaryImage() {
         if (images != null) {
@@ -359,6 +373,10 @@ public class Product {
             }
         }
         return null;
+    }
+
+    public void setDefaultVariant(ProductVariant defaultVariant) {
+        this.defaultVariant = defaultVariant;
     }
 
     @Override

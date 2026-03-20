@@ -5,13 +5,9 @@ import java.sql.Timestamp;
 public class OrderStatusHistory {
     private int historyId;
     private int orderId;
-    private String oldStatus;
-    private String newStatus;
-    private Integer changedBy;
-    private Timestamp changedAt;
+    private String status;
+    private Timestamp createdAt;
     private String note;
-
-    private String changedByUsername;
 
     public OrderStatusHistory() {
     }
@@ -32,36 +28,20 @@ public class OrderStatusHistory {
         this.orderId = orderId;
     }
 
-    public String getOldStatus() {
-        return oldStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setOldStatus(String oldStatus) {
-        this.oldStatus = oldStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getNewStatus() {
-        return newStatus;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setNewStatus(String newStatus) {
-        this.newStatus = newStatus;
-    }
-
-    public Integer getChangedBy() {
-        return changedBy;
-    }
-
-    public void setChangedBy(Integer changedBy) {
-        this.changedBy = changedBy;
-    }
-
-    public Timestamp getChangedAt() {
-        return changedAt;
-    }
-
-    public void setChangedAt(Timestamp changedAt) {
-        this.changedAt = changedAt;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getNote() {
@@ -70,13 +50,5 @@ public class OrderStatusHistory {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public String getChangedByUsername() {
-        return changedByUsername;
-    }
-
-    public void setChangedByUsername(String changedByUsername) {
-        this.changedByUsername = changedByUsername;
     }
 }

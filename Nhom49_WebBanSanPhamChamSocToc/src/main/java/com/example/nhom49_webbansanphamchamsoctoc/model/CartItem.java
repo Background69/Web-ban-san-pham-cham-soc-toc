@@ -22,8 +22,8 @@ public class CartItem implements Serializable {
     /**
      * Khởi tạo CartItem với product và variant.
      *
-     * @param product Sản phẩm.
-     * @param variant Bien the.
+     * @param product  Sản phẩm.
+     * @param variant  Bien the.
      * @param quantity So luong.
      */
     public CartItem(Product product, ProductVariant variant, int quantity) {
@@ -33,8 +33,8 @@ public class CartItem implements Serializable {
     /**
      * Khởi tạo CartItem đầy đủ thong tin.
      *
-     * @param product Sản phẩm.
-     * @param variant Bien the.
+     * @param product  Sản phẩm.
+     * @param variant  Bien the.
      * @param quantity So luong.
      * @param imageUrl Anh dai dien.
      */
