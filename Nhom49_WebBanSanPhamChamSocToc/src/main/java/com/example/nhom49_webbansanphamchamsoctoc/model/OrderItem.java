@@ -1,6 +1,7 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 /**
  * Model OrderItem - Bảng order_items trong database
@@ -9,13 +10,14 @@ import java.math.BigDecimal;
 public class OrderItem {
     private int orderItemId;
     private int orderId;
-    private int productId;
+    private Integer productId;
     private Integer variantId;
     private String productName;
     private String variantName;
     private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
+    private Timestamp createdAt;
     private String productImage; // Thêm field để lưu đường dẫn ảnh sản phẩm
 
     // Đối tượng liên kết
@@ -43,11 +45,11 @@ public class OrderItem {
         this.orderId = orderId;
     }
 
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
@@ -97,6 +99,14 @@ public class OrderItem {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getProductImage() {

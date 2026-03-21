@@ -22,7 +22,9 @@ public class Order {
     private BigDecimal subtotal;
     private BigDecimal totalAmount;
     private String orderStatus; // 'pending', 'confirmed', 'shipping', 'completed', 'cancelled'
+    private String note;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Đối tượng liên kết
     private User user;
@@ -138,12 +140,28 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     public Timestamp getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public User getUser() {
@@ -193,6 +211,7 @@ public class Order {
             case "cod":
                 return "Thanh toán khi nhận hàng";
             case "bank":
+            case "bank_transfer":
                 return "Chuyển khoản ngân hàng";
             case "momo":
                 return "Ví MoMo";
