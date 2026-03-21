@@ -15,18 +15,8 @@ public class PromotionDAO implements IDAO<Promotion> {
     @Override
     public Promotion findById(int id) {
         String sql = """
-            SELECT
-                promotion_id,
-                promotion_name,
-                promotion_type,
-                discount_value,
-                discount_percent,
-                badge_text,
-                NULLIF(start_date, '0000-00-00 00:00:00') AS start_date,
-                NULLIF(end_date,   '0000-00-00 00:00:00') AS end_date,
-                is_active,
-                NULLIF(created_at, '0000-00-00 00:00:00') AS created_at,
-                NULLIF(updated_at, '0000-00-00 00:00:00') AS updated_at
+            SELECT promotion_id, promotion_name, promotion_type, badge_text,
+                   start_date, end_date, is_active, created_at, updated_at
             FROM promotions
             WHERE promotion_id = :id
             """;
@@ -43,18 +33,8 @@ public class PromotionDAO implements IDAO<Promotion> {
     @Override
     public List<Promotion> findAll() {
         String sql = """
-            SELECT
-                promotion_id,
-                promotion_name,
-                promotion_type,
-                discount_value,
-                discount_percent,
-                badge_text,
-                NULLIF(start_date, '0000-00-00 00:00:00') AS start_date,
-                NULLIF(end_date,   '0000-00-00 00:00:00') AS end_date,
-                is_active,
-                NULLIF(created_at, '0000-00-00 00:00:00') AS created_at,
-                NULLIF(updated_at, '0000-00-00 00:00:00') AS updated_at
+            SELECT promotion_id, promotion_name, promotion_type, badge_text,
+                   start_date, end_date, is_active, created_at, updated_at
             FROM promotions
             ORDER BY promotion_id DESC
             """;
@@ -70,21 +50,22 @@ public class PromotionDAO implements IDAO<Promotion> {
     public int insert(Promotion entity) {
         String sql = """
             INSERT INTO promotions
-            (promotion_name, promotion_type, discount_value, discount_percent, badge_text, start_date, end_date, is_active)
-            VALUES (:name, :type, :value, :percent, :badge, :start, :end, :active)
+            (promotion_name, promotion_type, badge_text, start_date, end_date, is_active)
+            VALUES (:name, :type, :badge, :start, :end, :active)
             """;
 
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
                         .bind("name", entity.getPromotionName())
                         .bind("type", entity.getPromotionType())
-                        .bind("value", entity.getDiscountValue())
-                        .bind("percent", entity.getDiscountPercent())
                         .bind("badge", entity.getBadgeText())
                         .bind("start", entity.getStartDate())
                         .bind("end", entity.getEndDate())
                         .bind("active", entity.isActive())
-                        .execute()
+                        .executeAndReturnGeneratedKeys("promotion_id")
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(-1)
         );
     }
 
@@ -94,8 +75,6 @@ public class PromotionDAO implements IDAO<Promotion> {
             UPDATE promotions SET
                 promotion_name = :name,
                 promotion_type = :type,
-                discount_value = :value,
-                discount_percent = :percent,
                 badge_text = :badge,
                 start_date = :start,
                 end_date = :end,
@@ -107,8 +86,6 @@ public class PromotionDAO implements IDAO<Promotion> {
                 handle.createUpdate(sql)
                         .bind("name", entity.getPromotionName())
                         .bind("type", entity.getPromotionType())
-                        .bind("value", entity.getDiscountValue())
-                        .bind("percent", entity.getDiscountPercent())
                         .bind("badge", entity.getBadgeText())
                         .bind("start", entity.getStartDate())
                         .bind("end", entity.getEndDate())
@@ -132,18 +109,8 @@ public class PromotionDAO implements IDAO<Promotion> {
 
     public List<Promotion> findActive() {
         String sql = """
-            SELECT
-                promotion_id,
-                promotion_name,
-                promotion_type,
-                discount_value,
-                discount_percent,
-                badge_text,
-                start_date,
-                end_date,
-                is_active,
-                created_at,
-                updated_at
+            SELECT promotion_id, promotion_name, promotion_type, badge_text,
+                   start_date, end_date, is_active, created_at, updated_at
             FROM promotions
             WHERE is_active = TRUE
               AND NOW() BETWEEN start_date AND end_date
@@ -161,8 +128,6 @@ public class PromotionDAO implements IDAO<Promotion> {
         p.setPromotionId(rs.getInt("promotion_id"));
         p.setPromotionName(rs.getString("promotion_name"));
         p.setPromotionType(rs.getString("promotion_type"));
-        p.setDiscountValue(rs.getBigDecimal("discount_value"));
-        p.setDiscountPercent((Integer) rs.getObject("discount_percent"));
         p.setBadgeText(rs.getString("badge_text"));
         p.setActive(rs.getBoolean("is_active"));
 

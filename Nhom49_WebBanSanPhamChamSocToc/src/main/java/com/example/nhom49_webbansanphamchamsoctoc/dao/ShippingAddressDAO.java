@@ -6,26 +6,14 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-/**
- * Lớp ShippingAddressDAO.
- */
 public class ShippingAddressDAO implements IDAO<ShippingAddress> {
 
     private final Jdbi jdbi;
 
-    /**
-     * Thực hiện shipping address dao.
-     */
     public ShippingAddressDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-
-    /**
-     * Tim all.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
     @Override
     public List<ShippingAddress> findAll() {
         String sql = "SELECT * FROM shipping_addresses ORDER BY created_at DESC";
@@ -36,12 +24,6 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         );
     }
 
-    /**
-     * Tim by user id.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<ShippingAddress> findByUserId(int userId) {
         String sql = "SELECT * FROM shipping_addresses WHERE user_id = :userId ORDER BY is_default DESC, created_at DESC";
         return jdbi.withHandle(handle ->
@@ -52,12 +34,6 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         );
     }
 
-    /**
-     * Tim default by user id.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public ShippingAddress findDefaultByUserId(int userId) {
         String sql = "SELECT * FROM shipping_addresses WHERE user_id = :userId AND is_default = true LIMIT 1";
         return jdbi.withHandle(handle ->
@@ -69,12 +45,6 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         );
     }
 
-    /**
-     * Tim by id.
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     @Override
     public ShippingAddress findById(int id) {
         String sql = "SELECT * FROM shipping_addresses WHERE address_id = :id";
@@ -87,24 +57,16 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         );
     }
 
-
-    /**
-     * Them .
-     *
-     * @param address Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     @Override
     public int insert(ShippingAddress address) {
-        String sql = "INSERT INTO shipping_addresses (user_id, full_name, phone, email, province_code, " +
+        String sql = "INSERT INTO shipping_addresses (user_id, full_name, phone, province_code, " +
                 "province_name, district_code, district_name, ward_code, ward_name, specific_address, " +
-                "note, is_default) VALUES (:userId, :fullName, :phone, :email, :provinceCode, :provinceName, :districtCode, :districtName, :wardCode, :wardName, :specificAddress, :note, :isDefault)";
+                "note, is_default) VALUES (:userId, :fullName, :phone, :provinceCode, :provinceName, :districtCode, :districtName, :wardCode, :wardName, :specificAddress, :note, :isDefault)";
         return jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
                         .bind("userId", address.getUserId())
                         .bind("fullName", address.getFullName())
                         .bind("phone", address.getPhone())
-                        .bind("email", address.getEmail())
                         .bind("provinceCode", address.getProvinceCode())
                         .bind("provinceName", address.getProvinceName())
                         .bind("districtCode", address.getDistrictCode())
@@ -121,22 +83,15 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         );
     }
 
-    /**
-     * Cập nhật .
-     *
-     * @param address Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     @Override
     public boolean update(ShippingAddress address) {
-        String sql = "UPDATE shipping_addresses SET full_name = :fullName, phone = :phone, email = :email, province_code = :provinceCode, " +
+        String sql = "UPDATE shipping_addresses SET full_name = :fullName, phone = :phone, province_code = :provinceCode, " +
                 "province_name = :provinceName, district_code = :districtCode, district_name = :districtName, ward_code = :wardCode, ward_name = :wardName, " +
                 "specific_address = :specificAddress, note = :note, is_default = :isDefault WHERE address_id = :addressId";
         int rowsAffected = jdbi.withHandle(handle ->
                 handle.createUpdate(sql)
                         .bind("fullName", address.getFullName())
                         .bind("phone", address.getPhone())
-                        .bind("email", address.getEmail())
                         .bind("provinceCode", address.getProvinceCode())
                         .bind("provinceName", address.getProvinceName())
                         .bind("districtCode", address.getDistrictCode())
@@ -152,12 +107,6 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Xóa .
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM shipping_addresses WHERE address_id = :addressId";
@@ -169,13 +118,6 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Thiết lập default.
-     *
-     * @param userId Tham số đầu vào.
-     * @param addressId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public boolean setDefault(int userId, int addressId) {
         return jdbi.inTransaction(handle -> {
             String unsetSql = "UPDATE shipping_addresses SET is_default = false WHERE user_id = :userId";
@@ -192,19 +134,12 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         });
     }
 
-    /**
-     * Thực hiện map address.
-     *
-     * @param rs Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     private ShippingAddress mapAddress(java.sql.ResultSet rs) throws java.sql.SQLException {
         ShippingAddress address = new ShippingAddress();
         address.setAddressId(rs.getInt("address_id"));
         address.setUserId(rs.getInt("user_id"));
         address.setFullName(rs.getString("full_name"));
         address.setPhone(rs.getString("phone"));
-        address.setEmail(rs.getString("email"));
         address.setProvinceCode(rs.getString("province_code"));
         address.setProvinceName(rs.getString("province_name"));
         address.setDistrictCode(rs.getString("district_code"));

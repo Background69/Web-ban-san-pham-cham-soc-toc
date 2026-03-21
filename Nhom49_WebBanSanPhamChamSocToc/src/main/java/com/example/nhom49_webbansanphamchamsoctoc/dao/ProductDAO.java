@@ -55,8 +55,6 @@ public class ProductDAO implements IDAO<Product> {
                     pr.promotion_id AS pr_promotion_id,
                     pr.promotion_name AS pr_promotion_name,
                     pr.promotion_type AS pr_promotion_type,
-                    pr.discount_value AS pr_discount_value,
-                    pr.discount_percent AS pr_discount_percent,
                     pr.badge_text AS pr_badge_text,
                     pr.start_date AS pr_start_date,
                     pr.end_date AS pr_end_date,
@@ -109,10 +107,6 @@ public class ProductDAO implements IDAO<Product> {
                             pr.setPromotionId(prId);
                             pr.setPromotionName(rs.getString("pr_promotion_name"));
                             pr.setPromotionType(rs.getString("pr_promotion_type"));
-                            pr.setDiscountValue(rs.getBigDecimal("pr_discount_value"));
-                            pr.setDiscountPercent(
-                                    rs.getObject("pr_discount_percent") != null ? rs.getInt("pr_discount_percent")
-                                            : null);
                             pr.setBadgeText(rs.getString("pr_badge_text"));
                             java.sql.Timestamp start = rs.getTimestamp("pr_start_date");
                             java.sql.Timestamp end = rs.getTimestamp("pr_end_date");
@@ -131,11 +125,7 @@ public class ProductDAO implements IDAO<Product> {
         });
     }
 
-    /**
-     * Tim all.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public List<Product> findAll() {
         String sql = "SELECT * FROM products WHERE is_deleted = FALSE ORDER BY created_at DESC";
@@ -144,17 +134,12 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Them .
-     *
-     * @param product Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public int insert(Product product) {
         String sql = "INSERT INTO products (product_name, product_slug, brand_id, category_id, origin, " +
-                "short_description, full_description, stock_quantity, is_featured, is_on_sale) " +
-                "VALUES (:productName, :productSlug, :brandId, :categoryId, :origin, :shortDescription, :fullDescription, :stockQuantity, :isFeatured, :isOnSale)";
+                "short_description, full_description, ingredients, usage_instructions, is_featured, is_on_sale) " +
+                "VALUES (:productName, :productSlug, :brandId, :categoryId, :origin, :shortDescription, :fullDescription, :ingredients, :usageInstructions, :isFeatured, :isOnSale)";
         return jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("productName", product.getProductName())
                 .bind("productSlug", product.getProductSlug())
@@ -163,7 +148,8 @@ public class ProductDAO implements IDAO<Product> {
                 .bind("origin", product.getOrigin())
                 .bind("shortDescription", product.getShortDescription())
                 .bind("fullDescription", product.getFullDescription())
-                .bind("stockQuantity", product.getStockQuantity())
+                .bind("ingredients", product.getIngredients())
+                .bind("usageInstructions", product.getUsageInstructions())
                 .bind("isFeatured", product.isFeatured())
                 .bind("isOnSale", product.isOnSale())
                 .executeAndReturnGeneratedKeys("product_id")
@@ -172,17 +158,11 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(-1));
     }
 
-    /**
-     * Cập nhật .
-     *
-     * @param product Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public boolean update(Product product) {
         String sql = "UPDATE products SET product_name = :productName, product_slug = :productSlug, brand_id = :brandId, category_id = :categoryId, "
-                +
-                "origin = :origin, short_description = :shortDescription, full_description = :fullDescription, stock_quantity = :stockQuantity, "
+                + "origin = :origin, short_description = :shortDescription, full_description = :fullDescription, ingredients = :ingredients, usage_instructions = :usageInstructions, "
                 +
                 "is_featured = :isFeatured, is_on_sale = :isOnSale, updated_at = CURRENT_TIMESTAMP WHERE product_id = :productId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
@@ -193,7 +173,8 @@ public class ProductDAO implements IDAO<Product> {
                 .bind("origin", product.getOrigin())
                 .bind("shortDescription", product.getShortDescription())
                 .bind("fullDescription", product.getFullDescription())
-                .bind("stockQuantity", product.getStockQuantity())
+                .bind("ingredients", product.getIngredients())
+                .bind("usageInstructions", product.getUsageInstructions())
                 .bind("isFeatured", product.isFeatured())
                 .bind("isOnSale", product.isOnSale())
                 .bind("productId", product.getProductId())
@@ -201,12 +182,7 @@ public class ProductDAO implements IDAO<Product> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Xóa .
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM products WHERE product_id = :productId";
@@ -225,12 +201,7 @@ public class ProductDAO implements IDAO<Product> {
 
     // Query methods
 
-    /**
-     * Tim by category.
-     *
-     * @param categoryId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findByCategory(int categoryId) {
         String sql = "SELECT * FROM products WHERE category_id = :categoryId AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -239,12 +210,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Tim by brand.
-     *
-     * @param brandId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findByBrand(int brandId) {
         String sql = "SELECT * FROM products WHERE brand_id = :brandId AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -266,12 +232,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Thực hiện search.
-     *
-     * @param keyword Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> search(String keyword) {
         String sql = "SELECT * FROM products WHERE (product_name LIKE :searchPattern OR short_description LIKE :searchPattern) AND is_deleted = FALSE "
                 +
@@ -283,11 +244,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Tim featured.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findFeatured() {
         String sql = "SELECT * FROM products WHERE is_featured = true AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -315,20 +272,49 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Tim on sale.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findOnSale() {
-        String sql = "SELECT * FROM products WHERE is_on_sale = true AND is_deleted = FALSE ORDER BY created_at DESC";
+        String sql = """
+                SELECT p.*
+                FROM products p
+                WHERE p.is_deleted = FALSE
+                  AND (
+                        p.is_on_sale = TRUE
+                        OR EXISTS (
+                            SELECT 1
+                            FROM product_promotions pp
+                            JOIN promotions pr ON pr.promotion_id = pp.promotion_id
+                            WHERE pp.product_id = p.product_id
+                              AND pr.is_active = TRUE
+                              AND NOW() BETWEEN pr.start_date AND pr.end_date
+                        )
+                  )
+                ORDER BY p.created_at DESC
+                """;
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .map((rs, ctx) -> mapProduct(rs))
                 .list());
     }
 
     public List<Product> findOnSale(int limit, int offset) {
-        String sql = "SELECT * FROM products WHERE is_on_sale = true AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        String sql = """
+                SELECT p.*
+                FROM products p
+                WHERE p.is_deleted = FALSE
+                  AND (
+                        p.is_on_sale = TRUE
+                        OR EXISTS (
+                            SELECT 1
+                            FROM product_promotions pp
+                            JOIN promotions pr ON pr.promotion_id = pp.promotion_id
+                            WHERE pp.product_id = p.product_id
+                              AND pr.is_active = TRUE
+                              AND NOW() BETWEEN pr.start_date AND pr.end_date
+                        )
+                  )
+                ORDER BY p.created_at DESC
+                LIMIT :limit OFFSET :offset
+                """;
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("limit", limit)
                 .bind("offset", offset)
@@ -337,22 +323,34 @@ public class ProductDAO implements IDAO<Product> {
     }
 
     public int countOnSale() {
-        String sql = "SELECT COUNT(*) FROM products WHERE is_on_sale = true AND is_deleted = FALSE";
+        String sql = """
+                SELECT COUNT(*)
+                FROM products p
+                WHERE p.is_deleted = FALSE
+                  AND (
+                        p.is_on_sale = TRUE
+                        OR EXISTS (
+                            SELECT 1
+                            FROM product_promotions pp
+                            JOIN promotions pr ON pr.promotion_id = pp.promotion_id
+                            WHERE pp.product_id = p.product_id
+                              AND pr.is_active = TRUE
+                              AND NOW() BETWEEN pr.start_date AND pr.end_date
+                        )
+                  )
+                """;
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .mapTo(Integer.class)
                 .findFirst()
                 .orElse(0));
     }
 
-    /**
-     * Tim flash sale.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findFlashSale() {
         String sql = "SELECT p.* FROM products p " +
                 "JOIN product_variants pv ON p.product_id = pv.product_id " +
                 "WHERE pv.is_default = true AND pv.original_price > 0 AND p.is_deleted = FALSE " +
+                "AND pv.sale_price IS NOT NULL AND pv.sale_price > 0 " +
                 "AND ((pv.original_price - pv.sale_price) / pv.original_price * 100) > 30 " +
                 "ORDER BY p.created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -360,14 +358,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Tim by brand with pagination.
-     *
-     * @param brandId  Tham số đầu vào.
-     * @param page     Tham số đầu vào.
-     * @param pageSize Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findByBrandWithPagination(int brandId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         String sql = "SELECT * FROM products WHERE brand_id = :brandId AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
@@ -379,12 +370,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Dem by brand.
-     *
-     * @param brandId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public int countByBrand(int brandId) {
         String sql = "SELECT COUNT(*) FROM products WHERE brand_id = :brandId AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -396,13 +382,7 @@ public class ProductDAO implements IDAO<Product> {
 
     // Pagination methods
 
-    /**
-     * Tim with pagination.
-     *
-     * @param page     Tham số đầu vào.
-     * @param pageSize Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findWithPagination(int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         String sql = "SELECT * FROM products WHERE is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
@@ -413,14 +393,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Tim by category with pagination.
-     *
-     * @param categoryId Tham số đầu vào.
-     * @param page       Tham số đầu vào.
-     * @param pageSize   Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<Product> findByCategoryWithPagination(int categoryId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         String sql = "SELECT * FROM products WHERE category_id = :categoryId AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
@@ -432,11 +405,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    /**
-     * Dem all.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public int countAll() {
         String sql = "SELECT COUNT(*) FROM products WHERE is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -445,12 +414,7 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(0));
     }
 
-    /**
-     * Dem by category.
-     *
-     * @param categoryId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public int countByCategory(int categoryId) {
         String sql = "SELECT COUNT(*) FROM products WHERE category_id = :categoryId AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -519,14 +483,7 @@ public class ProductDAO implements IDAO<Product> {
 
     // Rating update
 
-    /**
-     * Cập nhật rating.
-     *
-     * @param productId   Tham số đầu vào.
-     * @param avgRating   Tham số đầu vào.
-     * @param reviewCount Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public boolean updateRating(int productId, double avgRating, int reviewCount) {
         String sql = "UPDATE products SET average_rating = :averageRating, review_count = :reviewCount WHERE product_id = :productId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
@@ -538,12 +495,7 @@ public class ProductDAO implements IDAO<Product> {
     }
 
     // Helper method
-    /**
-     * Thực hiện map product.
-     *
-     * @param rs Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     private Product mapProduct(java.sql.ResultSet rs) throws java.sql.SQLException {
         Product product = new Product();
         product.setProductId(rs.getInt("product_id"));
@@ -554,7 +506,13 @@ public class ProductDAO implements IDAO<Product> {
         product.setOrigin(rs.getString("origin"));
         product.setShortDescription(rs.getString("short_description"));
         product.setFullDescription(rs.getString("full_description"));
-        product.setStockQuantity(rs.getInt("stock_quantity"));
+        product.setIngredients(rs.getString("ingredients"));
+        product.setUsageInstructions(rs.getString("usage_instructions"));
+        try {
+            product.setSoldQuantity(rs.getInt("sold_quantity"));
+        } catch (java.sql.SQLException ignored) {
+            product.setSoldQuantity(0);
+        }
         product.setFeatured(rs.getBoolean("is_featured"));
         product.setOnSale(rs.getBoolean("is_on_sale"));
         product.setDeleted(rs.getBoolean("is_deleted"));
