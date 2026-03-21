@@ -59,7 +59,7 @@ public class ShippingService {
      * @return ShippingAddress nếu thành công, null nếu thất bại
      */
     public ShippingAddress createAddress(int userId, String fullName, String phone,
-                                         String email, String provinceCode, String provinceName,
+                                         String provinceCode, String provinceName,
                                          String districtCode, String districtName,
                                          String wardCode, String wardName,
                                          String specificAddress, String note) {
@@ -72,7 +72,7 @@ public class ShippingService {
 
         // Tạo address
         ShippingAddress address = AddressUtil.createAddress(
-                userId, fullName, phone, email,
+                userId, fullName, phone,
                 provinceCode, provinceName, districtCode, districtName,
                 wardCode, wardName, specificAddress, note
         );

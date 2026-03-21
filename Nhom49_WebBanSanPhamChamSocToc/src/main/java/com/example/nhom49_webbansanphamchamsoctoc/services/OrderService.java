@@ -3,10 +3,12 @@ package com.example.nhom49_webbansanphamchamsoctoc.services;
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderItemDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderStatusHistoryDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OrderItem;
+import com.example.nhom49_webbansanphamchamsoctoc.model.OrderStatusHistory;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
@@ -21,6 +23,7 @@ public class OrderService {
 
     private final OrderDAO orderDao;
     private final OrderItemDAO orderItemDao;
+    private final OrderStatusHistoryDAO orderStatusHistoryDAO;
     private final ProductVariantDAO variantDao;
     private final ProductDAO productDao;
     private final ShippingService shippingService;
@@ -29,6 +32,7 @@ public class OrderService {
     public OrderService() {
         this.orderDao = new OrderDAO();
         this.orderItemDao = new OrderItemDAO();
+        this.orderStatusHistoryDAO = new OrderStatusHistoryDAO();
         this.variantDao = new ProductVariantDAO();
         this.productDao = new ProductDAO();
         this.shippingService = new ShippingService();
@@ -39,6 +43,7 @@ public class OrderService {
                         ProductVariantDAO variantDao, ProductDAO productDao) {
         this.orderDao = orderDao;
         this.orderItemDao = orderItemDao;
+        this.orderStatusHistoryDAO = new OrderStatusHistoryDAO();
         this.variantDao = variantDao;
         this.productDao = productDao;
         this.shippingService = new ShippingService();
@@ -126,6 +131,16 @@ public class OrderService {
 
                 if (orderId == null || orderId <= 0) {
                     throw new IllegalStateException("Không thể tạo đơn hàng");
+                }
+
+                String insertHistorySql = "INSERT INTO order_status_history (order_id, status, note) VALUES (:orderId, :status, :note)";
+                int historyInserted = handle.createUpdate(insertHistorySql)
+                        .bind("orderId", orderId)
+                        .bind("status", order.getOrderStatus())
+                        .bind("note", "Initial status")
+                        .execute();
+                if (historyInserted == 0) {
+                    throw new IllegalStateException("Không thể lưu lịch sử trạng thái đơn hàng");
                 }
 
                 String insertItemSql = "INSERT INTO order_items (order_id, product_id, variant_id, product_name, variant_name, quantity, unit_price, total_price) " +
@@ -295,7 +310,14 @@ public class OrderService {
         boolean result = orderDao.updateStatus(orderId, status);
         if (!result) {
             lastError = "Không thể cập nhật trạng thái đơn hàng";
+            return false;
         }
+
+        OrderStatusHistory history = new OrderStatusHistory();
+        history.setOrderId(orderId);
+        history.setStatus(status);
+        history.setNote("Status updated");
+        orderStatusHistoryDAO.insert(history);
         return result;
     }
 
