@@ -79,7 +79,7 @@ public class AddressUtil {
 
 
     public static ShippingAddress createAddress(int userId, String fullName, String phone,
-                                                String email, String provinceCode, String provinceName,
+                                                String provinceCode, String provinceName,
                                                 String districtCode, String districtName,
                                                 String wardCode, String wardName,
                                                 String specificAddress, String note) {
@@ -87,7 +87,6 @@ public class AddressUtil {
         address.setUserId(userId);
         address.setFullName(ValidationUtil.sanitize(fullName));
         address.setPhone(ValidationUtil.sanitize(phone));
-        address.setEmail(ValidationUtil.sanitize(email));
         address.setProvinceCode(provinceCode);
         address.setProvinceName(provinceName);
         address.setDistrictCode(districtCode);
