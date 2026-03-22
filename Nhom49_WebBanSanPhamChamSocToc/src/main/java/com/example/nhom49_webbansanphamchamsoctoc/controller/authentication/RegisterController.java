@@ -1,10 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.EmailService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.OtpUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -51,48 +51,52 @@ public class RegisterController extends HttpServlet {
         String username = request.getParameter("username");
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
+
         String confirmPassword = request.getParameter("confirmPassword");
 
-        User user = authService.register(email, fullname, username, phone, password, confirmPassword);
+        boolean validateUserInput = authService.validateUserInput(email, fullname, username, phone, password, confirmPassword);
 
-        if (user == null) {
+        if (!validateUserInput) {
             request.setAttribute("error", authService.getLastError());
             request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
             return;
         }
 
-        if (!user.isActive()) {
-            String otpCode = OtpUtil.otpGenerate(6);
-            java.sql.Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
+        PasswordUtil.hashPassword(password);
+        request.getSession(true).setAttribute("pendingReqEmail", email);
+        request.getSession(true).setAttribute("pendingReqFullname", fullname);
+        request.getSession(true).setAttribute("pendingReqUsername", username);
+        request.getSession(true).setAttribute("pendingReqPhone", phone);
+        request.getSession(true).setAttribute("pendingReqPassword", password);
 
-            int otpId = otpVerificationDAO.createOtp(user.getUserId(), otpCode, OtpVerificationDAO.OtpPurpose.REGISTER, expiry);
-            if (otpId == -1) {
-                request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
-                request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
-                return;
-            }
+        String otpCode = OtpUtil.otpGenerate(6);
+        java.sql.Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-            request.getSession().setAttribute("otpPurpose", "REGISTER");
-            request.getSession().setAttribute("otpPendingUserId", user.getUserId());
-            request.getSession().setAttribute("otpPendingEmail", email);
-
-            String verifyOtpLink  = request.getScheme() + "://" + request.getServerName()
-                    + ":" + request.getServerPort()
-                    + request.getContextPath()
-                    + "/auth/verify-otp";
-            boolean sent = emailService.sendRegisterOtpEmail(email, otpCode, verifyOtpLink , OTP_EXPIRY_MINUTES);
-
-
-            if (!sent) {
-                request.setAttribute("error", "không gửi được Emai. vui lòng gửi lại sau");
-                request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
-                return;
-            }
-
-            request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
-            request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
+        int otpId = otpVerificationDAO.createOtp(email, otpCode, OtpVerificationDAO.OtpPurpose.REGISTER, expiry);
+        if (otpId == -1) {
+            request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
+            request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
             return;
         }
+
+        request.getSession().setAttribute("otpPurpose", "REGISTER");
+        request.getSession().setAttribute("otpPendingEmail", email);
+
+        String verifyOtpLink = request.getScheme() + "://" + request.getServerName()
+                + ":" + request.getServerPort()
+                + request.getContextPath()
+                + "/auth/verify-otp";
+        boolean sent = emailService.sendRegisterOtpEmail(email, otpCode, verifyOtpLink, OTP_EXPIRY_MINUTES);
+
+
+        if (!sent) {
+            request.setAttribute("error", "không gửi được Emai. vui lòng gửi lại sau");
+            request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
+            return;
+        } else {
+            request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
+        }
+
 
         request.getSession().setAttribute("success", "Tài khoản đã được kích hoạt. Vui lòng đăng nhập");
         response.sendRedirect(request.getContextPath() + "/auth/login");

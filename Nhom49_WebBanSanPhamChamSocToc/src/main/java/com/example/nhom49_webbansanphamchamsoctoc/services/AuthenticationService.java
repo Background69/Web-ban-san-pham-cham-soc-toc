@@ -54,53 +54,59 @@ public class AuthenticationService {
         return user;
     }
 
-    public User register(String email, String fullname, String username, String phone, String password, String confirmPassword) {
+    public boolean validateUserInput(String email, String fullname, String username, String phone, String password, String confirmPassword) {
         lastError = null;
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             lastError = emailError;
-            return null;
+            return false;
         }
 
-        String fullnameError = ValidationUtil.validateUsername(fullname);
+        String fullnameError = ValidationUtil.validateFullName(fullname);
         if (fullnameError != null) {
             lastError = fullnameError;
-            return null;
+            return false;
         }
 
         String usernameError = ValidationUtil.validateUsername(username);
         if (usernameError != null) {
             lastError = usernameError;
-            return null;
+            return false;
         }
 
         String passwordError = ValidationUtil.validatePassword(password);
         if (passwordError != null) {
             lastError = passwordError;
-            return null;
+            return false;
         }
 
         String phoneError = ValidationUtil.validatePhone(phone);
         if (phoneError != null) {
             lastError = phoneError;
-            return null;
+            return false;
         }
 
         String confirmError = ValidationUtil.validateConfirmPassword(password, confirmPassword);
         if (confirmError != null) {
             lastError = confirmError;
-            return null;
+            return false;
         }
 
         if (userDAO.existsByEmail(email.trim())) {
             lastError = "Email đã tồn tại";
-            return null;
+            return false;
         }
 
         if (userDAO.existsByUsername(username.trim())) {
             lastError = "Tên đăng nhập đã tồn tại";
-            return null;
+            return false;
         }
+
+        lastError = "Sai thông tin đăng ký. Vui lòng thử lại";
+        return true;
+    }
+
+    public User register(String email, String fullname, String username, String phone, String password, String confirmPassword) {
 
         User user = new User();
         user.setEmail(email.trim());
@@ -108,7 +114,7 @@ public class AuthenticationService {
         user.setUsername(username.trim());
         user.setPassword(PasswordUtil.hashPassword(password));
         user.setRole("Khách hàng");
-        user.setActive(false);
+        user.setActive(true);
         user.setPhone(ValidationUtil.sanitize(phone));
         user.setAuthProvider("LOCAL");
 
@@ -117,9 +123,9 @@ public class AuthenticationService {
             user.setUserId(userId);
             return user;
         }
+        lastError = null;
 
-        lastError = "Đăng ký thất bại, vui lòng thử lại";
-        return null;
+        return user;
     }
 
     public boolean setActiveStatus(int userId, boolean active) {

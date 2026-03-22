@@ -55,7 +55,7 @@ public class ForgotPasswordController extends HttpServlet {
         String otpCode = OtpUtil.otpGenerate(6);
         Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-        int otpId = otpVerificationDAO.createOtp(user.getUserId(), otpCode, OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD, expiry);
+        int otpId = otpVerificationDAO.createOtp(email, otpCode, OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD, expiry);
         if (otpId == -1) {
             request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
             request.getRequestDispatcher("/authentication/forgot-password.jsp").forward(request, response);

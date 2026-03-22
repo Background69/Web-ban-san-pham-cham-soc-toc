@@ -22,6 +22,11 @@ public class ResendOtpController extends HttpServlet {
     private final EmailService emailService = new EmailService();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         Integer otpPendingUserId = (Integer) req.getSession().getAttribute("otpPendingUserId");
         String otpPendingEmail = (String) req.getSession().getAttribute("otpPendingEmail");
@@ -60,7 +65,7 @@ public class ResendOtpController extends HttpServlet {
         String otpCode = OtpUtil.otpGenerate(6);
         java.sql.Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-        int otpId = otpVerificationDAO.createOtp(otpPendingUserId, otpCode, otpPurpose, expiry);
+        int otpId = otpVerificationDAO.createOtp(otpPendingEmail, otpCode, otpPurpose, expiry);
         if (otpId == -1) {
             req.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
             req.getRequestDispatcher("/authentication/otp-verification.jsp").forward(req, res);
