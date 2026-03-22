@@ -24,7 +24,7 @@
 
     <div id="timer" class="timer"></div>
 
-    <form action="${pageContext.request.contextPath}/resend-otp" method="post">
+    <form action="${pageContext.request.contextPath}/auth/resend-otp" method="post">
         <button type="submit">Gửi lại OTP</button>
     </form>
 

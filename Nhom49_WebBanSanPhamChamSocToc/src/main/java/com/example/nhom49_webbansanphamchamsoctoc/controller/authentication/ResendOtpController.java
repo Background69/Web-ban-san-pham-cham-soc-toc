@@ -25,10 +25,19 @@ public class ResendOtpController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         Integer otpPendingUserId = (Integer) req.getSession().getAttribute("otpPendingUserId");
         String otpPendingEmail = (String) req.getSession().getAttribute("otpPendingEmail");
-        String otpPurpose = (String) req.getSession().getAttribute("otpPurpose");
+        String purposeRaw = (String) req.getSession().getAttribute("otpPurpose");
 
-        if (otpPendingUserId == null || otpPendingEmail == null || !"FORGOT_PASSWORD".equals(otpPurpose)) {
-            res.sendRedirect(req.getContextPath() + "/auth/forgot-password");
+        if (otpPendingUserId == null || otpPendingEmail == null || otpPendingEmail.isBlank() || purposeRaw == null || purposeRaw.isBlank()) {
+            res.sendRedirect(req.getContextPath() + "/auth/login");
+            return;
+        }
+
+
+        OtpVerificationDAO.OtpPurpose otpPurpose;
+        try {
+            otpPurpose = OtpVerificationDAO.OtpPurpose.valueOf(purposeRaw);
+        } catch (Exception e) {
+            res.sendRedirect(req.getContextPath() + "/auth/login");
             return;
         }
 
@@ -51,14 +60,25 @@ public class ResendOtpController extends HttpServlet {
         String otpCode = OtpUtil.otpGenerate(6);
         java.sql.Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-        otpVerificationDAO.createForgotPasswordOtp(otpPendingUserId, otpCode, expiry);
+        int otpId = otpVerificationDAO.createOtp(otpPendingUserId, otpCode, otpPurpose, expiry);
+        if (otpId == -1) {
+            req.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
+            req.getRequestDispatcher("/authentication/otp-verification.jsp").forward(req, res);
+            return;
+        }
 
         String resetLink = req.getScheme() + "://" + req.getServerName()
                 + ":" + req.getServerPort()
                 + req.getContextPath()
                 + "/auth/verify-otp";
 
-        boolean sent = emailService.sendPasswordResetOtpEmail(otpPendingEmail, otpCode, resetLink, OTP_EXPIRY_MINUTES);
+        boolean sent;
+        if (otpPurpose == OtpVerificationDAO.OtpPurpose.REGISTER) {
+            sent = emailService.sendRegisterOtpEmail(otpPendingEmail, otpCode, resetLink, OTP_EXPIRY_MINUTES);
+        } else {
+            sent = emailService.sendResetPasswordOtpEmail(otpPendingEmail, otpCode, resetLink, OTP_EXPIRY_MINUTES);
+        }
+
 
         if (!sent) {
             req.setAttribute("error", "Khong gui duoc OTP. Vui long thu lai sau.");
