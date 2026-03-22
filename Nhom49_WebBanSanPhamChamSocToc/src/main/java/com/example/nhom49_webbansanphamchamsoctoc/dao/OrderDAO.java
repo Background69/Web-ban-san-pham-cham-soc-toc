@@ -525,7 +525,27 @@ public class OrderDAO implements IDAO<Order> {
                         .orElse(0L)
         );
     }
-
+    public List<Integer> getRevenueByWeek(){
+        String sql = "SELECT DAYOFWEEK(created_at) as d, SUM(total_amount) as total FROM orders GROUP BY DAYOFWEEK(created_At)";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs,ctx)-> rs.getInt("total"))
+                        .list());
+    }
+    public List<Integer> getRevenueByMonth(){
+        String sql = "SELECT MONTH(created_at) as m, SUM(total_amount) as total FROM orders GROUP BY MONTH(created_At)";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs,ctx)-> rs.getInt("total"))
+                .list());
+    }
+    public List<Integer> getRevenueByYear(){
+        String sql = "SELECT YEAR(created_at) as Y, SUM(total_amount) as total FROM orders GROUP BY YEAR(created_At)";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .map((rs,ctx)-> rs.getInt("total"))
+                        .list());
+    }
 
     // Helper method;
 
