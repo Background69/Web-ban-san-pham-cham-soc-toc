@@ -47,12 +47,13 @@ public class RegisterController extends HttpServlet {
             throws ServletException, IOException {
 
         String email = request.getParameter("email");
+        String fullname = request.getParameter("fullname");
         String username = request.getParameter("username");
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        User user = authService.register(email, username, phone, password, confirmPassword);
+        User user = authService.register(email, fullname, username, phone, password, confirmPassword);
 
         if (user == null) {
             request.setAttribute("error", authService.getLastError());

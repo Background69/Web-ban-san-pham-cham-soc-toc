@@ -54,11 +54,17 @@ public class AuthenticationService {
         return user;
     }
 
-    public User register(String email, String username, String phone, String password, String confirmPassword) {
+    public User register(String email, String fullname, String username, String phone, String password, String confirmPassword) {
         lastError = null;
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             lastError = emailError;
+            return null;
+        }
+
+        String fullnameError = ValidationUtil.validateUsername(fullname);
+        if (fullnameError != null) {
+            lastError = fullnameError;
             return null;
         }
 
@@ -98,6 +104,7 @@ public class AuthenticationService {
 
         User user = new User();
         user.setEmail(email.trim());
+        user.setFullName(fullname.trim());
         user.setUsername(username.trim());
         user.setPassword(PasswordUtil.hashPassword(password));
         user.setRole("Khách hàng");
