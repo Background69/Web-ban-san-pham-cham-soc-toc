@@ -11,7 +11,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -38,7 +37,6 @@ public class ForgotPasswordController extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        HttpSession session = request.getSession();
 
         String email = request.getParameter("email");
         email = (email != null) ? email.trim() : "";
@@ -57,14 +55,19 @@ public class ForgotPasswordController extends HttpServlet {
         String otpCode = OtpUtil.otpGenerate(6);
         Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-        otpVerificationDAO.createForgotPasswordOtp(user.getUserId(), otpCode, expiry);
+        int otpId = otpVerificationDAO.createOtp(user.getUserId(), otpCode, OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD, expiry);
+        if (otpId == -1) {
+            request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
+            request.getRequestDispatcher("/authentication/forgot-password.jsp").forward(request, response);
+            return;
+        }
 
-        String resetLink = request.getScheme() + "://" + request.getServerName()
+        String verifyOtpLink  = request.getScheme() + "://" + request.getServerName()
                 + ":" + request.getServerPort()
                 + request.getContextPath()
                 + "/auth/verify-otp";
 
-        boolean sent = emailService.sendPasswordResetOtpEmail(email, otpCode, resetLink, OTP_EXPIRY_MINUTES);
+        boolean sent = emailService.sendResetPasswordOtpEmail(email, otpCode, verifyOtpLink , OTP_EXPIRY_MINUTES);
 
         if (!sent) {
             request.setAttribute("error", "Khong gui duoc email. Vui long thu lai sau.");
@@ -72,11 +75,12 @@ public class ForgotPasswordController extends HttpServlet {
             return;
         }
 
-        session.setAttribute("otpPendingUserId", user.getUserId());
-        session.setAttribute("otpPendingEmail", email);
-        session.setAttribute("otpPurpose", "FORGOT_PASSWORD");
+        request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
+        request.getSession().setAttribute("otpPendingUserId", user.getUserId());
+        request.getSession().setAttribute("otpPendingEmail", email);
+        request.getSession().setAttribute("otpPurpose", "FORGOT_PASSWORD");
 
-        response.sendRedirect(request.getContextPath() + "/auth/verify-otp");
+        request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
     }
 
     private static boolean validateEmail(HttpServletRequest request, HttpServletResponse response, String email, String commonMsg) throws ServletException, IOException {
