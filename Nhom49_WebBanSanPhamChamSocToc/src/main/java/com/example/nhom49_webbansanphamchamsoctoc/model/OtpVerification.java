@@ -1,55 +1,31 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class OtpVerification {
-    private Integer otpId;
-    private User user;
+    private int otpId;
+    private int userId;
     private String otpCode;
+    private String otpType;
+    private Timestamp otpExpiry;
+    private int attempts;
+    private boolean verified;
+    private Timestamp createdAt;
 
-    private OtpType otpType;
-
-    private LocalDateTime otpExpiry;
-
-    private Integer attempts = 0;
-
-    private Boolean isVerified = false;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    public enum OtpType {
-        REGISTER,
-        FORGOT_PASSWORD,
-    }
-
-    public OtpVerification() {
-    }
-
-    public OtpVerification(Integer otpId, User user, String otpCode, OtpType otpType, LocalDateTime otpExpiry, Integer attempts, Boolean isVerified, LocalDateTime createdAt) {
-        this.otpId = otpId;
-        this.user = user;
-        this.otpCode = otpCode;
-        this.otpType = otpType;
-        this.otpExpiry = otpExpiry;
-        this.attempts = attempts;
-        this.isVerified = isVerified;
-        this.createdAt = createdAt;
-    }
-
-    public Integer getOtpId() {
+    public int getOtpId() {
         return otpId;
     }
 
-    public void setOtpId(Integer otpId) {
+    public void setOtpId(int otpId) {
         this.otpId = otpId;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getOtpCode() {
@@ -60,43 +36,43 @@ public class OtpVerification {
         this.otpCode = otpCode;
     }
 
-    public OtpType getOtpType() {
+    public String getOtpType() {
         return otpType;
     }
 
-    public void setOtpType(OtpType otpType) {
+    public void setOtpType(String otpType) {
         this.otpType = otpType;
     }
 
-    public LocalDateTime getOtpExpiry() {
+    public Timestamp getOtpExpiry() {
         return otpExpiry;
     }
 
-    public void setOtpExpiry(LocalDateTime otpExpiry) {
+    public void setOtpExpiry(Timestamp otpExpiry) {
         this.otpExpiry = otpExpiry;
     }
 
-    public Integer getAttempts() {
+    public int getAttempts() {
         return attempts;
     }
 
-    public void setAttempts(Integer attempts) {
+    public void setAttempts(int attempts) {
         this.attempts = attempts;
     }
 
-    public Boolean getVerified() {
-        return isVerified;
+    public boolean isVerified() {
+        return verified;
     }
 
-    public void setVerified(Boolean verified) {
-        isVerified = verified;
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 }

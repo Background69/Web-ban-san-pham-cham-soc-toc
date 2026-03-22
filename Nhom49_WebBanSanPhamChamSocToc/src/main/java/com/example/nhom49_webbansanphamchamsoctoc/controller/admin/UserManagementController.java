@@ -69,14 +69,18 @@ public class UserManagementController extends HttpServlet {
             String phone = request.getParameter("phone");
             String role = request.getParameter("role");
 
-            User u = new User();
-            u.setUserId(id);
-            u.setUsername(username);
-            u.setEmail(email);
-            u.setPhone(phone);
-            u.setRole(role);
+            User existing = userService.getUserById(id);
+            if (existing == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "User not found");
+                return;
+            }
 
-            userService.updateProfile(u);
+            existing.setUsername(username);
+            existing.setEmail(email);
+            existing.setPhone(phone);
+            existing.setRole(role);
+
+            userService.updateProfile(existing);
 
             response.sendRedirect(request.getContextPath() + "/admin/users?action=detail&id=" + id);
             return;

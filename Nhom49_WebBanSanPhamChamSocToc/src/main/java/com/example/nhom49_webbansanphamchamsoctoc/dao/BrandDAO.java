@@ -20,12 +20,7 @@ public class BrandDAO implements IDAO<Brand> {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    /**
-     * Them .
-     *
-     * @param brand Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public int insert(Brand brand) {
         String sql = "INSERT INTO brands (brand_name, brand_slug, logo_url, origin, short_description, full_description) " +
@@ -45,12 +40,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    /**
-     * Cập nhật .
-     *
-     * @param brand Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public boolean update(Brand brand) {
         String sql = "UPDATE brands SET brand_name = :brandName, brand_slug = :brandSlug, logo_url = :logoUrl, origin = :origin, " +
@@ -69,12 +59,7 @@ public class BrandDAO implements IDAO<Brand> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Xóa .
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM brands WHERE brand_id = :brandId";
@@ -86,11 +71,7 @@ public class BrandDAO implements IDAO<Brand> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Tim all.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public List<Brand> findAll() {
         String sql = "SELECT * FROM brands ORDER BY created_at DESC";
@@ -101,12 +82,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    /**
-     * Tim by id.
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     @Override
     public Brand findById(int id) {
         String sql = "SELECT * FROM brands WHERE brand_id = :id";
@@ -119,12 +95,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    /**
-     * Tim by slug.
-     *
-     * @param slug Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public Brand findBySlug(String slug) {
         String sql = "SELECT * FROM brands WHERE brand_slug = :slug";
         return jdbi.withHandle(handle ->
@@ -136,12 +107,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    /**
-     * Thực hiện map brand.
-     *
-     * @param rs Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     private Brand mapBrand(java.sql.ResultSet rs) throws java.sql.SQLException {
         Brand brand = new Brand();
         brand.setBrandId(rs.getInt("brand_id"));
@@ -155,11 +121,7 @@ public class BrandDAO implements IDAO<Brand> {
         return brand;
     }
 
-    /**
-     * Tim all origins.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
+    
     public List<String> findAllOrigins() {
         String sql = "SELECT DISTINCT origin FROM brands WHERE origin IS NOT NULL AND origin != '' ORDER BY origin";
         return jdbi.withHandle(handle ->

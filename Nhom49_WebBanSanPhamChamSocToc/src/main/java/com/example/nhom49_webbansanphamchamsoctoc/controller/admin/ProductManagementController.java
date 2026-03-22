@@ -51,9 +51,7 @@ public class ProductManagementController extends HttpServlet {
         if ("delete".equals(action)) {
             int id = parseIntSafe(request.getParameter("id"));
             if (id > 0) {
-                productVariantDAO.deleteByProductId(id);
-                productImgDAO.deleteByProductId(id);
-                productDAO.delete(id);
+                productDAO.softDelete(id);
             }
             response.sendRedirect(request.getContextPath() + "/admin/products");
             return;
@@ -71,7 +69,6 @@ public class ProductManagementController extends HttpServlet {
                 Product product = productService.getProductById(id);
                 request.setAttribute("product", product);
 
-                // Load all variants for this product
                 List<ProductVariant> variants = productVariantDAO.findByProductId(id);
                 request.setAttribute("variants", variants);
             }
@@ -101,9 +98,7 @@ public class ProductManagementController extends HttpServlet {
                     return;
                 }
 
-                // Save multiple variants from form arrays
                 saveVariantsFromRequest(request, newId);
-
                 saveImageIfPresent(request, newId);
 
                 response.sendRedirect(request.getContextPath() + "/admin/products");
@@ -127,7 +122,6 @@ public class ProductManagementController extends HttpServlet {
                 p.setProductId(id);
                 productDAO.update(p);
 
-                // Delete old variants and save new ones from form
                 productVariantDAO.deleteByProductId(id);
                 saveVariantsFromRequest(request, id);
 
@@ -147,21 +141,24 @@ public class ProductManagementController extends HttpServlet {
 
     private void saveImageIfPresent(HttpServletRequest request, int productId) throws Exception {
         Part imagePart = request.getPart("image");
-        if (imagePart == null || imagePart.getSize() <= 0)
+        if (imagePart == null || imagePart.getSize() <= 0) {
             return;
+        }
 
         String originalName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
         String ext = "";
         int dot = originalName.lastIndexOf('.');
-        if (dot >= 0)
+        if (dot >= 0) {
             ext = originalName.substring(dot);
+        }
 
         String savedFileName = UUID.randomUUID().toString().replace("-", "") + ext;
 
         String realDir = getServletContext().getRealPath(STATIC_PRODUCT_DIR);
         File dir = new File(realDir);
-        if (!dir.exists())
+        if (!dir.exists()) {
             dir.mkdirs();
+        }
 
         imagePart.write(realDir + File.separator + savedFileName);
 
@@ -186,37 +183,38 @@ public class ProductManagementController extends HttpServlet {
         p.setOrigin(trim(request.getParameter("origin")));
         p.setShortDescription(trim(request.getParameter("shortDescription")));
         p.setFullDescription(trim(request.getParameter("fullDescription")));
+        p.setIngredients(trim(request.getParameter("ingredients")));
+        p.setUsageInstructions(trim(request.getParameter("usageInstructions")));
+        p.setFeatured("on".equalsIgnoreCase(request.getParameter("isFeatured")));
+        p.setOnSale("on".equalsIgnoreCase(request.getParameter("isOnSale")));
 
         int categoryId = parseIntSafe(request.getParameter("categoryId"));
-        if (categoryId > 0)
+        if (categoryId > 0) {
             p.setCategoryId(categoryId);
+        }
 
         int brandId = parseIntSafe(request.getParameter("brandId"));
-        if (brandId > 0)
+        if (brandId > 0) {
             p.setBrandId(brandId);
-
-        int stockQuantity = parseIntSafe(request.getParameter("stockQuantity"));
-        p.setStockQuantity(Math.max(stockQuantity, 0));
+        }
 
         return p;
     }
 
-    /**
-     * Save multiple variants from form arrays
-     */
     private void saveVariantsFromRequest(HttpServletRequest request, int productId) {
         String[] names = request.getParameterValues("variantName[]");
+        String[] skus = request.getParameterValues("variantSku[]");
         String[] originalPrices = request.getParameterValues("variantOriginalPrice[]");
         String[] salePrices = request.getParameterValues("variantSalePrice[]");
         String[] stocks = request.getParameterValues("variantStock[]");
 
         if (names == null || names.length == 0) {
-            // Fallback: create a default variant if no variants provided
             ProductVariant v = new ProductVariant();
             v.setProductId(productId);
-            v.setVariantName("Mặc định");
-            v.setOriginalPrice(BigDecimal.ZERO);
-            v.setSalePrice(BigDecimal.ZERO);
+            v.setVariantName("Mac dinh");
+            v.setOriginalPrice(BigDecimal.ONE);
+            v.setSalePrice(null);
+            v.setDiscountPercent(0);
             v.setStockQuantity(0);
             v.setDefault(true);
             productVariantDAO.insert(v);
@@ -226,28 +224,36 @@ public class ProductManagementController extends HttpServlet {
         for (int i = 0; i < names.length; i++) {
             String name = trim(names[i]);
             if (name.isEmpty()) {
-                name = "Mặc định";
+                name = "Mac dinh";
             }
+
+            String sku = trim(skus != null && i < skus.length ? skus[i] : null);
 
             BigDecimal originalPrice = parseBigDecimalSafe(
                     originalPrices != null && i < originalPrices.length ? originalPrices[i] : null);
-            BigDecimal salePrice = parseBigDecimalSafe(
+            if (originalPrice.compareTo(BigDecimal.ZERO) <= 0) {
+                originalPrice = BigDecimal.ONE;
+            }
+
+            BigDecimal salePrice = parseOptionalBigDecimal(
                     salePrices != null && i < salePrices.length ? salePrices[i] : null);
+            if (salePrice != null && salePrice.compareTo(originalPrice) >= 0) {
+                salePrice = null;
+            }
+
             int stock = parseIntSafe(stocks != null && i < stocks.length ? stocks[i] : "0");
 
             ProductVariant v = new ProductVariant();
             v.setProductId(productId);
             v.setVariantName(name);
+            v.setSku(sku.isEmpty() ? null : sku);
             v.setOriginalPrice(originalPrice);
             v.setSalePrice(salePrice);
             v.setStockQuantity(Math.max(stock, 0));
-            v.setDefault(i == 0); // First variant is default
+            v.setDefault(i == 0);
 
-            // Calculate discount percent
             int discount = 0;
-            if (originalPrice.compareTo(BigDecimal.ZERO) > 0
-                    && salePrice.compareTo(BigDecimal.ZERO) > 0
-                    && salePrice.compareTo(originalPrice) < 0) {
+            if (salePrice != null && salePrice.compareTo(BigDecimal.ZERO) > 0 && salePrice.compareTo(originalPrice) < 0) {
                 discount = originalPrice.subtract(salePrice)
                         .multiply(BigDecimal.valueOf(100))
                         .divide(originalPrice, 0, RoundingMode.HALF_UP)
@@ -269,14 +275,32 @@ public class ProductManagementController extends HttpServlet {
 
     private BigDecimal parseBigDecimalSafe(String s) {
         try {
-            if (s == null)
+            if (s == null) {
                 return BigDecimal.ZERO;
+            }
             s = s.trim();
-            if (s.isEmpty())
+            if (s.isEmpty()) {
                 return BigDecimal.ZERO;
+            }
             return new BigDecimal(s);
         } catch (Exception e) {
             return BigDecimal.ZERO;
+        }
+    }
+
+    private BigDecimal parseOptionalBigDecimal(String s) {
+        try {
+            if (s == null) {
+                return null;
+            }
+            s = s.trim();
+            if (s.isEmpty()) {
+                return null;
+            }
+            BigDecimal value = new BigDecimal(s);
+            return value.compareTo(BigDecimal.ZERO) > 0 ? value : null;
+        } catch (Exception e) {
+            return null;
         }
     }
 

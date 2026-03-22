@@ -9,24 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Lớp OrderDao.
- */
+
 public class OrderDAO implements IDAO<Order> {
 
-    /**
-     * Thực hiện atomic integer.
-     *
-     * @param 100 Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
+
     private static final AtomicInteger orderCounter = new AtomicInteger(100);
     private final Jdbi jdbi;
 
-    /**
-     * Khởi tạo OrderDao.
-     */
-    public OrderDAO() {
+        public OrderDAO() {
         this.jdbi = JDBIConnector.getInstance();
         Integer maxId = jdbi.withHandle(handle -> handle.createQuery("SELECT MAX(order_id) FROM orders")
                 .mapTo(Integer.class)
@@ -37,13 +27,7 @@ public class OrderDAO implements IDAO<Order> {
         }
     }
 
-    /**
-     * Tim by id.
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    @Override
+        @Override
     public Order findById(int id) {
         String sql = "SELECT * FROM orders WHERE order_id = :orderId";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -53,12 +37,7 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(null));
     }
 
-    /**
-     * Tim all.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
-    @Override
+        @Override
     public List<Order> findAll() {
         String sql = "SELECT * FROM orders ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -66,17 +45,11 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-    /**
-     * Them .
-     *
-     * @param order Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    @Override
+        @Override
     public int insert(Order order) {
         String sql = "INSERT INTO orders (order_code, user_id, shipping_address_id, shipping_full_name, " +
                 "shipping_phone, shipping_address, shipping_method, shipping_fee, payment_method, " +
-                "subtotal, total_amount, order_status) VALUES (:orderCode, :userId, :shippingAddressId, :shippingFullName, :shippingPhone, :shippingAddress, :shippingMethod, :shippingFee, :paymentMethod, :subtotal, :totalAmount, :orderStatus)";
+                "subtotal, total_amount, order_status, note) VALUES (:orderCode, :userId, :shippingAddressId, :shippingFullName, :shippingPhone, :shippingAddress, :shippingMethod, :shippingFee, :paymentMethod, :subtotal, :totalAmount, :orderStatus, :note)";
         return jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("orderCode", order.getOrderCode())
                 .bind("userId", order.getUserId())
@@ -90,25 +63,20 @@ public class OrderDAO implements IDAO<Order> {
                 .bind("subtotal", order.getSubtotal())
                 .bind("totalAmount", order.getTotalAmount())
                 .bind("orderStatus", order.getOrderStatus() != null ? order.getOrderStatus() : "pending")
+                .bind("note", order.getNote())
                 .executeAndReturnGeneratedKeys("order_id")
                 .mapTo(Integer.class)
                 .findFirst()
                 .orElse(-1));
     }
 
-    /**
-     * Cập nhật .
-     *
-     * @param order Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    @Override
+        @Override
     public boolean update(Order order) {
         String sql = "UPDATE orders SET shipping_full_name = :shippingFullName, shipping_phone = :shippingPhone, shipping_address = :shippingAddress, "
                 +
                 "shipping_method = :shippingMethod, shipping_fee = :shippingFee, payment_method = :paymentMethod, subtotal = :subtotal, "
                 +
-                "total_amount = :totalAmount, order_status = :orderStatus WHERE order_id = :orderId";
+                "total_amount = :totalAmount, order_status = :orderStatus, note = :note WHERE order_id = :orderId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("shippingFullName", order.getShippingFullName())
                 .bind("shippingPhone", order.getShippingPhone())
@@ -119,18 +87,13 @@ public class OrderDAO implements IDAO<Order> {
                 .bind("subtotal", order.getSubtotal())
                 .bind("totalAmount", order.getTotalAmount())
                 .bind("orderStatus", order.getOrderStatus())
+                .bind("note", order.getNote())
                 .bind("orderId", order.getOrderId())
                 .execute());
         return rowsAffected > 0;
     }
 
-    /**
-     * Xóa .
-     *
-     * @param id Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    @Override
+        @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM orders WHERE order_id = :orderId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
@@ -141,13 +104,7 @@ public class OrderDAO implements IDAO<Order> {
 
     // Query methods
 
-    /**
-     * Tim by user id.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public List<Order> findByUserId(int userId) {
+        public List<Order> findByUserId(int userId) {
         String sql = "SELECT * FROM orders WHERE user_id = :userId ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
@@ -155,13 +112,7 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-    /**
-     * Tim by order code.
-     *
-     * @param orderCode Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public Order findByOrderCode(String orderCode) {
+        public Order findByOrderCode(String orderCode) {
         String sql = "SELECT * FROM orders WHERE order_code = :orderCode";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("orderCode", orderCode)
@@ -178,13 +129,7 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-    /**
-     * Tim by status.
-     *
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public List<Order> findByStatus(String status) {
+        public List<Order> findByStatus(String status) {
         String sql = "SELECT * FROM orders WHERE order_status = :orderStatus ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("orderStatus", status)
@@ -192,29 +137,16 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-    /**
-     * Tim by user id and status.
-     *
-     * @param userId Tham số đầu vào.
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public List<Order> findByUserIdAndStatus(int userId, String status) {
-        String sql = "SELECT * FROM orders WHERE user_id = :userId AND UPPER(order_status) = :orderStatus ORDER BY created_at DESC";
+        public List<Order> findByUserIdAndStatus(int userId, String status) {
+        String sql = "SELECT * FROM orders WHERE user_id = :userId AND order_status = :orderStatus ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
-                .bind("orderStatus", status.toUpperCase())
+                .bind("orderStatus", status)
                 .map((rs, ctx) -> mapOrder(rs))
                 .list());
     }
 
-    /**
-     * Dem by user id.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public int countByUserId(int userId) {
+        public int countByUserId(int userId) {
         String sql = "SELECT COUNT(*) FROM orders WHERE user_id = :userId";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
@@ -223,18 +155,11 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(0));
     }
 
-    /**
-     * Dem by user id and status.
-     *
-     * @param userId Tham số đầu vào.
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public int countByUserIdAndStatus(int userId, String status) {
-        String sql = "SELECT COUNT(*) FROM orders WHERE user_id = :userId AND UPPER(order_status) = :orderStatus";
+        public int countByUserIdAndStatus(int userId, String status) {
+        String sql = "SELECT COUNT(*) FROM orders WHERE user_id = :userId AND order_status = :orderStatus";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
-                .bind("orderStatus", status.toUpperCase())
+                .bind("orderStatus", status)
                 .mapTo(Integer.class)
                 .findFirst()
                 .orElse(0));
@@ -256,7 +181,7 @@ public class OrderDAO implements IDAO<Order> {
                     JOIN order_items oi ON o.order_id = oi.order_id
                     WHERE o.user_id = :userId
                       AND oi.product_id = :productId
-                      AND UPPER(o.order_status) IN ('COMPLETED', 'DELIVERED', 'DONE', 'HOÀN THÀNH')
+                      AND o.order_status = 'completed'
                 """;
 
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -274,7 +199,7 @@ public class OrderDAO implements IDAO<Order> {
                     JOIN order_items oi ON o.order_id = oi.order_id
                     WHERE o.user_id = :userId
                       AND oi.product_id = :productId
-                      AND UPPER(o.order_status) NOT IN ('COMPLETED', 'DELIVERED', 'DONE', 'HOÀN THÀNH', 'CANCELLED')
+                      AND o.order_status NOT IN ('completed', 'cancelled')
                 """;
 
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -291,7 +216,7 @@ public class OrderDAO implements IDAO<Order> {
                     SELECT COALESCE(SUM(total_amount), 0)
                     FROM orders
                     WHERE user_id = :userId
-                      AND UPPER(order_status) IN ('COMPLETED', 'DELIVERED', 'DONE', 'HOÀN THÀNH')
+                      AND order_status = 'completed'
                 """;
 
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -339,14 +264,7 @@ public class OrderDAO implements IDAO<Order> {
 
     // Management methods
 
-    /**
-     * Cập nhật status.
-     *
-     * @param orderId Tham số đầu vào.
-     * @param status  Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public boolean updateStatus(int orderId, String status) {
+        public boolean updateStatus(int orderId, String status) {
         String sql = "UPDATE orders SET order_status = :orderStatus WHERE order_id = :orderId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("orderStatus", status)
@@ -355,22 +273,11 @@ public class OrderDAO implements IDAO<Order> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Sinh order code.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
-    public String generateOrderCode() {
+        public String generateOrderCode() {
         return "#HD" + orderCounter.incrementAndGet();
     }
 
-    /**
-     * Kiểm tra mã đơn hàng đã tồn tại hay chưa.
-     *
-     * @param orderCode Mã đơn hàng cần kiểm tra.
-     * @return true nếu mã đơn hàng đã tồn tại, false nếu chưa.
-     */
-    public boolean existsByOrderCode(String orderCode) {
+        public boolean existsByOrderCode(String orderCode) {
         String sql = "SELECT COUNT(*) FROM orders WHERE order_code = :orderCode";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("orderCode", orderCode)
@@ -379,14 +286,7 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(0) > 0);
     }
 
-    /**
-     * Lấy daily stats.
-     *
-     * @param startDate Tham số đầu vào.
-     * @param endDate   Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public java.util.Map<String, Object> getDailyStats(java.util.Date startDate, java.util.Date endDate) {
+        public java.util.Map<String, Object> getDailyStats(java.util.Date startDate, java.util.Date endDate) {
         // Validate input
         if (startDate == null || endDate == null) {
             java.util.Map<String, Object> defaultResult = new java.util.HashMap<>();
@@ -418,25 +318,11 @@ public class OrderDAO implements IDAO<Order> {
                 }));
     }
 
-    /**
-     * Lấy stats.
-     *
-     * @param startDate Tham số đầu vào.
-     * @param endDate   Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public java.util.Map<String, Object> getStats(java.util.Date startDate, java.util.Date endDate) {
+        public java.util.Map<String, Object> getStats(java.util.Date startDate, java.util.Date endDate) {
         return getDailyStats(startDate, endDate);
     }
 
-    /**
-     * Lấy revenue by promotion.
-     *
-     * @param startDate Tham số đầu vào.
-     * @param endDate   Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    public java.util.List<java.util.Map<String, Object>> getRevenueByPromotion(java.util.Date startDate,
+        public java.util.List<java.util.Map<String, Object>> getRevenueByPromotion(java.util.Date startDate,
             java.util.Date endDate) {
         String sql = "SELECT p.promotion_id, p.promotion_name, p.promotion_type, " +
                 "COALESCE(SUM(oi.total_price), 0) AS revenue " +
@@ -474,8 +360,8 @@ public class OrderDAO implements IDAO<Order> {
     }
 
     public long totalRevenue() {
-        // Hỗ trợ nhiều biến thể của status hoàn thành
-        String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE UPPER(order_status) IN ('HOÀN THÀNH', 'DELIVERED', 'COMPLETED', 'DONE')";
+        // Hỗ trợ nhiều biến thể trạng thái hoàn thành
+        String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE order_status = 'completed'";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .mapTo(Long.class)
                 .findFirst()
@@ -485,13 +371,7 @@ public class OrderDAO implements IDAO<Order> {
     // Helper method;
 
     // Helper method
-    /**
-     * Thực hiện map order.
-     *
-     * @param rs Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
-    private Order mapOrder(java.sql.ResultSet rs) throws java.sql.SQLException {
+        private Order mapOrder(java.sql.ResultSet rs) throws java.sql.SQLException {
         Order order = new Order();
         order.setOrderId(rs.getInt("order_id"));
         order.setOrderCode(rs.getString("order_code"));
@@ -507,9 +387,12 @@ public class OrderDAO implements IDAO<Order> {
         order.setSubtotal(rs.getBigDecimal("subtotal"));
         order.setTotalAmount(rs.getBigDecimal("total_amount"));
         order.setOrderStatus(rs.getString("order_status"));
+        order.setNote(rs.getString("note"));
         order.setCreatedAt(rs.getTimestamp("created_at"));
+        order.setUpdatedAt(rs.getTimestamp("updated_at"));
         return order;
     }
 }
+
 
 
