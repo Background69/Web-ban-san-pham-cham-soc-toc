@@ -92,10 +92,35 @@
                 </c:if>
             </table>
         </div>
+        <!--chart-->
+        <div class="chart">
+            <div class="chartbox">
+                <h2>Doanh thu theo tháng</h2>
+                <canvas id="revenuechart">
+                </canvas>
+            </div>
+            <div class="chartbox">
+                <h2>Đơn thàng theo trạng thái</h2>
+                <canvas id="orderchart"></canvas>
+            </div>
+        </div>
 
     </main>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    new Chart(document.getElementById('revenuechart'),{
+        type: 'line',
+        data: {
+            labels: ["Tháng 1","Tháng 2", "Tháng 3"],
+            datasets:[{
+                label:'Doanh thu',
+                data:[100,200,300]
+            }]
+        }
+    });
+</script>
 </body>
 </html>
 
