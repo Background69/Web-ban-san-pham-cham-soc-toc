@@ -1,6 +1,5 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -11,14 +10,13 @@ import java.time.LocalDateTime;
 public class Promotion {
     private int promotionId;
     private String promotionName;
-    private String promotionType; // 'flash-sale', 'combo', 'new', 'clearance', 'percent', 'fixed'
-    private BigDecimal discountValue;
-    private Integer discountPercent;
+    private String promotionType; // 'percent', 'fixed', 'flash-sale', 'combo', 'new', 'clearance'
     private String badgeText;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean isActive;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructors
     public Promotion() {
@@ -47,22 +45,6 @@ public class Promotion {
 
     public void setPromotionType(String promotionType) {
         this.promotionType = promotionType;
-    }
-
-    public BigDecimal getDiscountValue() {
-        return discountValue;
-    }
-
-    public void setDiscountValue(BigDecimal discountValue) {
-        this.discountValue = discountValue;
-    }
-
-    public Integer getDiscountPercent() {
-        return discountPercent;
-    }
-
-    public void setDiscountPercent(Integer discountPercent) {
-        this.discountPercent = discountPercent;
     }
 
     public String getBadgeText() {
@@ -103,6 +85,14 @@ public class Promotion {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

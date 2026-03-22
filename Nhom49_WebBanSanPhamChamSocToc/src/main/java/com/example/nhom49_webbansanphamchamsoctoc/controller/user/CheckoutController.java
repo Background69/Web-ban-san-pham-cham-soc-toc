@@ -142,7 +142,6 @@ public class CheckoutController extends HttpServlet {
                 userId,
                 request.getParameter("fullName"),
                 request.getParameter("phone"),
-                request.getParameter("email"),
                 request.getParameter("provinceCode"),
                 request.getParameter("provinceName"),
                 request.getParameter("districtCode"),

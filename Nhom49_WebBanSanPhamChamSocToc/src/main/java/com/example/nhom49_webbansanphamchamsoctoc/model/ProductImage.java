@@ -12,6 +12,7 @@ public class ProductImage {
     private String imageUrl;
     private boolean isPrimary;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructors
     public ProductImage() {
@@ -56,6 +57,14 @@ public class ProductImage {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

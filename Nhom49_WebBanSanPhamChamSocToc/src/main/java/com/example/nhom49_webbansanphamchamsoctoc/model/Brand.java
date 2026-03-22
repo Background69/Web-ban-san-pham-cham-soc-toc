@@ -16,6 +16,7 @@ public class Brand {
     private String shortDescription;
     private String fullDescription;
     private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructors
     public Brand() {
@@ -84,6 +85,14 @@ public class Brand {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

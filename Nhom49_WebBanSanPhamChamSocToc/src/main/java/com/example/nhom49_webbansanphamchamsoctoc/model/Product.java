@@ -17,9 +17,13 @@ public class Product {
     private String origin;
     private String shortDescription;
     private String fullDescription;
+    private String ingredients;
+    private String usageInstructions;
     private int stockQuantity;
     private boolean isFeatured;
     private boolean isOnSale;
+    private boolean isDeleted;
+    private Timestamp deletedAt;
     private BigDecimal averageRating;
     private int reviewCount;
     private Timestamp createdAt;
@@ -51,9 +55,9 @@ public class Product {
     }
 
     public Product(int productId, String productName, String productSlug, Integer brandId, Integer categoryId,
-            String origin, String shortDescription, String fullDescription, int stockQuantity,
-            boolean isFeatured, boolean isOnSale, BigDecimal averageRating, int reviewCount,
-            Timestamp createdAt, Timestamp updatedAt) {
+                   String origin, String shortDescription, String fullDescription, int stockQuantity,
+                   boolean isFeatured, boolean isOnSale, BigDecimal averageRating, int reviewCount,
+                   Timestamp createdAt, Timestamp updatedAt) {
         this.productId = productId;
         this.productName = productName;
         this.productSlug = productSlug;
@@ -136,6 +140,22 @@ public class Product {
         this.fullDescription = fullDescription;
     }
 
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getUsageInstructions() {
+        return usageInstructions;
+    }
+
+    public void setUsageInstructions(String usageInstructions) {
+        this.usageInstructions = usageInstructions;
+    }
+
     public int getStockQuantity() {
         return stockQuantity;
     }
@@ -158,6 +178,22 @@ public class Product {
 
     public void setOnSale(boolean onSale) {
         isOnSale = onSale;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Timestamp getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Timestamp deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public BigDecimal getAverageRating() {
@@ -305,10 +341,6 @@ public class Product {
         this.activePromotion = activePromotion;
     }
 
-    public void setDefaultVariant(ProductVariant defaultVariant) {
-        this.defaultVariant = defaultVariant;
-    }
-
     // Helper methods
     public ProductImage getPrimaryImage() {
         if (images != null) {
@@ -341,6 +373,10 @@ public class Product {
             }
         }
         return null;
+    }
+
+    public void setDefaultVariant(ProductVariant defaultVariant) {
+        this.defaultVariant = defaultVariant;
     }
 
     @Override
