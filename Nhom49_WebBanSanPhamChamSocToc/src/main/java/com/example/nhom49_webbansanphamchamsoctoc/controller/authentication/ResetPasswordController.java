@@ -41,79 +41,83 @@ public class ResetPasswordController extends HttpServlet {
 
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
-            forwardWithError(req, resp, "Email khong hop le.", email, otpCode);
+            forwardWithError(req, resp, emailError, email, otpCode);
             return;
         }
 
-        if (!isValidOtpCode(otpCode)) {
-            forwardWithError(req, resp, "Ma OTP phai gom 6 chu so.", email, otpCode);
+        String passwordError = ValidationUtil.validatePassword(newPassword);
+        if (passwordError != null) {
+            forwardWithError(req, resp, passwordError, email, otpCode);
             return;
         }
 
-        String passErr = ValidationUtil.validatePassword(newPassword);
-        if (passErr != null) {
-            forwardWithError(req, resp, passErr, email, otpCode);
-            return;
-        }
-
-        String confirmErr = ValidationUtil.validateConfirmPassword(newPassword, confirmPassword);
-        if (confirmErr != null) {
-            forwardWithError(req, resp, confirmErr, email, otpCode);
+        String confirmPasswordError = ValidationUtil.validateConfirmPassword(newPassword, confirmPassword);
+        if (confirmPasswordError != null) {
+            forwardWithError(req, resp, confirmPasswordError, email, otpCode);
             return;
         }
 
         User user = userDAO.findByEmail(email);
         if (user == null) {
-            forwardWithError(req, resp, "OTP khong hop le hoac da het han.", email, otpCode);
+            forwardWithError(req, resp, "Không tìm thấy Email.", email, otpCode);
             return;
         }
 
-        OtpVerification otp = otpVerificationDAO.findLatestForgotPasswordOtp(user.getUserId(), otpCode);
+        if (!isValidOtpCode(otpCode)) {
+            forwardWithError(req, resp, "OTP phải đủ 6 kí tự số.", email, otpCode);
+            return;
+        }
+
+        OtpVerification otp = otpVerificationDAO.findLatestOtpByUserId(user.getUserId());
         if (otp == null) {
-            OtpVerification latestOtp = otpVerificationDAO.findLatestForgotPasswordOtpByUser(user.getUserId());
-            if (latestOtp != null && !latestOtp.isVerified()) {
-                otpVerificationDAO.incrementAttempts(latestOtp.getOtpId());
-                if (latestOtp.getAttempts() + 1 >= MAX_OTP_ATTEMPTS) {
-                    forwardWithError(req, resp, "OTP da vuot qua so lan thu toi da.", email, otpCode);
-                    return;
-                }
-            }
-            forwardWithError(req, resp, "OTP khong hop le hoac da het han.", email, otpCode);
-            return;
-        }
-
-        if (otp.isVerified()) {
-            forwardWithError(req, resp, "OTP da duoc su dung. Vui long yeu cau ma moi.", email, otpCode);
-            return;
-        }
-
-        if (otp.getAttempts() >= MAX_OTP_ATTEMPTS) {
-            forwardWithError(req, resp, "OTP da vuot qua so lan thu toi da.", email, otpCode);
+            forwardWithError(req, resp, "Mã OTP không hợp lệ.", email, otpCode);
             return;
         }
 
         if (otp.getOtpExpiry() == null || otp.getOtpExpiry().toLocalDateTime().isBefore(LocalDateTime.now())) {
-            forwardWithError(req, resp, "OTP da het han. Vui long yeu cau ma moi.", email, otpCode);
+            forwardWithError(req, resp, "Mã OTP hết hạn sử dụng.", email, otpCode);
             return;
         }
 
-        String hashed = PasswordUtil.hashPassword(newPassword);
-        boolean updated = userDAO.updatePassword(user.getUserId(), hashed);
+        if (otp.isVerified()) {
+            forwardWithError(req, resp, "Mã OTP đã qua sử dụng rồi.", email, otpCode);
+            return;
+        }
+
+        if (otp.getAttempts() >= MAX_OTP_ATTEMPTS) {
+            forwardWithError(req, resp, "Đã vượt quá số lần nhập OTP.", email, otpCode);
+            return;
+        }
+
+        if (!otp.getOtpCode().equals(otpCode)) {
+            otpVerificationDAO.incrementAttempts(otp.getOtpId());
+            int newAttempts = otp.getAttempts() + 1;
+            if (newAttempts >= MAX_OTP_ATTEMPTS) {
+                forwardWithError(req, resp, "OTP sai. Đã vượt quá số lần nhập.", email, otpCode);
+            } else {
+                forwardWithError(req, resp, "OTP không đúng.", email, otpCode);
+            }
+            return;
+        }
+
+        String hashedPassword = PasswordUtil.hashPassword(newPassword);
+
+        boolean updated = userDAO.updatePassword(user.getUserId(), hashedPassword);
         if (!updated) {
-            forwardWithError(req, resp, "Khong the cap nhat mat khau. Vui long thu lai.", email, otpCode);
+            forwardWithError(req, resp, "Không thể cập nhật mật khẩu, vui lòng thử lại.", email, otpCode);
             return;
         }
 
         otpVerificationDAO.markVerified(otp.getOtpId());
-        req.getSession().setAttribute("success", "Doi mat khau thanh cong, vui long dang nhap.");
+        req.getSession().setAttribute("success", "Đổi mật khẩu thành công, vui lòng đăng nhập lại.");
         resp.sendRedirect(req.getContextPath() + "/auth/login");
     }
 
     private void forwardWithError(HttpServletRequest req, HttpServletResponse resp, String error,
-                                  String email, String otp) throws ServletException, IOException {
+                                  String email, String otpCode) throws ServletException, IOException {
         req.setAttribute("error", error);
         req.setAttribute("email", email);
-        req.setAttribute("otp", otp);
+        req.setAttribute("otp", otpCode);
         req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
     }
 
