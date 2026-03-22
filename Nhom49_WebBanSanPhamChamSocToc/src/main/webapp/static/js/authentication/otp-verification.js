@@ -1,62 +1,131 @@
-let timeLeft = 60 * 5;
+"use strict";
 
-function startCountdown() {
-    const timer = document.getElementById("timer");
+(function () {
 
-    const interval = setInterval(() => {
-        timeLeft--;
-        if (timer) {
-            timer.innerText = "OTP hết hạn sau: " + timeLeft + "s";
-        }
+    // ─── Helpers ────────────────────────────────────────────────────────────
 
-        if (timeLeft <= 0) {
-            clearInterval(interval);
-            if (timer) {
-                timer.innerText = "OTP đã hết hạn!";
-            }
-        }
-    }, 1000);
-
-}
-
-function combineOtp() {
-    let otp = "";
-    for (let i = 1; i <= 6; i++) {
-        const input = document.getElementById("otp" + i);
-        if (input) otp += input.value;
-    }
-    document.getElementById("fullOtp").value = otp;
-}
-
-window.addEventListener("DOMContentLoaded", function () {
-    startCountdown();
-
-    for (let i = 1; i <= 6; i++) {
-        const input = document.getElementById("otp" + i);
-
-        if (!input) continue;
-
-        // Auto next
-        input.addEventListener("input", function () {
-            this.value = this.value.replace(/[^0-9]/g, ""); // chỉ số
-
-            if (this.value.length === 1) {
-                const next = document.getElementById("otp" + (i + 1));
-                if (next) next.focus();
-            }
-        });
-
-        // Backspace quay lại
-        input.addEventListener("keydown", function (e) {
-            if (e.key === "Backspace" && this.value === "" && i > 1) {
-                const prev = document.getElementById("otp" + (i - 1));
-                if (prev) prev.focus();
-            }
-        });
+    function $(id) {
+        return document.getElementById(id);
     }
 
-// Focus ô đầu tiên
-    const first = document.getElementById("otp1");
-    if (first) first.focus();
+    function setText(id, text) {
+        var el = $(id);
+        if (el) el.textContent = text;
+    }
 
-});
+    function toNumber(value, fallback) {
+        var n = Number(value);
+        return Number.isFinite(n) ? n : fallback;
+    }
+
+    // ─── OTP Inputs ─────────────────────────────────────────────────────────
+
+    function wireOtpInputs() {
+        for (var i = 1; i <= 6; i++) {
+            (function (idx) {
+                var input = $("otp" + idx);
+                if (!input) return;
+
+                input.addEventListener("input", function () {
+                    this.value = this.value.replace(/\D/g, "").slice(0, 1);
+                    if (this.value.length === 1) {
+                        var next = $("otp" + (idx + 1));
+                        if (next) next.focus();
+                    }
+                });
+
+                input.addEventListener("keydown", function (e) {
+                    if (e.key === "Backspace" && this.value === "" && idx > 1) {
+                        var prev = $("otp" + (idx - 1));
+                        if (prev) prev.focus();
+                    }
+                });
+
+                input.addEventListener("paste", function (e) {
+                    e.preventDefault();
+                    var text = (e.clipboardData || window.clipboardData).getData("text");
+                    var digits = text.replace(/\D/g, "").slice(0, 6);
+                    if (!digits) return;
+
+                    for (var j = 0; j < digits.length; j++) {
+                        var target = $("otp" + (j + 1));
+                        if (target) target.value = digits[j];
+                    }
+
+                    var focusEl = $("otp" + Math.min(digits.length + 1, 6));
+                    if (focusEl) focusEl.focus();
+                });
+
+            })(i);
+        }
+
+        var first = $("otp1");
+        if (first) first.focus();
+    }
+
+    // Gọi từ form onsubmit="combineOtp()"
+    window.combineOtp = function () {
+        var otp = "";
+        for (var i = 1; i <= 6; i++) {
+            var input = $("otp" + i);
+            otp += input ? input.value : "";
+        }
+        var fullOtp = $("fullOtp");
+        if (fullOtp) fullOtp.value = otp;
+    };
+
+    // ─── Timers ─────────────────────────────────────────────────────────────
+
+    function startTimers(otpExpiryAt, otpLastSentAt, cooldownSeconds) {
+        var resendBtn = document.querySelector(
+            'form[action$="/auth/resend-otp"] button[type="submit"]'
+        );
+
+        function tick() {
+            var now = Date.now();
+
+            // Timer hết hạn OTP
+            if (otpExpiryAt > 0) {
+                var remainOtp = Math.ceil((otpExpiryAt - now) / 1000);
+                setText("otpExpiryTimer",
+                    remainOtp > 0
+                        ? "OTP hết hạn sau: " + remainOtp + " giây"
+                        : "OTP đã hết hạn!"
+                );
+            }
+
+            // Cooldown nút gửi lại
+            if (otpLastSentAt > 0) {
+                var cooldownEnd = otpLastSentAt + cooldownSeconds * 1000;
+                var remainCooldown = Math.ceil((cooldownEnd - now) / 1000);
+
+                if (remainCooldown > 0) {
+                    setText("resendCooldownTimer", "Vui lòng đợi " + remainCooldown + " giây để gửi lại OTP.");
+                    if (resendBtn) resendBtn.disabled = true;
+                } else {
+                    setText("resendCooldownTimer", "Bạn có thể gửi lại OTP.");
+                    if (resendBtn) resendBtn.disabled = false;
+                }
+            }
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    // ─── Init ────────────────────────────────────────────────────────────────
+
+    window.addEventListener("DOMContentLoaded", function () {
+        wireOtpInputs();
+
+        var box = document.querySelector(".otp-box[data-otp-expiry-at]");
+        if (!box) return;
+
+        startTimers(
+            toNumber(box.dataset.otpExpiryAt, 0),
+            toNumber(box.dataset.otpLastSentAt, 0),
+            toNumber(box.dataset.resendCooldownSeconds, 45)
+        );
+    });
+
+})();

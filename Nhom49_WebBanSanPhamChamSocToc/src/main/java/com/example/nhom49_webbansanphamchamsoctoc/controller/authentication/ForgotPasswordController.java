@@ -80,6 +80,12 @@ public class ForgotPasswordController extends HttpServlet {
             return;
         }
 
+        long now = System.currentTimeMillis();
+        long otpExpiryAt = now + OTP_EXPIRY_MINUTES * 60_000L;
+
+        request.getSession().setAttribute("otpLastSentAt", now);
+        request.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
+
         request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
         request.getSession().setAttribute("otpPendingUserId", user.getUserId());
         request.getSession().setAttribute("otpPendingEmail", email);
