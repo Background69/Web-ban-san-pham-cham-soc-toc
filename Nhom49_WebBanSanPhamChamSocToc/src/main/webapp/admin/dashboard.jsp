@@ -93,14 +93,26 @@
             </table>
         </div>
         <!--chart-->
+        <div style = "margin-bottom: 20px">
+            <select id="filterRevenue" onchange="changeFilter">
+                <option value="week" ${type=='week'? 'selected':''} >Theo tuần</option>
+                <option value="month" ${type=='month'? 'selected':''} >Theo tháng</option>
+                <option value="year" ${type=='year'? 'selected':''} >Theo năm</option>
+            </select>
+        </div>
         <div class="chart">
             <div class="chartbox">
-                <h2>Doanh thu theo tháng</h2>
+                <h2>Doanh thu theo
+                <c:choose>
+                    <c:when test="${type=='month'}">tháng</c:when>
+                    <c:when test="${type=='year'}">năm</c:when>
+                    <c:otherwise>tuần</c:otherwise>
+                </c:choose></h2>
                 <canvas id="revenuechart">
                 </canvas>
             </div>
             <div class="chartbox">
-                <h2>Đơn thàng theo trạng thái</h2>
+                <h2>Đơn hàng theo trạng thái</h2>
                 <canvas id="orderchart"></canvas>
             </div>
         </div>
@@ -108,15 +120,25 @@
     </main>
 
 </div>
+<script> function changeFilter(){
+    const type = document.getElementById("filterRevenue").value;
+    window.location.href ="${pageContext.request.contextPath}/admin/dashboard?type=" + type;
+
+}</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    const revenueLabels = ${revenueLabels};
+    const revenueData = ${revenueData};
+
     new Chart(document.getElementById('revenuechart'),{
         type: 'line',
         data: {
-            labels: ["Tháng 1","Tháng 2", "Tháng 3"],
+            labels: revenueLabels,
             datasets:[{
                 label:'Doanh thu',
-                data:[100,200,300]
+                data:revenueData,
+                borderWidth:2,
+                fill:false
             }]
         }
     });
