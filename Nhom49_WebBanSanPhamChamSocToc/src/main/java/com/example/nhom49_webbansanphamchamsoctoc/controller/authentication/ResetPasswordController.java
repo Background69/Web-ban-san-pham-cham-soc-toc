@@ -57,8 +57,13 @@ public class ResetPasswordController extends HttpServlet {
         boolean updatePassword = userDAO.updatePassword(verifiedUserId, hashedPassword);
 
         if (updatePassword) {
-            req.getSession().removeAttribute("otpVerifiedUserId");
             req.getSession().setAttribute("success", "Đổi mật khẩu thành công.");
+            req.getSession().removeAttribute("otpVerifiedUserId");
+            req.getSession().removeAttribute("otpPendingUserId");
+            req.getSession().removeAttribute("otpPendingEmail");
+            req.getSession().removeAttribute("otpPurpose");
+            req.getSession().removeAttribute("otpLastSentAt");
+
             resp.sendRedirect(req.getContextPath() + "/auth/login");
         } else  {
             forwardWithError(req, resp, "Không thể cập nhật mật khẩu. Vui lòng thử lại.");
