@@ -8,7 +8,6 @@ import org.jdbi.v3.core.Jdbi;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Optional;
 
 public class PendingRegistrationDAO {
     private final Jdbi jdbi;
@@ -65,9 +64,9 @@ public class PendingRegistrationDAO {
                 LIMIT 1
                 """;
 
-        return (PendingRegistration) jdbi.withHandle(handle -> handle.createQuery(sql)
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("pendingId", pendingId)
-                .map((rs, ctx) -> mapPending(rs)));
+                .map((rs, ctx) -> mapPending(rs)).findFirst().orElse(null));
     }
 
     public boolean incrementAttempts(int pendingId) {
@@ -120,8 +119,8 @@ public class PendingRegistrationDAO {
                     .bind("phone", pending.getPhone())
                     .bind("avatar", "avatar/avatar.jpg")
                     .bind("role", "Khach hang")
-                    .bind("isActive", true)      // OTP ok => account active ngay
-                    .bind("googleId", Optional.empty())
+                    .bind("isActive", true)
+                    .bind("googleId", (String) null)
                     .bind("authProvider", "LOCAL")
                     .executeAndReturnGeneratedKeys("user_id")
                     .mapTo(Integer.class)
