@@ -63,8 +63,8 @@ public class OtpVerificationDAO {
                     AND otp_type = :otpType
                     AND  is_verified = FALSE
                     AND otp_expiry > CURRENT_TIMESTAMP
-                ORDER BY otp_expiry DESC;
-                LIMIT 1;
+                ORDER BY otp_expiry DESC
+                LIMIT 1
         """;
 
         return jdbi.withHandle(handle -> handle.createQuery(sql))

@@ -6,7 +6,7 @@
 <div class="otp-box">
     <h3>Nhập mã OTP</h3>
 
-    <form action="${pageContext.request.contextPath}/verify-otp" method="post" onsubmit="combineOtp()">
+    <form action="${pageContext.request.contextPath}/auth/verify-otp" method="post" onsubmit="combineOtp()">
         <div class="otp-inputs">
             <input type="text" id="otp1" maxlength="1" oninput="moveNext(this,1)" onkeydown="movePrev(event,1)">
             <input type="text" id="otp2" maxlength="1" oninput="moveNext(this,2)" onkeydown="movePrev(event,2)">
