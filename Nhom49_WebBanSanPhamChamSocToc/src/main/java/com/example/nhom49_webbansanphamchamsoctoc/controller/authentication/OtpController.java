@@ -1,7 +1,8 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
 import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 public class OtpController extends HttpServlet {
     private final OtpVerificationDAO otpVerificationDAO = new OtpVerificationDAO();
     private final AuthenticationService authenticationService = new AuthenticationService();
+    private final PendingRegistrationDAO pendingRegistrationDAO = new PendingRegistrationDAO();
+
     private static final int MAX_OTP_ATTEMPTS = 5;
 
 
@@ -29,10 +32,8 @@ public class OtpController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        Integer otpPendingUserId = (Integer) req.getSession().getAttribute("otpPendingUserId");
         String purposeRaw = (String) req.getSession().getAttribute("otpPurpose");
-
-        if (otpPendingUserId == null || purposeRaw == null || purposeRaw.isBlank()) {
+        if (purposeRaw == null || purposeRaw.isBlank()) {
             resp.sendRedirect(req.getContextPath() + "/auth/login");
             return;
         }
@@ -51,83 +52,53 @@ public class OtpController extends HttpServlet {
             return;
         }
 
-        OtpVerification otp = otpVerificationDAO.findLatestOtpByUserId(otpPendingUserId, otpPurpose);
-        if (otp == null) {
-            forwardWithError(req, resp, "Mã OTP không hợp lệ.");
-            return;
-        }
-
-        if (otp.getOtpExpiry() == null || otp.getOtpExpiry().toLocalDateTime().isBefore(LocalDateTime.now())) {
-            forwardWithError(req, resp, "Mã OTP hết hạn sử dụng.");
-            return;
-        }
-
-        if (otp.isVerified()) {
-            forwardWithError(req, resp, "Mã OTP đã qua sử dụng rồi.");
-            return;
-        }
-
-        if (otp.getAttempts() >= MAX_OTP_ATTEMPTS) {
-            forwardWithError(req, resp, "Đã vượt quá số lần nhập OTP.");
-            return;
-        }
-
-        if (!otp.getOtpCode().equals(otpCode)) {
-            if (!otpVerificationDAO.incrementAttempts(otp.getOtpId())) {
-                forwardWithError(req, resp, "Có lỗi xảy ra, vui lòng thử lại.");
-                return;
-            }
-
-            int newAttempts = otp.getAttempts() + 1;
-            if (newAttempts >= MAX_OTP_ATTEMPTS) {
-                forwardWithError(req, resp, "OTP sai. Đã vượt quá số lần nhập.");
-            } else {
-                forwardWithError(req, resp, "OTP không đúng.");
-            }
-            return;
-        }
-
-
-        if (otpPurpose == OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD) {
-            boolean markOtp = otpVerificationDAO.markVerified(otp.getOtpId());
-            if (!markOtp) {
-                forwardWithError(req, resp, "Có lỗi xảy ra khi xác nhận OTP, vui lòng thử lại");
-                return;
-            }
-
-            req.getSession().setAttribute("otpVerifiedUserId", otpPendingUserId);
-
-            req.getSession().removeAttribute("otpPendingUserId");
-            req.getSession().removeAttribute("otpPendingEmail");
-            req.getSession().removeAttribute("otpPurpose");
-            req.getSession().removeAttribute("otpLastSentAt");
-
-
-            resp.sendRedirect(req.getContextPath() + "/reset-password");
-            return;
-        }
-
         if (otpPurpose == OtpVerificationDAO.OtpPurpose.REGISTER) {
-            boolean activated = authenticationService.setActiveStatus(otpPendingUserId, true);
-            if (!activated) {
-                forwardWithError(req, resp, "Không thể kích hoạt tài khoản");
+            Integer pendingId = (Integer) req.getSession().getAttribute("otpPendingRegistrationId");
+            if (pendingId == null) {
+                resp.sendRedirect(req.getContextPath() + "/auth/register");
                 return;
             }
 
-            boolean markOtp = otpVerificationDAO.markVerified(otp.getOtpId());
-            if (!markOtp) {
-                forwardWithError(req, resp, "Có lỗi xảy ra khi xác nhận OTP, vui lòng thử lại");
+            PendingRegistration pending = pendingRegistrationDAO.findById(pendingId);
+            if (pending == null || pending.isVerified()) {
+                forwardWithError(req, resp, "Phiên đăng ký không hợp lệ. Vui lòng đăng ký lại.");
                 return;
             }
-            req.getSession().removeAttribute("otpPendingUserId");
+
+            if (pending.getOtpExpiry() == null || pending.getOtpExpiry().toLocalDateTime().isBefore(LocalDateTime.now())) {
+                forwardWithError(req, resp, "Mã OTP hết hạn sử dụng.");
+                return;
+            }
+
+            if (pending.getAttempts() >= MAX_OTP_ATTEMPTS) {
+                forwardWithError(req, resp, "Đã vượt quá số lần nhập OTP.");
+                return;
+            }
+
+            if (!pending.getOtpCode().equals(otpCode)) {
+                pendingRegistrationDAO.incrementAttempts(pendingId);
+                int newAttempts = pending.getAttempts() + 1;
+                forwardWithError(req, resp, newAttempts >= MAX_OTP_ATTEMPTS
+                        ? "OTP sai. Đã vượt quá số lần nhập."
+                        : "OTP không đúng.");
+                return;
+            }
+
+            int newUserId = pendingRegistrationDAO.createUserAndConsumePending(pendingId);
+            if (newUserId <= 0) {
+                forwardWithError(req, resp, "Không thể tạo tài khoản. Vui lòng thử lại.");
+                return;
+            }
+
+            req.getSession().removeAttribute("otpPendingRegistrationId");
             req.getSession().removeAttribute("otpPendingEmail");
             req.getSession().removeAttribute("otpPurpose");
             req.getSession().removeAttribute("otpLastSentAt");
 
             req.getSession().setAttribute("success", "Xác minh đăng ký thành công, vui lòng đăng nhập.");
-
             resp.sendRedirect(req.getContextPath() + "/auth/login");
         }
+
     }
 
 
