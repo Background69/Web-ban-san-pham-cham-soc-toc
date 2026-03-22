@@ -71,12 +71,10 @@ public class OtpVerificationDAO {
                         LIMIT 1
                 """;
 
-        return jdbi.withHandle(handle -> handle.createQuery(sql))
+        return (OtpVerification) jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
                 .bind("otpType", purpose.name())
-                .map((rs, ctx) -> mapOtp(rs))
-                .findFirst()
-                .orElse(null);
+                .map((rs, ctx) -> mapOtp(rs)));
     }
 
     public boolean incrementAttempts(int otpId) {
