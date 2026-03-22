@@ -6,11 +6,13 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.EmailService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.OtpUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import jakarta.mail.Session;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -44,6 +46,7 @@ public class ForgotPasswordController extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
         String email = request.getParameter("email");
         email = (email != null) ? email.trim() : "";
         String commonMsg = "Neu email ton tai trong he thong, chung toi da gui ma OTP dat lai mat khau.";
@@ -60,9 +63,12 @@ public class ForgotPasswordController extends HttpServlet {
             String resetLink = request.getScheme() + "://" + request.getServerName()
                     + ":" + request.getServerPort()
                     + request.getContextPath()
-                    + "/reset-password?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8);
+                    + "/auth/verify-otp=" + URLEncoder.encode(email, StandardCharsets.UTF_8);
 
             boolean sent = emailService.sendPasswordResetOtpEmail(email, otpCode, resetLink, OTP_EXPIRY_MINUTES);
+            session.setAttribute("otpPendingUserId", user.getUserId());
+            session.setAttribute("otpPendingEmail", email);
+            session.setAttribute("otpPurpose", "FORGOT_PASSWORD");
             if (!sent) {
                 request.setAttribute("error", "Khong gui duoc email. Vui long thu lai sau.");
             }

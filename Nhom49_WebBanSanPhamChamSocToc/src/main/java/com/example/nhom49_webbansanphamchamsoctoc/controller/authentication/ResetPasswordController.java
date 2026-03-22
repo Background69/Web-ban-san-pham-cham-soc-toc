@@ -32,8 +32,6 @@ public class ResetPasswordController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        String email = trim(req.getParameter("email"));
-        String otpCode = trim(req.getParameter("otp"));
         String newPassword = req.getParameter("newPassword");
         String confirmPassword = req.getParameter("confirmPassword");
         Integer verifiedUserId = (Integer) req.getSession().getAttribute("otpVerifiedUserId");
@@ -45,33 +43,31 @@ public class ResetPasswordController extends HttpServlet {
 
         String passwordError = ValidationUtil.validatePassword(newPassword);
         if (passwordError != null) {
-            forwardWithError(req, resp, passwordError, email, otpCode);
+            forwardWithError(req, resp, passwordError);
             return;
         }
 
         String confirmPasswordError = ValidationUtil.validateConfirmPassword(newPassword, confirmPassword);
         if (confirmPasswordError != null) {
-            forwardWithError(req, resp, confirmPasswordError, email, otpCode);
+            forwardWithError(req, resp, confirmPasswordError);
             return;
         }
 
         String hashedPassword = PasswordUtil.hashPassword(newPassword);
-        userDAO.updatePassword(verifiedUserId, hashedPassword);
+        boolean updatePassword = userDAO.updatePassword(verifiedUserId, hashedPassword);
 
-        req.getSession().removeAttribute("otpVerifiedUserId");
-        req.getSession().setAttribute("success", "Đổi mật khẩu thành công.");
-        resp.sendRedirect(req.getContextPath() + "/auth/login");
+        if (updatePassword) {
+            req.getSession().removeAttribute("otpVerifiedUserId");
+            req.getSession().setAttribute("success", "Đổi mật khẩu thành công.");
+            resp.sendRedirect(req.getContextPath() + "/auth/login");
+        } else  {
+            forwardWithError(req, resp, "Không thể cập nhật mật khẩu. Vui lòng thử lại.");
+        }
+
     }
 
-    private void forwardWithError(HttpServletRequest req, HttpServletResponse resp, String error,
-                                  String email, String otpCode) throws ServletException, IOException {
+    private void forwardWithError(HttpServletRequest req, HttpServletResponse resp, String error) throws ServletException, IOException {
         req.setAttribute("error", error);
-        req.setAttribute("email", email);
-        req.setAttribute("otp", otpCode);
         req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
-    }
-
-    private String trim(String value) {
-        return value == null ? "" : value.trim();
     }
 }

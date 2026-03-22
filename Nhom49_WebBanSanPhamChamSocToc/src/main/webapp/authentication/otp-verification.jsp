@@ -8,12 +8,12 @@
 
     <form action="${pageContext.request.contextPath}/auth/verify-otp" method="post" onsubmit="combineOtp()">
         <div class="otp-inputs">
-            <input type="text" id="otp1" maxlength="1" oninput="moveNext(this,1)" onkeydown="movePrev(event,1)">
-            <input type="text" id="otp2" maxlength="1" oninput="moveNext(this,2)" onkeydown="movePrev(event,2)">
-            <input type="text" id="otp3" maxlength="1" oninput="moveNext(this,3)" onkeydown="movePrev(event,3)">
-            <input type="text" id="otp4" maxlength="1" oninput="moveNext(this,4)" onkeydown="movePrev(event,4)">
-            <input type="text" id="otp5" maxlength="1" oninput="moveNext(this,5)" onkeydown="movePrev(event,5)">
-            <input type="text" id="otp6" maxlength="1" oninput="moveNext(this,6)" onkeydown="movePrev(event,6)">
+            <input type="text" id="otp1" maxlength="1" oninput="moveNext(this,1)">
+            <input type="text" id="otp2" maxlength="1" oninput="moveNext(this,2)">
+            <input type="text" id="otp3" maxlength="1" oninput="moveNext(this,3)">
+            <input type="text" id="otp4" maxlength="1" oninput="moveNext(this,4)">
+            <input type="text" id="otp5" maxlength="1" oninput="moveNext(this,5)">
+            <input type="text" id="otp6" maxlength="1" oninput="moveNext(this,6)">
         </div>
 
         <!-- hidden input để gửi OTP -->
