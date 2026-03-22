@@ -101,7 +101,7 @@ public class AuthenticationService {
         user.setUsername(username.trim());
         user.setPassword(PasswordUtil.hashPassword(password));
         user.setRole("Khách hàng");
-        user.setActive(true);
+        user.setActive(false);
         user.setPhone(ValidationUtil.sanitize(phone));
         user.setAuthProvider("LOCAL");
 
@@ -113,6 +113,10 @@ public class AuthenticationService {
 
         lastError = "Đăng ký thất bại, vui lòng thử lại";
         return null;
+    }
+
+    public boolean setActiveStatus(int userId, boolean active) {
+        return userDAO.updateActiveStatus(userId, active);
     }
 
     public void setCurrentUser(HttpSession session, User user) {
