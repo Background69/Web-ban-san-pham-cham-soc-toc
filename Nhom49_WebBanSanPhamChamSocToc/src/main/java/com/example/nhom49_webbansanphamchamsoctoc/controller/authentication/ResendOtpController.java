@@ -82,6 +82,8 @@ public class ResendOtpController extends HttpServlet {
             }
 
             sent = emailService.sendRegisterOtpEmail(otpPendingEmail, otpCode, verifyLink, OTP_EXPIRY_MINUTES);
+
+
         } else {
             Integer otpPendingUserId = (Integer) req.getSession().getAttribute("otpPendingUserId");
             if (otpPendingUserId == null) {
@@ -105,6 +107,11 @@ public class ResendOtpController extends HttpServlet {
             return;
         }
 
+        now = System.currentTimeMillis();
+        long otpExpiryAt = now + OTP_EXPIRY_MINUTES * 60_000L;
+
+        req.getSession().setAttribute("otpLastSentAt", now);
+        req.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
         req.getSession().setAttribute("otpLastSentAt", now);
         req.setAttribute("message", "Da gui lai OTP. Vui long kiem tra email.");
         req.getRequestDispatcher("/authentication/otp-verification.jsp").forward(req, res);

@@ -88,11 +88,18 @@ public class RegisterController extends HttpServlet {
         request.getSession().setAttribute("otpPendingRegistrationId", pendingId);
         request.getSession().setAttribute("otpPendingEmail", email);
 
+
         if (!sent) {
             request.setAttribute("error", "Không gửi được email OTP. Vui lòng thử lại.");
             request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
             return;
         }
+
+        long now = System.currentTimeMillis();
+        long otpExpiryAt = now + OTP_EXPIRY_MINUTES * 60_000L;
+
+        request.getSession().setAttribute("otpLastSentAt", now);
+        request.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
 
         request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
         response.sendRedirect(request.getContextPath() + "/auth/verify-otp");
