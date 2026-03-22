@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
+import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
 import java.sql.Timestamp;
@@ -16,67 +17,62 @@ public class OtpVerificationDAO {
     }
 
     public int createForgotPasswordOtp(int userId, String otpCode, Timestamp expiry) {
-        return jdbi.inTransaction(handle -> {
-            handle.createUpdate("""
+        return  jdbi.inTransaction(handle -> {
+            invalidateOldOtp(handle, userId);
+            return insertNewOtp(handle, userId, otpCode, expiry);
+        });
+    }
+
+    // Tắt otp cũ chưa dùng của user
+    private void invalidateOldOtp(Handle handle, int userId) {
+        handle.createUpdate("""
                     UPDATE otp_verification
                     SET is_verified = TRUE
                     WHERE user_id = :userId
                       AND otp_type = :otpType
                       AND is_verified = FALSE
                     """)
-                    .bind("userId", userId)
-                    .bind("otpType", OTP_TYPE_FORGOT_PASSWORD)
-                    .execute();
-
-            return handle.createUpdate("""
-                    INSERT INTO otp_verification (user_id, otp_code, otp_type, otp_expiry, attempts, is_verified)
-                    VALUES (:userId, :otpCode, :otpType, :otpExpiry, 0, FALSE)
-                    """)
-                    .bind("userId", userId)
-                    .bind("otpCode", otpCode)
-                    .bind("otpType", OTP_TYPE_FORGOT_PASSWORD)
-                    .bind("otpExpiry", expiry)
-                    .executeAndReturnGeneratedKeys("otp_id")
-                    .mapTo(Integer.class)
-                    .findFirst()
-                    .orElse(-1);
-        });
+                .bind("userId", userId)
+                .bind("otpType", OTP_TYPE_FORGOT_PASSWORD)
+                .execute();
     }
 
-    public OtpVerification findLatestForgotPasswordOtp(int userId, String otpCode) {
-        String sql = """
-                SELECT *
-                FROM otp_verification
-                WHERE user_id = :userId
-                  AND otp_code = :otpCode
-                  AND otp_type = :otpType
-                ORDER BY created_at DESC
-                LIMIT 1
-                """;
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
+    // Tạo otp mới cho user
+    private int insertNewOtp(Handle handle, int userId, String otpCode, Timestamp expiry) {
+        return handle.createUpdate("""
+                INSERT INTO otp_verification
+                (user_id, otp_code, otp_type, otp_expiry, attempts, is_verified)
+                VALUES (:userId, :otpCode, :otpType, :otpExpiry, 0, FALSE)
+                """)
                 .bind("userId", userId)
                 .bind("otpCode", otpCode)
                 .bind("otpType", OTP_TYPE_FORGOT_PASSWORD)
-                .map((rs, ctx) -> mapOtp(rs))
+                .bind("otpExpiry", expiry)
+                .executeAndReturnGeneratedKeys("otp_id")
+                .mapTo(Integer.class)
                 .findFirst()
-                .orElse(null));
+                .orElse(-1);
     }
 
-    public OtpVerification findLatestForgotPasswordOtpByUser(int userId) {
+    // Lọc date của otp từ mới nhất xuống => lấy otp đầu tiên và phải còn hạn
+    public OtpVerification findLatestOtpByUserId(int userId) {
         String sql = """
                 SELECT *
                 FROM otp_verification
                 WHERE user_id = :userId
-                  AND otp_type = :otpType
-                ORDER BY created_at DESC
-                LIMIT 1
-                """;
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                    AND otp_type = :otpType
+                    AND  is_verified = FALSE
+                    AND otp_expiry > CURRENT_TIMESTAMP
+                ORDER BY otp_expiry DESC;
+                LIMIT 1;
+        """;
+
+        return jdbi.withHandle(handle -> handle.createQuery(sql))
                 .bind("userId", userId)
                 .bind("otpType", OTP_TYPE_FORGOT_PASSWORD)
                 .map((rs, ctx) -> mapOtp(rs))
                 .findFirst()
-                .orElse(null));
+                .orElse(null);
     }
 
     public boolean incrementAttempts(int otpId) {

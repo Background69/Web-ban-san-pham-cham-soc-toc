@@ -10,6 +10,7 @@ import jakarta.mail.internet.MimeMessage;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.Properties;
 
 public class EmailService {
@@ -139,5 +140,4 @@ public class EmailService {
         }
         return v;
     }
-
 }
