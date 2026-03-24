@@ -22,18 +22,6 @@
 
                     <form action="${pageContext.request.contextPath}/reset-password" method="post">
                         <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email"
-                                   value="${email}" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Mã OTP (6 chữ số)</label>
-                            <input type="text" class="form-control" name="otp"
-                                   value="${otp}" maxlength="6" pattern="\\d{6}" required>
-                        </div>
-
-                        <div class="mb-3">
                             <label class="form-label">Mật khẩu mới</label>
                             <input type="password" class="form-control" name="newPassword" minlength="6" required>
                         </div>

@@ -82,7 +82,7 @@
 
             <p class="signup-text">
                 Chưa có tài khoản?
-                <a href="${pageContext.request.contextPath}/authentication/register.jsp">Đăng ký</a>
+                <a href="${pageContext.request.contextPath}/auth/register">Đăng ký</a>
 
             </p>
         </div>
