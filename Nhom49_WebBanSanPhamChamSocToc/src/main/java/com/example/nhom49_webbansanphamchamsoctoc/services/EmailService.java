@@ -1,10 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
-import jakarta.mail.Authenticator;
-import jakarta.mail.Message;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
+import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
@@ -26,30 +22,20 @@ public class EmailService {
         Properties config = loadConfig();
 
         EMAIL_USERNAME = mustGet(config, "mail.username").trim();
-        EMAIL_PASSWORD = getMailPassword(config).replaceAll("\\s+", "");
-        EMAIL_FROM_NAME = propOrDefault(config, "mail.from_name", "HairGlow");
-
-        String smtpHost = propOrDefault(config, "mail.smtp.host", "smtp.gmail.com");
-        String smtpPort = propOrDefault(config, "mail.smtp.port", "587");
-        String smtpAuth = propOrDefault(config, "mail.smtp.auth", "true");
-        String smtpStartTls = propOrDefault(config, "mail.smtp.starttls.enable", "true");
-        String smtpSslProtocols = propOrDefault(config, "mail.smtp.ssl.protocols", "TLSv1.2");
-        String smtpSslTrust = propOrDefault(config, "mail.smtp.ssl.trust", smtpHost);
-        String smtpSocketFactoryPort = propOrDefault(config, "mail.smtp.socketFactory.port", smtpPort);
-        String smtpSocketFactoryClass = propOrDefault(config, "mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        boolean mailDebug = Boolean.parseBoolean(propOrDefault(config, "mail.debug", "false"));
+        EMAIL_PASSWORD = mustGet(config, "mail.app_password").replaceAll("\\s+", "");
+        EMAIL_FROM_NAME = config.getProperty("mail.from_name", "HairGlow").trim();
 
         Properties props = new Properties();
-        props.put("mail.smtp.auth", smtpAuth);
-        props.put("mail.smtp.starttls.enable", smtpStartTls);
-        props.put("mail.smtp.host", smtpHost);
-        props.put("mail.smtp.port", smtpPort);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-        props.put("mail.smtp.ssl.protocols", smtpSslProtocols);
-        props.put("mail.smtp.ssl.trust", smtpSslTrust);
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
-        props.put("mail.smtp.socketFactory.port", smtpSocketFactoryPort);
-        props.put("mail.smtp.socketFactory.class", smtpSocketFactoryClass);
+        props.put("mail.smtp.socketFactory.port", "587");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         session = Session.getInstance(props, new Authenticator() {
             @Override
@@ -58,104 +44,68 @@ public class EmailService {
             }
         });
 
-        session.setDebug(mailDebug);
+        session.setDebug(false);
     }
 
-    public boolean sendPasswordResetEmail(String toEmail, String resetLink) {
+    public boolean sendResetPasswordOtpEmail(String toEmail, String otpCode, String verifyLink, int expiryMinutes) {
+        return sendOtpHtml(
+                toEmail,
+                "Mã OTP đặt lại mật khẩu - HairGlow",
+                "Đặt lại mật khẩu",
+                "Bạn vừa yêu cầu đặt lại mật khẩu cho tài khoản HairGlow.",
+                "Mở trang đặt lại mật khẩu",
+                otpCode,
+                verifyLink,
+                expiryMinutes
+        );
+    }
+
+    public boolean sendRegisterOtpEmail(String toEmail, String otpCode, String verifyLink, int expiryMinutes) {
+        return sendOtpHtml(
+                toEmail,
+                "Mã OTP xác minh tài khoản - HairGlow",
+                "Xác minh tài khoản",
+                "Cảm ơn bạn đã đăng ký HairGlow. Vui lòng nhập OTP để kích hoạt tài khoản.",
+                "Mở trang xác minh tài khoản",
+                otpCode,
+                verifyLink,
+                expiryMinutes
+        );
+    }
+
+    private boolean sendOtpHtml(String toEmail, String subject, String title, String intro,
+                                String ctaLabel, String otpCode, String verifyLink, int expiryMinutes) {
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(EMAIL_USERNAME, EMAIL_FROM_NAME, StandardCharsets.UTF_8.name()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-            message.setSubject("Đặt lại mật khẩu - HairGlow", StandardCharsets.UTF_8.name());
+            message.setSubject(subject, StandardCharsets.UTF_8.name());
 
             String html = """
-                <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
-                  <h2 style="color:#2c5940;">Đặt lại mật khẩu</h2>
-                  <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
-                  <p>
-                    <a href="%s" style="background:#2c5940;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;">
-                      Đặt lại mật khẩu
-                    </a>
-                  </p>
-                  <p>Link sẽ hết hạn sau 30 phút.</p>
-                  <p>Nếu nút không hoạt động, copy link sau:</p>
-                  <p style="word-break:break-all;">%s</p>
-                  <p style="color:#64748b;font-size:12px;">Email tự động, vui lòng không trả lời.</p>
-                </div>
-            """.formatted(resetLink, resetLink);
-
-            message.setContent(html, "text/html; charset=UTF-8");
-
-            Transport.send(message);
-            return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean sendPasswordResetOtpEmail(String toEmail, String otpCode, String resetLink, int expiryMinutes) {
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(EMAIL_USERNAME, EMAIL_FROM_NAME, StandardCharsets.UTF_8.name()));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-            message.setSubject("Ma OTP dat lai mat khau - HairGlow", StandardCharsets.UTF_8.name());
-
-            String html = """
-                <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
-                  <h2 style="color:#2c5940;">Dat lai mat khau</h2>
-                  <p>Ban vua yeu cau dat lai mat khau cho tai khoan HairGlow.</p>
-                  <p>Ma OTP cua ban:</p>
-                  <div style="font-size:28px;font-weight:700;letter-spacing:8px;color:#2c5940;margin:12px 0 18px 0;">%s</div>
-                  <p>Ma co hieu luc trong %d phut va chi duoc dung 1 lan.</p>
-                  <p>
-                    <a href="%s" style="background:#2c5940;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;">
-                      Mo trang dat lai mat khau
-                    </a>
-                  </p>
-                  <p>Neu nut khong hoat dong, copy link sau:</p>
-                  <p style="word-break:break-all;">%s</p>
-                  <p style="color:#64748b;font-size:12px;">Email tu dong, vui long khong tra loi.</p>
-                </div>
-            """.formatted(otpCode, expiryMinutes, resetLink, resetLink);
+                        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
+                          <h2 style="color:#2c5940;">%s</h2>
+                          <p>%s</p>
+                          <p>Mã OTP của bạn:</p>
+                          <div style="font-size:28px;font-weight:700;letter-spacing:8px;color:#2c5940;margin:12px 0 18px 0;">%s</div>
+                          <p>Mã có hiệu lực trong %d phút và chỉ được dùng 1 lần.</p>
+                          <p>
+                            <a href="%s" style="background:#2c5940;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;">%s</a>
+                          </p>
+                          <p>Nếu nút không hoạt động, hãy sao chép liên kết sau:</p>
+                          <p style="word-break:break-all;">%s</p>
+                          <p style="color:#64748b;font-size:12px;">Đây là email tự động, vui lòng không trả lời.</p>
+                        </div>
+                    """.formatted(title, intro, otpCode, expiryMinutes, verifyLink, ctaLabel, verifyLink);
 
             message.setContent(html, "text/html; charset=UTF-8");
             Transport.send(message);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Lỗi gửi email");
             return false;
         }
     }
 
-    public boolean sendRegistrationOtpEmail(String toEmail, String otpCode, int expiryMinutes) {
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(EMAIL_USERNAME, EMAIL_FROM_NAME, StandardCharsets.UTF_8.name()));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-            message.setSubject("Ma OTP xac thuc dang ky - HairGlow", StandardCharsets.UTF_8.name());
-
-            String html = """
-                <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
-                  <h2 style="color:#2c5940;">Xac thuc dang ky tai khoan</h2>
-                  <p>Cam on ban da dang ky tai khoan HairGlow.</p>
-                  <p>Ma OTP xac thuc cua ban:</p>
-                  <div style="font-size:28px;font-weight:700;letter-spacing:8px;color:#2c5940;margin:12px 0 18px 0;">%s</div>
-                  <p>Ma co hieu luc trong %d phut.</p>
-                  <p>Neu ban khong thuc hien dang ky, vui long bo qua email nay.</p>
-                  <p style="color:#64748b;font-size:12px;">Email tu dong, vui long khong tra loi.</p>
-                </div>
-            """.formatted(otpCode, expiryMinutes);
-
-            message.setContent(html, "text/html; charset=UTF-8");
-            Transport.send(message);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     private static Properties loadConfig() {
         try (InputStream is = EmailService.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
@@ -177,24 +127,4 @@ public class EmailService {
         }
         return v;
     }
-
-    private static String getMailPassword(Properties p) {
-        String password = p.getProperty("mail.app_password");
-        if (password == null || password.isBlank()) {
-            password = p.getProperty("mail.password");
-        }
-        if (password == null || password.isBlank()) {
-            throw new RuntimeException("Thieu cau hinh: mail.app_password (hoac mail.password) trong " + CONFIG_FILE);
-        }
-        return password;
-    }
-
-    private static String propOrDefault(Properties p, String key, String defaultValue) {
-        String value = p.getProperty(key);
-        if (value == null || value.isBlank()) {
-            return defaultValue;
-        }
-        return value.trim();
-    }
-
 }

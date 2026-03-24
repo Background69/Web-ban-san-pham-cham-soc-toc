@@ -32,22 +32,27 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String redirect = request.getParameter("redirect");
 
-        if (email == null || password == null ||
-                email.trim().isEmpty() || password.trim().isEmpty()) {
-            request.setAttribute("error", "Vui lòng nhập đầy đủ Email và Mật khẩu");
+        email = email == null ? "" : email.trim();
+        password = password == null ? "" : password;
+
+        if (email.trim().isEmpty() || password.trim().isEmpty()) {
+            request.setAttribute("error", "Vui lòng nhập đầy đủ Email/Tên đăng nhập và Mật khẩu");
+            request.setAttribute("email", email);
+            request.setAttribute("redirect", redirect);
             request.getRequestDispatcher("/authentication/login.jsp").forward(request, response);
             return;
         }
 
-        User user = authService.login(email.trim(), password);
+        User user = authService.login(email, password);
 
         if (user == null) {
-            request.setAttribute("error", "Email hoặc mật khẩu không đúng");
+            request.setAttribute("error", authService.getLastError());
+            request.setAttribute("email", email);
+            request.setAttribute("redirect", redirect);
             request.getRequestDispatcher("/authentication/login.jsp").forward(request, response);
             return;
         }
