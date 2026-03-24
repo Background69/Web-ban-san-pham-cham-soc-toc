@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
@@ -26,7 +26,7 @@
                  class="logo" alt="HairGlow Logo">
 
             <h1>Quên mật khẩu</h1>
-            <p class="subtitle">Nhập email đã liên kết với tài khoản</p>
+            <p class="subtitle">Nhập email để nhận mã OTP đặt lại mật khẩu</p>
 
             <c:if test="${not empty message}">
                 <div class="success-msg">${message}</div>
@@ -43,8 +43,12 @@
                            placeholder="Nhập email của bạn" required autocomplete="email">
                 </div>
 
-                <button type="submit" class="btn-login">Gửi link đặt lại mật khẩu</button>
+                <button type="submit" class="btn-login">Gửi mã OTP</button>
             </form>
+
+            <div class="mt-3 text-center">
+                <a href="${pageContext.request.contextPath}/reset-password">Tới trang nhập OTP</a>
+            </div>
 
             <p class="signup-text">
                 Còn nhớ mật khẩu?
