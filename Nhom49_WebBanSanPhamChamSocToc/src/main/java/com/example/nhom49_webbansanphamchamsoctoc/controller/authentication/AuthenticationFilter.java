@@ -17,7 +17,11 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/checkout/*", "/profile/*", "/orders/*"})
+@WebFilter(filterName = "AuthenticationFilter", urlPatterns = {
+        "/checkout", "/checkout/*",
+        "/profile", "/profile/*",
+        "/orders", "/orders/*"
+})
 public class AuthenticationFilter implements Filter {
 
     @Override
