@@ -41,8 +41,7 @@
         </div>
     </div>
 
-    <!-- TODO: nếu bạn có servlet UpdateProfile thì giữ, không thì đổi action -->
-    <form action="${pageContext.request.contextPath}/UpdateProfile" method="post" class="profile-right">
+    <form action="${pageContext.request.contextPath}/profile/edit" method="post" class="profile-right">
 
         <div>
             <label>Số điện thoại</label>
