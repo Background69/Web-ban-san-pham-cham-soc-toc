@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @WebServlet(name = "OtpController", value = "/auth/verify-otp")
 public class OtpController extends HttpServlet {
     private final OtpVerificationDAO otpVerificationDAO = new OtpVerificationDAO();
-    private final AuthenticationService authenticationService = new AuthenticationService();
     private final PendingRegistrationDAO pendingRegistrationDAO = new PendingRegistrationDAO();
 
     private static final int MAX_OTP_ATTEMPTS = 5;
@@ -50,6 +49,13 @@ public class OtpController extends HttpServlet {
 
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return
+     * @throws IOException
+     */
     private OtpVerificationDAO.OtpPurpose parseOtpPurpose(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         String purposeRaw = (String) req.getSession().getAttribute("otpPurpose");
