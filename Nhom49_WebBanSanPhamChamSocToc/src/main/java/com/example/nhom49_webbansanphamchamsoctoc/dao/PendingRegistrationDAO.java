@@ -118,7 +118,7 @@ public class PendingRegistrationDAO {
                     .bind("password", pending.getPasswordHash())
                     .bind("phone", pending.getPhone())
                     .bind("avatar", "avatar/avatar.jpg")
-                    .bind("role", "Khach hang")
+                    .bind("role", "Khách hàng")
                     .bind("isActive", true)
                     .bind("googleId", (String) null)
                     .bind("authProvider", "LOCAL")
