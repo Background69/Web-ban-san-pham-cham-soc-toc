@@ -31,6 +31,10 @@
             <c:if test="${not empty error}">
                 <div class="error-msg">${error}</div>
             </c:if>
+            <c:if test="${not empty sessionScope.success}">
+                <div class="success-msg">${sessionScope.success}</div>
+                <c:remove var="success" scope="session"/>
+            </c:if>
             <%
                 String redirect = request.getParameter("redirect");
                 if (redirect == null) redirect = "";
@@ -57,7 +61,7 @@
                 </div>
 
                 <div class="options">
-                    <a href="${pageContext.request.contextPath}/authentication/forgot-password.jsp">Quên mật khẩu?</a>
+                    <a href="${pageContext.request.contextPath}/auth/forgot-password">Quên mật khẩu?</a>
                 </div>
 
                 <button type="submit" class="btn-login">Đăng nhập</button>
