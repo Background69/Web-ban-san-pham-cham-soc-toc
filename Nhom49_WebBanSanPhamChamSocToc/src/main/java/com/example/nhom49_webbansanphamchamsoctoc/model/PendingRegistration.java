@@ -7,14 +7,17 @@ public class PendingRegistration {
     private String email;
     private String username;
     private String fullName;
-    private String phone;
     private String passwordHash;
+    private String phone;
     private String otpCode;
     private Timestamp otpExpiry;
     private int attempts;
-    private boolean verified;
+    private boolean isVerified;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    public PendingRegistration() {
+    }
 
     public int getPendingId() {
         return pendingId;
@@ -48,20 +51,20 @@ public class PendingRegistration {
         this.fullName = fullName;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getPasswordHash() {
         return passwordHash;
     }
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getOtpCode() {
@@ -89,11 +92,11 @@ public class PendingRegistration {
     }
 
     public boolean isVerified() {
-        return verified;
+        return isVerified;
     }
 
     public void setVerified(boolean verified) {
-        this.verified = verified;
+        isVerified = verified;
     }
 
     public Timestamp getCreatedAt() {

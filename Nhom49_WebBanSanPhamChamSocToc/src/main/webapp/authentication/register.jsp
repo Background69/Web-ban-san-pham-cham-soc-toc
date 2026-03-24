@@ -37,11 +37,19 @@
                     <input type="email" id="email" name="email" placeholder="Nhập email" required
                            value="${email}">
                 </div>
+
+                <div class="form-group">
+                    <label for="fullname">Họ tên</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Nhập họ tên" required
+                           value="${fullname}">
+                </div>
+
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" placeholder="Nhập username" required
                            value="${username}">
                 </div>
+
                 <div class="form-group">
                     <label for="phone">Số điện thoại</label>
                     <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại" required
