@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -53,7 +53,7 @@
                 giá</a></li>
         </ul>
 
-        <a class="view-site" href="${pageContext.request.contextPath}/index">
+        <a class="view-site" href="${pageContext.request.contextPath}/">
             Quay lại Website
         </a>
     </aside>
@@ -88,7 +88,7 @@
                                      alt="${b.brandName}">
                             </c:when>
                             <c:otherwise>
-                                <div class="thumb-placeholder">🏪</div>
+                                <div class="thumb-placeholder"></div>
                             </c:otherwise>
                         </c:choose>
                     </td>

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -293,12 +293,12 @@
                             <c:when
                                     test="${p.defaultVariant != null && p.defaultVariant.salePrice != null && p.defaultVariant.salePrice > 0}">
                                 <fmt:formatNumber value="${p.defaultVariant.salePrice}"
-                                                  type="number"/> ₫
+                                                  type="number"/> &#8363;
                             </c:when>
                             <c:when
                                     test="${p.defaultVariant != null && p.defaultVariant.originalPrice != null && p.defaultVariant.originalPrice > 0}">
                                 <fmt:formatNumber value="${p.defaultVariant.originalPrice}"
-                                                  type="number"/> ₫
+                                                  type="number"/> &#8363;
                             </c:when>
                             <c:otherwise>-</c:otherwise>
                         </c:choose>
@@ -341,7 +341,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="modal-title">Thêm sản phẩm</h2>
-            <button class="close" type="button" onclick="closeModal()">×</button>
+            <button class="close" type="button" onclick="closeModal()">Ã—</button>
         </div>
 
         <form action="${pageContext.request.contextPath}/admin/products" method="post"
@@ -405,7 +405,7 @@
                                 <input type="number" name="variantStock[]" placeholder="Tồn kho" min="0"
                                        value="0">
                                 <button type="button" class="btn-variant-remove"
-                                        onclick="removeVariantRow(this)" title="Xóa biến thể">×
+                                        onclick="removeVariantRow(this)" title="Xóa biến thể">✕
                                 </button>
                             </div>
                         </div>
@@ -467,7 +467,7 @@
             '<input type="number" name="variantOriginalPrice[]" placeholder="Giá gốc" min="0" required>' +
             '<input type="number" name="variantSalePrice[]" placeholder="Giá sale" min="0">' +
             '<input type="number" name="variantStock[]" placeholder="Tồn kho" min="0" value="0">' +
-            '<button type="button" class="btn-variant-remove" onclick="removeVariantRow(this)" title="Xóa biến thể">×</button>';
+            '<button type="button" class="btn-variant-remove" onclick="removeVariantRow(this)" title="Xóa biến thể">✕</button>';
         container.appendChild(newRow);
     }
 
