@@ -30,8 +30,8 @@
         <a href="${pageContext.request.contextPath}/profile/orders" class="tab-link active">
             <i class="fas fa-box"></i>
             <span>Đơn hàng</span>
-            <c:if test="${orderCounts != null && orderCounts.ALL > 0}">
-                <span class="tab-count">${orderCounts.ALL}</span>
+            <c:if test="${orderCounts != null && orderCounts.all > 0}">
+                <span class="tab-count">${orderCounts.all}</span>
             </c:if>
         </a>
         <a href="${pageContext.request.contextPath}/profile/addresses" class="tab-link">
@@ -59,45 +59,45 @@
         <!-- Order Filter Tabs -->
         <div class="order-filter-tabs">
             <a href="${pageContext.request.contextPath}/profile/orders"
-               class="order-filter-btn ${empty status || status == 'ALL' ? 'active' : ''}">
+               class="order-filter-btn ${empty status || status == 'all' ? 'active' : ''}">
                 Tất cả
                 <c:if test="${orderCounts != null}">
-                    <span class="count">${orderCounts.ALL}</span>
+                    <span class="count">${orderCounts.all}</span>
                 </c:if>
             </a>
             <a href="${pageContext.request.contextPath}/profile/orders?status=pending"
                class="order-filter-btn ${status == 'pending' ? 'active' : ''}">
                 <i class="fas fa-clock"></i> Chờ xác nhận
-                <c:if test="${orderCounts != null && orderCounts.PENDING > 0}">
-                    <span class="count">${orderCounts.PENDING}</span>
+                <c:if test="${orderCounts != null && orderCounts.pending > 0}">
+                    <span class="count">${orderCounts.pending}</span>
                 </c:if>
             </a>
             <a href="${pageContext.request.contextPath}/profile/orders?status=confirmed"
                class="order-filter-btn ${status == 'confirmed' ? 'active' : ''}">
                 <i class="fas fa-check"></i> Đã xác nhận
-                <c:if test="${orderCounts != null && orderCounts.CONFIRMED > 0}">
-                    <span class="count">${orderCounts.CONFIRMED}</span>
+                <c:if test="${orderCounts != null && orderCounts.confirmed > 0}">
+                    <span class="count">${orderCounts.confirmed}</span>
                 </c:if>
             </a>
             <a href="${pageContext.request.contextPath}/profile/orders?status=shipping"
                class="order-filter-btn ${status == 'shipping' ? 'active' : ''}">
                 <i class="fas fa-truck"></i> Đang giao
-                <c:if test="${orderCounts != null && orderCounts.SHIPPING > 0}">
-                    <span class="count">${orderCounts.SHIPPING}</span>
+                <c:if test="${orderCounts != null && orderCounts.shipping > 0}">
+                    <span class="count">${orderCounts.shipping}</span>
                 </c:if>
             </a>
             <a href="${pageContext.request.contextPath}/profile/orders?status=completed"
                class="order-filter-btn ${status == 'completed' ? 'active' : ''}">
                 <i class="fas fa-check-circle"></i> Hoàn thành
-                <c:if test="${orderCounts != null && orderCounts.COMPLETED > 0}">
-                    <span class="count">${orderCounts.COMPLETED}</span>
+                <c:if test="${orderCounts != null && orderCounts.completed > 0}">
+                    <span class="count">${orderCounts.completed}</span>
                 </c:if>
             </a>
             <a href="${pageContext.request.contextPath}/profile/orders?status=cancelled"
                class="order-filter-btn ${status == 'cancelled' ? 'active' : ''}">
                 <i class="fas fa-times-circle"></i> Đã hủy
-                <c:if test="${orderCounts != null && orderCounts.CANCELLED > 0}">
-                    <span class="count">${orderCounts.CANCELLED}</span>
+                <c:if test="${orderCounts != null && orderCounts.cancelled > 0}">
+                    <span class="count">${orderCounts.cancelled}</span>
                 </c:if>
             </a>
         </div>
@@ -131,15 +131,15 @@
                                 <span
                                         class="order-status status-${order.orderStatus != null ? order.orderStatus.toLowerCase() : 'pending'}">
                                                     <c:choose>
-                                                        <c:when test="${order.orderStatus == 'PENDING'}"><i
+                                                        <c:when test="${order.orderStatus == 'pending'}"><i
                                                                 class="fas fa-clock"></i> Chờ xác nhận</c:when>
-                                                        <c:when test="${order.orderStatus == 'CONFIRMED'}"><i
+                                                        <c:when test="${order.orderStatus == 'confirmed'}"><i
                                                                 class="fas fa-check"></i> Đã xác nhận</c:when>
-                                                        <c:when test="${order.orderStatus == 'SHIPPING'}"><i
+                                                        <c:when test="${order.orderStatus == 'shipping'}"><i
                                                                 class="fas fa-truck"></i> Đang giao hàng</c:when>
-                                                        <c:when test="${order.orderStatus == 'COMPLETED'}"><i
+                                                        <c:when test="${order.orderStatus == 'completed'}"><i
                                                                 class="fas fa-check-circle"></i> Hoàn thành</c:when>
-                                                        <c:when test="${order.orderStatus == 'CANCELLED'}"><i
+                                                        <c:when test="${order.orderStatus == 'cancelled'}"><i
                                                                 class="fas fa-times-circle"></i> Đã hủy</c:when>
                                                         <c:otherwise>${order.orderStatus}</c:otherwise>
                                                     </c:choose>
@@ -199,7 +199,7 @@
                                        class="btn-order btn-order-primary">
                                         <i class="fas fa-eye"></i> Xem chi tiết
                                     </a>
-                                    <c:if test="${order.orderStatus == 'PENDING'}">
+                                    <c:if test="${order.orderStatus == 'pending'}">
                                         <form
                                                 action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel"
                                                 method="post" style="display: inline;">
@@ -209,7 +209,7 @@
                                             </button>
                                         </form>
                                     </c:if>
-                                    <c:if test="${order.orderStatus == 'COMPLETED'}">
+                                    <c:if test="${order.orderStatus == 'completed'}">
                                         <a href="${pageContext.request.contextPath}/store"
                                            class="btn-order btn-order-outline">
                                             <i class="fas fa-redo"></i> Mua lại
@@ -228,7 +228,7 @@
                         <h4 class="empty-state-title">Chưa có đơn hàng nào</h4>
                         <p class="empty-state-text">
                             <c:choose>
-                                <c:when test="${not empty status && status != 'ALL'}">
+                                <c:when test="${not empty status && status != 'all'}">
                                     Không có đơn hàng nào ở trạng thái này
                                 </c:when>
                                 <c:otherwise>
