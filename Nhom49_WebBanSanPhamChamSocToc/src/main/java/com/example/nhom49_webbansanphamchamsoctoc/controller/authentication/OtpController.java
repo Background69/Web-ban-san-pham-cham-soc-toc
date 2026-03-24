@@ -50,7 +50,9 @@ public class OtpController extends HttpServlet {
     }
 
     /**
-     *
+     * Phân tích mục đích OTP từ session để xác định luồng xử lý tiếp theo.
+     * Nếu không tìm thấy hoặc không hợp lệ, sẽ chuyển hướng về trang đăng nhập.
+     * Mục đích OTP được lưu trong session khi gửi OTP, ví dụ: "FORGOT_PASSWORD" hoặc "REGISTER".
      * @param req
      * @param resp
      * @return
