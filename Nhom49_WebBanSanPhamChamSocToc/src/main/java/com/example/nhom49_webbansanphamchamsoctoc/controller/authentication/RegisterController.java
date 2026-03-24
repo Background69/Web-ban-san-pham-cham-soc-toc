@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "RegisterController", urlPatterns = {"/auth/register"})
 public class RegisterController extends HttpServlet {
@@ -48,7 +50,8 @@ public class RegisterController extends HttpServlet {
         User user = authService.register(email, username, phone, password, confirmPassword);
 
         if (user != null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login");
+            response.sendRedirect(request.getContextPath() + "/auth/verify-registration?email=" +
+                    URLEncoder.encode(user.getEmail(), StandardCharsets.UTF_8));
             return;
         }
 
