@@ -75,7 +75,7 @@
                                 <div class="cart-item-details">
                                     <h3 class="cart-item-name">
                                         <a
-                                                href="${pageContext.request.contextPath}/product/${item.product.productId}">
+                                                href="${pageContext.request.contextPath}/product/${item.productSlug}">
                                                 ${item.product.productName}
                                         </a>
                                     </h3>

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <c:set var="activeMenu" value="products"/>
 
@@ -23,7 +23,7 @@
             background: #fff;
             border-radius: 16px;
             padding: 32px;
-            max-width: 900px;
+            max-width: 980px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
         }
 
@@ -71,7 +71,6 @@
             min-height: 100px;
         }
 
-        /* Variant Styles */
         .variants-section {
             border: 1px solid #e0e0e0;
             border-radius: 12px;
@@ -94,7 +93,7 @@
 
         .variant-row {
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 0.8fr auto;
+            grid-template-columns: 1.4fr 1.2fr 1fr 1fr 0.8fr auto;
             gap: 10px;
             align-items: center;
             padding: 14px;
@@ -168,6 +167,12 @@
             color: #374151;
         }
 
+        @media (max-width: 920px) {
+            .variant-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         @media (max-width: 720px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -175,10 +180,6 @@
 
             .form-group.span-2 {
                 grid-column: span 1;
-            }
-
-            .variant-row {
-                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
@@ -256,7 +257,6 @@
                         </select>
                     </div>
 
-                    <!-- Variants Section -->
                     <div class="form-group span-2">
                         <div class="variants-section">
                             <h3>Biến thể sản phẩm <span
@@ -267,15 +267,16 @@
                                     <c:when test="${not empty variants}">
                                         <c:forEach var="v" items="${variants}">
                                             <div class="variant-row">
-                                                <input type="text" name="variantName[]"
-                                                       value="${v.variantName}"
-                                                       placeholder="Tên (vd: 100ml)" required>
+                                                <input type="text" name="variantName[]" value="${v.variantName}"
+                                                       placeholder="Tên (VD: 100ml)" required>
+                                                <input type="text" name="variantSku[]" value="${v.sku}"
+                                                       placeholder="SKU">
                                                 <input type="number" name="variantOriginalPrice[]"
                                                        value="${v.originalPrice}" placeholder="Giá gốc"
-                                                       min="0" required>
+                                                       min="1" step="0.01" required>
                                                 <input type="number" name="variantSalePrice[]"
                                                        value="${v.salePrice}" placeholder="Giá sale"
-                                                       min="0">
+                                                       min="0" step="0.01">
                                                 <input type="number" name="variantStock[]"
                                                        value="${v.stockQuantity}" placeholder="Tồn kho"
                                                        min="0">
@@ -289,11 +290,13 @@
                                     <c:otherwise>
                                         <div class="variant-row">
                                             <input type="text" name="variantName[]"
-                                                   placeholder="Tên (vd: 100ml)" required>
+                                                   placeholder="Tên (VD: 100ml)" required>
+                                            <input type="text" name="variantSku[]"
+                                                   placeholder="SKU">
                                             <input type="number" name="variantOriginalPrice[]"
-                                                   placeholder="Giá gốc" min="0" required>
+                                                   placeholder="Giá gốc" min="1" step="0.01" required>
                                             <input type="number" name="variantSalePrice[]"
-                                                   placeholder="Giá sale" min="0">
+                                                   placeholder="Giá sale" min="0" step="0.01">
                                             <input type="number" name="variantStock[]"
                                                    placeholder="Tồn kho" min="0" value="0">
                                             <button type="button" class="btn-variant-remove"
@@ -304,8 +307,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </div>
-                            <button type="button" class="btn-add-variant" onclick="addVariantRow()">+
-                                Thêm biến thể
+                            <button type="button" class="btn-add-variant" onclick="addVariantRow()">+ Them bien the
                             </button>
                         </div>
                     </div>
@@ -323,6 +325,18 @@
                     </div>
 
                     <div class="form-group span-2">
+                        <label>Thành phần</label>
+                        <textarea name="ingredients" rows="4"
+                                  placeholder="Liệt kê thành phần...">${product.ingredients}</textarea>
+                    </div>
+
+                    <div class="form-group span-2">
+                        <label>Hướng dẫn sử dụng</label>
+                        <textarea name="usageInstructions" rows="4"
+                                  placeholder="Nhập hướng dẫn sử dụng...">${product.usageInstructions}</textarea>
+                    </div>
+
+                    <div class="form-group span-2">
                         <label>Ảnh sản phẩm</label>
                         <input type="file" name="image" accept="image/*">
                         <c:if test="${not empty product.primaryImageUrl}">
@@ -330,8 +344,7 @@
                                 <img src="${pageContext.request.contextPath}/static/${product.primaryImageUrl}"
                                      alt="Current image"
                                      style="max-width:120px;border-radius:8px;border:1px solid #eee">
-                                <span style="margin-left:10px;color:#666;font-size:13px">Ảnh hiện
-                                                    tại</span>
+                                <span style="margin-left:10px;color:#666;font-size:13px">Anh hien tai</span>
                             </div>
                         </c:if>
                     </div>

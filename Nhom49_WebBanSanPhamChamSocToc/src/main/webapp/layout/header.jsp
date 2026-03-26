@@ -31,11 +31,15 @@
         border-radius: 50%;
         overflow: hidden;
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .user-avatar {
         width: 100%;
         height: 100%;
+        display: block;
         object-fit: cover;
         border: 2px solid white;
         border-radius: 50%;
@@ -58,6 +62,7 @@
     .default-avatar i {
         color: white;
         font-size: 16px;
+        line-height: 1;
     }
 
     /* User Name */
@@ -120,11 +125,15 @@
         border-radius: 50%;
         overflow: hidden;
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .dropdown-avatar img {
         width: 100%;
         height: 100%;
+        display: block;
         object-fit: cover;
         border: 2px solid rgba(255, 255, 255, 0.5);
         border-radius: 50%;
@@ -144,6 +153,7 @@
     .default-avatar-large i {
         color: white;
         font-size: 20px;
+        line-height: 1;
     }
 
     .dropdown-user-info {
@@ -376,6 +386,30 @@
                     <%-- TRẠNG THÁI: ĐÃ ĐĂNG NHẬP --%>
                     <c:otherwise>
                         <%-- Giỏ hàng --%>
+                        <c:set var="avatarValue" value="${sessionScope.currentUser.avatar}"/>
+                        <c:set var="hasCustomAvatar"
+                               value="${not empty avatarValue && avatarValue != 'avatar/avatar.jpg'}"/>
+                        <c:set var="resolvedAvatarSrc" value=""/>
+                        <c:if test="${hasCustomAvatar}">
+                            <c:choose>
+                                <c:when test="${avatarValue.startsWith('http')}">
+                                    <c:set var="resolvedAvatarSrc" value="${avatarValue}"/>
+                                </c:when>
+                                <c:when test="${avatarValue.startsWith('/static/')}">
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}${avatarValue}"/>
+                                </c:when>
+                                <c:when test="${avatarValue.startsWith('static/')}">
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}/${avatarValue}"/>
+                                </c:when>
+                                <c:when test="${avatarValue.startsWith('/')}">
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}${avatarValue}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}/static/${avatarValue}"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+
                         <div class="cart position-relative">
                             <a href="${pageContext.request.contextPath}/cart">
                                 <i class="fas fa-shopping-cart"></i>
@@ -396,19 +430,14 @@
                                     <%-- Avatar --%>
                                 <div class="user-avatar-wrapper">
                                     <c:choose>
-                                        <c:when
-                                                test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                                            <c:choose>
-                                                <c:when
-                                                        test="${sessionScope.currentUser.avatar.startsWith('http')}">
-                                                    <img src="${sessionScope.currentUser.avatar}"
-                                                         alt="Avatar" class="user-avatar">
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
-                                                         alt="Avatar" class="user-avatar">
-                                                </c:otherwise>
-                                            </c:choose>
+                                        <c:when test="${hasCustomAvatar}">
+                                            <img src="${resolvedAvatarSrc}"
+                                                 alt="Avatar"
+                                                 class="user-avatar"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <div class="default-avatar" style="display: none;">
+                                                <i class="fas fa-user"></i>
+                                            </div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="default-avatar">
@@ -428,19 +457,13 @@
                                 <div class="dropdown-header">
                                     <div class="dropdown-avatar">
                                         <c:choose>
-                                            <c:when
-                                                    test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                                                <c:choose>
-                                                    <c:when
-                                                            test="${sessionScope.currentUser.avatar.startsWith('http')}">
-                                                        <img src="${sessionScope.currentUser.avatar}"
-                                                             alt="Avatar">
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
-                                                             alt="Avatar">
-                                                    </c:otherwise>
-                                                </c:choose>
+                                            <c:when test="${hasCustomAvatar}">
+                                                <img src="${resolvedAvatarSrc}"
+                                                     alt="Avatar"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div class="default-avatar-large" style="display: none;">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="default-avatar-large">

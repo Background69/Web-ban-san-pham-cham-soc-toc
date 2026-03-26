@@ -55,25 +55,36 @@ public class ForgotPasswordController extends HttpServlet {
         String otpCode = OtpUtil.otpGenerate(6);
         Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-        int otpId = otpVerificationDAO.createOtp(user.getUserId(), otpCode, OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD, expiry);
+        int otpId = otpVerificationDAO.createOtp(
+                user.getUserId(),
+                otpCode,
+                OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD,
+                expiry);
+
         if (otpId == -1) {
             request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
             request.getRequestDispatcher("/authentication/forgot-password.jsp").forward(request, response);
             return;
         }
 
-        String verifyOtpLink  = request.getScheme() + "://" + request.getServerName()
+        String verifyOtpLink = request.getScheme() + "://" + request.getServerName()
                 + ":" + request.getServerPort()
                 + request.getContextPath()
                 + "/auth/verify-otp";
 
-        boolean sent = emailService.sendResetPasswordOtpEmail(email, otpCode, verifyOtpLink , OTP_EXPIRY_MINUTES);
+        boolean sent = emailService.sendResetPasswordOtpEmail(email, otpCode, verifyOtpLink, OTP_EXPIRY_MINUTES);
 
         if (!sent) {
             request.setAttribute("error", "Khong gui duoc email. Vui long thu lai sau.");
             request.getRequestDispatcher("/authentication/forgot-password.jsp").forward(request, response);
             return;
         }
+
+        long now = System.currentTimeMillis();
+        long otpExpiryAt = now + OTP_EXPIRY_MINUTES * 60_000L;
+
+        request.getSession().setAttribute("otpLastSentAt", now);
+        request.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
 
         request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
         request.getSession().setAttribute("otpPendingUserId", user.getUserId());

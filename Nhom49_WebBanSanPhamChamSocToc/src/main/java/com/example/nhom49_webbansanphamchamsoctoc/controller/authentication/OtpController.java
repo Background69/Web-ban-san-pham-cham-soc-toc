@@ -1,8 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
-import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
+import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +16,8 @@ import java.time.LocalDateTime;
 @WebServlet(name = "OtpController", value = "/auth/verify-otp")
 public class OtpController extends HttpServlet {
     private final OtpVerificationDAO otpVerificationDAO = new OtpVerificationDAO();
-    private final AuthenticationService authenticationService = new AuthenticationService();
+    private final PendingRegistrationDAO pendingRegistrationDAO = new PendingRegistrationDAO();
+
     private static final int MAX_OTP_ATTEMPTS = 5;
 
 
@@ -25,25 +27,18 @@ public class OtpController extends HttpServlet {
         request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
     }
 
+    /**
+     * Xử lý xác nhận OTP cho cả hai trường hợp: quên mật khẩu và đăng ký tài khoản mới.
+     * Mục đích OTP được xác định thông qua session, và luồng xử lý
+     * sẽ khác nhau tùy vào mục đích đó. Sau khi xác nhận OTP thành công, sẽ chuyển hướng
+     * đến trang đặt lại mật khẩu hoặc trang đăng nhập với thông báo thành công tương ứng.
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        Integer otpPendingUserId = (Integer) req.getSession().getAttribute("otpPendingUserId");
-        String purposeRaw = (String) req.getSession().getAttribute("otpPurpose");
-
-        if (otpPendingUserId == null || purposeRaw == null || purposeRaw.isBlank()) {
-            resp.sendRedirect(req.getContextPath() + "/auth/login");
-            return;
-        }
-
-        OtpVerificationDAO.OtpPurpose otpPurpose;
-        try {
-            otpPurpose = OtpVerificationDAO.OtpPurpose.valueOf(purposeRaw);
-        } catch (Exception e) {
-            resp.sendRedirect(req.getContextPath() + "/auth/login");
-            return;
-        }
+        OtpVerificationDAO.OtpPurpose otpPurpose = parseOtpPurpose(req, resp);
+        if (otpPurpose == null) return;
 
         String otpCode = trim(req.getParameter("otp"));
         if (!isValidOtpCode(otpCode)) {
@@ -51,7 +46,64 @@ public class OtpController extends HttpServlet {
             return;
         }
 
-        OtpVerification otp = otpVerificationDAO.findLatestOtpByUserId(otpPendingUserId, otpPurpose);
+        switch (otpPurpose) {
+            case FORGOT_PASSWORD -> handleForgotPasswordOtp(req, resp, otpCode);
+            case REGISTER -> handleRegisterOtp(req, resp, otpCode);
+            default -> resp.sendRedirect(req.getContextPath() + "/auth/login");
+        }
+
+    }
+
+    /**
+     * Phân tích mục đích OTP từ session để xác định luồng xử lý tiếp theo.
+     * Nếu không tìm thấy hoặc không hợp lệ, sẽ chuyển hướng về trang đăng nhập.
+     * Mục đích OTP được lưu trong session khi gửi OTP, ví dụ: "FORGOT_PASSWORD" hoặc "REGISTER".
+     * @param req
+     * @param resp
+     * @return
+     * @throws IOException
+     */
+    private OtpVerificationDAO.OtpPurpose parseOtpPurpose(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        String purposeRaw = (String) req.getSession().getAttribute("otpPurpose");
+        if (purposeRaw == null || purposeRaw.isBlank()) {
+            resp.sendRedirect(req.getContextPath() + "/auth/login");
+            return null;
+        }
+
+        try {
+            return OtpVerificationDAO.OtpPurpose.valueOf(purposeRaw);
+        } catch (Exception e) {
+            resp.sendRedirect(req.getContextPath() + "/auth/login");
+            return null;
+        }
+    }
+
+    /**
+     * Xử lý xác nhận OTP cho trường hợp quên mật khẩu.
+     * luồng: 
+     * - Kiểm tra session để lấy userId đang chờ OTP
+     * - Truy vấn OTP mới nhất cho userId đó với mục đích FORGOT_PASSWORD, kiểm tra tồn tại, thời hạn, số lần thử, và mã OTP
+     * - Nếu hợp lệ, đánh dấu OTP đã xác minh, lưu userId đã xác minh vào session, và chuyển hướng đến trang đặt lại mật khẩu
+     * @param req
+     * @param resp
+     * @param otpCode
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void handleForgotPasswordOtp(HttpServletRequest req, HttpServletResponse resp, String otpCode)
+            throws ServletException, IOException {
+
+        Integer otpPendingUserId = (Integer) req.getSession().getAttribute("otpPendingUserId");
+        if (otpPendingUserId == null) {
+            resp.sendRedirect(req.getContextPath() + "/auth/forgot-password");
+            return;
+        }
+
+        OtpVerification otp = otpVerificationDAO.findLatestOtpByUserId(
+                otpPendingUserId, OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD
+        );
+
         if (otp == null) {
             forwardWithError(req, resp, "Mã OTP không hợp lệ.");
             return;
@@ -73,63 +125,91 @@ public class OtpController extends HttpServlet {
         }
 
         if (!otp.getOtpCode().equals(otpCode)) {
-            if (!otpVerificationDAO.incrementAttempts(otp.getOtpId())) {
-                forwardWithError(req, resp, "Có lỗi xảy ra, vui lòng thử lại.");
-                return;
-            }
-
+            otpVerificationDAO.incrementAttempts(otp.getOtpId());
             int newAttempts = otp.getAttempts() + 1;
-            if (newAttempts >= MAX_OTP_ATTEMPTS) {
-                forwardWithError(req, resp, "OTP sai. Đã vượt quá số lần nhập.");
-            } else {
-                forwardWithError(req, resp, "OTP không đúng.");
-            }
+            forwardWithError(req, resp, newAttempts >= MAX_OTP_ATTEMPTS
+                    ? "OTP sai. Đã vượt quá số lần nhập."
+                    : "OTP không đúng.");
             return;
         }
 
-
-        if (otpPurpose == OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD) {
-            boolean markOtp = otpVerificationDAO.markVerified(otp.getOtpId());
-            if (!markOtp) {
-                forwardWithError(req, resp, "Có lỗi xảy ra khi xác nhận OTP, vui lòng thử lại");
-                return;
-            }
-
-            req.getSession().setAttribute("otpVerifiedUserId", otpPendingUserId);
-
-            req.getSession().removeAttribute("otpPendingUserId");
-            req.getSession().removeAttribute("otpPendingEmail");
-            req.getSession().removeAttribute("otpPurpose");
-            req.getSession().removeAttribute("otpLastSentAt");
-
-
-            resp.sendRedirect(req.getContextPath() + "/reset-password");
+        boolean marked = otpVerificationDAO.markVerified(otp.getOtpId());
+        if (!marked) {
+            forwardWithError(req, resp, "Có lỗi xảy ra khi xác nhận OTP, vui lòng thử lại.");
             return;
         }
 
-        if (otpPurpose == OtpVerificationDAO.OtpPurpose.REGISTER) {
-            boolean activated = authenticationService.setActiveStatus(otpPendingUserId, true);
-            if (!activated) {
-                forwardWithError(req, resp, "Không thể kích hoạt tài khoản");
-                return;
-            }
+        req.getSession().setAttribute("otpVerifiedUserId", otpPendingUserId);
+        clearOtpSession(req);
 
-            boolean markOtp = otpVerificationDAO.markVerified(otp.getOtpId());
-            if (!markOtp) {
-                forwardWithError(req, resp, "Có lỗi xảy ra khi xác nhận OTP, vui lòng thử lại");
-                return;
-            }
-            req.getSession().removeAttribute("otpPendingUserId");
-            req.getSession().removeAttribute("otpPendingEmail");
-            req.getSession().removeAttribute("otpPurpose");
-            req.getSession().removeAttribute("otpLastSentAt");
-
-            req.getSession().setAttribute("success", "Xác minh đăng ký thành công, vui lòng đăng nhập.");
-
-            resp.sendRedirect(req.getContextPath() + "/auth/login");
-        }
+        resp.sendRedirect(req.getContextPath() + "/reset-password");
     }
 
+    /**
+     * Xử lý xác nhận OTP cho trường hợp đăng ký tài khoản mới.
+     * luồng:
+     * - Kiểm tra session để lấy pendingRegistrationId đang chờ OTP
+     * - Truy vấn PendingRegistration theo ID đó, kiểm tra tồn tại, đã xác minh hay chưa, thời hạn OTP, số lần thử, và mã OTP
+     * - Nếu hợp lệ, tạo tài khoản mới dựa trên thông tin trong PendingRegistration, đánh dấu PendingRegistration đã xác minh, xóa thông tin OTP liên quan trong session, và chuyển hướng đến trang đăng nhập với thông báo thành công
+     * @param req
+     * @param resp
+     * @param otpCode
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void handleRegisterOtp(HttpServletRequest req, HttpServletResponse resp, String otpCode)
+            throws ServletException, IOException {
+
+        Integer pendingId = (Integer) req.getSession().getAttribute("otpPendingRegistrationId");
+        if (pendingId == null) {
+            resp.sendRedirect(req.getContextPath() + "/auth/register");
+            return;
+        }
+
+        PendingRegistration pending = pendingRegistrationDAO.findById(pendingId);
+        if (pending == null || pending.isVerified()) {
+            forwardWithError(req, resp, "Phiên đăng ký không hợp lệ. Vui lòng đăng ký lại.");
+            return;
+        }
+
+        if (pending.getOtpExpiry() == null || pending.getOtpExpiry().toLocalDateTime().isBefore(LocalDateTime.now())) {
+            forwardWithError(req, resp, "Mã OTP hết hạn sử dụng.");
+            return;
+        }
+
+        if (pending.getAttempts() >= MAX_OTP_ATTEMPTS) {
+            forwardWithError(req, resp, "Đã vượt quá số lần nhập OTP.");
+            return;
+        }
+
+        if (!pending.getOtpCode().equals(otpCode)) {
+            pendingRegistrationDAO.incrementAttempts(pendingId);
+            int newAttempts = pending.getAttempts() + 1;
+            forwardWithError(req, resp, newAttempts >= MAX_OTP_ATTEMPTS
+                    ? "OTP sai. Đã vượt quá số lần nhập."
+                    : "OTP không đúng.");
+            return;
+        }
+
+        int newUserId = pendingRegistrationDAO.createUserAndConsumePending(pendingId);
+        if (newUserId <= 0) {
+            forwardWithError(req, resp, "Không thể tạo tài khoản. Vui lòng thử lại.");
+            return;
+        }
+
+        req.getSession().removeAttribute("otpPendingRegistrationId");
+        clearOtpSession(req);
+
+        req.getSession().setAttribute("success", "Xác minh đăng ký thành công, vui lòng đăng nhập.");
+        resp.sendRedirect(req.getContextPath() + "/auth/login");
+    }
+
+    private void clearOtpSession(HttpServletRequest req) {
+        req.getSession().removeAttribute("otpPendingUserId");
+        req.getSession().removeAttribute("otpPendingEmail");
+        req.getSession().removeAttribute("otpPurpose");
+        req.getSession().removeAttribute("otpLastSentAt");
+    }
 
     private void forwardWithError(HttpServletRequest req, HttpServletResponse resp, String error) throws ServletException, IOException {
         req.setAttribute("error", error);

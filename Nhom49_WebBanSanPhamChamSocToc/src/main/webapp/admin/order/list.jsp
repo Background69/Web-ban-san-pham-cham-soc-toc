@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <c:set var="activeMenu" value="orders"/>
 
@@ -35,7 +35,7 @@
                 giá</a></li>
         </ul>
 
-        <a class="view-site" href="${pageContext.request.contextPath}/index">
+        <a class="view-site" href="${pageContext.request.contextPath}/">
             Quay lại Website
         </a>
     </aside>
@@ -64,7 +64,7 @@
 
                     <td>
                         <fmt:formatNumber value="${o.totalAmount}" type="currency"
-                                          currencySymbol="₫"/>
+                                          currencySymbol="&#8363;"/>
                     </td>
 
                     <td>

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <c:set var="activeMenu" value="flash-sale"/>
 
@@ -390,7 +390,7 @@
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
             <h2 class="modal-title"> Thêm sản phẩm vào Flash Sale</h2>
-            <button class="modal-close" onclick="closeModal()">×</button>
+            <button class="modal-close" onclick="closeModal()">X</button>
         </div>
 
         <form action="${pageContext.request.contextPath}/admin/flash-sale" method="post">
