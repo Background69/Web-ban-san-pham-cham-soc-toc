@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -149,13 +149,6 @@
                             <label class="form-label" for="phone">Số điện thoại</label>
                             <input type="text" class="form-control" name="phone" id="phone" required
                                    placeholder="Nhập số điện thoại">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="email">Email (tùy chọn)</label>
-                            <input type="email" class="form-control" name="email" id="email"
-                                   placeholder="Nhập email">
                         </div>
                     </div>
                     <div class="col-md-6">

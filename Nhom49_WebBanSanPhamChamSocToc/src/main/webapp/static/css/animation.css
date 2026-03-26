@@ -145,9 +145,15 @@
 
 /* Shake */
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
 }
 
 /* Gradient Flow */
@@ -218,18 +224,53 @@
     will-change: transform, opacity;
 }
 
-.stagger-fade > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger-fade > *:nth-child(2) { animation-delay: 0.1s; }
-.stagger-fade > *:nth-child(3) { animation-delay: 0.15s; }
-.stagger-fade > *:nth-child(4) { animation-delay: 0.2s; }
-.stagger-fade > *:nth-child(5) { animation-delay: 0.25s; }
-.stagger-fade > *:nth-child(6) { animation-delay: 0.3s; }
-.stagger-fade > *:nth-child(7) { animation-delay: 0.35s; }
-.stagger-fade > *:nth-child(8) { animation-delay: 0.4s; }
-.stagger-fade > *:nth-child(9) { animation-delay: 0.45s; }
-.stagger-fade > *:nth-child(10) { animation-delay: 0.5s; }
-.stagger-fade > *:nth-child(11) { animation-delay: 0.55s; }
-.stagger-fade > *:nth-child(12) { animation-delay: 0.6s; }
+.stagger-fade > *:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.stagger-fade > *:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.stagger-fade > *:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.stagger-fade > *:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.stagger-fade > *:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.stagger-fade > *:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+.stagger-fade > *:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.stagger-fade > *:nth-child(8) {
+    animation-delay: 0.4s;
+}
+
+.stagger-fade > *:nth-child(9) {
+    animation-delay: 0.45s;
+}
+
+.stagger-fade > *:nth-child(10) {
+    animation-delay: 0.5s;
+}
+
+.stagger-fade > *:nth-child(11) {
+    animation-delay: 0.55s;
+}
+
+.stagger-fade > *:nth-child(12) {
+    animation-delay: 0.6s;
+}
 
 .stagger-scale > * {
     opacity: 0;
@@ -237,21 +278,58 @@
     will-change: transform, opacity;
 }
 
-.stagger-scale > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger-scale > *:nth-child(2) { animation-delay: 0.1s; }
-.stagger-scale > *:nth-child(3) { animation-delay: 0.15s; }
-.stagger-scale > *:nth-child(4) { animation-delay: 0.2s; }
-.stagger-scale > *:nth-child(5) { animation-delay: 0.25s; }
-.stagger-scale > *:nth-child(6) { animation-delay: 0.3s; }
-.stagger-scale > *:nth-child(7) { animation-delay: 0.35s; }
-.stagger-scale > *:nth-child(8) { animation-delay: 0.4s; }
+.stagger-scale > *:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.stagger-scale > *:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.stagger-scale > *:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.stagger-scale > *:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.stagger-scale > *:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.stagger-scale > *:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+.stagger-scale > *:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.stagger-scale > *:nth-child(8) {
+    animation-delay: 0.4s;
+}
 
 /* Staggered Animation Delays */
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
-.delay-4 { animation-delay: 0.4s; }
-.delay-5 { animation-delay: 0.5s; }
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.delay-3 {
+    animation-delay: 0.3s;
+}
+
+.delay-4 {
+    animation-delay: 0.4s;
+}
+
+.delay-5 {
+    animation-delay: 0.5s;
+}
 
 /* ========== HOVER EFFECTS ========== */
 

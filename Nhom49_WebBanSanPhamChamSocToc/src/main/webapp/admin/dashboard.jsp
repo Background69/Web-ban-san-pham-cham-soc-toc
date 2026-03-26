@@ -1,9 +1,10 @@
 ﻿<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"  pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -22,13 +23,14 @@
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
+            <li class="active"><a
+                    href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm giá</a></li>
 
         </ul>
 
@@ -77,11 +79,49 @@
                     <tr>
                         <td>#HD${order.orderId}</td>
                         <td>${order.shippingFullName}</td>
-                        <td><fmt:formatNumber value="${order.totalAmount}" type="number"/> ₫</td>
                         <td>
-                            <span class="status ${order.orderStatus}">
-                                ${order.orderStatus}
-                            </span>
+                            <fmt:formatNumber value="${order.totalAmount}" type="number"/> ₫
+                        </td>
+                        <td>
+                            <c:set var="rawStatus" value="${order.orderStatus}"/>
+                            <c:set var="normalizedStatus"
+                                   value="${rawStatus != null ? rawStatus.toLowerCase() : ''}"/>
+                            <c:set var="statusText" value="${rawStatus}"/>
+                            <c:set var="statusClass" value="unknown"/>
+                            <c:choose>
+                                <c:when test="${normalizedStatus eq 'pending'}">
+                                    <c:set var="statusText" value="Chờ xử lý"/>
+                                    <c:set var="statusClass" value="pending"/>
+                                </c:when>
+                                <c:when test="${normalizedStatus eq 'confirmed'}">
+                                    <c:set var="statusText" value="Đã xác nhận"/>
+                                    <c:set var="statusClass" value="confirmed"/>
+                                </c:when>
+                                <c:when test="${normalizedStatus eq 'processing'}">
+                                    <c:set var="statusText" value="Đang xử lý"/>
+                                    <c:set var="statusClass" value="processing"/>
+                                </c:when>
+                                <c:when test="${normalizedStatus eq 'shipping'}">
+                                    <c:set var="statusText" value="Đang giao"/>
+                                    <c:set var="statusClass" value="shipping"/>
+                                </c:when>
+                                <c:when
+                                        test="${normalizedStatus eq 'delivered'
+                                        or normalizedStatus eq 'completed'
+                                        or normalizedStatus eq 'done'
+                                        or normalizedStatus eq 'hoàn thành'
+                                        or normalizedStatus eq 'hoan thanh'}">
+                                    <c:set var="statusText" value="Hoàn thành"/>
+                                    <c:set var="statusClass" value="completed"/>
+                                </c:when>
+                                <c:when
+                                        test="${normalizedStatus eq 'cancelled'
+                                        or normalizedStatus eq 'canceled'}">
+                                    <c:set var="statusText" value="Đã hủy"/>
+                                    <c:set var="statusClass" value="cancelled"/>
+                                </c:when>
+                            </c:choose>
+                            <span class="status ${statusClass}">${statusText}</span>
                         </td>
                     </tr>
                 </c:forEach>
@@ -144,5 +184,5 @@
     });
 </script>
 </body>
-</html>
 
+</html>

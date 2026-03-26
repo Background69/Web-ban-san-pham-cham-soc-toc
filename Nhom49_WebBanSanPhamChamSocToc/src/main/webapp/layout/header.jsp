@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -30,11 +31,15 @@
         border-radius: 50%;
         overflow: hidden;
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .user-avatar {
         width: 100%;
         height: 100%;
+        display: block;
         object-fit: cover;
         border: 2px solid white;
         border-radius: 50%;
@@ -57,6 +62,7 @@
     .default-avatar i {
         color: white;
         font-size: 16px;
+        line-height: 1;
     }
 
     /* User Name */
@@ -119,11 +125,15 @@
         border-radius: 50%;
         overflow: hidden;
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .dropdown-avatar img {
         width: 100%;
         height: 100%;
+        display: block;
         object-fit: cover;
         border: 2px solid rgba(255, 255, 255, 0.5);
         border-radius: 50%;
@@ -143,6 +153,7 @@
     .default-avatar-large i {
         color: white;
         font-size: 20px;
+        line-height: 1;
     }
 
     .dropdown-user-info {
@@ -375,6 +386,30 @@
                     <%-- TRẠNG THÁI: ĐÃ ĐĂNG NHẬP --%>
                     <c:otherwise>
                         <%-- Giỏ hàng --%>
+                        <c:set var="avatarValue" value="${sessionScope.currentUser.avatar}"/>
+                        <c:set var="hasCustomAvatar"
+                               value="${not empty avatarValue && avatarValue != 'avatar/avatar.jpg'}"/>
+                        <c:set var="resolvedAvatarSrc" value=""/>
+                        <c:if test="${hasCustomAvatar}">
+                            <c:choose>
+                                <c:when test="${avatarValue.startsWith('http')}">
+                                    <c:set var="resolvedAvatarSrc" value="${avatarValue}"/>
+                                </c:when>
+                                <c:when test="${avatarValue.startsWith('/static/')}">
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}${avatarValue}"/>
+                                </c:when>
+                                <c:when test="${avatarValue.startsWith('static/')}">
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}/${avatarValue}"/>
+                                </c:when>
+                                <c:when test="${avatarValue.startsWith('/')}">
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}${avatarValue}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}/static/${avatarValue}"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+
                         <div class="cart position-relative">
                             <a href="${pageContext.request.contextPath}/cart">
                                 <i class="fas fa-shopping-cart"></i>
@@ -395,10 +430,14 @@
                                     <%-- Avatar --%>
                                 <div class="user-avatar-wrapper">
                                     <c:choose>
-                                        <c:when
-                                                test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                                            <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
-                                                 alt="Avatar" class="user-avatar">
+                                        <c:when test="${hasCustomAvatar}">
+                                            <img src="${resolvedAvatarSrc}"
+                                                 alt="Avatar"
+                                                 class="user-avatar"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <div class="default-avatar" style="display: none;">
+                                                <i class="fas fa-user"></i>
+                                            </div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="default-avatar">
@@ -418,10 +457,13 @@
                                 <div class="dropdown-header">
                                     <div class="dropdown-avatar">
                                         <c:choose>
-                                            <c:when
-                                                    test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                                                <img src="${pageContext.request.contextPath}/static/${sessionScope.currentUser.avatar}"
-                                                     alt="Avatar">
+                                            <c:when test="${hasCustomAvatar}">
+                                                <img src="${resolvedAvatarSrc}"
+                                                     alt="Avatar"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div class="default-avatar-large" style="display: none;">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="default-avatar-large">
@@ -496,42 +538,42 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=dau-goi"><i
+                                   href="${pageContext.request.contextPath}/products?category=shampoo"><i
                                     class="fas fa-tint text-primary me-2"></i>Dầu gội</a></li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=dau-xa"><i
+                                   href="${pageContext.request.contextPath}/products?category=conditioner"><i
                                     class="fas fa-pump-soap text-info me-2"></i>Dầu xả</a></li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=kem-u"><i
+                                   href="${pageContext.request.contextPath}/products?category=mask-hair"><i
                                     class="fas fa-jar text-warning me-2"></i>Kem ủ – Mặt nạ tóc</a></li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=serum"><i
+                                   href="${pageContext.request.contextPath}/products?category=serum"><i
                                     class="fas fa-flask text-danger me-2"></i>Serum – Dầu dưỡng tóc</a></li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=xit-duong"><i
+                                   href="${pageContext.request.contextPath}/products?category=hair-care-products"><i
                                     class="fas fa-spray-can text-success me-2"></i>Xịt dưỡng – Tinh chất
                                 dưỡng</a></li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=hoa-chat"><i
+                                   href="${pageContext.request.contextPath}/products?category=hair-chemical-product"><i
                                     class="fas fa-magic text-purple me-2"></i>Thuốc uốn – Duỗi – Nhuộm</a>
                             </li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=tao-kieu"><i
+                                   href="${pageContext.request.contextPath}/products?category=hair-styling-products"><i
                                     class="fas fa-cut text-secondary me-2"></i>Gôm – Sáp – Gel tạo kiểu</a>
                             </li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=dau-goi-kho"><i
+                                   href="${pageContext.request.contextPath}/products?category=dry-shampoo"><i
                                     class="fas fa-wind text-info me-2"></i>Dầu gội khô</a></li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=moc-toc"><i
+                                   href="${pageContext.request.contextPath}/products?category=hair-serum"><i
                                     class="fas fa-seedling text-success me-2"></i>Tinh chất mọc tóc</a></li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=tri-gau"><i
+                                   href="${pageContext.request.contextPath}/products?category=hair-loss"><i
                                     class="fas fa-medkit text-danger me-2"></i>Sản phẩm trị gàu / nấm / rụng
                                 tóc</a>
                             </li>
                             <li><a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/store?category=dung-cu"><i
+                                   href="${pageContext.request.contextPath}/products?category=hair-tools"><i
                                     class="fas fa-tools text-dark me-2"></i>Dụng cụ tóc</a></li>
                         </ul>
                     </li>

@@ -1,3 +1,4 @@
+<%@ page import="java.nio.charset.StandardCharsets" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
@@ -9,8 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập - HairGlow</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/login.css">
 </head>
@@ -30,6 +30,10 @@
 
             <c:if test="${not empty error}">
                 <div class="error-msg">${error}</div>
+            </c:if>
+            <c:if test="${not empty sessionScope.success}">
+                <div class="success-msg">${sessionScope.success}</div>
+                <c:remove var="success" scope="session"/>
             </c:if>
             <%
                 String redirect = request.getParameter("redirect");
@@ -57,7 +61,7 @@
                 </div>
 
                 <div class="options">
-                    <a href="${pageContext.request.contextPath}/authentication/forgot-password.jsp">Quên mật khẩu?</a>
+                    <a href="${pageContext.request.contextPath}/auth/forgot-password">Quên mật khẩu?</a>
                 </div>
 
                 <button type="submit" class="btn-login">Đăng nhập</button>
@@ -67,7 +71,7 @@
                 <div class="social-login">
                     <a class="google-btn"
                        href="${pageContext.request.contextPath}/auth/google<%=
-        redirect.isEmpty() ? "" : "?redirect=" + java.net.URLEncoder.encode(redirect, "UTF-8")
+        redirect.isEmpty() ? "" : "?redirect=" + java.net.URLEncoder.encode(redirect, StandardCharsets.UTF_8)
    %>">
                         <img src="${pageContext.request.contextPath}/static/assets/icons/Google.png" alt="Google">
                         <span>Đăng nhập bằng Google</span>
@@ -78,7 +82,7 @@
 
             <p class="signup-text">
                 Chưa có tài khoản?
-                <a href="${pageContext.request.contextPath}/authentication/register.jsp">Đăng ký</a>
+                <a href="${pageContext.request.contextPath}/auth/register">Đăng ký</a>
 
             </p>
         </div>

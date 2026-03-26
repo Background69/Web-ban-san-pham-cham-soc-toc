@@ -10,6 +10,7 @@ public class Category {
     private int categoryId;
     private String categoryName;
     private String categorySlug;
+    private Integer parentCategoryId;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -40,6 +41,14 @@ public class Category {
 
     public void setCategorySlug(String categorySlug) {
         this.categorySlug = categorySlug;
+    }
+
+    public Integer getParentCategoryId() {
+        return parentCategoryId;
+    }
+
+    public void setParentCategoryId(Integer parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
     }
 
     public Timestamp getCreatedAt() {

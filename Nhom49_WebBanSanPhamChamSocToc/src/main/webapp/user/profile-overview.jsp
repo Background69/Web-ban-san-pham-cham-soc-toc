@@ -93,16 +93,10 @@
     <!-- Statistics Cards -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-icon icon-orders">
-                <i class="fas fa-box"></i>
-            </div>
             <div class="stat-value">${stats.totalOrders != null ? stats.totalOrders : 0}</div>
             <div class="stat-label">Đơn hàng</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon icon-spending">
-                <i class="fas fa-wallet"></i>
-            </div>
             <div class="stat-value">
                 <fmt:formatNumber value="${stats.totalSpending != null ? stats.totalSpending : 0}"
                                   type="number" maxFractionDigits="0"/>đ
@@ -110,18 +104,8 @@
             <div class="stat-label">Chi tiêu</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon icon-addresses">
-                <i class="fas fa-map-marker-alt"></i>
-            </div>
             <div class="stat-value">${stats.totalAddresses != null ? stats.totalAddresses : 0}</div>
             <div class="stat-label">Địa chỉ</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon icon-points">
-                <i class="fas fa-star"></i>
-            </div>
-            <div class="stat-value">${stats.loyaltyPoints != null ? stats.loyaltyPoints : 0}</div>
-            <div class="stat-label">Điểm tích lũy</div>
         </div>
     </div>
 
@@ -195,8 +179,7 @@
                     </div>
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">Số điện thoại</span>
-                        <span class="fw-medium">${not empty user.phone ? user.phone : 'Chưa cập
-                                nhật'}</span>
+                        <span class="fw-medium">${not empty user.phone ? user.phone : 'Chưa cập nhật'}</span>
                     </div>
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">Vai trò</span>
@@ -300,15 +283,15 @@
                                     <span
                                             class="order-status status-${order.orderStatus != null ? order.orderStatus.toLowerCase() : 'pending'}">
                                                         <c:choose>
-                                                            <c:when test="${order.orderStatus == 'PENDING'}"><i
+                                                            <c:when test="${order.orderStatus == 'pending'}"><i
                                                                     class="fas fa-clock"></i> Chờ xác nhận</c:when>
-                                                            <c:when test="${order.orderStatus == 'CONFIRMED'}"><i
+                                                            <c:when test="${order.orderStatus == 'confirmed'}"><i
                                                                     class="fas fa-check"></i> Đã xác nhận</c:when>
-                                                            <c:when test="${order.orderStatus == 'SHIPPING'}"><i
+                                                            <c:when test="${order.orderStatus == 'shipping'}"><i
                                                                     class="fas fa-truck"></i> Đang giao</c:when>
-                                                            <c:when test="${order.orderStatus == 'COMPLETED'}"><i
+                                                            <c:when test="${order.orderStatus == 'completed'}"><i
                                                                     class="fas fa-check-circle"></i> Hoàn thành</c:when>
-                                                            <c:when test="${order.orderStatus == 'CANCELLED'}"><i
+                                                            <c:when test="${order.orderStatus == 'cancelled'}"><i
                                                                     class="fas fa-times-circle"></i> Đã hủy</c:when>
                                                             <c:otherwise>${order.orderStatus}</c:otherwise>
                                                         </c:choose>

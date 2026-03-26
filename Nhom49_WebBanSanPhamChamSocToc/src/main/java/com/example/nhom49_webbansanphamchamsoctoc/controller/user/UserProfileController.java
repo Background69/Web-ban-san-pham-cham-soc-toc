@@ -18,11 +18,16 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @WebServlet(name = "UserProfileController", urlPatterns = { "/profile", "/profile/*" })
 public class UserProfileController extends HttpServlet {
+
+    private static final List<String> ORDER_STATUSES = List.of(
+            "pending", "confirmed", "shipping", "completed", "cancelled");
 
     private ProfileService profileService;
     private ShippingService shippingService;
@@ -108,21 +113,21 @@ public class UserProfileController extends HttpServlet {
     private void showUserOrders(HttpServletRequest request, HttpServletResponse response, User currentUser)
             throws ServletException, IOException {
         int userId = currentUser.getUserId();
-        String status = request.getParameter("status");
+        String normalizedStatus = normalizeOrderStatus(request.getParameter("status"));
 
         List<Order> orders;
-        if (status != null && !status.isEmpty() && !status.equalsIgnoreCase("ALL")) {
-            orders = orderService.getOrdersByUserAndStatus(userId, status.toUpperCase());
+        if (normalizedStatus != null) {
+            orders = orderService.getOrdersByUserAndStatus(userId, normalizedStatus);
         } else {
             orders = orderService.getOrdersByUser(userId);
         }
 
         // Lấy số lượng đơn hàng theo từng status
-        Map<String, Integer> orderCounts = orderService.getOrderCountsByStatus(userId);
+        Map<String, Integer> orderCounts = buildOrderCounts(orderService.getOrderCountsByStatus(userId));
 
         request.setAttribute("orders", orders);
         request.setAttribute("orderCounts", orderCounts);
-        request.setAttribute("status", status);
+        request.setAttribute("status", normalizedStatus != null ? normalizedStatus : "all");
         request.setAttribute("activeTab", "orders");
 
         request.getRequestDispatcher("/user/profile-orders.jsp").forward(request, response);
@@ -171,10 +176,11 @@ public class UserProfileController extends HttpServlet {
     private void updateProfile(HttpServletRequest request, HttpServletResponse response, User currentUser)
             throws ServletException, IOException {
 
+        String fullname = request.getParameter("fullname");
         String username = request.getParameter("username");
         String phone = request.getParameter("phone");
 
-        boolean success = profileService.updateProfile(currentUser, username, phone);
+        boolean success = profileService.updateProfile(currentUser, fullname, username, phone);
         if (success) {
             SessionUtil.setCurrentUser(request.getSession(), currentUser);
             request.setAttribute("success", "Cập nhật hồ sơ thành công.");
@@ -209,5 +215,32 @@ public class UserProfileController extends HttpServlet {
 
         request.setAttribute("activeTab", "security");
         request.getRequestDispatcher("/user/change-password.jsp").forward(request, response);
+    }
+
+    private String normalizeOrderStatus(String rawStatus) {
+        if (rawStatus == null) {
+            return null;
+        }
+
+        String normalized = rawStatus.trim().toLowerCase(Locale.ROOT);
+        if (normalized.isEmpty() || "all".equals(normalized)) {
+            return null;
+        }
+
+        return ORDER_STATUSES.contains(normalized) ? normalized : null;
+    }
+
+    private Map<String, Integer> buildOrderCounts(Map<String, Integer> sourceCounts) {
+        Map<String, Integer> counts = new LinkedHashMap<>();
+        int total = 0;
+
+        for (String status : ORDER_STATUSES) {
+            int count = sourceCounts != null ? sourceCounts.getOrDefault(status, 0) : 0;
+            counts.put(status, count);
+            total += count;
+        }
+
+        counts.put("all", total);
+        return counts;
     }
 }

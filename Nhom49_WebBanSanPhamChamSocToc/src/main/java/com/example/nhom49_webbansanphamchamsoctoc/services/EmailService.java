@@ -44,45 +44,68 @@ public class EmailService {
             }
         });
 
-        session.setDebug(true);
-
-        System.out.println("MAIL USER = " + EMAIL_USERNAME);
-        System.out.println("MAIL PASS LEN = " + EMAIL_PASSWORD.length());
+        session.setDebug(false);
     }
 
-    public boolean sendPasswordResetEmail(String toEmail, String resetLink) {
+    public boolean sendResetPasswordOtpEmail(String toEmail, String otpCode, String verifyLink, int expiryMinutes) {
+        return sendOtpHtml(
+                toEmail,
+                "Mã OTP đặt lại mật khẩu - HairGlow",
+                "Đặt lại mật khẩu",
+                "Bạn vừa yêu cầu đặt lại mật khẩu cho tài khoản HairGlow.",
+                "Mở trang đặt lại mật khẩu",
+                otpCode,
+                verifyLink,
+                expiryMinutes
+        );
+    }
+
+    public boolean sendRegisterOtpEmail(String toEmail, String otpCode, String verifyLink, int expiryMinutes) {
+        return sendOtpHtml(
+                toEmail,
+                "Mã OTP xác minh tài khoản - HairGlow",
+                "Xác minh tài khoản",
+                "Cảm ơn bạn đã đăng ký HairGlow. Vui lòng nhập OTP để kích hoạt tài khoản.",
+                "Mở trang xác minh tài khoản",
+                otpCode,
+                verifyLink,
+                expiryMinutes
+        );
+    }
+
+    private boolean sendOtpHtml(String toEmail, String subject, String title, String intro,
+                                String ctaLabel, String otpCode, String verifyLink, int expiryMinutes) {
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(EMAIL_USERNAME, EMAIL_FROM_NAME, StandardCharsets.UTF_8.name()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-            message.setSubject("Đặt lại mật khẩu - HairGlow", StandardCharsets.UTF_8.name());
+            message.setSubject(subject, StandardCharsets.UTF_8.name());
 
             String html = """
-                <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
-                  <h2 style="color:#2c5940;">Đặt lại mật khẩu</h2>
-                  <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
-                  <p>
-                    <a href="%s" style="background:#2c5940;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;">
-                      Đặt lại mật khẩu
-                    </a>
-                  </p>
-                  <p>Link sẽ hết hạn sau 30 phút.</p>
-                  <p>Nếu nút không hoạt động, copy link sau:</p>
-                  <p style="word-break:break-all;">%s</p>
-                  <p style="color:#64748b;font-size:12px;">Email tự động, vui lòng không trả lời.</p>
-                </div>
-            """.formatted(resetLink, resetLink);
+                        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
+                          <h2 style="color:#2c5940;">%s</h2>
+                          <p>%s</p>
+                          <p>Mã OTP của bạn:</p>
+                          <div style="font-size:28px;font-weight:700;letter-spacing:8px;color:#2c5940;margin:12px 0 18px 0;">%s</div>
+                          <p>Mã có hiệu lực trong %d phút và chỉ được dùng 1 lần.</p>
+                          <p>
+                            <a href="%s" style="background:#2c5940;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-block;">%s</a>
+                          </p>
+                          <p>Nếu nút không hoạt động, hãy sao chép liên kết sau:</p>
+                          <p style="word-break:break-all;">%s</p>
+                          <p style="color:#64748b;font-size:12px;">Đây là email tự động, vui lòng không trả lời.</p>
+                        </div>
+                    """.formatted(title, intro, otpCode, expiryMinutes, verifyLink, ctaLabel, verifyLink);
 
             message.setContent(html, "text/html; charset=UTF-8");
-
             Transport.send(message);
             return true;
-
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Lỗi gửi email");
             return false;
         }
     }
+
 
     private static Properties loadConfig() {
         try (InputStream is = EmailService.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
@@ -104,5 +127,4 @@ public class EmailService {
         }
         return v;
     }
-
 }

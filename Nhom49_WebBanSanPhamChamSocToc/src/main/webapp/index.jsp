@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -20,85 +20,9 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/animation.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css">
+          href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css?v=20260322-2">
 </head>
 
-
-<style>
-    .flash-sale-slider-container {
-        position: relative !important;
-        padding: 0 70px !important;
-    }
-
-    button#flash-sale-prev,
-    button#flash-sale-next,
-    .flash-sale-nav {
-        position: absolute !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border: 2px solid rgba(255, 71, 87, 0.3) !important;
-        width: 55px !important;
-        height: 55px !important;
-        border-radius: 50% !important;
-        cursor: pointer !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        box-shadow: 0 8px 32px rgba(255, 71, 87, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
-        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
-        z-index: 20 !important;
-        outline: none !important;
-    }
-
-    button#flash-sale-prev {
-        left: 5px !important;
-    }
-
-    button#flash-sale-next {
-        right: 5px !important;
-    }
-
-    button#flash-sale-prev:hover,
-    button#flash-sale-next:hover,
-    .flash-sale-nav:hover {
-        transform: translateY(-50%) scale(1.1) !important;
-        background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%) !important;
-        border-color: transparent !important;
-        box-shadow: 0 12px 40px rgba(255, 71, 87, 0.35), 0 0 20px rgba(255, 71, 87, 0.3) !important;
-    }
-
-    button#flash-sale-prev:hover {
-        transform: translateY(-50%) scale(1.1) rotate(-5deg) !important;
-    }
-
-    button#flash-sale-next:hover {
-        transform: translateY(-50%) scale(1.1) rotate(5deg) !important;
-    }
-
-    button#flash-sale-prev i,
-    button#flash-sale-next i,
-    .flash-sale-nav i {
-        color: #ff4757 !important;
-        font-size: 20px !important;
-        transition: all 0.3s ease !important;
-    }
-
-    button#flash-sale-prev:hover i,
-    button#flash-sale-next:hover i,
-    .flash-sale-nav:hover i {
-        color: white !important;
-    }
-
-    button#flash-sale-prev:hover i {
-        transform: translateX(-2px) !important;
-    }
-
-    button#flash-sale-next:hover i {
-        transform: translateX(2px) !important;
-    }
-</style>
 
 <body>
 <!-- Header -->
@@ -135,20 +59,6 @@
         <div class="flash-sale-header">
             <div class="flash-sale-title-group">
                 <h2><i class="fas fa-bolt"></i> FLASH SALE</h2>
-            </div>
-            <div class="flash-sale-countdown">
-                <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-hours">00</span>
-                    <span class="countdown-label">Giờ</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-minutes">00</span>
-                    <span class="countdown-label">Phút</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-seconds">00</span>
-                    <span class="countdown-label">Giây</span>
-                </div>
             </div>
         </div>
 

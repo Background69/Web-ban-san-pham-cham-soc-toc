@@ -1,17 +1,20 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh toán - HairGlow</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cart.css">
 </head>
+
 <body>
 <jsp:include page="/layout/header.jsp"/>
 
@@ -66,7 +69,8 @@
                                                     <i class="fas fa-phone-alt"></i> ${address.phone}
                                                 </div>
                                                 <div class="address-card-detail">
-                                                        ${address.specificAddress}, ${address.wardName}, ${address.districtName}, ${address.provinceName}
+                                                        ${address.specificAddress}, ${address.wardName},
+                                                        ${address.districtName}, ${address.provinceName}
                                                 </div>
                                                 <c:if test="${address.defaultAddress}">
                                                     <span class="address-default-badge">Mặc định</span>
@@ -79,7 +83,8 @@
                                 </c:when>
                                 <c:otherwise>
                                     <div class="alert alert-warning">
-                                        <i class="fas fa-info-circle me-2"></i>Bạn chưa có địa chỉ giao hàng. Vui lòng
+                                        <i class="fas fa-info-circle me-2"></i>Bạn chưa có địa chỉ giao
+                                        hàng. Vui lòng
                                         thêm địa chỉ mới bên dưới.
                                     </div>
                                 </c:otherwise>
@@ -92,44 +97,46 @@
                             </div>
 
                             <!-- New Address Form -->
-                            <div class="new-address-form ${empty addresses ? 'show' : ''}" id="newAddressForm">
+                            <div class="new-address-form ${empty addresses ? 'show' : ''}"
+                                 id="newAddressForm">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                                        <label class="form-label">Họ và tên <span
+                                                class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="fullName"
-                                               placeholder="Nhập họ tên" ${empty addresses ? 'required' : ''}>
+                                               placeholder="Nhập họ tên" ${empty addresses ? 'required'
+                                                : '' }>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại <span
                                                 class="text-danger">*</span></label>
                                         <input type="tel" class="form-control" name="phone"
-                                               placeholder="Nhập số điện thoại" ${empty addresses ? 'required' : ''}>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" placeholder="Nhập email">
+                                               placeholder="Nhập số điện thoại" ${empty addresses
+                                                ? 'required' : '' }>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Tỉnh/Thành phố <span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select" name="provinceCode"
-                                                id="province" ${empty addresses ? 'required' : ''}>
+                                        <select class="form-select" name="provinceCode" id="province"
+                                        ${empty addresses ? 'required' : '' }>
                                             <option value="">-- Chọn Tỉnh/Thành phố --</option>
                                         </select>
                                         <input type="hidden" name="provinceName" id="provinceName">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Quận/Huyện <span class="text-danger">*</span></label>
+                                        <label class="form-label">Quận/Huyện <span
+                                                class="text-danger">*</span></label>
                                         <select class="form-select" name="districtCode" id="district"
-                                                disabled ${empty addresses ? 'required' : ''}>
+                                                disabled ${empty addresses ? 'required' : '' }>
                                             <option value="">-- Chọn Quận/Huyện --</option>
                                         </select>
                                         <input type="hidden" name="districtName" id="districtName">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Phường/Xã <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="wardCode" id="ward"
-                                                disabled ${empty addresses ? 'required' : ''}>
+                                        <label class="form-label">Phường/Xã <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-select" name="wardCode" id="ward" disabled
+                                        ${empty addresses ? 'required' : '' }>
                                             <option value="">-- Chọn Phường/Xã --</option>
                                         </select>
                                         <input type="hidden" name="wardName" id="wardName">
@@ -138,7 +145,8 @@
                                         <label class="form-label">Địa chỉ cụ thể <span
                                                 class="text-danger">*</span></label>
                                         <textarea class="form-control" name="specificAddress" rows="2"
-                                                  placeholder="Số nhà, tên đường..." ${empty addresses ? 'required' : ''}></textarea>
+                                                  placeholder="Số nhà, tên đường..." ${empty addresses
+                                                ? 'required' : '' }></textarea>
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Ghi chú</label>
@@ -159,28 +167,34 @@
                         </div>
                         <div class="checkout-section-body">
                             <div class="shipping-methods">
-                                <div class="shipping-method selected" onclick="selectShipping(this, 'standard')">
+                                <div class="shipping-method selected"
+                                     onclick="selectShipping(this, 'standard')">
                                     <div class="shipping-method-info">
-                                        <div class="shipping-method-icon"><i class="fas fa-truck"></i></div>
+                                        <div class="shipping-method-icon"><i class="fas fa-truck"></i>
+                                        </div>
                                         <div>
                                             <div class="shipping-method-name">Giao hàng tiêu chuẩn</div>
-                                            <div class="shipping-method-desc">Nhận hàng trong 3-5 ngày</div>
+                                            <div class="shipping-method-desc">Nhận hàng trong 3-5 ngày
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="shipping-method-price">30,000đ</div>
                                 </div>
                                 <div class="shipping-method" onclick="selectShipping(this, 'express')">
                                     <div class="shipping-method-info">
-                                        <div class="shipping-method-icon"><i class="fas fa-shipping-fast"></i></div>
+                                        <div class="shipping-method-icon"><i
+                                                class="fas fa-shipping-fast"></i></div>
                                         <div>
                                             <div class="shipping-method-name">Giao hàng nhanh</div>
-                                            <div class="shipping-method-desc">Nhận hàng trong 1-2 ngày</div>
+                                            <div class="shipping-method-desc">Nhận hàng trong 1-2 ngày
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="shipping-method-price">50,000đ</div>
                                 </div>
                             </div>
-                            <input type="hidden" name="shippingMethod" id="shippingMethod" value="standard">
+                            <input type="hidden" name="shippingMethod" id="shippingMethod"
+                                   value="standard">
                         </div>
                     </div>
 
@@ -193,12 +207,17 @@
                         </div>
                         <div class="checkout-section-body">
                             <div class="payment-methods">
-                                <div class="payment-method selected" onclick="selectPayment(this, 'cod')">
-                                    <div class="payment-method-icon"><i class="fas fa-money-bill-wave"></i></div>
-                                    <div class="payment-method-name">Thanh toán khi nhận hàng (COD)</div>
+                                <div class="payment-method selected"
+                                     onclick="selectPayment(this, 'cod')">
+                                    <div class="payment-method-icon"><i
+                                            class="fas fa-money-bill-wave"></i></div>
+                                    <div class="payment-method-name">Thanh toán khi nhận hàng (COD)
+                                    </div>
                                 </div>
-                                <div class="payment-method" onclick="selectPayment(this, 'bank_transfer')">
-                                    <div class="payment-method-icon"><i class="fas fa-university"></i></div>
+                                <div class="payment-method"
+                                     onclick="selectPayment(this, 'bank_transfer')">
+                                    <div class="payment-method-icon"><i class="fas fa-university"></i>
+                                    </div>
                                     <div class="payment-method-name">Chuyển khoản ngân hàng</div>
                                 </div>
                                 <div class="payment-method" onclick="selectPayment(this, 'momo')">
@@ -223,13 +242,15 @@
                             <c:forEach var="item" items="${cartItems}">
                                 <div class="checkout-item">
                                     <div class="checkout-item-image">
-                                        <img src="${pageContext.request.contextPath}/static/images/products/${not empty item.imageUrl ? item.imageUrl : 'default-product.png'}"
+                                        <img src="${pageContext.request.contextPath}/static/${not empty item.imageUrl ? item.imageUrl : 'images/default-product.png'}"
                                              alt="${item.product.productName}"
                                              onerror="this.src='${pageContext.request.contextPath}/static/images/default-product.png'">
                                     </div>
                                     <div class="checkout-item-info">
-                                        <div class="checkout-item-name">${item.product.productName}</div>
-                                        <div class="checkout-item-variant">${item.variant.variantName}</div>
+                                        <div class="checkout-item-name">${item.product.productName}
+                                        </div>
+                                        <div class="checkout-item-variant">${item.variant.variantName}
+                                        </div>
                                         <div class="checkout-item-qty">Số lượng: ${item.quantity}</div>
                                     </div>
                                     <div class="checkout-item-price">
@@ -245,7 +266,9 @@
                         <div class="price-breakdown">
                             <div class="price-row">
                                 <span class="price-label">Tạm tính</span>
-                                <span class="price-value"><fmt:formatNumber value="${subtotal}" type="number"/>đ</span>
+                                <span class="price-value">
+                                                    <fmt:formatNumber value="${subtotal}" type="number"/>đ
+                                                </span>
                             </div>
                             <div class="price-row">
                                 <span class="price-label">Phí vận chuyển</span>
@@ -254,8 +277,8 @@
                             <div class="price-row total">
                                 <span class="price-label">Tổng cộng</span>
                                 <span class="price-value" id="totalDisplay">
-                                    <fmt:formatNumber value="${subtotal + 30000}" type="number"/>đ
-                                </span>
+                                                    <fmt:formatNumber value="${subtotal + 30000}" type="number"/>đ
+                                                </span>
                             </div>
                         </div>
 
@@ -266,8 +289,8 @@
 
                         <!-- Back to Cart -->
                         <div class="text-center mt-3">
-                            <a href="${pageContext.request.contextPath}/cart" class="text-decoration-none"
-                               style="color: #326e51;">
+                            <a href="${pageContext.request.contextPath}/cart"
+                               class="text-decoration-none" style="color: #326e51;">
                                 <i class="fas fa-arrow-left me-1"></i> Quay lại giỏ hàng
                             </a>
                         </div>
@@ -286,7 +309,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const contextPath = '${pageContext.request.contextPath}';
-    const subtotal = ${subtotal != null ? subtotal : 0};
+    const subtotal = ${ subtotal != null ? subtotal : 0};
 
     // Select address
     function selectAddress(element, addressId) {
@@ -429,4 +452,5 @@
     </c:if>
 </script>
 </body>
+
 </html>

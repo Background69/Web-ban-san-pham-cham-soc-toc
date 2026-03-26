@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 
 public class AuthenticationService {
 
-    private static final int VERIFICATION_TOKEN_EXPIRY_HOURS = 24;
     private final UserDAO userDAO;
     private String lastError;
 
@@ -55,65 +54,28 @@ public class AuthenticationService {
         return user;
     }
 
-    public User register(String email, String username, String phone, String password, String confirmPassword) {
-        lastError = null;
-        String emailError = ValidationUtil.validateEmail(email);
-        if (emailError != null) {
-            lastError = emailError;
-            return null;
-        }
+    public String validateUserInput(String email, String fullname, String username, String phone, String password, String confirmPassword) {
+        email = ValidationUtil.sanitize(email);
+        fullname = ValidationUtil.sanitize(fullname);
+        username = ValidationUtil.sanitize(username);
+        phone = ValidationUtil.sanitize(phone);
 
-        String usernameError = ValidationUtil.validateUsername(username);
-        if (usernameError != null) {
-            lastError = usernameError;
-            return null;
-        }
+        String error;
+        if ((error = ValidationUtil.validateEmail(email)) != null) return error;
+        if ((error = ValidationUtil.validateFullName(fullname)) != null) return error;
+        if ((error = ValidationUtil.validateUsername(username)) != null) return error;
+        if ((error = ValidationUtil.validatePassword(password)) != null) return error;
+        if ((error = ValidationUtil.validatePhone(phone)) != null) return error;
+        if ((error = ValidationUtil.validateConfirmPassword(password, confirmPassword)) != null) return error;
 
-        String passwordError = ValidationUtil.validatePassword(password);
-        if (passwordError != null) {
-            lastError = passwordError;
-            return null;
-        }
+        if (userDAO.existsByEmail(email)) return "Email đã tồn tại";
+        if (userDAO.existsByUsername(username)) return "Tên đăng nhập đã tồn tại";
 
-        String phoneError = ValidationUtil.validatePhone(phone);
-        if (phoneError != null) {
-            lastError = phoneError;
-            return null;
-        }
-
-        String confirmError = ValidationUtil.validateConfirmPassword(password, confirmPassword);
-        if (confirmError != null) {
-            lastError = confirmError;
-            return null;
-        }
-
-        if (userDAO.existsByEmail(email.trim())) {
-            lastError = "Email đã tồn tại";
-            return null;
-        }
-
-        if (userDAO.existsByUsername(username.trim())) {
-            lastError = "Tên đăng nhập đã tồn tại";
-            return null;
-        }
-
-        User user = new User();
-        user.setEmail(email.trim());
-        user.setUsername(username.trim());
-        user.setPassword(PasswordUtil.hashPassword(password));
-        user.setRole("Khách hàng");
-        user.setActive(true);
-        user.setPhone(ValidationUtil.sanitize(phone));
-        user.setAuthProvider("LOCAL");
-
-        int userId = userDAO.insert(user);
-        if (userId > 0) {
-            user.setUserId(userId);
-            return user;
-        }
-
-        lastError = "Đăng ký thất bại, vui lòng thử lại";
         return null;
+    }
+
+    public boolean setActiveStatus(int userId, boolean active) {
+        return userDAO.updateActiveStatus(userId, active);
     }
 
     public void setCurrentUser(HttpSession session, User user) {

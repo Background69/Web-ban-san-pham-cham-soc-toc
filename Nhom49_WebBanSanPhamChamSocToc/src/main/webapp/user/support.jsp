@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
@@ -7,11 +7,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hỗ trợ khách hàng - HairGlow</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/support.css?v=3">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/support.css">
 </head>
 <body>
 
@@ -33,7 +35,8 @@
         <!-- Tìm kiếm -->
         <div class="support-search">
             <form action="${pageContext.request.contextPath}/support" method="get">
-                <input type="text" name="q" placeholder="Tìm kiếm câu hỏi thường gặp..." value="${searchQuery}">
+                <input type="text" name="q" placeholder="Tìm kiếm câu hỏi thường gặp..."
+                       value="<c:out value='${searchQuery}' default=""/>">
                 <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
             </form>
         </div>
@@ -203,7 +206,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Bạn có thể theo dõi đơn hàng bằng cách đăng nhập vào tài khoản, vào mục "Đơn hàng của tôi" để xem trạng thái đơn hàng.</p>
+                        <p>Bạn có thể theo dõi đơn hàng bằng cách đăng nhập vào tài khoản, vào mục "Đơn hàng của tôi" để
+                            xem trạng thái đơn hàng.</p>
                     </div>
                 </div>
 
@@ -213,7 +217,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Tất cả sản phẩm tại HairGlow đều là hàng chính hãng 100%, nhập khẩu trực tiếp từ các thương hiệu hoặc nhà phân phối ủy quyền.</p>
+                        <p>Tất cả sản phẩm tại HairGlow đều là hàng chính hãng 100%, nhập khẩu trực tiếp từ các thương
+                            hiệu hoặc nhà phân phối ủy quyền.</p>
                     </div>
                 </div>
 
@@ -223,7 +228,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Bạn có thể hủy đơn hàng khi đơn hàng chưa được xác nhận giao cho đơn vị vận chuyển. Vui lòng liên hệ hotline để được hỗ trợ.</p>
+                        <p>Bạn có thể hủy đơn hàng khi đơn hàng chưa được xác nhận giao cho đơn vị vận chuyển. Vui lòng
+                            liên hệ hotline để được hỗ trợ.</p>
                     </div>
                 </div>
 
@@ -233,7 +239,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <p>Bạn có thể nhận mã giảm giá bằng cách đăng ký thành viên, theo dõi fanpage Facebook hoặc tham gia các chương trình khuyến mãi định kỳ.</p>
+                        <p>Bạn có thể nhận mã giảm giá bằng cách đăng ký thành viên, theo dõi fanpage Facebook hoặc tham
+                            gia các chương trình khuyến mãi định kỳ.</p>
                     </div>
                 </div>
             </div>
@@ -251,8 +258,19 @@
             const faqItem = this.closest('.faq-item');
             const isActive = faqItem.classList.contains('active');
 
-            document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
-            if (!isActive) faqItem.classList.add('active');
+            // Đóng tất cả
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.faq-question').setAttribute("aria-expanded", "false");
+            });
+
+            // Nếu mục vừa click chưa active -> mở
+            if (!isActive) {
+                faqItem.classList.add('active');
+                this.setAttribute("aria-expanded", "true");
+            } else {
+                this.setAttribute("aria-expanded", "false");
+            }
         });
     });
 </script>
