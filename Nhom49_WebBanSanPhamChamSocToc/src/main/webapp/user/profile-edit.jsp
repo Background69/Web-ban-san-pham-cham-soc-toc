@@ -115,7 +115,17 @@
                         <i class="fas fa-lock me-1"></i> Email không thể thay đổi
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label class="form-label" for="fullname">
+                        <i class="fas fa-user me-1"></i> Họ tên
+                    </label>
+                    <input type="text" class="form-control" id="fullname" name="fullname"
+                           value="${user.fullname}" required minlength="3" maxlength="50"
+                           pattern="[a-zA-Z0-9_]+" oninput="validateUsername(this)">
+                    <div class="form-hint" id="usernameHint">
+                        Chỉ chứa chữ cái, số và dấu gạch dưới (_)
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="form-label" for="username">
                         <i class="fas fa-user me-1"></i> Tên đăng nhập
@@ -198,6 +208,27 @@
             hint.innerHTML = '<i class="fas fa-times-circle me-1"></i> Không hợp lệ (chỉ chứa chữ, số, _)';
             hint.style.color = '#ef4444';
         }
+    }
+
+    function validateFullname(fullname) {
+        if (!fullname || fullname.trim().length === 0) {
+            return "Họ tên không được để trống";
+        }
+
+        // Chuẩn hóa giống Java: xóa khoảng trắng thừa giữa các từ
+        const normalized = fullname.trim().replace(/\s+/g, " ");
+
+        if (normalized.length < 10 || normalized.length > 30) {
+            return "Họ tên phải từ 10–30 ký tự";
+        }
+
+        // Chỉ cho phép chữ cái + khoảng trắng (bao gồm unicode)
+        const FULLNAME_PATTERN = /^[A-Za-zÀ-ỹ\s]+$/;
+        if (!FULLNAME_PATTERN.test(normalized)) {
+            return "Họ tên chỉ được chứa chữ cái và khoảng trắng";
+        }
+
+        return null; // Hợp lệ
     }
 
     function validatePhone(input) {
