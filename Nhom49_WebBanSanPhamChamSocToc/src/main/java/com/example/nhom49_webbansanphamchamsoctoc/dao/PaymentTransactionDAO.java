@@ -100,6 +100,44 @@ public class PaymentTransactionDAO implements IDAO<PaymentTransaction> {
                 .list());
     }
 
+    public PaymentTransaction findByIdAndUserId(int transactionId, int userId) {
+        String sql = "SELECT * FROM payment_transactions WHERE transaction_id = :transactionId AND user_id = :userId";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("transactionId", transactionId)
+                .bind("userId", userId)
+                .map((rs, ctx) -> mapPaymentTransaction(rs))
+                .findFirst()
+                .orElse(null));
+    }
+
+    public PaymentTransaction findLatestByOrderId(int orderId) {
+        String sql = "SELECT * FROM payment_transactions WHERE order_id = :orderId ORDER BY created_at DESC LIMIT 1";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderId", orderId)
+                .map((rs, ctx) -> mapPaymentTransaction(rs))
+                .findFirst()
+                .orElse(null));
+    }
+
+    public boolean existsByOrderIdAndStatus(int orderId, String status) {
+        String sql = "SELECT COUNT(*) FROM payment_transactions WHERE order_id = :orderId AND status = :status";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderId", orderId)
+                .bind("status", status)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
+    }
+
+    public boolean markExpiredByOrderId(int orderId) {
+        String sql = "UPDATE payment_transactions " +
+                "SET status = 'EXPIRED', confirmed_at = NULL " +
+                "WHERE order_id = :orderId AND status = 'PENDING'";
+        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderId", orderId)
+                .execute() > 0);
+    }
+
     public boolean markSuccessAndAttachOrder(int transactionId, int orderId) {
         return jdbi.inTransaction(handle -> handle.createUpdate(
                         "UPDATE payment_transactions SET status = 'SUCCESS', confirmed_at = NOW(), order_id = :orderId WHERE transaction_id = :transactionId")
