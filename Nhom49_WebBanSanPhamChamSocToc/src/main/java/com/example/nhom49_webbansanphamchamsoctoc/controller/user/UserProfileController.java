@@ -176,10 +176,11 @@ public class UserProfileController extends HttpServlet {
     private void updateProfile(HttpServletRequest request, HttpServletResponse response, User currentUser)
             throws ServletException, IOException {
 
+        String fullname = request.getParameter("fullname");
         String username = request.getParameter("username");
         String phone = request.getParameter("phone");
 
-        boolean success = profileService.updateProfile(currentUser, username, phone);
+        boolean success = profileService.updateProfile(currentUser, fullname, username, phone);
         if (success) {
             SessionUtil.setCurrentUser(request.getSession(), currentUser);
             request.setAttribute("success", "Cập nhật hồ sơ thành công.");
