@@ -1,13 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.util;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.SecureRandom;
-import java.util.Properties;
 
 public class OtpUtil {
     private static final SecureRandom RANDOM = new SecureRandom();
