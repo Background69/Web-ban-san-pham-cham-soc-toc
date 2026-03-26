@@ -389,7 +389,19 @@ public class OrderDAO implements IDAO<Order> {
                     .findFirst()
                     .orElse(0L));
         }
-
+        public List<Integer> getOrderStatusStats(){
+            String sql = "SELECT SUM(CASE WHEN order_status IN ('completed','done') THEN 1 ELSE 0 END) AS completed,SUM(CASE WHEN order_status IN ('cancelled','canceled') THEN 1 ELSE 0 END) AS cancelled, SUM(CASE WHEN order_status = 'pending' THEN 1 ELSE 0 END) AS pending FROM orders";
+        return jdbi.withHandle(handle->
+                handle.createQuery(sql)
+                        .map((rs,ctx)->List.of(
+                                rs.getInt("completed"),
+                                rs.getInt("cancelled"),
+                                rs.getInt("pending")
+                        ))
+                        .findFirst()
+                        .orElse(List.of(0,0,0))
+        );
+        }
     // Helper method;
 
     // Helper method
