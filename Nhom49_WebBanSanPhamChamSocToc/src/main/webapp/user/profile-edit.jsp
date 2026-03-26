@@ -125,7 +125,7 @@
                            pattern="[A-Za-zÀ-ỹ\s]+"
                            oninput="validateFullname(this)">
                     <div class="form-hint" id="fullnameHint">
-                        Chỉ chứa chữ cái, số và dấu gạch dưới (_)
+                        Chỉ chứa chữ cái
                     </div>
                 </div>
 
