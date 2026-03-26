@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 
 public class AuthenticationService {
 
-    private static final int VERIFICATION_TOKEN_EXPIRY_HOURS = 24;
     private final UserDAO userDAO;
     private String lastError;
 
@@ -55,11 +54,17 @@ public class AuthenticationService {
         return user;
     }
 
-    public User register(String email, String username, String phone, String password, String confirmPassword) {
+    public User register(String email, String fullname, String username, String phone, String password, String confirmPassword) {
         lastError = null;
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             lastError = emailError;
+            return null;
+        }
+
+        String fullnameError = ValidationUtil.validateUsername(fullname);
+        if (fullnameError != null) {
+            lastError = fullnameError;
             return null;
         }
 
@@ -99,10 +104,11 @@ public class AuthenticationService {
 
         User user = new User();
         user.setEmail(email.trim());
+        user.setFullName(fullname.trim());
         user.setUsername(username.trim());
         user.setPassword(PasswordUtil.hashPassword(password));
         user.setRole("Khách hàng");
-        user.setActive(true);
+        user.setActive(false);
         user.setPhone(ValidationUtil.sanitize(phone));
         user.setAuthProvider("LOCAL");
 
@@ -114,6 +120,10 @@ public class AuthenticationService {
 
         lastError = "Đăng ký thất bại, vui lòng thử lại";
         return null;
+    }
+
+    public boolean setActiveStatus(int userId, boolean active) {
+        return userDAO.updateActiveStatus(userId, active);
     }
 
     public void setCurrentUser(HttpSession session, User user) {

@@ -1,6 +1,7 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 /**
  * Model ProductVariant - Bảng product_variants trong database
@@ -10,11 +11,14 @@ public class ProductVariant {
     private int variantId;
     private int productId;
     private String variantName;
+    private String sku;
     private BigDecimal originalPrice;
     private BigDecimal salePrice;
     private int discountPercent;
     private int stockQuantity;
     private boolean isDefault;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     // Constructors
     public ProductVariant() {
@@ -43,6 +47,14 @@ public class ProductVariant {
 
     public void setVariantName(String variantName) {
         this.variantName = variantName;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public BigDecimal getOriginalPrice() {
@@ -85,6 +97,22 @@ public class ProductVariant {
         isDefault = aDefault;
     }
 
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     // Helper method - Lấy giá hiện tại (sale price nếu có, không thì original price)
     public BigDecimal getCurrentPrice() {
         return (salePrice != null && salePrice.compareTo(BigDecimal.ZERO) > 0) ? salePrice : originalPrice;
@@ -101,6 +129,7 @@ public class ProductVariant {
                 "variantId=" + variantId +
                 ", productId=" + productId +
                 ", variantName='" + variantName + '\'' +
+                ", sku='" + sku + '\'' +
                 ", originalPrice=" + originalPrice +
                 ", salePrice=" + salePrice +
                 ", discountPercent=" + discountPercent +

@@ -2,10 +2,12 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.BrandDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Brand;
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
@@ -28,8 +30,6 @@ public class BrandManagementController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
 
         String path = request.getServletPath();
 
@@ -57,9 +57,6 @@ public class BrandManagementController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-
         if ("/admin/brands/save".equals(request.getServletPath())) {
             saveBrand(request, response);
         }
@@ -85,7 +82,11 @@ public class BrandManagementController extends HttpServlet {
     private void editBrand(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int id = Integer.parseInt(request.getParameter("id"));
+        Integer id = ValidationUtil.parseIntSafe(request.getParameter("id"));
+        if (id == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+            return;
+        }
         Brand brand = brandDAO.findById(id);
 
         request.setAttribute("brand", brand);
@@ -136,7 +137,11 @@ public class BrandManagementController extends HttpServlet {
     private void deleteBrand(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        int id = Integer.parseInt(request.getParameter("id"));
+        Integer id = ValidationUtil.parseIntSafe(request.getParameter("id"));
+        if (id == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+            return;
+        }
         brandDAO.delete(id);
         response.sendRedirect(request.getContextPath() + "/admin/brands");
     }

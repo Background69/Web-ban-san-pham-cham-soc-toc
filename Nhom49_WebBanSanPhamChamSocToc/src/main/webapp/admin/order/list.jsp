@@ -6,6 +6,7 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>Quản lý đơn hàng</title>
@@ -23,13 +24,15 @@
         <p>HairGlow Admin</p>
 
         <ul class="menu">
-            <li ><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
-            <li ><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn
+                hàng</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/category">Quản lý danh mục</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/promotion/flash-sale.jsp">Quản lý giảm giá</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm
+                giá</a></li>
         </ul>
 
         <a class="view-site" href="${pageContext.request.contextPath}/index">
@@ -60,24 +63,42 @@
                     <td>${o.shippingFullName}</td>
 
                     <td>
-                        <fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/>
+                        <fmt:formatNumber value="${o.totalAmount}" type="currency"
+                                          currencySymbol="₫"/>
                     </td>
 
                     <td>
-                        <form action="${pageContext.request.contextPath}/admin/order/detail.jsp"
-                              method="post">
+                        <form action="${pageContext.request.contextPath}/admin/orders" method="get">
                             <input type="hidden" name="action" value="updateStatus">
                             <input type="hidden" name="id" value="${o.orderId}">
                             <select name="status" onchange="this.form.submit()">
-                                <option value="pending" ${o.orderStatus == 'pending' ? 'selected' : ''}>Đang xử lý</option>
-                                <option value="completed" ${o.orderStatus == 'completed' ? 'selected' : ''}>Hoàn thành</option>
-                                <option value="cancelled" ${o.orderStatus == 'cancelled' ? 'selected' : ''}>Đã hủy</option>
+                                <option value="pending" ${o.orderStatus=='pending' ? 'selected' : ''
+                                        }>
+                                    Chờ xác nhận
+                                </option>
+                                <option value="confirmed" ${o.orderStatus=='confirmed' ? 'selected'
+                                        : '' }>
+                                    Đã xác nhận
+                                </option>
+                                <option value="shipping" ${o.orderStatus=='shipping' ? 'selected'
+                                        : '' }>
+                                    Đang giao
+                                </option>
+                                <option value="completed" ${o.orderStatus=='completed' ? 'selected'
+                                        : '' }>
+                                    Hoàn thành
+                                </option>
+                                <option value="cancelled" ${o.orderStatus=='cancelled' ? 'selected'
+                                        : '' }>
+                                    Đã hủy
+                                </option>
                             </select>
                         </form>
                     </td>
 
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin/orders?action=detail&id=${o.orderId}">
+                        <a
+                                href="${pageContext.request.contextPath}/admin/orders?action=detail&id=${o.orderId}">
                             Chi tiết
                         </a>
                         |
@@ -99,4 +120,5 @@
     </main>
 </div>
 </body>
+
 </html>

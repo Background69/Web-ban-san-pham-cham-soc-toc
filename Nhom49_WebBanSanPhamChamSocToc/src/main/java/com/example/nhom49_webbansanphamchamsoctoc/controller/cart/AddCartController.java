@@ -32,7 +32,6 @@ public class AddCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
         User currentUser = SessionUtil.getCurrentUser(session);
 

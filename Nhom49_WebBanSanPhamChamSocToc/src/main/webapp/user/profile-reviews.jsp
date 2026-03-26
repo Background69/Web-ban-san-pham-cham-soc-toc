@@ -287,7 +287,7 @@
                             <div class="review-product-image">
                                 <c:choose>
                                     <c:when test="${not empty review.productImageUrl}">
-                                        <img src="${review.productImageUrl}"
+                                        <img src="${pageContext.request.contextPath}/static/${review.productImageUrl}"
                                              alt="${review.productName}">
                                     </c:when>
                                     <c:otherwise>

@@ -3,6 +3,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.services;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 import jakarta.servlet.http.HttpSession;
 
@@ -10,8 +11,6 @@ import java.util.List;
 
 /**
  * Service class cho User management
- * Xử lý CRUD user, Google OAuth
- * Authentication được xử lý bởi AuthService
  */
 public class UserService {
 
@@ -23,24 +22,14 @@ public class UserService {
         this.authService = new AuthenticationService();
     }
 
-    /**
-     * Đăng nhập user - AuthService
-     */
     public User login(String emailOrUsername, String password) {
         return authService.login(emailOrUsername, password);
     }
 
-    /**
-     * Kiểm tra active user.
-
-     */
     public boolean isActiveUser(User user) {
         return authService.isActiveUser(user);
     }
 
-    /**
-     * Thực hiện register.
-     */
     public User register(String email, String username, String password) {
         if (!isValidEmail(email) || !isValidUsername(username) || !PasswordUtil.isValidPassword(password)) {
             return null;
@@ -65,39 +54,22 @@ public class UserService {
         return null;
     }
 
-    /**
-     * Kiểm tra email exists.
-
-     */
     public boolean isEmailExists(String email) {
         return userDAO.existsByEmail(email);
     }
 
-    /**
-     * Lấy all users.
-     */
     public List<User> getAllUsers() {
         return userDAO.findAll();
     }
 
-    /**
-     * Lấy user by id.
-
-     */
     public User getUserById(int userId) {
         return userDAO.findById(userId);
     }
 
-    /**
-     * Lấy user by email.
-     */
     public User getUserByEmail(String email) {
         return userDAO.findByEmail(email);
     }
 
-    /**
-     * Thực hiện change password.
-     */
     public boolean changePassword(int userId, String oldPassword, String newPassword) {
         User user = userDAO.findById(userId);
         if (user == null || !PasswordUtil.verifyPassword(oldPassword, user.getPassword())) {
@@ -112,10 +84,6 @@ public class UserService {
         return userDAO.updatePassword(userId, hashedNewPassword);
     }
 
-    /**
-     * Tìm hoặc tạo google user.
-
-     */
     public User findOrCreateGoogleUser(GoogleOAuthService.GoogleUserInfo googleInfo) {
         if (googleInfo == null || googleInfo.getGoogleId() == null) {
             return null;
@@ -164,9 +132,6 @@ public class UserService {
         return userDAO.updateGoogleId(userId, googleId);
     }
 
-    /**
-     * Tim by google id.
-     */
     public User findByGoogleId(String googleId) {
         if (googleId == null || googleId.isEmpty()) {
             return null;
@@ -174,9 +139,6 @@ public class UserService {
         return userDAO.findByGoogleId(googleId);
     }
 
-    /**
-     * Sinh username from google name.
-     */
     private String generateUsernameFromGoogleName(String name, String email) {
         String baseUsername;
 
@@ -200,30 +162,18 @@ public class UserService {
         return username;
     }
 
-    /**
-     * Kiểm tra email hop le.
-     */
     private boolean isValidEmail(String email) {
         return ValidationUtil.validateEmail(email) == null;
     }
 
-    /**
-     * Kiểm tra username hop le.
-     */
     private boolean isValidUsername(String username) {
         return ValidationUtil.validateUsername(username) == null;
     }
 
-    /**
-     * Lấy danh sách người dùng theo role.
-     */
     public List<User> getUsersByRole(String role) {
         return userDAO.findByRole(role);
     }
 
-    /**
-     * Bật/tắt trạng thái active của người dùng.
-     */
     public boolean toggleUserActive(int userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
@@ -232,9 +182,6 @@ public class UserService {
         return userDAO.updateActiveStatus(userId, !user.isActive());
     }
 
-    /**
-     * Thay đổi vai trò của người dùng.
-     */
     public boolean changeUserRole(int userId, String newRole) {
         if (newRole == null || newRole.isEmpty()) {
             return false;
@@ -243,6 +190,7 @@ public class UserService {
     }
 
     public void setCurrentUser(HttpSession session, User user) {
+        SessionUtil.setCurrentUser(session, user);
     }
 
     public boolean updateProfile(User user) {

@@ -1,9 +1,7 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
-import com.example.nhom49_webbansanphamchamsoctoc.util.TokenUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.Instant;
 
 @WebServlet(name = "ResetPasswordController", urlPatterns = {"/reset-password"})
 public class ResetPasswordController extends HttpServlet {
@@ -21,25 +18,13 @@ public class ResetPasswordController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String token = req.getParameter("token");
+        Integer verifiedUserId = (Integer) req.getSession().getAttribute("otpVerifiedUserId");
 
-        if (token == null || token.isBlank()) {
-            req.setAttribute("error", "Link đặt lại mật khẩu không hợp lệ.");
-            req.getRequestDispatcher("/authentication/forgot-password-sent.jsp").forward(req, resp);
+        if (verifiedUserId == null) {
+            resp.sendRedirect(req.getContextPath() + "/auth/forgot-password");
             return;
         }
 
-        String tokenHash = TokenUtil.hashToken(token);
-        User user = userDAO.findByResetToken(tokenHash);
-
-        // ✅ Check user + expiry an toàn
-        if (user == null || user.getResetTokenExpiry() == null ||
-                user.getResetTokenExpiry().toInstant().isBefore(Instant.now())) {
-            req.setAttribute("error", "Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.");
-            req.getRequestDispatcher("/authentication/forgot-password-sent.jsp").forward(req, resp);
-            return;
-        }
-        req.setAttribute("token", token);
         req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
     }
 
@@ -47,46 +32,47 @@ public class ResetPasswordController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        String token = req.getParameter("token");
         String newPassword = req.getParameter("newPassword");
         String confirmPassword = req.getParameter("confirmPassword");
+        Integer verifiedUserId = (Integer) req.getSession().getAttribute("otpVerifiedUserId");
 
-        if (token == null || token.isBlank()) {
-            req.setAttribute("error", "Token không hợp lệ.");
-            req.getRequestDispatcher("/authentication/forgot-password-sent.jsp").forward(req, resp);
+        if (verifiedUserId == null) {
+            resp.sendRedirect(req.getContextPath() + "/auth/forgot-password");
             return;
         }
 
-        String passErr = ValidationUtil.validatePassword(newPassword);
-        if (passErr != null) {
-            req.setAttribute("error", passErr);
-            req.setAttribute("token", token);
-            req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
+        String passwordError = ValidationUtil.validatePassword(newPassword);
+        if (passwordError != null) {
+            forwardWithError(req, resp, passwordError);
             return;
         }
 
-        String confirmErr = ValidationUtil.validateConfirmPassword(newPassword, confirmPassword);
-        if (confirmErr != null) {
-            req.setAttribute("error", confirmErr);
-            req.setAttribute("token", token);
-            req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
+        String confirmPasswordError = ValidationUtil.validateConfirmPassword(newPassword, confirmPassword);
+        if (confirmPasswordError != null) {
+            forwardWithError(req, resp, confirmPasswordError);
             return;
         }
 
-        String tokenHash = TokenUtil.hashToken(token);
-        User user = userDAO.findByResetToken(tokenHash);
+        String hashedPassword = PasswordUtil.hashPassword(newPassword);
+        boolean updatePassword = userDAO.updatePassword(verifiedUserId, hashedPassword);
 
-        if (user == null || user.getResetTokenExpiry() == null ||
-                user.getResetTokenExpiry().toInstant().isBefore(Instant.now())) {
-            req.setAttribute("error", "Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.");
-            req.getRequestDispatcher("/authentication/forgot-password-sent.jsp").forward(req, resp);
-            return;
+        if (updatePassword) {
+            req.getSession().setAttribute("success", "Đổi mật khẩu thành công.");
+            req.getSession().removeAttribute("otpVerifiedUserId");
+            req.getSession().removeAttribute("otpPendingUserId");
+            req.getSession().removeAttribute("otpPendingEmail");
+            req.getSession().removeAttribute("otpPurpose");
+            req.getSession().removeAttribute("otpLastSentAt");
+
+            resp.sendRedirect(req.getContextPath() + "/auth/login");
+        } else  {
+            forwardWithError(req, resp, "Không thể cập nhật mật khẩu. Vui lòng thử lại.");
         }
 
-        String hashed = PasswordUtil.hashPassword(newPassword);
-        userDAO.updatePassword(user.getUserId(), hashed);
-        userDAO.saveResetToken(user.getUserId(), null, null);
-        req.getSession().setAttribute("success", "Đổi mật khẩu thành công, vui lòng đăng nhập.");
-        resp.sendRedirect(req.getContextPath() + "/auth/login");
+    }
+
+    private void forwardWithError(HttpServletRequest req, HttpServletResponse resp, String error) throws ServletException, IOException {
+        req.setAttribute("error", error);
+        req.getRequestDispatcher("/authentication/forgot-password-reset.jsp").forward(req, resp);
     }
 }

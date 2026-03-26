@@ -1,11 +1,14 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
+import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderItemDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderStatusHistoryDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OrderItem;
+import com.example.nhom49_webbansanphamchamsoctoc.model.OrderStatusHistory;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
@@ -16,65 +19,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Lớp OrderService.
- */
 public class OrderService {
 
     private final OrderDAO orderDao;
     private final OrderItemDAO orderItemDao;
+    private final OrderStatusHistoryDAO orderStatusHistoryDAO;
     private final ProductVariantDAO variantDao;
     private final ProductDAO productDao;
     private final ShippingService shippingService;
     private String lastError;
 
-    /**
-     * Thực hiện order service.
-     */
     public OrderService() {
         this.orderDao = new OrderDAO();
         this.orderItemDao = new OrderItemDAO();
+        this.orderStatusHistoryDAO = new OrderStatusHistoryDAO();
         this.variantDao = new ProductVariantDAO();
         this.productDao = new ProductDAO();
         this.shippingService = new ShippingService();
     }
 
     // Constructor for testing
-    /**
-     * Khởi tạo OrderService với cac DAO (phuc vu test).
-     *
-     * @param orderDao     DAO đơn hàng.
-     * @param orderItemDao DAO chỉ tiet đơn hàng.
-     * @param variantDao   DAO bien the sản phẩm.
-     * @param productDao   DAO sản phẩm.
-     */
     public OrderService(OrderDAO orderDao, OrderItemDAO orderItemDao,
                         ProductVariantDAO variantDao, ProductDAO productDao) {
         this.orderDao = orderDao;
         this.orderItemDao = orderItemDao;
+        this.orderStatusHistoryDAO = new OrderStatusHistoryDAO();
         this.variantDao = variantDao;
         this.productDao = productDao;
         this.shippingService = new ShippingService();
     }
 
-    /**
-     * Lấy last error.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
     public String getLastError() {
         return lastError;
     }
 
     /**
-     * Tạo đơn hàng từ giỏ hàng và thong tin giao hàng.
-     *
-     * @param userId         ID nguoi dung.
-     * @param cartItems      Map bien the và số lượng.
-     * @param address        Địa chỉ giao hàng.
-     * @param shippingMethod Phương thức giao hàng.
-     * @param paymentMethod  Phương thức thanh toán.
-     * @return Đơn hàng đã tao hoặc null nếu thất bại.
+     * Tạo đơn hàng từ giỏ hàng và thông tin giao hàng.
      */
     public Order createOrder(int userId, Map<Integer, Integer> cartItems,
                              ShippingAddress address, String shippingMethod, String paymentMethod) {
@@ -124,43 +104,95 @@ public class OrderService {
         order.setTotalAmount(total);
         order.setOrderStatus("pending");
 
-        // Insert order
-        int orderId = orderDao.insert(order);
-        if (orderId > 0) {
-            order.setOrderId(orderId);
+        try {
+            Order createdOrder = JDBIConnector.getInstance().inTransaction(handle -> {
+                String insertOrderSql = "INSERT INTO orders (order_code, user_id, shipping_address_id, shipping_full_name, " +
+                        "shipping_phone, shipping_address, shipping_method, shipping_fee, payment_method, subtotal, total_amount, order_status, note) " +
+                        "VALUES (:orderCode, :userId, :shippingAddressId, :shippingFullName, :shippingPhone, :shippingAddress, :shippingMethod, :shippingFee, :paymentMethod, :subtotal, :totalAmount, :orderStatus, :note)";
 
-            // Set order ID for all items and insert
-            for (OrderItem item : orderItems) {
-                item.setOrderId(orderId);
-            }
+                Integer orderId = handle.createUpdate(insertOrderSql)
+                        .bind("orderCode", order.getOrderCode())
+                        .bind("userId", order.getUserId())
+                        .bind("shippingAddressId", order.getShippingAddressId())
+                        .bind("shippingFullName", order.getShippingFullName())
+                        .bind("shippingPhone", order.getShippingPhone())
+                        .bind("shippingAddress", order.getShippingAddress())
+                        .bind("shippingMethod", order.getShippingMethod())
+                        .bind("shippingFee", order.getShippingFee())
+                        .bind("paymentMethod", order.getPaymentMethod())
+                        .bind("subtotal", order.getSubtotal())
+                        .bind("totalAmount", order.getTotalAmount())
+                        .bind("orderStatus", order.getOrderStatus())
+                        .bind("note", order.getNote())
+                        .executeAndReturnGeneratedKeys("order_id")
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(null);
 
-            if (orderItemDao.insertBatch(orderItems)) {
-                if (!decrementStock(orderItems)) {
-                    orderItemDao.deleteByOrderId(orderId);
-                    orderDao.delete(orderId);
-                    lastError = "Stock changed, please try again";
-                } else {
-                    order.setOrderItems(orderItems);
-                    return order;
+                if (orderId == null || orderId <= 0) {
+                    throw new IllegalStateException("Không thể tạo đơn hàng");
                 }
+
+                String insertHistorySql = "INSERT INTO order_status_history (order_id, status, note) VALUES (:orderId, :status, :note)";
+                int historyInserted = handle.createUpdate(insertHistorySql)
+                        .bind("orderId", orderId)
+                        .bind("status", order.getOrderStatus())
+                        .bind("note", "Initial status")
+                        .execute();
+                if (historyInserted == 0) {
+                    throw new IllegalStateException("Không thể lưu lịch sử trạng thái đơn hàng");
+                }
+
+                String insertItemSql = "INSERT INTO order_items (order_id, product_id, variant_id, product_name, variant_name, quantity, unit_price, total_price) " +
+                        "VALUES (:orderId, :productId, :variantId, :productName, :variantName, :quantity, :unitPrice, :totalPrice)";
+
+                var batch = handle.prepareBatch(insertItemSql);
+                for (OrderItem item : orderItems) {
+                    item.setOrderId(orderId);
+                    batch.bind("orderId", orderId)
+                            .bind("productId", item.getProductId())
+                            .bind("variantId", item.getVariantId())
+                            .bind("productName", item.getProductName())
+                            .bind("variantName", item.getVariantName())
+                            .bind("quantity", item.getQuantity())
+                            .bind("unitPrice", item.getUnitPrice())
+                            .bind("totalPrice", item.getTotalPrice())
+                            .add();
+                }
+
+                int[] insertedRows = batch.execute();
+                for (int rowCount : insertedRows) {
+                    if (rowCount == 0) {
+                        throw new IllegalStateException("Không thể lưu chi tiết đơn hàng");
+                    }
+                }
+
+                for (OrderItem item : orderItems) {
+                    int affected = handle.createUpdate("UPDATE product_variants SET stock_quantity = stock_quantity - :quantity WHERE variant_id = :variantId AND stock_quantity >= :quantity")
+                            .bind("variantId", item.getVariantId())
+                            .bind("quantity", item.getQuantity())
+                            .execute();
+                    if (affected == 0) {
+                        throw new IllegalStateException("Stock changed, please try again");
+                    }
+                }
+
+                order.setOrderId(orderId);
+                order.setOrderItems(orderItems);
+                return order;
+            });
+            return createdOrder;
+        } catch (Exception ex) {
+            if (ex.getMessage() != null && !ex.getMessage().isBlank()) {
+                lastError = ex.getMessage();
             } else {
-                // Rollback: delete order if items insertion failed
-                orderDao.delete(orderId);
-                lastError = "Không thể lưu chỉ tiết đơn hàng";
+                lastError = "Không thể tạo đơn hàng";
             }
-        } else {
-            lastError = "Không thể tạo đơn hàng";
         }
 
         return null;
     }
 
-    /**
-     * Kiểm tra hop le stock for order.
-     *
-     * @param cartItems Map<variantId, quantity>
-     * @return List các thông báo lỗi (rỗng nếu tất cả hợp lệ)
-     */
     private List<String> validateStockForOrder(Map<Integer, Integer> cartItems) {
         List<String> errors = new ArrayList<>();
 
@@ -189,34 +221,16 @@ public class OrderService {
 
     // Order calculation methods
 
-    /**
-     * Thực hiện calculate subtotal.
-     *
-     * @param items Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public BigDecimal calculateSubtotal(List<OrderItem> items) {
         return items.stream()
                 .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    /**
-     * Thực hiện calculate total.
-     *
-     * @param subtotal Tham số đầu vào.
-     * @param shippingFee Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public BigDecimal calculateTotal(BigDecimal subtotal, BigDecimal shippingFee) {
         return subtotal.add(shippingFee != null ? shippingFee : BigDecimal.ZERO);
     }
 
-    /**
-     * Sinh order code.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
     public String generateOrderCode() {
         String code;
         do {
@@ -227,24 +241,12 @@ public class OrderService {
 
     // Order query methods
 
-    /**
-     * Lấy orders by user.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getOrdersByUser(int userId) {
         List<Order> orders = orderDao.findByUserId(userId);
         enrichOrdersWithItems(orders);
         return orders;
     }
 
-    /**
-     * Lấy order by id.
-     *
-     * @param orderId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public Order getOrderById(int orderId) {
         Order order = orderDao.findById(orderId);
         if (order != null) {
@@ -253,12 +255,6 @@ public class OrderService {
         return order;
     }
 
-    /**
-     * Lấy order by code.
-     *
-     * @param orderCode Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public Order getOrderByCode(String orderCode) {
         Order order = orderDao.findByOrderCode(orderCode);
         if (order != null) {
@@ -267,11 +263,6 @@ public class OrderService {
         return order;
     }
 
-    /**
-     * Lấy all orders.
-     *
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getAllOrders() {
         List<Order> orders = orderDao.findAll();
         enrichOrdersWithItems(orders);
@@ -279,48 +270,22 @@ public class OrderService {
     }
 
 
-    /**
-     * Lấy orders by status.
-     *
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getOrdersByStatus(String status) {
         List<Order> orders = orderDao.findByStatus(status);
         enrichOrdersWithItems(orders);
         return orders;
     }
 
-    /**
-     * Lấy orders by user and status.
-     *
-     * @param userId Tham số đầu vào.
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<Order> getOrdersByUserAndStatus(int userId, String status) {
         List<Order> orders = orderDao.findByUserIdAndStatus(userId, status);
         enrichOrdersWithItems(orders);
         return orders;
     }
 
-    /**
-     * Dem orders by user.
-     *
-     * @param userId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public int countOrdersByUser(int userId) {
         return orderDao.countByUserId(userId);
     }
 
-    /**
-     * Dem orders by user and status.
-     *
-     * @param userId Tham số đầu vào.
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public int countOrdersByUserAndStatus(int userId, String status) {
         return orderDao.countByUserIdAndStatus(userId, status);
     }
@@ -329,10 +294,6 @@ public class OrderService {
 
     /**
      * Cập nhật trạng thái đơn hàng.
-     *
-     * @param orderId ID đơn hàng cần cập nhật.
-     * @param status Trạng thái mới của đơn hàng.
-     * @return true nếu cập nhật thành công, false nếu thất bại.
      */
     public boolean updateOrderStatus(int orderId, String status) {
         if (!isValidOrderStatus(status)) {
@@ -349,15 +310,19 @@ public class OrderService {
         boolean result = orderDao.updateStatus(orderId, status);
         if (!result) {
             lastError = "Không thể cập nhật trạng thái đơn hàng";
+            return false;
         }
+
+        OrderStatusHistory history = new OrderStatusHistory();
+        history.setOrderId(orderId);
+        history.setStatus(status);
+        history.setNote("Status updated");
+        orderStatusHistoryDAO.insert(history);
         return result;
     }
 
     /**
-     * Hủy đơn hàng.
-     *
-     * @param orderId ID đơn hàng cần hủy.
-     * @return true nếu hủy thành công, false nếu thất bại.
+     * Hủy đơn hàng và hoàn trả stock.
      */
     public boolean cancelOrder(int orderId) {
         Order order = orderDao.findById(orderId);
@@ -374,9 +339,18 @@ public class OrderService {
             return false;
         }
 
-        return updateOrderStatus(orderId, "cancelled");
+        boolean cancelled = updateOrderStatus(orderId, "cancelled");
+        if (cancelled) {
+            // Hoàn trả stock cho từng item
+            List<OrderItem> items = orderItemDao.findByOrderId(orderId);
+            for (OrderItem item : items) {
+                if (item.getVariantId() != null) {
+                    variantDao.incrementStock(item.getVariantId(), item.getQuantity());
+                }
+            }
+        }
+        return cancelled;
     }
-
 
     private List<OrderItem> convertCartToOrderItems(Map<Integer, Integer> cartItems) {
         List<OrderItem> orderItems = new ArrayList<>();
@@ -412,12 +386,6 @@ public class OrderService {
         return orderItems;
     }
 
-    /**
-     * Thực hiện enrich order with items.
-     *
-     * @param order Tham số đầu vào.
-     * @return Không trả về giá trị.
-     */
     private void enrichOrderWithItems(Order order) {
         if (order != null) {
             List<OrderItem> items = orderItemDao.findByOrderId(order.getOrderId());
@@ -425,25 +393,12 @@ public class OrderService {
         }
     }
 
-
-    /**
-     * Thực hiện enrich orders with items.
-     *
-     * @param orders Tham số đầu vào.
-     * @return Không trả về giá trị.
-     */
     private void enrichOrdersWithItems(List<Order> orders) {
         for (Order order : orders) {
             enrichOrderWithItems(order);
         }
     }
 
-    /**
-     * Kiểm tra valid order status.
-     *
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     private boolean isValidOrderStatus(String status) {
         return status != null &&
                 (status.equals("pending") || status.equals("confirmed") ||
@@ -451,13 +406,6 @@ public class OrderService {
                         status.equals("cancelled"));
     }
 
-
-    /**
-     * Lấy order status display name.
-     *
-     * @param status Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public String getOrderStatusDisplayName(String status) {
         switch (status) {
             case "pending":
@@ -475,12 +423,6 @@ public class OrderService {
         }
     }
 
-    /**
-     * Thực hiện decrement stock.
-     *
-     * @param orderItems Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     private boolean decrementStock(List<OrderItem> orderItems) {
         if (orderItems == null || orderItems.isEmpty()) {
             return true;
@@ -496,16 +438,10 @@ public class OrderService {
         return true;
     }
 
-    /**
-     * Lấy tổng chi tiêu của user
-     */
     public BigDecimal getTotalSpendingByUser(int userId) {
         return orderDao.getTotalSpendingByUser(userId);
     }
 
-    /**
-     * Lấy danh sách đơn hàng gần đây của user
-     */
     public List<Order> getRecentOrdersByUser(int userId, int limit) {
         List<Order> orders = orderDao.findByUserIdWithLimit(userId, limit);
         // Load order items for each order
@@ -516,14 +452,8 @@ public class OrderService {
         return orders;
     }
 
-    /**
-     * Lấy số lượng đơn hàng theo từng status
-     */
     public Map<String, Integer> getOrderCountsByStatus(int userId) {
         return orderDao.getOrderCountsByStatus(userId);
     }
 }
-
-
-
 

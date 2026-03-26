@@ -136,20 +136,6 @@
             <div class="flash-sale-title-group">
                 <h2><i class="fas fa-bolt"></i> FLASH SALE</h2>
             </div>
-            <div class="flash-sale-countdown">
-                <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-hours">00</span>
-                    <span class="countdown-label">Giờ</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-minutes">00</span>
-                    <span class="countdown-label">Phút</span>
-                </div>
-                <div class="countdown-box">
-                    <span class="countdown-number" id="flash-sale-seconds">00</span>
-                    <span class="countdown-label">Giây</span>
-                </div>
-            </div>
         </div>
 
         <div class="flash-sale-slider-container">

@@ -1,22 +1,25 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
-import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
 @WebServlet(name = "LoginController", value = "/auth/login")
 public class LoginController extends HttpServlet {
 
-    private UserDAO userDAO;
+    private AuthenticationService authService;
 
     @Override
     public void init() {
-        userDAO = new UserDAO();
+        authService = new AuthenticationService();
     }
 
     @Override
@@ -29,8 +32,6 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -43,7 +44,7 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        User user = userDAO.authenticate(email.trim(), password);
+        User user = authService.login(email.trim(), password);
 
         if (user == null) {
             request.setAttribute("error", "Email hoặc mật khẩu không đúng");
@@ -61,7 +62,7 @@ public class LoginController extends HttpServlet {
         SessionUtil.setCurrentUser(session, user);
         session.setMaxInactiveInterval(30 * 60);
         if ("Admin".equalsIgnoreCase(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            response.sendRedirect(request.getContextPath() + "/");
             return;
         }
         String safeRedirect = normalizeRedirect(redirect);

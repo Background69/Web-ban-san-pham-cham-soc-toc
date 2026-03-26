@@ -51,6 +51,7 @@ public class SessionUtil {
 
         session.setAttribute(USER_KEY, sessionUser);
         session.setAttribute(CURRENT_USER_KEY, sessionUser);
+        // Đảm bảo cả 2 key đều trỏ tới cùng 1 object
     }
 
     /**

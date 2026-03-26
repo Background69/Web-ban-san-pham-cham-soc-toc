@@ -5,25 +5,22 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductImgDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.CategoryDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.BrandDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Brand;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductImage;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Promotion;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-/**
- * Service class cho Product business logic
- * Xử lý product retrieval, search, management
- */
 public class ProductService {
 
     private static final int FEATURED_PRODUCTS_LIMIT = 8;
@@ -89,6 +86,12 @@ public class ProductService {
         return products;
     }
 
+        public List<Product> getRelatedProducts(int productId, int categoryId, int limit) {
+        List<Product> products = productDAO.findRelatedProducts(productId, categoryId, limit);
+        enrichProductsWithBasicDetails(products);
+        return products;
+    }
+
     public List<Product> getAllProductsExcludingOnSale() {
         List<Product> products = filterOutOnSale(productDAO.findAll());
         enrichProductsWithBasicDetails(products);
@@ -141,20 +144,13 @@ public class ProductService {
         return productDAO.countOnSale();
     }
 
-    /**
-     * Lấy flash sale products.
-     */
-    public List<Product> getFlashSaleProducts() {
+        public List<Product> getFlashSaleProducts() {
         List<Product> products = productDAO.findFlashSale();
         enrichProductsWithBasicDetails(products);
         return products;
     }
 
-    /**
-     * Lấy sản phẩm với đầy đủ quan hệ (HairConditions, Promotions) và tính giá
-     * khuyến mãi.
-     */
-    public Product getProductWithPromotions(int productId) {
+        public Product getProductWithPromotions(int productId) {
         Product product = productDAO.findByIdWithRelations(productId);
         if (product != null) {
             enrichProductWithDetails(product);
@@ -163,10 +159,7 @@ public class ProductService {
         return product;
     }
 
-    /**
-     * Lấy sản phẩm theo slug với đầy đủ quan hệ và tính giá khuyến mãi.
-     */
-    public Product getProductBySlugWithPromotions(String slug) {
+        public Product getProductBySlugWithPromotions(String slug) {
         Product product = productDAO.findBySlug(slug);
         if (product != null) {
             Product withRelations = productDAO.findByIdWithRelations(product.getProductId());
@@ -180,88 +173,64 @@ public class ProductService {
         return product;
     }
 
-    /**
-     * Tính giá cuối cùng sau khi áp dụng khuyến mãi.
-     * Lọc promotion đang active và chọn mức giảm cao nhất.
-     */
-    public BigDecimal calculateFinalPrice(Product product) {
-        if (product == null)
+        public BigDecimal calculateFinalPrice(Product product) {
+        if (product == null) {
             return BigDecimal.ZERO;
+        }
 
         ProductVariant defaultVariant = product.getDefaultVariant();
-        BigDecimal originalPrice = defaultVariant != null
-                ? (defaultVariant.getSalePrice() != null ? defaultVariant.getSalePrice()
-                        : defaultVariant.getOriginalPrice())
-                : BigDecimal.ZERO;
-
-        java.util.List<Promotion> promotions = product.getPromotions();
-        if (promotions == null || promotions.isEmpty()) {
-            product.setFinalPrice(originalPrice);
-            return originalPrice;
+        BigDecimal finalPrice = BigDecimal.ZERO;
+        if (defaultVariant != null) {
+            if (defaultVariant.getSalePrice() != null && defaultVariant.getSalePrice().compareTo(BigDecimal.ZERO) > 0) {
+                finalPrice = defaultVariant.getSalePrice();
+            } else if (defaultVariant.getOriginalPrice() != null) {
+                finalPrice = defaultVariant.getOriginalPrice();
+            }
         }
 
-        LocalDateTime now = LocalDateTime.now();
-
-        Promotion bestPromotion = promotions.stream()
-                .filter(Promotion::isActive)
-                .filter(p -> p.getStartDate() != null && p.getEndDate() != null)
-                .filter(p -> now.isAfter(p.getStartDate()) && now.isBefore(p.getEndDate()))
-                .filter(p -> p.getDiscountPercent() != null && p.getDiscountPercent() > 0)
-                .max(Comparator.comparing(Promotion::getDiscountPercent))
-                .orElse(null);
-
-        if (bestPromotion != null) {
-            int discountPercent = bestPromotion.getDiscountPercent();
-            BigDecimal discount = originalPrice.multiply(BigDecimal.valueOf(discountPercent))
-                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-            BigDecimal finalPrice = originalPrice.subtract(discount);
-
-            product.setFinalPrice(finalPrice);
-            product.setActivePromotion(bestPromotion);
-            return finalPrice;
-        }
-
-        product.setFinalPrice(originalPrice);
-        return originalPrice;
+        product.setFinalPrice(finalPrice);
+        product.setActivePromotion(findFirstActivePromotion(product.getPromotions()));
+        return finalPrice;
     }
 
-    /**
-     * Lấy products by brand.
-     */
-    public List<Product> getProductsByBrand(int brandId, int page, int pageSize) {
+    private Promotion findFirstActivePromotion(List<Promotion> promotions) {
+        if (promotions == null || promotions.isEmpty()) {
+            return null;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        for (Promotion promotion : promotions) {
+            if (promotion == null || !promotion.isActive() || promotion.getStartDate() == null || promotion.getEndDate() == null) {
+                continue;
+            }
+            if (!now.isBefore(promotion.getStartDate()) && !now.isAfter(promotion.getEndDate())) {
+                return promotion;
+            }
+        }
+        return null;
+    }
+
+        public List<Product> getProductsByBrand(int brandId, int page, int pageSize) {
         List<Product> products = productDAO.findByBrandWithPagination(brandId, page, pageSize);
         enrichProductsWithBasicDetails(products);
         return products;
     }
 
-    /**
-     * Đếm số sản phẩm theo brand
-     */
-    public int countProductsByBrand(int brandId) {
+        public int countProductsByBrand(int brandId) {
         return productDAO.countByBrand(brandId);
     }
 
-    /**
-     * Lấy sản phẩm theo category với phân trang.
-     */
-    public List<Product> getProductsByCategory(int categoryId, int page, int pageSize) {
+        public List<Product> getProductsByCategory(int categoryId, int page, int pageSize) {
         List<Product> products = productDAO.findByCategoryWithPagination(categoryId, page, pageSize);
         enrichProductsWithBasicDetails(products);
         return products;
     }
 
-    /**
-     * Tính tổng số trang sản phẩm theo category.
-     */
-    public int getTotalPagesByCategory(int categoryId, int pageSize) {
+        public int getTotalPagesByCategory(int categoryId, int pageSize) {
         int totalProducts = productDAO.countByCategory(categoryId);
         return (int) Math.ceil((double) totalProducts / pageSize);
     }
 
-    /**
-     * Tạo product.
-     */
-    public int createProduct(Product product) {
+        public int createProduct(Product product) {
         if (product == null || !isValidProduct(product)) {
             return -1;
         }
@@ -277,10 +246,7 @@ public class ProductService {
         return productId;
     }
 
-    /**
-     * Cập nhật product.
-     */
-    public boolean updateProduct(Product product) {
+        public boolean updateProduct(Product product) {
         if (product == null || product.getProductId() <= 0 || !isValidProduct(product)) {
             return false;
         }
@@ -302,37 +268,20 @@ public class ProductService {
         return true;
     }
 
-    /**
-     * Xóa product.
-     */
-    public boolean deleteProduct(int productId) {
-        variantDAO.deleteByProductId(productId);
-        imageDAO.deleteByProductId(productId);
-        return productDAO.delete(productId);
+        public boolean deleteProduct(int productId) {
+        return productDAO.softDelete(productId);
     }
 
-    /**
-     * Lấy total pages.
-     */
-    public int getTotalPages(int pageSize) {
+        public int getTotalPages(int pageSize) {
         int totalProducts = productDAO.countAll();
         return (int) Math.ceil((double) totalProducts / pageSize);
     }
 
-    /**
-     * Lấy product images.
-     *
-     * @param productId Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<ProductImage> getProductImages(int productId) {
         return imageDAO.findByProductId(productId);
     }
 
-    /**
-     * Thực hiện enrich product with details.
-     */
-    private void enrichProductWithDetails(Product product) {
+        private void enrichProductWithDetails(Product product) {
         List<ProductVariant> variants = variantDAO.findByProductId(product.getProductId());
         List<ProductImage> images = imageDAO.findByProductId(product.getProductId());
         product.setVariants(variants);
@@ -375,16 +324,19 @@ public class ProductService {
         return filtered;
     }
 
-    /**
-     * Thực hiện enrich products with basic details.
-     * 
-     */
-    private void enrichProductsWithBasicDetails(List<Product> products) {
+        private void enrichProductsWithBasicDetails(List<Product> products) {
         if (products == null || products.isEmpty()) {
             return;
         }
         List<Integer> productIds = products.stream().map(Product::getProductId).toList();
         Map<Integer, Integer> remainingStockMap = variantDAO.getTotalStockByProductIds(productIds);
+
+        // Tải category và brand theo batch để tránh query lặp
+        Map<Integer, Category> categoryMap = categoryDAO.findAll()
+                .stream().collect(Collectors.toMap(Category::getCategoryId, c -> c));
+        Map<Integer, Brand> brandMap = brandDAO.findAll()
+                .stream().collect(Collectors.toMap(Brand::getBrandId, b -> b));
+
         for (Product product : products) {
             ProductImage primaryImage = imageDAO.findPrimaryByProductId(product.getProductId());
             if (primaryImage != null) {
@@ -398,14 +350,14 @@ public class ProductService {
             }
 
             if (product.getCategoryId() != null) {
-                var category = categoryDAO.findById(product.getCategoryId());
+                Category category = categoryMap.get(product.getCategoryId());
                 if (category != null) {
                     product.setCategory(category);
                     product.setCategoryName(category.getCategoryName());
                 }
             }
             if (product.getBrandId() != null) {
-                var brand = brandDAO.findById(product.getBrandId());
+                Brand brand = brandMap.get(product.getBrandId());
                 if (brand != null) {
                     product.setBrand(brand);
                     product.setBrandName(brand.getBrandName());
@@ -421,22 +373,17 @@ public class ProductService {
         if (product == null) {
             return;
         }
-        int totalStock = Math.max(0, product.getStockQuantity());
         int remaining = Math.max(0, remainingStock);
-        int soldQuantity = Math.max(0, totalStock - remaining);
-        if (soldQuantity > totalStock) {
-            soldQuantity = totalStock;
-        }
+        int soldQuantity = Math.max(0, product.getSoldQuantity());
+        int totalStock = remaining + soldQuantity;
         int soldPercent = totalStock > 0 ? (int) Math.round((soldQuantity * 100.0) / totalStock) : 0;
 
+        product.setStockQuantity(totalStock);
         product.setRemainingStock(remaining);
         product.setSoldQuantity(soldQuantity);
         product.setSoldPercent(soldPercent);
     }
 
-    /**
-     * Kiểm tra valid product.
-     */
     private void saveVariants(int productId, List<ProductVariant> variants) {
         if (variants == null || variants.isEmpty()) {
             return;
@@ -466,3 +413,6 @@ public class ProductService {
                 product.getProductName().length() <= 255;
     }
 }
+
+
+
