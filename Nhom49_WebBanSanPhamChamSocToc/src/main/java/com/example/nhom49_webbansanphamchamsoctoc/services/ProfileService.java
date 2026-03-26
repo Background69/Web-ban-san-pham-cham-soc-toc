@@ -27,15 +27,26 @@ public class ProfileService {
     /**
      * Cập nhật thông tin profile người dùng.
      */
-    public boolean updateProfile(User user, String newUsername, String newPhone) {
+    public boolean updateProfile(User user, String newFullname, String newUsername, String newPhone) {
         lastError = null;
         if (user == null) {
             lastError = "Không thấy user";
             return false;
         }
 
+        if (ValidationUtil.isEmpty(newFullname)) {
+            lastError = "Họ tên là bắt buộc";
+            return false;
+        }
+
         if (ValidationUtil.isEmpty(newUsername)) {
             lastError = "Username là bắt buộc";
+            return false;
+        }
+
+        String fullnameError = ValidationUtil.validateFullName(newFullname);
+        if (fullnameError != null) {
+            lastError = fullnameError;
             return false;
         }
 

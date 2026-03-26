@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
+import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 
 public class PendingRegistrationDAO {
     private final Jdbi jdbi;
+    private final UserDAO userDAO = new UserDAO();
 
     public PendingRegistrationDAO() {
         this.jdbi = JDBIConnector.getInstance();
@@ -106,27 +108,19 @@ public class PendingRegistrationDAO {
                 return -1;
             }
 
-            int userId = handle.createUpdate("""
-                            INSERT INTO users
-                                (email, username, full_name, password, phone, avatar, role, is_active, google_id, auth_provider)
-                            VALUES
-                                (:email, :username, :fullName, :password, :phone, :avatar, :role, :isActive, :googleId, :authProvider)
-                            """)
-                    .bind("email", pending.getEmail())
-                    .bind("username", pending.getUsername())
-                    .bind("fullName", pending.getFullName())
-                    .bind("password", pending.getPasswordHash())
-                    .bind("phone", pending.getPhone())
-                    .bind("avatar", "avatar/avatar.jpg")
-                    .bind("role", "Khách hàng")
-                    .bind("isActive", true)
-                    .bind("googleId", (String) null)
-                    .bind("authProvider", "LOCAL")
-                    .executeAndReturnGeneratedKeys("user_id")
-                    .mapTo(Integer.class)
-                    .findFirst()
-                    .orElse(-1);
+            User user = new User();
+            user.setEmail(pending.getEmail());
+            user.setUsername(pending.getUsername());
+            user.setFullName(pending.getFullName());
+            user.setPassword(pending.getPasswordHash());
+            user.setPhone(pending.getPhone());
+            user.setAvatar("avatar/avatar.jpg");
+            user.setRole("Khach hang");
+            user.setActive(true);
+            user.setGoogleId(null);
+            user.setAuthProvider("LOCAL");
 
+            int userId = userDAO.insert(handle, user);
             if (userId <= 0) {
                 return -1;
             }
