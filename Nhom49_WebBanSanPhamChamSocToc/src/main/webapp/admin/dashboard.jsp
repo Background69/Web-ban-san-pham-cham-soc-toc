@@ -134,7 +134,7 @@
         </div>
         <!--chart-->
         <div style = "margin-bottom: 20px">
-            <select id="filterRevenue" onchange="changeFilter()">
+            <select id="filterRevenue" onchange="loadChart()">
                 <option value="week" ${type=='week'? 'selected':''} >Theo tuần</option>
                 <option value="month" ${type=='month'? 'selected':''} >Theo tháng</option>
                 <option value="year" ${type=='year'? 'selected':''} >Theo năm</option>
@@ -160,28 +160,68 @@
     </main>
 
 </div>
-<script> function changeFilter(){
-    const type = document.getElementById("filterRevenue").value;
-    window.location.href ="${pageContext.request.contextPath}/admin/dashboard?type=" + type;
-
-}</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const revenueLabels = ${revenueLabels};
-    const revenueData = ${revenueData};
+    let chart;
+    function ichart(labels,data) {
+        const ctx = document.getElementById('revenuechart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, "rgba(75, 192, 192, 0.5)");
+        gradient.addColorStop(1, "rgba(75, 192, 192, 0)");
 
-    new Chart(document.getElementById('revenuechart'),{
-        type: 'line',
-        data: {
-            labels: revenueLabels,
-            datasets:[{
-                label:'Doanh thu',
-                data:revenueData,
-                borderWidth:2,
-                fill:false
-            }]
-        }
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: data,
+                    borderWidth: 2,
+                    borderColor: "#4bc0c0",
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: "#4bc0c0"
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return value.toLocaleString() + " ₫";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    function loadChart() {
+        const type = document.getElementById("filterRevenue").value;
+        fetch("${pageContext.request.contextPath}/admin/dashboard-data?type=" + type)
+        .then(res => res.json())
+        .then(data => {
+            if (!chart){
+                ichart(data.labels, data.values);
+            }else {
+                chart.data.labels = data.labels;
+                chart.data.datasets[0].data = data.values;
+                chart.update();
+            }
     });
+    }
+    window.onload= function (){
+        loadChart();
+    }
 </script>
 </body>
 
