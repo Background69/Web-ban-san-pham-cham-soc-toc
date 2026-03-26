@@ -8,8 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chỉnh sửa hồ sơ - HairGlow</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/profile.css">
 </head>
@@ -115,17 +113,22 @@
                         <i class="fas fa-lock me-1"></i> Email không thể thay đổi
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label" for="fullname">
                         <i class="fas fa-user me-1"></i> Họ tên
                     </label>
-                    <input type="text" class="form-control" id="fullname" name="fullname"
-                           value="${user.fullname}" required minlength="3" maxlength="50"
-                           pattern="[a-zA-Z0-9_]+" oninput="validateUsername(this)">
-                    <div class="form-hint" id="usernameHint">
+                    <input type="text" class="form-control" id="fullname"
+                           name="fullname"
+                           value="${user.fullName}"
+                           required minlength="10" maxlength="30"
+                           pattern="[A-Za-zÀ-ỹ\s]+"
+                           oninput="validateFullname(this)">
+                    <div class="form-hint" id="fullnameHint">
                         Chỉ chứa chữ cái, số và dấu gạch dưới (_)
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label" for="username">
                         <i class="fas fa-user me-1"></i> Tên đăng nhập
@@ -210,25 +213,38 @@
         }
     }
 
-    function validateFullname(fullname) {
-        if (!fullname || fullname.trim().length === 0) {
-            return "Họ tên không được để trống";
+    function validateFullname(input) {
+        const hint = document.getElementById('fullnameHint');
+        const value = input.value.trim().replace(/\s+/g, " ");
+        const regex = /^[A-Za-zÀ-ỹ\s]+$/;
+
+        if (value.length === 0) {
+            input.classList.remove('is-valid', 'is-invalid');
+            hint.innerHTML = 'Họ tên chỉ được chứa chữ cái và khoảng trắng';
+            hint.style.color = '';
+            return;
         }
 
-        // Chuẩn hóa giống Java: xóa khoảng trắng thừa giữa các từ
-        const normalized = fullname.trim().replace(/\s+/g, " ");
-
-        if (normalized.length < 10 || normalized.length > 30) {
-            return "Họ tên phải từ 10–30 ký tự";
+        if (value.length < 10 || value.length > 30) {
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+            hint.innerHTML = '<i class="fas fa-times-circle me-1"></i> Họ tên phải từ 10–30 ký tự';
+            hint.style.color = '#ef4444';
+            return;
         }
 
-        // Chỉ cho phép chữ cái + khoảng trắng (bao gồm unicode)
-        const FULLNAME_PATTERN = /^[A-Za-zÀ-ỹ\s]+$/;
-        if (!FULLNAME_PATTERN.test(normalized)) {
-            return "Họ tên chỉ được chứa chữ cái và khoảng trắng";
+        if (!regex.test(value)) {
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+            hint.innerHTML = '<i class="fas fa-times-circle me-1"></i> Chỉ được chứa chữ cái và khoảng trắng';
+            hint.style.color = '#ef4444';
+            return;
         }
 
-        return null; // Hợp lệ
+        input.classList.add('is-valid');
+        input.classList.remove('is-invalid');
+        hint.innerHTML = '<i class="fas fa-check-circle me-1"></i> Hợp lệ';
+        hint.style.color = '#10b981';
     }
 
     function validatePhone(input) {
