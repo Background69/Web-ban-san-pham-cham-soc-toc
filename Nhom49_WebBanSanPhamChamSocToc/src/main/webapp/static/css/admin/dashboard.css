@@ -408,3 +408,25 @@ body {
 .product-form-wrapper::-webkit-scrollbar-track {
     background: #e8f5e9;
 }
+#filterRevenue{
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+.filter-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-box label {
+    font-weight: 500;
+    color: #333;
+}
+#filterRevenue:hover{
+    border-color: #4bc0c0;
+}
