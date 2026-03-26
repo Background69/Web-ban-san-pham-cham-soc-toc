@@ -260,12 +260,28 @@ body {
     background: #ff9800;
 }
 
+.status.confirmed {
+    background: #2196f3;
+}
+
+.status.processing {
+    background: #9c27b0;
+}
+
+.status.shipping {
+    background: #00acc1;
+}
+
 .status.completed {
     background: #4caf50;
 }
 
 .status.cancelled {
     background: #f44336;
+}
+
+.status.unknown {
+    background: #9e9e9e;
 }
 
 /* Action Buttons */
@@ -295,6 +311,7 @@ body {
 .action-btn.delete:hover {
     background: #c0392b;
 }
+
 /* Reset nhẹ */
 * {
     box-sizing: border-box;
@@ -304,13 +321,13 @@ body {
 /* Wrapper ngoài */
 .product-form-wrapper {
     max-width: 600px;
-    max-height: 80vh;          /* 👈 để có scroll */
+    max-height: 80vh; /* 👈 để có scroll */
     margin: 40px auto;
     padding: 25px;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;          /* 👈 thanh cuộn dọc */
+    overflow-y: auto; /* 👈 thanh cuộn dọc */
 }
 
 /* Tiêu đề */

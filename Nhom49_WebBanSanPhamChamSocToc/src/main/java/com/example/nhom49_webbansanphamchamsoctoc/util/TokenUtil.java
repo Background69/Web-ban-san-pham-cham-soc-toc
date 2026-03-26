@@ -40,12 +40,6 @@ public final class TokenUtil {
         }
     }
 
-    /**
-     * Thực hiện to hex.
-     *
-     * @param bytes Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     private static String toHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder(bytes.length * 2);
         for (byte b : bytes) {
@@ -54,8 +48,3 @@ public final class TokenUtil {
         return sb.toString();
     }
 }
-
-
-
-
-

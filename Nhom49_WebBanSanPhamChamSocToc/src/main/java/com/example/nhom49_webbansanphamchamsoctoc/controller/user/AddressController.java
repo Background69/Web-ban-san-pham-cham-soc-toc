@@ -73,7 +73,7 @@ public class AddressController extends HttpServlet {
 
         String pathInfo = request.getPathInfo();
 
-        if (pathInfo == null || pathInfo.equals("/") || pathInfo.equals("/save")) {
+        if (pathInfo == null || pathInfo.equals("/") || pathInfo.equals("/save") || pathInfo.equals("/add")) {
             saveAddress(request, response, user);
         } else if (pathInfo.equals("/set-default")) {
             setDefaultAddress(request, response, user);
@@ -89,7 +89,6 @@ public class AddressController extends HttpServlet {
 
         String fullName = request.getParameter("fullName");
         String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
         String provinceCode = request.getParameter("provinceCode");
         String provinceName = request.getParameter("provinceName");
         String districtCode = request.getParameter("districtCode");
@@ -103,7 +102,6 @@ public class AddressController extends HttpServlet {
         address.setUserId(user.getUserId());
         address.setFullName(fullName);
         address.setPhone(phone);
-        address.setEmail(email);
         address.setProvinceCode(provinceCode);
         address.setProvinceName(provinceName);
         address.setDistrictCode(districtCode);

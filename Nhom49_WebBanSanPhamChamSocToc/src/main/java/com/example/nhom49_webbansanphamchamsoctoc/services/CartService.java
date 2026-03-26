@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Lớp CartService.
- */
 public class CartService {
 
     private static final String CART_SESSION_KEY = "cart";
@@ -26,27 +23,18 @@ public class CartService {
     private final ProductDAO productDAO;
     private final ProductImgDAO imageDAO;
 
-    /**
-     * Thực hiện cart service.
-     */
     public CartService() {
         this.variantDAO = new ProductVariantDAO();
         this.productDAO = new ProductDAO();
         this.imageDAO = new ProductImgDAO();
     }
 
-    /**
-     * Thực hiện cart service.
-     */
     public CartService(ProductVariantDAO variantDAO, ProductDAO productDAO, ProductImgDAO imageDAO) {
-        this.variantDAO = new ProductVariantDAO();
-        this.productDAO = new ProductDAO();
-        this.imageDAO = imageDAO != null ? imageDAO : new ProductImgDAO();
+        this.variantDAO = (variantDAO != null) ? variantDAO : new ProductVariantDAO();
+        this.productDAO = (productDAO != null) ? productDAO : new ProductDAO();
+        this.imageDAO = (imageDAO != null) ? imageDAO : new ProductImgDAO();
     }
 
-    /**
-     * Lấy cart từ session, nếu chua co thi tạo mới.
-     */
     public Cart getCart(HttpSession session) {
         if (session == null) return new Cart();
         Object obj = session.getAttribute(CART_SESSION_KEY);
@@ -63,18 +51,12 @@ public class CartService {
         return cart;
     }
 
-    /**
-     * Thực hiện save cart to session.
-     */
     private void saveCartToSession(HttpSession session, Cart cart) {
         if (session != null) {
             session.setAttribute(CART_SESSION_KEY, cart);
         }
     }
 
-    /**
-     * Them sản phẩm vao giỏ hàng.
-     */
     public boolean addToCart(HttpSession session, int variantId, int quantity) {
         if (session == null || variantId <= 0) return false;
 
@@ -105,9 +87,6 @@ public class CartService {
         return true;
     }
 
-    /**
-     * Cập nhật quantity.
-     */
     public boolean updateQuantity(HttpSession session, int variantId, int quantity) {
         if (session == null) return false;
 
@@ -124,9 +103,6 @@ public class CartService {
         return true;
     }
 
-    /**
-     * Xóa sản phẩm trong cart.
-     */
     public boolean removeFromCart(HttpSession session, int variantId) {
         if (session == null) return false;
 
@@ -136,25 +112,16 @@ public class CartService {
         return true;
     }
 
-    /**
-     * Thực hiện clear cart.
-     */
     public void clearCart(HttpSession session) {
         if (session != null) {
             session.removeAttribute(CART_SESSION_KEY);
         }
     }
 
-    /**
-     * Lấy danh sach cart items đã được lam moi thong tin.
-     */
     public List<CartItem> getCartItems(HttpSession session) {
         return getCartItems(getCart(session));
     }
 
-    /**
-     * Lấy danh sach cart items đã được lam moi thong tin.
-     */
     public List<CartItem> getCartItems(Cart cart) {
         List<CartItem> items = new ArrayList<>();
         if (cart == null) return items;
@@ -182,33 +149,21 @@ public class CartService {
         return items;
     }
 
-    /**
-     * Thực hiện calculate subtotal.
-     */
     public BigDecimal calculateSubtotal(HttpSession session) {
         List<CartItem> refreshedItems = getCartItems(session);
         return calculateSubtotal(refreshedItems);
     }
 
-    /**
-     * Thực hiện calculate subtotal.
-     */
     public BigDecimal calculateSubtotal(List<CartItem> items) {
         return items.stream()
                 .map(CartItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    /**
-     * Lấy số lượng sản phẩm trỗng gio.
-     */
     public int getCartCount(HttpSession session) {
         return getCart(session).getTotalQuantity();
     }
 
-    /**
-     * Lấy product primary image.
-     */
     private String getProductPrimaryImage(int productId) {
         List<ProductImage> images = imageDAO.findByProductId(productId);
         if (images != null && !images.isEmpty()) {
@@ -220,9 +175,6 @@ public class CartService {
         return null;
     }
 
-    /**
-     * Thực hiện rebuild cart from map.
-     */
     private Cart rebuildCartFromMap(Map<?, ?> cartMap) {
         Cart cart = new Cart();
         if (cartMap == null || cartMap.isEmpty()) {
@@ -254,9 +206,6 @@ public class CartService {
         return cart;
     }
 
-    /**
-     * Thực hiện parse integer.
-     */
     private Integer parseInteger(Object value) {
         if (value instanceof Number) {
             return ((Number) value).intValue();
@@ -271,28 +220,13 @@ public class CartService {
         return null;
     }
 
-    /**
-     * Thực hiện load cart from database.
-
-     */
+    // Cart chỉ lưu ở session, chưa đồng bộ với database
     public void loadCartFromDatabase(HttpSession session, int userId) {
-        // Cart dang luu trỗng session, chua dong bo với database
     }
 
-    /**
-     * Xóa cart trỗng database (neu co).
-
-     */
     public void clearCartInDatabase(int userId) {
-        // Cart chỉ luu o session, chua can thao tac DB
     }
 
-    /**
-     * Kiểm tra hop le stock từ Cart.
-     *
-     * @param cart Tham số đầu vào.
-     * @return Kết quả xử lý của phương thức.
-     */
     public List<StockValidationResult> validateStock(Cart cart) {
         if (cart == null) {
             return new ArrayList<>();
@@ -300,10 +234,6 @@ public class CartService {
         return validateStock(cart.toVariantQuantityMap());
     }
 
-    /**
-     * Kiểm tra hop le stock.
-
-     */
     public List<StockValidationResult> validateStock(Map<Integer, Integer> cartMap) {
         List<StockValidationResult> invalidItems = new ArrayList<>();
         if (cartMap == null || cartMap.isEmpty()) return invalidItems;
@@ -330,16 +260,10 @@ public class CartService {
         return invalidItems;
     }
 
-    /**
-     * Kiểm tra stock valid.
-     */
     public boolean isStockValid(HttpSession session) {
         return validateStock(getCart(session)).isEmpty();
     }
 
-    /**
-     * Tạo thông báo lỗi stock.
-     */
     public String buildStockErrorMessage(List<StockValidationResult> items) {
         if (items == null || items.isEmpty()) {
             return "";
@@ -357,16 +281,10 @@ public class CartService {
         return sb.toString();
     }
 
-    /**
-     * Lấy cart as map.
-     */
     public Map<Integer, Integer> getCartAsMap(HttpSession session) {
         return getCart(session).toVariantQuantityMap();
     }
 
-    /**
-     * Ket qua kiem tra tồn kho.
-     */
     public static class StockValidationResult {
         private final int variantId;
         private final String productName;
@@ -374,9 +292,6 @@ public class CartService {
         private final int requestedQuantity;
         private final int availableStock;
 
-        /**
-         * Thực hiện stock validation result.
-         */
         public StockValidationResult(int variantId, String productName, String variantName, int requestedQuantity, int availableStock) {
             this.variantId = variantId;
             this.productName = productName;
@@ -385,49 +300,10 @@ public class CartService {
             this.availableStock = availableStock;
         }
 
-        /**
-         * Lấy variant id.
-         *
-         * @return Kết quả xử lý của phương thức.
-         */
-        public int getVariantId() {
-            return variantId;
-        }
-
-        /**
-         * Lấy product name.
-         *
-         * @return Kết quả xử lý của phương thức.
-         */
-        public String getProductName() {
-            return productName;
-        }
-
-        /**
-         * Lấy variant name.
-         *
-         * @return Kết quả xử lý của phương thức.
-         */
-        public String getVariantName() {
-            return variantName;
-        }
-
-        /**
-         * Lấy requested quantity.
-         *
-         * @return Kết quả xử lý của phương thức.
-         */
-        public int getRequestedQuantity() {
-            return requestedQuantity;
-        }
-
-        /**
-         * Lấy available stock.
-         *
-         * @return Kết quả xử lý của phương thức.
-         */
-        public int getAvailableStock() {
-            return availableStock;
-        }
+        public int getVariantId() { return variantId; }
+        public String getProductName() { return productName; }
+        public String getVariantName() { return variantName; }
+        public int getRequestedQuantity() { return requestedQuantity; }
+        public int getAvailableStock() { return availableStock; }
     }
 }

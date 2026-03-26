@@ -18,6 +18,35 @@ public class Cart implements Serializable {
     }
 
     /**
+     * Tạo cart từ map variantId -> quantity.
+     */
+    public static Cart fromVariantQuantityMap(Map<Integer, Integer> map) {
+        Cart cart = new Cart();
+        if (map == null || map.isEmpty()) {
+            return cart;
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int variantId = entry.getKey();
+            int quantity = entry.getValue() != null ? entry.getValue() : 0;
+            if (variantId <= 0 || quantity <= 0) {
+                continue;
+            }
+
+            // Tạo variant stub để giữ variantId; giá se được cập nhật sau
+            ProductVariant variant = new ProductVariant();
+            variant.setVariantId(variantId);
+            variant.setOriginalPrice(BigDecimal.ZERO);
+            variant.setSalePrice(BigDecimal.ZERO);
+
+            CartItem item = new CartItem(null, variant, quantity);
+            cart.addItem(item);
+        }
+
+        return cart;
+    }
+
+    /**
      * Them item.
      */
     public void addItem(CartItem item) {
@@ -105,35 +134,6 @@ public class Cart implements Serializable {
             map.put(item.getVariantId(), item.getQuantity());
         }
         return map;
-    }
-
-    /**
-     * Tạo cart từ map variantId -> quantity.
-     */
-    public static Cart fromVariantQuantityMap(Map<Integer, Integer> map) {
-        Cart cart = new Cart();
-        if (map == null || map.isEmpty()) {
-            return cart;
-        }
-
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            int variantId = entry.getKey();
-            int quantity = entry.getValue() != null ? entry.getValue() : 0;
-            if (variantId <= 0 || quantity <= 0) {
-                continue;
-            }
-
-            // Tạo variant stub để giữ variantId; giá se được cập nhật sau
-            ProductVariant variant = new ProductVariant();
-            variant.setVariantId(variantId);
-            variant.setOriginalPrice(BigDecimal.ZERO);
-            variant.setSalePrice(BigDecimal.ZERO);
-
-            CartItem item = new CartItem(null, variant, quantity);
-            cart.addItem(item);
-        }
-
-        return cart;
     }
 
     /**
