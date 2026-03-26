@@ -6,7 +6,8 @@
     BlinkMacSystemFont, 'Segoe UI',
     Arial, sans-serif;
 }
-:root{
+
+:root {
     --primary: #006b5c;
     --primary-2: #009b7c;
     --bg: #f6f8fb;
@@ -14,57 +15,56 @@
     --text: #1f2a37;
     --muted: #6b7280;
     --border: #e5e7eb;
-    --shadow: 0 10px 28px rgba(0,0,0,.08);
+    --shadow: 0 10px 28px rgba(0, 0, 0, .08);
 }
 
-.support-main{
+.support-main {
     background: var(--bg);
     padding: 0 0 56px;
     color: var(--text);
 }
 
-.support-container{
+.support-container {
     width: min(1100px, 92%);
     margin: 0 auto;
 }
 
-.support-banner{
+.support-banner {
     height: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background:
-            linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,.45)),
-            url("../../assets/images/banner.jpg");
+    background: linear-gradient(0deg, rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)),
+    url("../../assets/images/banner.jpg");
     background-size: cover;
     background-position: center;
 }
 
-.support-banner-content{
+.support-banner-content {
     text-align: center;
     color: #fff;
     padding: 0 16px;
 }
 
-.support-banner-content h1{
+.support-banner-content h1 {
     font-size: 40px;
     font-weight: 900;
     margin: 0 0 10px;
     letter-spacing: .2px;
 }
 
-.support-banner-content p{
+.support-banner-content p {
     margin: 0;
     font-size: 15px;
     opacity: .95;
 }
 
-.support-search{
+.support-search {
     margin-top: -26px;
     margin-bottom: 20px;
 }
 
-.support-search form{
+.support-search form {
     display: flex;
     align-items: center;
     background: var(--card);
@@ -74,7 +74,7 @@
     overflow: hidden;
 }
 
-.support-search input{
+.support-search input {
     flex: 1;
     border: 0;
     outline: 0;
@@ -83,7 +83,7 @@
     background: transparent;
 }
 
-.support-search button{
+.support-search button {
     width: 56px;
     height: 50px;
     border: 0;
@@ -94,19 +94,19 @@
     transition: background .2s ease;
 }
 
-.support-search button:hover{
+.support-search button:hover {
     background: var(--primary-2);
 }
 
 
-.contact-quick{
+.contact-quick {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     margin: 18px 0 26px;
 }
 
-.contact-item{
+.contact-item {
     background: var(--card);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
@@ -118,64 +118,64 @@
     min-height: 140px;
 }
 
-.contact-icon{
+.contact-icon {
     width: 48px;
     height: 48px;
     border-radius: 14px;
     display: grid;
     place-items: center;
-    background: rgba(0,107,92,.10);
+    background: rgba(0, 107, 92, .10);
     color: var(--primary);
     flex: 0 0 48px;
 }
 
-.contact-icon i{
+.contact-icon i {
     font-size: 18px;
 }
 
-.contact-body{
+.contact-body {
     flex: 1;
     min-width: 0;
 }
 
-.contact-body h3{
+.contact-body h3 {
     margin: 2px 0 8px;
     font-size: 16px;
     font-weight: 900;
 }
 
-.contact-body p{
+.contact-body p {
     margin: 0 0 6px;
     font-weight: 800;
     color: var(--text);
     word-break: break-word;
 }
 
-.contact-body span{
+.contact-body span {
     color: var(--muted);
     font-size: 13px;
 }
 
-.chat-btn{
+.chat-btn {
     margin-top: 10px;
     width: 100%;
     max-width: 320px;
     padding: 10px 14px;
     border-radius: 12px;
-    border: 1px solid rgba(0,107,92,.25);
-    background: rgba(0,107,92,.08);
+    border: 1px solid rgba(0, 107, 92, .25);
+    background: rgba(0, 107, 92, .08);
     color: var(--primary);
     font-weight: 800;
     cursor: pointer;
     transition: all .2s ease;
 }
 
-.chat-btn:hover{
-    background: rgba(0,107,92,.14);
+.chat-btn:hover {
+    background: rgba(0, 107, 92, .14);
     transform: translateY(-1px);
 }
 
-.support-section{
+.support-section {
     background: var(--card);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
@@ -184,7 +184,7 @@
     margin: 16px 0;
 }
 
-.support-section h2{
+.support-section h2 {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -193,17 +193,17 @@
     margin: 0 0 14px;
 }
 
-.support-section h2 i{
+.support-section h2 i {
     color: var(--primary);
 }
 
-.guide-steps{
+.guide-steps {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
 }
 
-.step{
+.step {
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 14px;
@@ -211,12 +211,12 @@
     transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.step:hover{
+.step:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0,0,0,.06);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
 }
 
-.step-number{
+.step-number {
     width: 36px;
     height: 36px;
     border-radius: 12px;
@@ -228,114 +228,114 @@
     margin-bottom: 10px;
 }
 
-.step h4{
+.step h4 {
     margin: 0 0 6px;
     font-size: 15px;
     font-weight: 900;
 }
 
-.step p{
+.step p {
     margin: 0;
     color: var(--muted);
     font-size: 13px;
     line-height: 1.5;
 }
 
-.policy-content h4{
+.policy-content h4 {
     margin: 12px 0 8px;
     font-size: 14px;
     font-weight: 900;
 }
 
 .policy-content ul,
-.policy-content ol{
+.policy-content ol {
     margin: 0 0 8px 18px;
 }
 
-.policy-content li{
+.policy-content li {
     margin: 6px 0;
     color: var(--muted);
     line-height: 1.55;
 }
 
-.payment-methods{
+.payment-methods {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
 }
 
-.method{
+.method {
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 14px;
     background: #fff;
 }
 
-.method i{
+.method i {
     color: var(--primary);
     font-size: 20px;
 }
 
-.method h4{
+.method h4 {
     margin: 10px 0 6px;
     font-size: 15px;
     font-weight: 900;
 }
 
-.method p{
+.method p {
     margin: 0;
     color: var(--muted);
     font-size: 13px;
     line-height: 1.5;
 }
 
-.shipping-info{
+.shipping-info {
     overflow-x: auto;
 }
 
-.shipping-table{
+.shipping-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 640px;
 }
 
-.shipping-table thead th{
-    background: rgba(0,107,92,.08);
+.shipping-table thead th {
+    background: rgba(0, 107, 92, .08);
     text-align: left;
     font-weight: 900;
     padding: 12px;
     border-bottom: 1px solid var(--border);
 }
 
-.shipping-table td{
+.shipping-table td {
     padding: 12px;
     border-bottom: 1px solid var(--border);
     color: var(--muted);
 }
 
-.note{
+.note {
     margin-top: 10px;
     color: var(--muted);
     font-size: 13px;
 }
 
-.note i{
+.note i {
     color: var(--primary);
 }
 
-.faq-list{
+.faq-list {
     display: grid;
     gap: 10px;
 }
 
-.faq-item{
+.faq-item {
     border: 1px solid var(--border);
     border-radius: 14px;
     overflow: hidden;
     background: #fff;
 }
 
-.faq-question{
+.faq-question {
     width: 100%;
     border: 0;
     background: #fff;
@@ -348,12 +348,12 @@
     color: var(--text);
 }
 
-.faq-question i{
+.faq-question i {
     color: var(--primary);
     transition: transform .2s ease;
 }
 
-.faq-answer{
+.faq-answer {
     display: none;
     padding: 0 14px 14px;
     color: var(--muted);
@@ -361,44 +361,51 @@
     font-size: 14px;
 }
 
-.faq-item.active .faq-answer{
+.faq-item.active .faq-answer {
     display: block;
 }
 
-.faq-item.active .faq-question i{
+.faq-item.active .faq-question i {
     transform: rotate(180deg);
 }
 
 /* Responsive */
-@media (max-width: 992px){
-    .contact-quick{
+@media (max-width: 992px) {
+    .contact-quick {
         grid-template-columns: 1fr;
     }
-    .guide-steps{
+
+    .guide-steps {
         grid-template-columns: 1fr 1fr;
     }
-    .payment-methods{
+
+    .payment-methods {
         grid-template-columns: 1fr 1fr;
     }
-    .support-banner{
+
+    .support-banner {
         height: 260px;
     }
-    .support-banner-content h1{
+
+    .support-banner-content h1 {
         font-size: 30px;
     }
 }
 
-@media (max-width: 576px){
-    .guide-steps{
+@media (max-width: 576px) {
+    .guide-steps {
         grid-template-columns: 1fr;
     }
-    .payment-methods{
+
+    .payment-methods {
         grid-template-columns: 1fr;
     }
-    .support-banner-content h1{
+
+    .support-banner-content h1 {
         font-size: 26px;
     }
-    .chat-btn{
+
+    .chat-btn {
         max-width: 100%;
     }
 }

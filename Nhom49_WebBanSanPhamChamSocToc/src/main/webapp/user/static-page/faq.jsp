@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java"  pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -80,7 +80,8 @@
 <section class="faq-wrap">
     <div class="faq-item">
         <h3><i class="fas fa-truck-fast"></i> Thời gian giao hàng bao lâu?</h3>
-        <p>Đơn nội thành thường 1-2 ngày, ngoại tỉnh 3-5 ngày làm việc. Bạn có thể chọn giao nhanh ở bước thanh toán.</p>
+        <p>Đơn nội thành thường 1-2 ngày, ngoại tỉnh 3-5 ngày làm việc. Bạn có thể chọn giao nhanh ở bước thanh
+            toán.</p>
     </div>
     <div class="faq-item">
         <h3><i class="fas fa-rotate"></i> Đổi trả như thế nào?</h3>

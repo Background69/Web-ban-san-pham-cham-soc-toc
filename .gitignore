@@ -43,6 +43,7 @@ replay_pid*
 catalina.out
 tomcat.*/
 *.log
+.smarttomcat/
 
 # ===========================
 # Database
@@ -110,3 +111,4 @@ yarn.lock
 /Nhom49_WebBanSanPhamChamSocToc/Nhom49_WebBanSanPhamChamSocToc.iml
 /test/
 /Nhom49_WebBanSanPhamChamSocToc/src/main/resources/
+/Nhom49_WebBanSanPhamChamSocToc/test/

@@ -31,8 +31,6 @@ public class CategoryManagementController extends HttpServlet {
         categoryService = new CategoryService();
     }
 
-
-    // ====== GET ======
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -60,6 +58,38 @@ public class CategoryManagementController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/admin/categories");
                 }
                 break;
+        if ("/admin/categories".equals(path)) {
+            listCategory(request, response);
+            return;
+        }
+
+        if ("/admin/category/add".equals(path)) {
+            request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
+            return;
+        }
+
+        if ("/admin/category/edit".equals(path)) {
+            int id = parseIntSafe(request.getParameter("id"));
+            if (id > 0) {
+                Category c = categoryService.getCategoryById(id);
+                if (c != null) {
+                    request.setAttribute("category", c);
+                    request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
+                    return;
+                }
+            }
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            return;
+        }
+
+        if ("/admin/category/delete".equals(path)) {
+            int id = parseIntSafe(request.getParameter("id"));
+            if (id > 0) {
+                categoryService.deleteCategory(id);
+            }
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            return;
+        }
 
             case "/admin/category/delete":
                 int deleteId = parseIntSafe(request.getParameter("id"));
@@ -89,6 +119,12 @@ public class CategoryManagementController extends HttpServlet {
             String idStr = trimOrEmpty(request.getParameter("id"));
             String name = trimOrEmpty(request.getParameter("categoryName"));
             String slug = trimOrEmpty(request.getParameter("categorySlug"));
+        String path = request.getServletPath();
+
+        if (!"/admin/category/save".equals(path)) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
             // ===== VALIDATE =====
             if (name.isEmpty() || name.length() > 100) {
@@ -106,6 +142,19 @@ public class CategoryManagementController extends HttpServlet {
                 Category c = new Category();
                 c.setCategoryName(name);
                 c.setCategorySlug(slug);
+        if (name.isEmpty() || name.length() > 100) {
+            String msg = URLEncoder.encode("Tên danh mục không hợp lệ", StandardCharsets.UTF_8);
+            String back = idStr.isEmpty() ? "/admin/category/add" : ("/admin/category/edit?id=" + idStr);
+            response.sendRedirect(request.getContextPath() + back + "&error=" + msg);
+            return;
+        }
+
+        if (slug.isEmpty() || slug.length() > 120) {
+            String msg = URLEncoder.encode("Slug không hợp lệ", StandardCharsets.UTF_8);
+            String back = idStr.isEmpty() ? "/admin/category/add" : ("/admin/category/edit?id=" + idStr);
+            response.sendRedirect(request.getContextPath() + back + "&error=" + msg);
+            return;
+        }
 
                 int newId = categoryService.createCategory(c);
                 if (newId <= 0) {
@@ -132,6 +181,21 @@ public class CategoryManagementController extends HttpServlet {
 
             exist.setCategoryName(name);
             exist.setCategorySlug(slug);
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            return;
+        }
+
+        int id = parseIntSafe(idStr);
+        if (id <= 0) {
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            return;
+        }
+
+        Category exist = categoryService.getCategoryById(id);
+        if (exist == null) {
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            return;
+        }
 
             boolean ok = categoryService.updateCategory(exist);
             if (!ok) {
@@ -153,6 +217,22 @@ public class CategoryManagementController extends HttpServlet {
 
         private String trimOrEmpty(String s) {
             return (s == null) ? "" : s.trim();
+    private void listCategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        List<Category> categories = categoryService.getAllCategories();
+        request.setAttribute("categories", categories);
+        request.getRequestDispatcher("/admin/category/list.jsp").forward(request, response);
+    }
+
+    private int parseIntSafe(String s) {
+        try {
+            if (s == null) return -1;
+            s = s.trim();
+            if (s.isEmpty()) return -1;
+            return Integer.parseInt(s);
+        } catch (Exception e) {
+            return -1;
         }
 
         private void redirectError(HttpServletResponse response, HttpServletRequest request, String message)
@@ -161,3 +241,7 @@ public class CategoryManagementController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/category/add?error=" + msg);
         }
         }
+    private String trimOrEmpty(String s) {
+        return s == null ? "" : s.trim();
+    }
+}

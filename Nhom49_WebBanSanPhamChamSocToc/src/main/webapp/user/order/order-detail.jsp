@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +11,10 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/order.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
+
 <body>
 <jsp:include page="/layout/header.jsp"/>
 
@@ -24,10 +27,11 @@
 
         <div class="order-card">
             <div class="order-header">
-                <span class="order-date">
-                    <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
-                </span>
-                <span class="order-status status-${order.orderStatus != null ? order.orderStatus : 'pending'}">
+                                <span class="order-date">
+                                    <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
+                                </span>
+                <span
+                        class="order-status status-${order.orderStatus != null ? order.orderStatus : 'pending'}">
                     ${order.statusDisplayName}
                 </span>
             </div>
@@ -52,27 +56,31 @@
             <div class="order-items">
                 <c:forEach var="item" items="${order.orderItems}">
                     <div class="order-item">
-                        <img src="${pageContext.request.contextPath}/static/images/default-product.png"
-                             alt="${item.productName}">
+                        <img src="${pageContext.request.contextPath}/static/${not empty item.productImage ? item.productImage : 'assets/icons/LOGO.png'}"
+                             alt="${item.productName}"
+                             onerror="this.src='${pageContext.request.contextPath}/static/assets/icons/LOGO.png'">
                         <div class="item-info">
                             <span class="item-name">${item.productName}</span>
                             <span class="item-variant">${item.variantName}</span>
                             <span class="item-qty">x${item.quantity}</span>
                         </div>
                         <span class="item-price">
-                            <fmt:formatNumber value="${item.totalPrice}" type="number"/>₫
-                        </span>
+                                            <fmt:formatNumber value="${item.totalPrice}" type="number"/>₫
+                                        </span>
                     </div>
                 </c:forEach>
             </div>
 
             <div class="order-footer">
                 <div class="order-total">
-                    Tổng tiền: <span><fmt:formatNumber value="${order.totalAmount}" type="number"/>₫</span>
+                    Tổng tiền: <span>
+                                        <fmt:formatNumber value="${order.totalAmount}" type="number"/>₫
+                                    </span>
                 </div>
                 <div class="order-actions">
                     <c:if test="${order.orderStatus == 'pending'}">
-                        <form action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel" method="post">
+                        <form action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel"
+                              method="post">
                             <button type="submit" class="btn-cancel"
                                     onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
                                 Hủy đơn
@@ -87,5 +95,5 @@
 
 <jsp:include page="/layout/footer.jsp"/>
 </body>
-</html>
 
+</html>
