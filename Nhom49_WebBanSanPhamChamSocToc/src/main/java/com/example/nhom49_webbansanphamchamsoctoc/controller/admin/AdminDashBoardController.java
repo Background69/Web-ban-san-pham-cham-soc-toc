@@ -76,8 +76,10 @@ public class AdminDashBoardController extends HttpServlet {
                 revenueData = orderDAO.getRevenueByWeek();
                 revenueLabels = "[\"Thứ 2\",\"Thứ 3\",\"Thứ 4\",\"Thứ 5\",\"Thứ 6\",\"Thứ 7\",\"Chủ Nhật\"]";
         }
+        List<Integer> statusData = orderDAO.getOrderStatusStats();
+        String statusLabels = "[\"Hoàn thành\",\"Đã huỷ\",\"Chờ xử lý\"]";
         response.setContentType("application/json;charset=UTF-8");
-        String json = "{ \"labels\":" + revenueLabels + ", \"values\":" + revenueData + "}";
+        String json = "{ \"labels\":" + revenueLabels + ", \"values\":" + revenueData.toString() + "," + "\"statusLabels\":" + statusLabels + "," + "\"statusValues\":" + statusData.toString() + "}";
         response.getWriter().write(json);
     }
 }
