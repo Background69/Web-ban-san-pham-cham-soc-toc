@@ -4,7 +4,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
-import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,6 +27,12 @@ public class OtpController extends HttpServlet {
         request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
     }
 
+    /**
+     * Xử lý xác nhận OTP cho cả hai trường hợp: quên mật khẩu và đăng ký tài khoản mới.
+     * Mục đích OTP được xác định thông qua session, và luồng xử lý
+     * sẽ khác nhau tùy vào mục đích đó. Sau khi xác nhận OTP thành công, sẽ chuyển hướng
+     * đến trang đặt lại mật khẩu hoặc trang đăng nhập với thông báo thành công tương ứng.
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -74,6 +79,18 @@ public class OtpController extends HttpServlet {
         }
     }
 
+    /**
+     * Xử lý xác nhận OTP cho trường hợp quên mật khẩu.
+     * luồng: 
+     * - Kiểm tra session để lấy userId đang chờ OTP
+     * - Truy vấn OTP mới nhất cho userId đó với mục đích FORGOT_PASSWORD, kiểm tra tồn tại, thời hạn, số lần thử, và mã OTP
+     * - Nếu hợp lệ, đánh dấu OTP đã xác minh, lưu userId đã xác minh vào session, và chuyển hướng đến trang đặt lại mật khẩu
+     * @param req
+     * @param resp
+     * @param otpCode
+     * @throws ServletException
+     * @throws IOException
+     */
     private void handleForgotPasswordOtp(HttpServletRequest req, HttpServletResponse resp, String otpCode)
             throws ServletException, IOException {
 
@@ -128,6 +145,18 @@ public class OtpController extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/reset-password");
     }
 
+    /**
+     * Xử lý xác nhận OTP cho trường hợp đăng ký tài khoản mới.
+     * luồng:
+     * - Kiểm tra session để lấy pendingRegistrationId đang chờ OTP
+     * - Truy vấn PendingRegistration theo ID đó, kiểm tra tồn tại, đã xác minh hay chưa, thời hạn OTP, số lần thử, và mã OTP
+     * - Nếu hợp lệ, tạo tài khoản mới dựa trên thông tin trong PendingRegistration, đánh dấu PendingRegistration đã xác minh, xóa thông tin OTP liên quan trong session, và chuyển hướng đến trang đăng nhập với thông báo thành công
+     * @param req
+     * @param resp
+     * @param otpCode
+     * @throws ServletException
+     * @throws IOException
+     */
     private void handleRegisterOtp(HttpServletRequest req, HttpServletResponse resp, String otpCode)
             throws ServletException, IOException {
 
