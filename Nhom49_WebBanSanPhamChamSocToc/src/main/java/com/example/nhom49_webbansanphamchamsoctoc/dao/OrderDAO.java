@@ -5,6 +5,8 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import org.jdbi.v3.core.Jdbi;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -358,15 +360,6 @@ public class OrderDAO implements IDAO<Order> {
 
         );
     }
-    public long totalRevenue(){
-        String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE order_status='Hoàn thành'";
-        return jdbi.withHandle(handle ->
-                handle.createQuery(sql)
-                        .mapTo(Long.class)
-                        .findFirst()
-                        .orElse(0L)
-        );
-    }
     public List<Integer> getRevenueByWeek(){
         String sql = "SELECT DAYOFWEEK(created_at) as d, SUM(total_amount) as total FROM orders GROUP BY DAYOFWEEK(created_At)";
         return jdbi.withHandle(handle ->
@@ -381,21 +374,21 @@ public class OrderDAO implements IDAO<Order> {
                         .map((rs,ctx)-> rs.getInt("total"))
                 .list());
     }
-    public List<Integer> getRevenueByYear(){
+    public List<Integer> getRevenueByYear() {
         String sql = "SELECT YEAR(created_at) as Y, SUM(total_amount) as total FROM orders GROUP BY YEAR(created_At)";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .map((rs,ctx)-> rs.getInt("total"))
+                        .map((rs, ctx) -> rs.getInt("total"))
                         .list());
-
-    public long totalRevenue() {
-        // Hỗ trợ nhiều biến thể trạng thái hoàn thành
-        String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE order_status = 'completed'";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .mapTo(Long.class)
-                .findFirst()
-                .orElse(0L));
     }
+        public long totalRevenue() {
+            // Hỗ trợ nhiều biến thể trạng thái hoàn thành
+            String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE order_status = 'completed'";
+            return jdbi.withHandle(handle -> handle.createQuery(sql)
+                    .mapTo(Long.class)
+                    .findFirst()
+                    .orElse(0L));
+        }
 
     // Helper method;
 

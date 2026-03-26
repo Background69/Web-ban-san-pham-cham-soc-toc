@@ -134,7 +134,7 @@
         </div>
         <!--chart-->
         <div style = "margin-bottom: 20px">
-            <select id="filterRevenue" onchange="changeFilter">
+            <select id="filterRevenue" onchange="changeFilter()">
                 <option value="week" ${type=='week'? 'selected':''} >Theo tuần</option>
                 <option value="month" ${type=='month'? 'selected':''} >Theo tháng</option>
                 <option value="year" ${type=='year'? 'selected':''} >Theo năm</option>
