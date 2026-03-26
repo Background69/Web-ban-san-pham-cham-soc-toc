@@ -163,8 +163,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     let chart;
+    let piechart;
     function ichart(labels,data) {
         const ctx = document.getElementById('revenuechart').getContext('2d');
+        if (chart) chart.destroy();
         const gradient = ctx.createLinearGradient(0, 0, 0, 300);
         gradient.addColorStop(0, "rgba(75, 192, 192, 0.5)");
         gradient.addColorStop(1, "rgba(75, 192, 192, 0)");
@@ -205,23 +207,46 @@
             }
         });
     }
+    function iPieChart(labels, data){
+        const ctx = document.getElementById('orderchart').getContext('2d');
+        if (piechart){
+            piechart.destroy()
+        }
+        piechart = new Chart(ctx,{
+            type:'pie',
+            data:{
+                labels:labels,
+                datasets:[{
+                    data:data,
+                    backgroundColor:["#4caf50", "#f44336", "#ff9800"]
+                }]
+            },
+            options: {
+                responsive:true,
+                animation: {
+                    duration: 800
+                },
+                plugins: {
+                    legend:{
+                        position:"bottom"
+                    }
+                }
+            }
+        });
+    }
     function loadChart() {
         const type = document.getElementById("filterRevenue").value;
         fetch("${pageContext.request.contextPath}/admin/dashboard-data?type=" + type)
         .then(res => res.json())
         .then(data => {
-            if (!chart){
                 ichart(data.labels, data.values);
-            }else {
-                chart.data.labels = data.labels;
-                chart.data.datasets[0].data = data.values;
-                chart.update();
-            }
+                iPieChart(data.statusLabels, data.statusValues)
     });
     }
     window.onload= function (){
         loadChart();
     }
+
 </script>
 </body>
 
