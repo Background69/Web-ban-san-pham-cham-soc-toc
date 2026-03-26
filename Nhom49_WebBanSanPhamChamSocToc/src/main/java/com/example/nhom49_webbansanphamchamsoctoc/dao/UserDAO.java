@@ -3,6 +3,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
+import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -33,23 +34,28 @@ public class UserDAO implements IDAO<User> {
 
     @Override
     public int insert(User user) {
+        return jdbi.withHandle(handle -> insert(handle, user));
+    }
+
+    public int insert(Handle handle, User user) {
         String sql = "INSERT INTO users (email, username, full_name, password, phone, avatar, role, is_active, google_id, auth_provider) " +
                 "VALUES (:email, :username, :fullName, :password, :phone, :avatar, :role, :isActive, :googleId, :authProvider)";
-        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+
+        return handle.createUpdate(sql)
                 .bind("email", user.getEmail())
                 .bind("username", user.getUsername())
                 .bind("fullName", user.getFullName())
                 .bind("password", user.getPassword())
                 .bind("phone", user.getPhone())
                 .bind("avatar", user.getAvatar() != null ? user.getAvatar() : "avatar/avatar.jpg")
-                .bind("role", user.getRole() != null ? user.getRole() : "Kh\u00e1ch h\u00e0ng")
+                .bind("role", user.getRole() != null ? user.getRole() : "Khach hang")
                 .bind("isActive", user.isActive())
                 .bind("googleId", user.getGoogleId())
                 .bind("authProvider", user.getAuthProvider() != null ? user.getAuthProvider() : "LOCAL")
                 .executeAndReturnGeneratedKeys("user_id")
                 .mapTo(Integer.class)
                 .findFirst()
-                .orElse(-1));
+                .orElse(-1);
     }
 
     @Override

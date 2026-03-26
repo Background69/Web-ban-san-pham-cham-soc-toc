@@ -1,10 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
-import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.EmailService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.OtpUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,7 +22,7 @@ public class RegisterController extends HttpServlet {
     private AuthenticationService authService;
     private static final int OTP_EXPIRY_MINUTES = 15;
 
-    private final OtpVerificationDAO otpVerificationDAO = new OtpVerificationDAO();
+    private final PendingRegistrationDAO pendingRegistrationDAO = new PendingRegistrationDAO();
     private final EmailService emailService = new EmailService();
 
     @Override
@@ -46,56 +46,67 @@ public class RegisterController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String email = request.getParameter("email");
-        String fullname = request.getParameter("fullname");
-        String username = request.getParameter("username");
-        String phone = request.getParameter("phone");
+        String email = trim(request.getParameter("email"));
+        String fullname = trim(request.getParameter("fullname"));
+        String username = trim(request.getParameter("username"));
+        String phone = trim(request.getParameter("phone"));
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        User user = authService.register(email, fullname, username, phone, password, confirmPassword);
-
-        if (user == null) {
+        String validationError = authService.validateUserInput(email, fullname, username, phone, password, confirmPassword);
+        if (validationError != null) {
             request.setAttribute("error", authService.getLastError());
+            request.setAttribute("email", email);
+            request.setAttribute("fullname", fullname);
+            request.setAttribute("username", username);
+            request.setAttribute("phone", phone);
             request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
             return;
         }
 
-        if (!user.isActive()) {
-            String otpCode = OtpUtil.otpGenerate(6);
-            java.sql.Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
+        String passwordHash = PasswordUtil.hashPassword(password);
+        String otpCode = OtpUtil.otpGenerate(6);
+        java.sql.Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
-            int otpId = otpVerificationDAO.createOtp(user.getUserId(), otpCode, OtpVerificationDAO.OtpPurpose.REGISTER, expiry);
-            if (otpId == -1) {
-                request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
-                request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
-                return;
-            }
+        int pendingId = pendingRegistrationDAO.upsertPending(
+                email, username, fullname, phone, passwordHash, otpCode, expiry
+        );
+        if (pendingId <= 0) {
+            request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
+            request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
+            return;
+        }
 
-            request.getSession().setAttribute("otpPurpose", "REGISTER");
-            request.getSession().setAttribute("otpPendingUserId", user.getUserId());
-            request.getSession().setAttribute("otpPendingEmail", email);
+        String verifyOtpLink = request.getScheme() + "://" + request.getServerName()
+                + ":" + request.getServerPort()
+                + request.getContextPath()
+                + "/auth/verify-otp";
 
-            String verifyOtpLink  = request.getScheme() + "://" + request.getServerName()
-                    + ":" + request.getServerPort()
-                    + request.getContextPath()
-                    + "/auth/verify-otp";
-            boolean sent = emailService.sendRegisterOtpEmail(email, otpCode, verifyOtpLink , OTP_EXPIRY_MINUTES);
+        boolean sent = emailService.sendRegisterOtpEmail(email, otpCode, verifyOtpLink, OTP_EXPIRY_MINUTES);
+
+        request.getSession().setAttribute("otpPurpose", "REGISTER");
+        request.getSession().setAttribute("otpPendingRegistrationId", pendingId);
+        request.getSession().setAttribute("otpPendingEmail", email);
 
 
-            if (!sent) {
-                request.setAttribute("error", "không gửi được Emai. vui lòng gửi lại sau");
-                request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
-                return;
-            }
-
-            request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
+        if (!sent) {
+            request.setAttribute("error", "Không gửi được email OTP. Vui lòng thử lại.");
             request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
             return;
         }
 
-        request.getSession().setAttribute("success", "Tài khoản đã được kích hoạt. Vui lòng đăng nhập");
-        response.sendRedirect(request.getContextPath() + "/auth/login");
+        long now = System.currentTimeMillis();
+        long otpExpiryAt = now + OTP_EXPIRY_MINUTES * 60_000L;
 
+        request.getSession().setAttribute("otpLastSentAt", now);
+        request.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
+
+        request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
+        response.sendRedirect(request.getContextPath() + "/auth/verify-otp");
     }
+
+    private String trim(String value) {
+        return value == null ? "" : value.trim();
+    }
+
 }

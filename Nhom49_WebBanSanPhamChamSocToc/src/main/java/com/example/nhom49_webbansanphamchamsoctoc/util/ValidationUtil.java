@@ -13,6 +13,8 @@ public class ValidationUtil {
     );
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{10,11}$");
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9_]{3,50}$");
+    private static final Pattern FULLNAME_PATTERN = Pattern.compile("^[\\p{L} ]{2,100}$");
+
 
     private ValidationUtil() {
     }
@@ -193,5 +195,17 @@ public class ValidationUtil {
             return "Địa chỉ cụ thể không được để trống";
         }
         return null; // Hợp lệ
+    }
+
+    public static String validateFullName(String fullName) {
+        if (isEmpty(fullName)) return "Họ tên không được để trống";
+        String normalized = fullName.trim().replaceAll("\\s+", " ");
+        if (normalized.length() < 10 || normalized.length() > 30) {
+            return "Họ tên phải từ 10-30 ký tự";
+        }
+        if (!FULLNAME_PATTERN.matcher(normalized).matches()) {
+            return "Họ tên chỉ được chứa chữ cái và khoảng trắng";
+        }
+        return null;
     }
 }

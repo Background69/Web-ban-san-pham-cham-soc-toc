@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 public class OtpVerificationDAO {
     private final Jdbi jdbi;
 
+
     public OtpVerificationDAO() {
         this.jdbi = JDBIConnector.getInstance();
     }
@@ -71,12 +72,10 @@ public class OtpVerificationDAO {
                         LIMIT 1
                 """;
 
-        return jdbi.withHandle(handle -> handle.createQuery(sql))
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
                 .bind("otpType", purpose.name())
-                .map((rs, ctx) -> mapOtp(rs))
-                .findFirst()
-                .orElse(null);
+                .map((rs, ctx) -> mapOtp(rs)).findFirst().orElse(null));
     }
 
     public boolean incrementAttempts(int otpId) {

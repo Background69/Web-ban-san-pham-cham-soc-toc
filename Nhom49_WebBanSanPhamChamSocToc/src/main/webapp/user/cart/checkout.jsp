@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -113,11 +113,6 @@
                                         <input type="tel" class="form-control" name="phone"
                                                placeholder="Nhập số điện thoại" ${empty addresses
                                                 ? 'required' : '' }>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email"
-                                               placeholder="Nhập email">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Tỉnh/Thành phố <span
