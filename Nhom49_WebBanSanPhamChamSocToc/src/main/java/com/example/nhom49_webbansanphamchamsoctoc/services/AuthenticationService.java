@@ -102,7 +102,7 @@ public class AuthenticationService {
             return false;
         }
 
-        lastError = "Sai thông tin đăng ký. Vui lòng thử lại";
+        lastError = null;
         return true;
     }
 
@@ -123,9 +123,8 @@ public class AuthenticationService {
             user.setUserId(userId);
             return user;
         }
-        lastError = null;
-
-        return user;
+        lastError = "Không thể tạo tài khoản. Vui lòng thử lại.";
+        return null;
     }
 
     public boolean setActiveStatus(int userId, boolean active) {

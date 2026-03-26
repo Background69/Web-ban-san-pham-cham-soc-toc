@@ -4,7 +4,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
-import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 @WebServlet(name = "OtpController", value = "/auth/verify-otp")
 public class OtpController extends HttpServlet {
     private final OtpVerificationDAO otpVerificationDAO = new OtpVerificationDAO();
-    private final AuthenticationService authenticationService = new AuthenticationService();
     private final PendingRegistrationDAO pendingRegistrationDAO = new PendingRegistrationDAO();
 
     private static final int MAX_OTP_ATTEMPTS = 5;
