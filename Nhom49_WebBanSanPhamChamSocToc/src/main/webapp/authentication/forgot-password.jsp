@@ -47,7 +47,7 @@
             </form>
 
             <div class="mt-3 text-center">
-                <a href="${pageContext.request.contextPath}/reset-password">Tới trang nhập OTP</a>
+                <a href="${pageContext.request.contextPath}/auth/verify-otp">Đã có mã OTP? Nhập mã tại đây</a>
             </div>
 
             <p class="signup-text">
