@@ -25,8 +25,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.List;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @MultipartConfig
 @WebServlet(name = "ProductManagementController", urlPatterns = "/admin/products")
@@ -39,8 +41,9 @@ public class ProductManagementController extends HttpServlet {
     private final ProductImgDAO productImgDAO = new ProductImgDAO();
     private final ProductService productService = new ProductService();
 
-    private static final String STATIC_PRODUCT_DIR = "/static/images/products/";
+    private static final String STATIC_PRODUCT_DIR = "/static/images/products";
     private static final String DB_IMAGE_PREFIX = "images/products/";
+    private static final Pattern IMAGE_INDEX_PATTERN = Pattern.compile("-(\\d+)\\.[^.]+$");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -146,29 +149,79 @@ public class ProductManagementController extends HttpServlet {
         }
 
         String originalName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
-        String ext = "";
-        int dot = originalName.lastIndexOf('.');
-        if (dot >= 0) {
-            ext = originalName.substring(dot);
+        String ext = normalizeImageExtension(originalName);
+        String productSlug = resolveProductSlug(productId);
+
+        String relativeDir = STATIC_PRODUCT_DIR + "/" + productSlug;
+        String realDir = getServletContext().getRealPath(relativeDir);
+        if (realDir == null || realDir.isBlank()) {
+            throw new IOException("Cannot resolve real path for " + relativeDir);
         }
 
-        String savedFileName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-        String realDir = getServletContext().getRealPath(STATIC_PRODUCT_DIR);
         File dir = new File(realDir);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
+        int nextIndex = findNextImageIndex(dir, productSlug);
+        String savedFileName = productSlug + "-" + nextIndex + ext;
         imagePart.write(realDir + File.separator + savedFileName);
 
         productImgDAO.setAllNonPrimary(productId);
 
         ProductImage img = new ProductImage();
         img.setProductId(productId);
-        img.setImageUrl(DB_IMAGE_PREFIX + savedFileName);
+        img.setImageUrl(DB_IMAGE_PREFIX + productSlug + "/" + savedFileName);
         img.setPrimary(true);
         productImgDAO.insert(img);
+    }
+
+    private String normalizeImageExtension(String originalName) {
+        int dot = originalName.lastIndexOf('.');
+        if (dot < 0 || dot == originalName.length() - 1) {
+            return ".jpg";
+        }
+        String ext = originalName.substring(dot).toLowerCase(Locale.ROOT);
+        return switch (ext) {
+            case ".jpg", ".jpeg", ".png", ".webp", ".gif" -> ext;
+            default -> ".jpg";
+        };
+    }
+
+    private String resolveProductSlug(int productId) {
+        Product product = productDAO.findById(productId);
+        String slug = product != null ? trim(product.getProductSlug()) : "";
+        return slug.isEmpty() ? "product-" + productId : slug;
+    }
+
+    private int findNextImageIndex(File dir, String productSlug) {
+        int maxIndex = 0;
+        File[] files = dir.listFiles();
+        if (files == null || files.length == 0) {
+            return 1;
+        }
+        String prefix = productSlug + "-";
+        for (File file : files) {
+            if (file == null || !file.isFile()) {
+                continue;
+            }
+            String name = file.getName();
+            if (!name.startsWith(prefix)) {
+                continue;
+            }
+            Matcher matcher = IMAGE_INDEX_PATTERN.matcher(name);
+            if (!matcher.find()) {
+                continue;
+            }
+            try {
+                int idx = Integer.parseInt(matcher.group(1));
+                if (idx > maxIndex) {
+                    maxIndex = idx;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return maxIndex + 1;
     }
 
     private Product productFromRequest(HttpServletRequest request) {
