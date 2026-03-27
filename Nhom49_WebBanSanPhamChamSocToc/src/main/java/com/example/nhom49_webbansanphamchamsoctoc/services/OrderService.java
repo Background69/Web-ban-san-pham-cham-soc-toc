@@ -423,21 +423,6 @@ public class OrderService {
         }
     }
 
-    private boolean decrementStock(List<OrderItem> orderItems) {
-        if (orderItems == null || orderItems.isEmpty()) {
-            return true;
-        }
-        for (OrderItem item : orderItems) {
-            if (item.getVariantId() == null) {
-                return false;
-            }
-            if (!variantDao.decrementStock(item.getVariantId(), item.getQuantity())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public BigDecimal getTotalSpendingByUser(int userId) {
         return orderDao.getTotalSpendingByUser(userId);
     }
