@@ -54,23 +54,76 @@ public class AuthenticationService {
         return user;
     }
 
-    public String validateUserInput(String email, String fullname, String username, String phone, String password, String confirmPassword) {
-        email = ValidationUtil.sanitize(email);
-        fullname = ValidationUtil.sanitize(fullname);
-        username = ValidationUtil.sanitize(username);
-        phone = ValidationUtil.sanitize(phone);
+    public boolean validateUserInput(String email, String fullname, String username, String phone, String password, String confirmPassword) {
+        lastError = null;
+        String emailError = ValidationUtil.validateEmail(email);
+        if (emailError != null) {
+            lastError = emailError;
+            return false;
+        }
 
-        String error;
-        if ((error = ValidationUtil.validateEmail(email)) != null) return error;
-        if ((error = ValidationUtil.validateFullName(fullname)) != null) return error;
-        if ((error = ValidationUtil.validateUsername(username)) != null) return error;
-        if ((error = ValidationUtil.validatePassword(password)) != null) return error;
-        if ((error = ValidationUtil.validatePhone(phone)) != null) return error;
-        if ((error = ValidationUtil.validateConfirmPassword(password, confirmPassword)) != null) return error;
+        String fullnameError = ValidationUtil.validateFullName(fullname);
+        if (fullnameError != null) {
+            lastError = fullnameError;
+            return false;
+        }
 
-        if (userDAO.existsByEmail(email)) return "Email đã tồn tại";
-        if (userDAO.existsByUsername(username)) return "Tên đăng nhập đã tồn tại";
+        String usernameError = ValidationUtil.validateUsername(username);
+        if (usernameError != null) {
+            lastError = usernameError;
+            return false;
+        }
 
+        String passwordError = ValidationUtil.validatePassword(password);
+        if (passwordError != null) {
+            lastError = passwordError;
+            return false;
+        }
+
+        String phoneError = ValidationUtil.validatePhone(phone);
+        if (phoneError != null) {
+            lastError = phoneError;
+            return false;
+        }
+
+        String confirmError = ValidationUtil.validateConfirmPassword(password, confirmPassword);
+        if (confirmError != null) {
+            lastError = confirmError;
+            return false;
+        }
+
+        if (userDAO.existsByEmail(email.trim())) {
+            lastError = "Email đã tồn tại";
+            return false;
+        }
+
+        if (userDAO.existsByUsername(username.trim())) {
+            lastError = "Tên đăng nhập đã tồn tại";
+            return false;
+        }
+
+        lastError = null;
+        return true;
+    }
+
+    public User register(String email, String fullname, String username, String phone, String password, String confirmPassword) {
+
+        User user = new User();
+        user.setEmail(email.trim());
+        user.setFullName(fullname.trim());
+        user.setUsername(username.trim());
+        user.setPassword(PasswordUtil.hashPassword(password));
+        user.setRole("Khách hàng");
+        user.setActive(true);
+        user.setPhone(ValidationUtil.sanitize(phone));
+        user.setAuthProvider("LOCAL");
+
+        int userId = userDAO.insert(user);
+        if (userId > 0) {
+            user.setUserId(userId);
+            return user;
+        }
+        lastError = "Không thể tạo tài khoản. Vui lòng thử lại.";
         return null;
     }
 

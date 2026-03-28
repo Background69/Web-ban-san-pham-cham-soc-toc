@@ -38,10 +38,10 @@ public class GoogleOAuthService {
     public GoogleOAuthService() {
         Properties props = loadProperties();
 
-        this.clientId = props.getProperty("google.client.id");
-        this.clientSecret = props.getProperty("google.client.secret");
-        this.redirectUri = props.getProperty("google.redirect.uri");
-        String scopesStr = props.getProperty("google.scopes", "openid,email,profile");
+        this.clientId = envOrProp(props, "GOOGLE_CLIENT_ID", "google.client.id", null);
+        this.clientSecret = envOrProp(props, "GOOGLE_CLIENT_SECRET", "google.client.secret", null);
+        this.redirectUri = envOrProp(props, "GOOGLE_REDIRECT_URI", "google.redirect.uri", null);
+        String scopesStr = envOrProp(props, "GOOGLE_SCOPES", "google.scopes", "openid,email,profile");
         this.scopes = scopesStr.split(",");
 
         // Validate cấu hình
@@ -114,6 +114,14 @@ public class GoogleOAuthService {
             throw new RuntimeException("Không thể đọc file google-oauth.properties", e);
         }
         return props;
+    }
+
+    private String envOrProp(Properties props, String envKey, String propKey, String defaultValue) {
+        String envVal = System.getenv(envKey);
+        if (envVal != null && !envVal.isBlank()) {
+            return envVal;
+        }
+        return props.getProperty(propKey, defaultValue);
     }
 
     /**

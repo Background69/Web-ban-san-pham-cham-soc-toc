@@ -287,16 +287,12 @@
 
 
     // Check for messages from server
-    <c:if test="${not empty sessionScope.cartMessage}">
-    showToast('${sessionScope.cartMessage}', 'success');
+    <c:if test="${not empty successMessage}">
+    showToast('${successMessage}', 'success');
     </c:if>
 
-    <c:if test="${not empty sessionScope.cartError}">
-    showToast('${sessionScope.cartError}', 'error');
-    </c:if>
-
-    <c:if test="${not empty sessionScope.errorMessage}">
-    showToast('${sessionScope.errorMessage}', 'error');
+    <c:if test="${not empty errorMessage}">
+    showToast('${errorMessage}', 'error');
     </c:if>
 </script>
 </body>

@@ -1,4 +1,3 @@
-<%@ page import="java.nio.charset.StandardCharsets" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
@@ -35,11 +34,6 @@
                 <div class="success-msg">${sessionScope.success}</div>
                 <c:remove var="success" scope="session"/>
             </c:if>
-            <%
-                String redirect = request.getParameter("redirect");
-                if (redirect == null) redirect = "";
-            %>
-
             <form action="${pageContext.request.contextPath}/auth/login" method="post" autocomplete="on">
                 <c:if test="${not empty param.redirect}">
                     <input type="hidden" name="redirect" value="${param.redirect}">
@@ -68,11 +62,14 @@
 
                 <div class="or-divider"><span>Hoặc</span></div>
 
+                <c:url var="googleLoginUrl" value="/auth/google">
+                    <c:if test="${not empty param.redirect}">
+                        <c:param name="redirect" value="${param.redirect}"/>
+                    </c:if>
+                </c:url>
+
                 <div class="social-login">
-                    <a class="google-btn"
-                       href="${pageContext.request.contextPath}/auth/google<%=
-        redirect.isEmpty() ? "" : "?redirect=" + java.net.URLEncoder.encode(redirect, StandardCharsets.UTF_8)
-   %>">
+                    <a class="google-btn" href="${googleLoginUrl}">
                         <img src="${pageContext.request.contextPath}/static/assets/icons/Google.png" alt="Google">
                         <span>Đăng nhập bằng Google</span>
                     </a>
