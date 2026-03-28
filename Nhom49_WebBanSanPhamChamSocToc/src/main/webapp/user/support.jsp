@@ -7,11 +7,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hỗ trợ khách hàng - HairGlow</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/support.css?v=3">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/support.css">
 </head>
 <body>
 
@@ -33,7 +35,8 @@
         <!-- Tìm kiếm -->
         <div class="support-search">
             <form action="${pageContext.request.contextPath}/support" method="get">
-                <input type="text" name="q" placeholder="Tìm kiếm câu hỏi thường gặp..." value="${searchQuery}">
+                <input type="text" name="q" placeholder="Tìm kiếm câu hỏi thường gặp..."
+                       value="<c:out value='${searchQuery}' default=""/>">
                 <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
             </form>
         </div>
@@ -255,8 +258,19 @@
             const faqItem = this.closest('.faq-item');
             const isActive = faqItem.classList.contains('active');
 
-            document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
-            if (!isActive) faqItem.classList.add('active');
+            // Đóng tất cả
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.faq-question').setAttribute("aria-expanded", "false");
+            });
+
+            // Nếu mục vừa click chưa active -> mở
+            if (!isActive) {
+                faqItem.classList.add('active');
+                this.setAttribute("aria-expanded", "true");
+            } else {
+                this.setAttribute("aria-expanded", "false");
+            }
         });
     });
 </script>
