@@ -13,22 +13,16 @@ public class SupportController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String query = request.getParameter("q");
+        if (query != null && !query.trim().isEmpty()) {
+            request.setAttribute("searchQuery", query.trim());
+        }
         request.getRequestDispatcher("/user/support.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        // Xử lý tìm kiếm hỗ trợ
-        String query = request.getParameter("q");
-        if (query != null && !query.trim().isEmpty()) {
-            // Tìm kiếm trỗng FAQ
-            // List<FAQ> results = faqService.search(query);
-            // request.setAttribute("searchResults", results);
-            request.setAttribute("searchQuery", query);
-        }
-
-        request.getRequestDispatcher("/user/support.jsp").forward(request, response);
+        doGet(request, response);
     }
 }

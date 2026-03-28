@@ -25,6 +25,13 @@
             <a href="${pageContext.request.contextPath}/orders" class="btn-detail">Quay lại</a>
         </div>
 
+        <c:if test="${not empty success}">
+            <div class="alert alert-success">${success}</div>
+        </c:if>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger">${error}</div>
+        </c:if>
+
         <div class="order-card">
             <div class="order-header">
                                 <span class="order-date">
@@ -51,6 +58,27 @@
                         <fmt:formatNumber value="${order.shippingFee}" type="number"/>₫
                     </p>
                 </div>
+
+                <c:if test="${not empty paymentTransaction}">
+                    <div class="order-detail-box">
+                        <h3>Thông tin chuyển khoản</h3>
+                        <p><strong>Trạng thái giao dịch:</strong> ${paymentTransaction.status}</p>
+                        <p><strong>Số tiền:</strong>
+                            <fmt:formatNumber value="${paymentTransaction.amount}" type="number"/>₫
+                        </p>
+                        <p><strong>Nội dung CK:</strong> ${paymentTransaction.transferContent}</p>
+                        <p><strong>Ngân hàng:</strong> ${paymentTransaction.bankName}</p>
+                        <c:if test="${not empty paymentTransaction.expiresAt}">
+                            <p><strong>Hết hạn:</strong>
+                                <fmt:formatDate value="${paymentTransaction.expiresAt}" pattern="dd/MM/yyyy HH:mm:ss"/>
+                            </p>
+                        </c:if>
+                        <a href="${pageContext.request.contextPath}/payment/bank-transfer?transactionId=${paymentTransaction.transactionId}"
+                           class="btn-detail">
+                            Mở trang thanh toán chuyển khoản
+                        </a>
+                    </div>
+                </c:if>
             </div>
 
             <div class="order-items">
@@ -78,7 +106,7 @@
                                     </span>
                 </div>
                 <div class="order-actions">
-                    <c:if test="${order.orderStatus == 'pending'}">
+                    <c:if test="${canCancelOrder}">
                         <form action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel"
                               method="post">
                             <button type="submit" class="btn-cancel"
@@ -86,6 +114,12 @@
                                 Hủy đơn
                             </button>
                         </form>
+                    </c:if>
+                    <c:if test="${not empty paymentTransaction && paymentTransaction.status == 'PENDING'}">
+                        <a href="${pageContext.request.contextPath}/payment/bank-transfer?transactionId=${paymentTransaction.transactionId}"
+                           class="btn-detail">
+                            Tiếp tục thanh toán
+                        </a>
                     </c:if>
                 </div>
             </div>
