@@ -1,12 +1,13 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Model Category - Bảng categories trong database
  * Quản lý danh mục sản phẩm (Dầu gội, Dầu xả, Kem ủ tóc...)
  */
-public class Category {
+public class Category implements Serializable {
     private int categoryId;
     private String categoryName;
     private String categorySlug;

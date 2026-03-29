@@ -1,5 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Model Product - Bảng products trong database
  * Quản lý thông tin sản phẩm chăm sóc tóc
  */
-public class Product {
+public class Product implements Serializable {
     private int productId;
     private String productName;
     private String productSlug;

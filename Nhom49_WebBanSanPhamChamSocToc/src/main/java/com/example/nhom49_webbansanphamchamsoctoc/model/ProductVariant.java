@@ -1,5 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -7,7 +8,7 @@ import java.sql.Timestamp;
  * Model ProductVariant - Bảng product_variants trong database
  * Quản lý các biến thể sản phẩm (dung tích: 30ml, 50ml, 100ml...)
  */
-public class ProductVariant {
+public class ProductVariant implements Serializable {
     private int variantId;
     private int productId;
     private String variantName;

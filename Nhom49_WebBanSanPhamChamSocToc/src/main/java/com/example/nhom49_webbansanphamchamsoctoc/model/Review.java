@@ -1,12 +1,13 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Model Review - Bảng reviews trong database
  * Quản lý đánh giá sản phẩm từ khách hàng
  */
-public class Review {
+public class Review implements Serializable {
     private int reviewId;
     private int productId;
     private Integer userId;

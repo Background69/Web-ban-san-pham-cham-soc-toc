@@ -1,5 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -7,7 +8,7 @@ import java.time.LocalDateTime;
  * Model Promotion - Bảng promotions trong database
  * Quản lý chương trình khuyến mãi (Flash Sale, Combo, Xả kho...)
  */
-public class Promotion {
+public class Promotion implements Serializable {
     private int promotionId;
     private String promotionName;
     private String promotionType; // 'percent', 'fixed', 'flash-sale', 'combo', 'new', 'clearance'
