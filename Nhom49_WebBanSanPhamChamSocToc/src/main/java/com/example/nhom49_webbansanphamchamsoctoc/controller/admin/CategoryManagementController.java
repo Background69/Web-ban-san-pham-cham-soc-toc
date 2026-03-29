@@ -17,7 +17,7 @@ import static com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil.par
 
 @WebServlet(urlPatterns = {
         "/admin/category",
-        "/admin/category/form",
+        "/admin/category/add",
         "/admin/category/edit",
         "/admin/category/save",
         "/admin/category/delete"
@@ -31,6 +31,7 @@ public class CategoryManagementController extends HttpServlet {
         categoryService = new CategoryService();
     }
 
+    // ===== GET =====
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,10 +39,9 @@ public class CategoryManagementController extends HttpServlet {
         String path = request.getServletPath();
 
         switch (path) {
+
             case "/admin/category":
-                List<Category> list = categoryService.getAllCategories();
-                request.setAttribute("categories", list);
-                request.getRequestDispatcher("/admin/category/list.jsp").forward(request, response);
+                listCategory(request, response);
                 break;
 
             case "/admin/category/add":
@@ -55,168 +55,92 @@ public class CategoryManagementController extends HttpServlet {
                     request.setAttribute("category", c);
                     request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/admin/categories");
+                    response.sendRedirect(request.getContextPath() + "/admin/category");
                 }
                 break;
-        if ("/admin/categories".equals(path)) {
-            listCategory(request, response);
-            return;
-        }
-
-        if ("/admin/category/add".equals(path)) {
-            request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
-            return;
-        }
-
-        if ("/admin/category/edit".equals(path)) {
-            int id = parseIntSafe(request.getParameter("id"));
-            if (id > 0) {
-                Category c = categoryService.getCategoryById(id);
-                if (c != null) {
-                    request.setAttribute("category", c);
-                    request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
-                    return;
-                }
-            }
-            response.sendRedirect(request.getContextPath() + "/admin/categories");
-            return;
-        }
-
-        if ("/admin/category/delete".equals(path)) {
-            int id = parseIntSafe(request.getParameter("id"));
-            if (id > 0) {
-                categoryService.deleteCategory(id);
-            }
-            response.sendRedirect(request.getContextPath() + "/admin/categories");
-            return;
-        }
 
             case "/admin/category/delete":
                 int deleteId = parseIntSafe(request.getParameter("id"));
                 if (deleteId > 0) {
-                   categoryService.deleteCategory(deleteId);
+                    categoryService.deleteCategory(deleteId);
                 }
-                    response.sendRedirect(request.getContextPath() + "/admin/categories");
-                    break;
+                response.sendRedirect(request.getContextPath() + "/admin/category");
+                break;
+
             default:
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                }
-
-    }
-    @Override
-            protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-            request.setCharacterEncoding("UTF-8");
-
-            if ("/admin/category/save".equals(request.getServletPath())) {
-                saveCategory(request, response);
-            }
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
-        private void saveCategory(HttpServletRequest request, HttpServletResponse response)
+    }
+
+    // ===== POST =====
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-            String idStr = trimOrEmpty(request.getParameter("id"));
-            String name = trimOrEmpty(request.getParameter("categoryName"));
-            String slug = trimOrEmpty(request.getParameter("categorySlug"));
-        String path = request.getServletPath();
+        request.setCharacterEncoding("UTF-8");
 
-        if (!"/admin/category/save".equals(path)) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+        if ("/admin/category/save".equals(request.getServletPath())) {
+            saveCategory(request, response);
         }
+    }
 
-            // ===== VALIDATE =====
-            if (name.isEmpty() || name.length() > 100) {
-                redirectError(response, request, "Tên danh mục không hợp lệ");
-                return;
-            }
+    // ===== SAVE =====
+    private void saveCategory(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
 
-            if (slug.isEmpty() || slug.length() > 120) {
-                redirectError(response, request, "Slug không hợp lệ");
-                return;
-            }
+        String idStr = trimOrEmpty(request.getParameter("id"));
+        String name = trimOrEmpty(request.getParameter("categoryName"));
+        String slug = trimOrEmpty(request.getParameter("categorySlug"));
 
-            // ===== CREATE =====
-            if (idStr.isEmpty()) {
-                Category c = new Category();
-                c.setCategoryName(name);
-                c.setCategorySlug(slug);
+        // VALIDATE
         if (name.isEmpty() || name.length() > 100) {
-            String msg = URLEncoder.encode("Tên danh mục không hợp lệ", StandardCharsets.UTF_8);
-            String back = idStr.isEmpty() ? "/admin/category/add" : ("/admin/category/edit?id=" + idStr);
-            response.sendRedirect(request.getContextPath() + back + "&error=" + msg);
+            redirectError(response, request, "Tên không hợp lệ");
             return;
         }
 
         if (slug.isEmpty() || slug.length() > 120) {
-            String msg = URLEncoder.encode("Slug không hợp lệ", StandardCharsets.UTF_8);
-            String back = idStr.isEmpty() ? "/admin/category/add" : ("/admin/category/edit?id=" + idStr);
-            response.sendRedirect(request.getContextPath() + back + "&error=" + msg);
+            redirectError(response, request, "Slug không hợp lệ");
             return;
         }
 
-                int newId = categoryService.createCategory(c);
-                if (newId <= 0) {
-                    redirectError(response, request, "Thêm thất bại");
-                    return;
-                }
+        // CREATE
+        if (idStr.isEmpty()) {
+            Category c = new Category();
+            c.setCategoryName(name);
+            c.setCategorySlug(slug);
 
-                response.sendRedirect(request.getContextPath() + "/admin/categories");
+            int newId = categoryService.createCategory(c);
+            if (newId <= 0) {
+                redirectError(response, request, "Thêm thất bại");
                 return;
             }
 
-            // ===== UPDATE =====
-            int id = parseIntSafe(idStr);
-            if (id <= 0) {
-                response.sendRedirect(request.getContextPath() + "/admin/categories");
-                return;
-            }
-
-            Category exist = categoryService.getCategoryById(id);
-            if (exist == null) {
-                response.sendRedirect(request.getContextPath() + "/admin/categories");
-                return;
-            }
-
-            exist.setCategoryName(name);
-            exist.setCategorySlug(slug);
-            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            response.sendRedirect(request.getContextPath() + "/admin/category");
             return;
         }
 
+        // UPDATE
         int id = parseIntSafe(idStr);
-        if (id <= 0) {
-            response.sendRedirect(request.getContextPath() + "/admin/categories");
-            return;
-        }
-
         Category exist = categoryService.getCategoryById(id);
+
         if (exist == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/categories");
+            response.sendRedirect(request.getContextPath() + "/admin/category");
             return;
         }
 
-            boolean ok = categoryService.updateCategory(exist);
-            if (!ok) {
-                redirectError(response, request, "Cập nhật thất bại");
-                return;
-            }
+        exist.setCategoryName(name);
+        exist.setCategorySlug(slug);
 
-            response.sendRedirect(request.getContextPath() + "/admin/categories");
+        boolean ok = categoryService.updateCategory(exist);
+        if (!ok) {
+            redirectError(response, request, "Cập nhật thất bại");
+            return;
         }
 
-        // ================= UTILS =================
-        private int parseIntSafe(String s) {
-            try {
-                return Integer.parseInt(s);
-            } catch (Exception e) {
-                return -1;
-            }
-        }
+        response.sendRedirect(request.getContextPath() + "/admin/category");
+    }
 
-        private String trimOrEmpty(String s) {
-            return (s == null) ? "" : s.trim();
+    // ===== LIST =====
     private void listCategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -225,23 +149,23 @@ public class CategoryManagementController extends HttpServlet {
         request.getRequestDispatcher("/admin/category/list.jsp").forward(request, response);
     }
 
+    // ===== UTILS =====
     private int parseIntSafe(String s) {
         try {
-            if (s == null) return -1;
-            s = s.trim();
-            if (s.isEmpty()) return -1;
             return Integer.parseInt(s);
         } catch (Exception e) {
             return -1;
         }
+    }
 
-        private void redirectError(HttpServletResponse response, HttpServletRequest request, String message)
-            throws IOException {
-            String msg = URLEncoder.encode(message, StandardCharsets.UTF_8);
-            response.sendRedirect(request.getContextPath() + "/admin/category/add?error=" + msg);
-        }
-        }
     private String trimOrEmpty(String s) {
-        return s == null ? "" : s.trim();
+        return (s == null) ? "" : s.trim();
+    }
+
+    private void redirectError(HttpServletResponse response, HttpServletRequest request, String message)
+            throws IOException {
+
+        String msg = URLEncoder.encode(message, StandardCharsets.UTF_8);
+        response.sendRedirect(request.getContextPath() + "/admin/category/add?error=" + msg);
     }
 }
