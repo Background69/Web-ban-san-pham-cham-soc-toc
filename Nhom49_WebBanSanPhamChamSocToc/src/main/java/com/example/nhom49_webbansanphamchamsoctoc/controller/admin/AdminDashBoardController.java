@@ -17,7 +17,7 @@ import java.util.List;
  * Servlet hiển thị Admin Dashboard
  * GET /admin: Dashboard với thống kê
  */
-@WebServlet(name = "AdminDashBoardController", urlPatterns = { "/admin/dashboard" })
+@WebServlet(name = "AdminDashBoardController", urlPatterns = { "/admin/dashboard", "/admin/dashboard-data"})
 public class AdminDashBoardController extends HttpServlet {
     private UserDAO userDAO;
     private ProductDAO productDAO;
@@ -33,6 +33,12 @@ public class AdminDashBoardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String path = request.getServletPath();
+        //ajax
+        if ("/admin/dashboard-data".equals(path)) {
+            handleAjax(request, response);
+            return;
+        }
         try {
             // Thống kê
             request.setAttribute("totalProducts", productDAO.countAll());
@@ -42,34 +48,38 @@ public class AdminDashBoardController extends HttpServlet {
 
             // Đơn hàng gần nhất (CHỈ SET 1 LẦN)
             request.setAttribute("recentOrders", orderDAO.findRecentOrder(5));
-        String type = request.getParameter("type");
-        if (type==null) type = "week";
-            List<Integer> revenueData;
-            String revenueLabels;
-            switch (type){
-                case "month":
-                    revenueData = orderDAO.getRevenueByMonth();
-                    revenueLabels = "[\"T1\",\"T2\",\"T3\",\"T4\",\"T5\",\"T6\",\"T7\",\"T8\",\"T9\",\"T10\",\"T11\",\"T12\"]";
-                    break;
-                case "year":
-                    revenueData = orderDAO.getRevenueByYear();
-                    revenueLabels = "[\"2022\",\"2023\",\"2024\",\"2025\",\"2026\"]";
-                    break;
-                default:
-                    revenueData = orderDAO.getRevenueByWeek();
-                    revenueLabels = "[\"Thứ 2\",\"Thứ 3\",\"Thứ 4\",\"Thứ 5\",\"Thứ 6\",\"Thứ 7\",\"Chủ Nhật\"]";
-                    break;
-            }
-           request.setAttribute("type",type);
-            request.setAttribute("revenueLabels",revenueLabels);
-            request.setAttribute("revenueData",revenueData.toString());
+            request.getRequestDispatcher("/admin/dashboard.jsp")
+                    .forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("dashboardError", "Không tải được dữ liệu");
         }
-
-        request.getRequestDispatcher("/admin/dashboard.jsp")
-                .forward(request, response);
     }
 
+    private void handleAjax(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String type = request.getParameter("type");
+        if (type == null) type = "week";
+        List<Integer> revenueData;
+        String revenueLabels;
+        switch (type) {
+            case "month":
+                revenueData = orderDAO.getRevenueByMonth();
+                revenueLabels = "[\"T1\",\"T2\",\"T3\",\"T4\",\"T5\",\"T6\",\"T7\",\"T8\",\"T9\",\"T10\",\"T11\",\"T12\"]";
+                break;
+            case "year":
+                revenueData = orderDAO.getRevenueByYear();
+                revenueLabels = "[\"2022\",\"2023\",\"2024\",\"2025\",\"2026\"]";
+                break;
+            default:
+                revenueData = orderDAO.getRevenueByWeek();
+                revenueLabels = "[\"Thứ 2\",\"Thứ 3\",\"Thứ 4\",\"Thứ 5\",\"Thứ 6\",\"Thứ 7\",\"Chủ Nhật\"]";
+        }
+        List<Integer> statusData = orderDAO.getOrderStatusStats();
+        String statusLabels = "[\"Hoàn thành\",\"Đã huỷ\",\"Chờ xử lý\"]";
+        response.setContentType("application/json;charset=UTF-8");
+        String json = "{ \"labels\":" + revenueLabels + ", \"values\":" + revenueData.toString() + "," + "\"statusLabels\":" + statusLabels + "," + "\"statusValues\":" + statusData.toString() + "}";
+        response.getWriter().write(json);
+    }
 }
