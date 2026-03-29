@@ -53,8 +53,10 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        String validationError = authService.validateUserInput(email, fullname, username, phone, password, confirmPassword);
-        if (validationError != null) {
+        boolean isValidInput = authService.validateUserInput(
+                email, fullname, username, phone, password, confirmPassword
+        );
+        if (!isValidInput) {
             request.setAttribute("error", authService.getLastError());
             request.setAttribute("email", email);
             request.setAttribute("fullname", fullname);
