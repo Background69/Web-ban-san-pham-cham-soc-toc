@@ -1,5 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Model Order - Bảng orders trong database
  * Quản lý đơn hàng
  */
-public class Order {
+public class Order implements Serializable {
     private int orderId;
     private String orderCode;
     private Integer userId;

@@ -1,12 +1,13 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Model ProductImage - Bảng product_images trong database
  * Quản lý hình ảnh sản phẩm (gallery)
  */
-public class ProductImage {
+public class ProductImage implements Serializable {
     private int imageId;
     private int productId;
     private String imageUrl;

@@ -1,12 +1,13 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Model Brand - Bảng brands
  * Quản lý thông tin thương hiệu sản phẩm
  */
-public class Brand {
+public class Brand implements Serializable {
     private int brandId;
     private String brandName;
     private String brandSlug;
