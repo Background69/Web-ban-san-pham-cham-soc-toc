@@ -54,56 +54,56 @@ public class AuthenticationService {
         return user;
     }
 
-    public boolean validateUserInput(String email, String fullname, String username, String phone, String password, String confirmPassword) {
+    public String validateUserInput(String email, String fullname, String username, String phone, String password, String confirmPassword) {
         lastError = null;
         String emailError = ValidationUtil.validateEmail(email);
         if (emailError != null) {
             lastError = emailError;
-            return false;
+            return lastError;
         }
 
         String fullnameError = ValidationUtil.validateFullName(fullname);
         if (fullnameError != null) {
             lastError = fullnameError;
-            return false;
+            return lastError;
         }
 
         String usernameError = ValidationUtil.validateUsername(username);
         if (usernameError != null) {
             lastError = usernameError;
-            return false;
+            return lastError;
         }
 
         String passwordError = ValidationUtil.validatePassword(password);
         if (passwordError != null) {
             lastError = passwordError;
-            return false;
+            return lastError;
         }
 
         String phoneError = ValidationUtil.validatePhone(phone);
         if (phoneError != null) {
             lastError = phoneError;
-            return false;
+            return lastError;
         }
 
         String confirmError = ValidationUtil.validateConfirmPassword(password, confirmPassword);
         if (confirmError != null) {
             lastError = confirmError;
-            return false;
+            return lastError;
         }
 
         if (userDAO.existsByEmail(email.trim())) {
             lastError = "Email đã tồn tại";
-            return false;
+            return lastError;
         }
 
         if (userDAO.existsByUsername(username.trim())) {
             lastError = "Tên đăng nhập đã tồn tại";
-            return false;
+            return lastError;
         }
 
         lastError = null;
-        return true;
+        return null;
     }
 
     public User register(String email, String fullname, String username, String phone, String password, String confirmPassword) {
