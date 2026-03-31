@@ -262,6 +262,36 @@
         animation: pulse 1.5s infinite;
     }
 
+    .search-form {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    /* Style the reset button */
+    .reset-button {
+        position: absolute;
+        right: 45px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #999;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 5px;
+        display: none;
+        z-index: 2;
+    }
+
+    .reset-button:hover {
+        color: #f44336;
+    }
+
+    .search-form .input:not(:placeholder-shown) ~ .reset-button {
+        display: block;
+    }
     @keyframes pulse {
         0% {
             box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.4);
@@ -364,6 +394,9 @@
                     <form action="${pageContext.request.contextPath}/search" class="search-form" method="get">
                         <input class="input" id="search" name="q" placeholder="Bạn muốn tìm sản phẩm nào"
                                type="text">
+                        <button aria-label="reset button " class="reset-button" type="reset">
+                            <i class="fas fa-times"></i>
+                        </button>
                         <button aria-label="search button suggest" class="search-button" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
