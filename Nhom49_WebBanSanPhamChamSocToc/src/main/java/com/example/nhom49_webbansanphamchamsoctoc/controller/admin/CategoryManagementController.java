@@ -17,10 +17,15 @@ import static com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil.par
 
 @WebServlet(urlPatterns = {
         "/admin/category",
+        "/admin/categories",
         "/admin/category/add",
+        "/admin/categories/add",
         "/admin/category/edit",
+        "/admin/categories/edit",
         "/admin/category/save",
-        "/admin/category/delete"
+        "/admin/categories/save",
+        "/admin/category/delete",
+        "/admin/categories/delete"
 })
 public class CategoryManagementController extends HttpServlet {
 
@@ -41,30 +46,34 @@ public class CategoryManagementController extends HttpServlet {
         switch (path) {
 
             case "/admin/category":
+            case "/admin/categories":
                 listCategory(request, response);
                 break;
 
             case "/admin/category/add":
+            case "/admin/categories/add":
                 request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
                 break;
 
             case "/admin/category/edit":
+            case "/admin/categories/edit":
                 int id = parseIntSafe(request.getParameter("id"));
                 if (id > 0) {
                     Category c = categoryService.getCategoryById(id);
                     request.setAttribute("category", c);
                     request.getRequestDispatcher("/admin/category/form.jsp").forward(request, response);
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/admin/category");
+                    response.sendRedirect(request.getContextPath() + "/admin/categories");
                 }
                 break;
 
             case "/admin/category/delete":
+            case "/admin/categories/delete":
                 int deleteId = parseIntSafe(request.getParameter("id"));
                 if (deleteId > 0) {
                     categoryService.deleteCategory(deleteId);
                 }
-                response.sendRedirect(request.getContextPath() + "/admin/category");
+                response.sendRedirect(request.getContextPath() + "/admin/categories");
                 break;
 
             default:
@@ -79,7 +88,8 @@ public class CategoryManagementController extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        if ("/admin/category/save".equals(request.getServletPath())) {
+        if ("/admin/category/save".equals(request.getServletPath())
+                || "/admin/categories/save".equals(request.getServletPath())) {
             saveCategory(request, response);
         }
     }
@@ -115,7 +125,7 @@ public class CategoryManagementController extends HttpServlet {
                 return;
             }
 
-            response.sendRedirect(request.getContextPath() + "/admin/category");
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
             return;
         }
 
@@ -124,7 +134,7 @@ public class CategoryManagementController extends HttpServlet {
         Category exist = categoryService.getCategoryById(id);
 
         if (exist == null) {
-            response.sendRedirect(request.getContextPath() + "/admin/category");
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
             return;
         }
 
@@ -137,7 +147,7 @@ public class CategoryManagementController extends HttpServlet {
             return;
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/category");
+        response.sendRedirect(request.getContextPath() + "/admin/categories");
     }
 
     // ===== LIST =====
@@ -166,6 +176,6 @@ public class CategoryManagementController extends HttpServlet {
             throws IOException {
 
         String msg = URLEncoder.encode(message, StandardCharsets.UTF_8);
-        response.sendRedirect(request.getContextPath() + "/admin/category/add?error=" + msg);
+        response.sendRedirect(request.getContextPath() + "/admin/categories/add?error=" + msg);
     }
 }
