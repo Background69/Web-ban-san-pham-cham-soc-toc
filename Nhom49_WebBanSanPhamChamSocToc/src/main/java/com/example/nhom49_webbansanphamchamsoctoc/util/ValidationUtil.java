@@ -148,31 +148,12 @@ public class ValidationUtil {
     }
 
     /**
-     * Validate số thực dương
-     */
-    public static boolean isPositiveDouble(Double number) {
-        return number != null && number > 0;
-    }
-
-    /**
      * Parse integer an toàn
      */
     public static Integer parseIntSafe(String str) {
         if (isEmpty(str)) return null;
         try {
             return Integer.parseInt(str.trim());
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Parse double an toàn
-     */
-    public static Double parseDoubleSafe(String str) {
-        if (isEmpty(str)) return null;
-        try {
-            return Double.parseDouble(str.trim());
         } catch (NumberFormatException e) {
             return null;
         }

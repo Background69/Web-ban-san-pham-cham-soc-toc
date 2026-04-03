@@ -55,16 +55,6 @@ public class SessionUtil {
     }
 
     /**
-     * Xóa user khỏi session
-     */
-    public static void removeCurrentUser(HttpSession session) {
-        if (session != null) {
-            session.removeAttribute(USER_KEY);
-            session.removeAttribute(CURRENT_USER_KEY);
-        }
-    }
-
-    /**
      * Kiểm tra user đã đăng nhập chưa
      */
     public static boolean isLoggedIn(HttpSession session) {
@@ -105,31 +95,6 @@ public class SessionUtil {
     }
 
     /**
-     * Thực hiện clear cart.
-     */
-    public static void clearCart(HttpSession session) {
-        if (session != null) {
-            session.removeAttribute(CART_KEY);
-        }
-    }
-
-    /**
-     * Kiểm tra cart empty.
-     */
-    public static boolean isCartEmpty(HttpSession session) {
-        Cart cart = getCartObject(session);
-        return cart.isEmpty();
-    }
-
-    /**
-     * Lấy cart item count.
-     */
-    public static int getCartItemCount(HttpSession session) {
-        Cart cart = getCartObject(session);
-        return cart.getTotalQuantity();
-    }
-
-    /**
      * Thiết lập success message.
      */
     public static void setSuccessMessage(HttpSession session, String message) {
@@ -167,22 +132,4 @@ public class SessionUtil {
         return message;
     }
 
-    /**
-     * Invalidate session.
-     */
-    public static void invalidateSession(HttpSession session) {
-        if (session != null) {
-            session.removeAttribute(USER_KEY);
-            session.removeAttribute(CURRENT_USER_KEY);
-            session.removeAttribute(CART_KEY);
-            session.invalidate();
-        }
-    }
-
-    /**
-     * Lấy hoặc tao session.
-     */
-    public static HttpSession getOrCreateSession(jakarta.servlet.http.HttpServletRequest request) {
-        return request.getSession(true);
-    }
 }

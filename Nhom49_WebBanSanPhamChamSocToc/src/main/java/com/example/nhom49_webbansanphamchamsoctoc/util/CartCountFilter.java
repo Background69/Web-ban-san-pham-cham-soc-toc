@@ -16,8 +16,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Filter để set cartCount vào session cho mọi request.
- * Đảm bảo header luôn hiển thị đúng số lượng sản phẩm trong giỏ hàng.
+ * Filter để set cartCount vào session cho mọi request
+ * Đảm bảo header luôn hiển thị đúng số lượng sản phẩm trong giỏ hàng
  */
 @WebFilter(filterName = "CartCountFilter", urlPatterns = { "/*" })
 public class CartCountFilter implements Filter {
