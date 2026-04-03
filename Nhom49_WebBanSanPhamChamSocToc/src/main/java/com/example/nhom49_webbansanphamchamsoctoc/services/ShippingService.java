@@ -8,9 +8,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Service chuyên xử lý shipping và địa chỉ giao hàng
- */
 public class ShippingService {
 
     // Shipping fees
@@ -24,39 +21,27 @@ public class ShippingService {
         this.addressDAO = new ShippingAddressDAO();
     }
 
-    /**
-     * Lấy thông báo lỗi cuối cùng
-     */
     public String getLastError() {
         return lastError;
     }
 
 
-    /**
-     * Lấy danh sách địa chỉ của user
-     */
     public List<ShippingAddress> getAddressesByUser(int userId) {
         return addressDAO.findByUserId(userId);
     }
 
-    /**
-     * Lấy địa chỉ mặc định của user
-     */
+
     public ShippingAddress getDefaultAddress(int userId) {
         return addressDAO.findDefaultByUserId(userId);
     }
 
-    /**
-     * Lấy địa chỉ theo ID
-     */
+
     public ShippingAddress getAddressById(int addressId) {
         return addressDAO.findById(addressId);
     }
 
     /**
      * Tạo địa chỉ mới
-     *
-     * @return ShippingAddress nếu thành công, null nếu thất bại
      */
     public ShippingAddress createAddress(int userId, String fullName, String phone,
                                          String provinceCode, String provinceName,
@@ -129,7 +114,7 @@ public class ShippingService {
     }
 
     /**
-     * Thêm địa chỉ mới (simplified version)
+     * Thêm địa chỉ mới
      */
     public boolean addAddress(ShippingAddress address) {
         if (address == null) {
@@ -183,26 +168,6 @@ public class ShippingService {
         return STANDARD_SHIPPING_FEE;
     }
 
-    /**
-     * Lấy tên hiển thị của phương thức ship
-     */
-    public String getShippingMethodDisplayName(String method) {
-        return switch (method) {
-            case "express" -> "Giao hàng nhanh";
-            default -> "Giao hàng tiêu chuẩn";
-        };
-    }
-
-    /**
-     * Format địa chỉ đầy đủ
-     */
-    public String formatFullAddress(ShippingAddress address) {
-        return AddressUtil.formatFullAddress(address);
-    }
-
-    /**
-     * Đếm số địa chỉ của user
-     */
     public int countAddressesByUser(int userId) {
         List<ShippingAddress> addresses = addressDAO.findByUserId(userId);
         return addresses != null ? addresses.size() : 0;

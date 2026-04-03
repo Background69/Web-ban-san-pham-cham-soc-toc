@@ -149,11 +149,6 @@ public class CartService {
         return items;
     }
 
-    public BigDecimal calculateSubtotal(HttpSession session) {
-        List<CartItem> refreshedItems = getCartItems(session);
-        return calculateSubtotal(refreshedItems);
-    }
-
     public BigDecimal calculateSubtotal(List<CartItem> items) {
         return items.stream()
                 .map(CartItem::getTotalPrice)
@@ -220,9 +215,6 @@ public class CartService {
         return null;
     }
 
-    // Cart chỉ lưu ở session, chưa đồng bộ với database
-    public void loadCartFromDatabase(HttpSession session, int userId) {
-    }
 
     public void clearCartInDatabase(int userId) {
     }
@@ -260,9 +252,6 @@ public class CartService {
         return invalidItems;
     }
 
-    public boolean isStockValid(HttpSession session) {
-        return validateStock(getCart(session)).isEmpty();
-    }
 
     public String buildStockErrorMessage(List<StockValidationResult> items) {
         if (items == null || items.isEmpty()) {
@@ -281,9 +270,6 @@ public class CartService {
         return sb.toString();
     }
 
-    public Map<Integer, Integer> getCartAsMap(HttpSession session) {
-        return getCart(session).toVariantQuantityMap();
-    }
 
     public static class StockValidationResult {
         private final int variantId;
@@ -300,10 +286,24 @@ public class CartService {
             this.availableStock = availableStock;
         }
 
-        public int getVariantId() { return variantId; }
-        public String getProductName() { return productName; }
-        public String getVariantName() { return variantName; }
-        public int getRequestedQuantity() { return requestedQuantity; }
-        public int getAvailableStock() { return availableStock; }
+        public int getVariantId() {
+            return variantId;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public String getVariantName() {
+            return variantName;
+        }
+
+        public int getRequestedQuantity() {
+            return requestedQuantity;
+        }
+
+        public int getAvailableStock() {
+            return availableStock;
+        }
     }
 }

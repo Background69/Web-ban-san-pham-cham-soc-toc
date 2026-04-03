@@ -5,9 +5,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 
-/**
- * Lớp ProfileService.
- */
 public class ProfileService {
 
     private final UserDAO userDAO;
@@ -17,9 +14,6 @@ public class ProfileService {
         this.userDAO = new UserDAO();
     }
 
-    /**
-     * Lấy thông báo lỗi cuối cùng
-     */
     public String getLastError() {
         return lastError;
     }
