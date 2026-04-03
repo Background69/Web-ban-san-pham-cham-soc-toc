@@ -15,12 +15,6 @@ public class OtpVerificationDAO {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    public enum OtpPurpose {
-        REGISTER,
-        FORGOT_PASSWORD
-    }
-
-
     public int createOtp(int userId, String otpCode, OtpPurpose purpose, Timestamp expiry) {
         return jdbi.inTransaction(handle -> {
             invalidateOldOtp(handle, userId, purpose);
@@ -103,5 +97,10 @@ public class OtpVerificationDAO {
         otp.setVerified(rs.getBoolean("is_verified"));
         otp.setCreatedAt(rs.getTimestamp("created_at"));
         return otp;
+    }
+
+    public enum OtpPurpose {
+        REGISTER,
+        FORGOT_PASSWORD
     }
 }

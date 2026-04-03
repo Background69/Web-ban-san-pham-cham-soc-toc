@@ -16,20 +16,21 @@ public class HairConditionDAO implements IDAO<HairCondition> {
 
     @Override
     public HairCondition findById(int id) {
-                 String sql ="SELECT * FROM hair_conditions WHERE condition_id=:id";
-                 return jdbi.withHandle(handle -> handle.createQuery(sql)
-                 .bind("id", id)
-                .map((rs,ctx)-> mapHairCondition(rs))
+        String sql = "SELECT * FROM hair_conditions WHERE condition_id=:id";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("id", id)
+                .map((rs, ctx) -> mapHairCondition(rs))
                 .findFirst()
                 .orElse(null));
     }
+
     @Override
     public List<HairCondition> findAll() {
         String sql = "SELECT condition_id, condition_name, condition_slug FROM hair_conditions";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
 
-                        .map((rs, ctx)->mapHairCondition(rs))
+                        .map((rs, ctx) -> mapHairCondition(rs))
                         .list()
         );
     }
@@ -77,18 +78,20 @@ public class HairConditionDAO implements IDAO<HairCondition> {
                         .bind("id", entity.getConditionId())
                         .execute()
         );
-       return rows >0;
-}
+        return rows > 0;
+    }
+
     @Override
     public boolean delete(int id) {
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
-                        "DELETE FROM hair_conditions WHERE condition_id =:id")
-                        .bind("id",id)
+                                "DELETE FROM hair_conditions WHERE condition_id =:id")
+                        .bind("id", id)
                         .execute()
         );
-        return rows >0;
+        return rows > 0;
     }
+
     private HairCondition mapHairCondition(ResultSet rs) {
         try {
             HairCondition h = new HairCondition();
