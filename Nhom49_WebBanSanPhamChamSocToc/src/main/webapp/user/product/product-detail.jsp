@@ -23,6 +23,200 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/static/css/user/style_for_product_detail.css">
+
+    <style>
+        .description-content {
+            padding: 24px;
+            background: #ffffff;
+            border: 1px solid #dbe6df;
+            border-radius: 14px;
+        }
+
+        .description-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .description-rendered {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .description-section {
+            background: #fcfefd;
+            border: 1px solid #e1ebe4;
+            border-left: 5px solid #1f3f2f;
+            border-radius: 10px;
+            padding: 16px 18px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .description-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .description-section + .description-section {
+            margin-top: 2px;
+        }
+
+        .description-section-title {
+            margin: 0;
+            font-size: 17px;
+            line-height: 1.4;
+            font-weight: 700;
+            color: #1f3f2f;
+            letter-spacing: 0.01em;
+        }
+
+        .description-section-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .description-section-body p {
+            margin: 0;
+            color: #253340;
+            font-size: 15px;
+            line-height: 1.82;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        .description-section-body strong {
+            color: #1f3f2f;
+            font-weight: 700;
+        }
+
+        .description-list {
+            margin: 0;
+            padding-left: 22px;
+            list-style-type: disc;
+            list-style-position: outside;
+            display: grid;
+            gap: 8px;
+            color: #253340;
+        }
+
+        .description-list-item {
+            font-size: 15px;
+            line-height: 1.8;
+            padding-left: 2px;
+            word-break: break-word;
+        }
+
+        .description-list-item::marker {
+            color: #1f3f2f;
+        }
+
+        .description-toggle-wrap {
+            display: flex;
+            justify-content: center;
+            padding-top: 4px;
+        }
+
+        .description-toggle-wrap[hidden] {
+            display: none;
+        }
+
+        .description-toggle-btn {
+            border: 1px solid #1f3f2f;
+            background: #ffffff;
+            color: #1f3f2f;
+            border-radius: 999px;
+            padding: 9px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .description-toggle-btn:hover {
+            background: #1f3f2f;
+            color: #ffffff;
+        }
+
+        .description-toggle-btn:focus-visible {
+            outline: 2px solid #8eb7a0;
+            outline-offset: 2px;
+        }
+
+        .description-fallback {
+            background: #ffffff;
+            border: 1px solid #dbe6df;
+            border-radius: 10px;
+            padding: 16px 18px;
+        }
+
+        .description-fallback p {
+            margin: 0;
+            color: #253340;
+            font-size: 15px;
+            line-height: 1.8;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+
+        .description-empty {
+            background: #ffffff;
+            border: 1px dashed #c7d7cd;
+            border-radius: 10px;
+            padding: 16px 18px;
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .description-raw {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .description-content {
+                padding: 18px;
+            }
+
+            .description-section,
+            .description-fallback,
+            .description-empty {
+                padding: 14px;
+            }
+
+            .description-section-title {
+                font-size: 15px;
+            }
+
+            .description-section-body p,
+            .description-list-item,
+            .description-fallback p {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .description-list {
+                gap: 7px;
+                padding-left: 18px;
+            }
+
+            .description-toggle-btn {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .description-section {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -235,9 +429,25 @@
             <!-- Description Tab -->
             <div class="detail-page-content active" id="description">
                 <div class="description-content">
-                    <c:if test="${not empty product.fullDescription}">
-                        <p>${product.fullDescription}</p>
-                    </c:if>
+                    <c:choose>
+                        <c:when test="${not empty product.fullDescription}">
+                            <div class="description-layout">
+                                <div class="description-rendered" id="description-rendered" hidden></div>
+                                <div class="description-fallback" id="description-fallback">
+                                    <p><c:out value="${product.fullDescription}"/></p>
+                                </div>
+                                <pre class="description-raw" id="description-raw" hidden><c:out
+                                        value="${product.fullDescription}"/></pre>
+                                <div class="description-toggle-wrap" id="description-toggle-wrap" hidden>
+                                    <button type="button" class="description-toggle-btn" id="description-toggle-btn"
+                                            aria-expanded="false"></button>
+                                </div>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="description-empty">Thông tin mô tả đang được cập nhật.</div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="specs-section">
@@ -587,6 +797,285 @@
     function formatNumber(num) {
         return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+    function normalizeHeadingLabel(label) {
+        const raw = label.replace(/[:：]\s*$/, '').trim();
+        if (!raw) return '';
+
+        const upper = raw.toLocaleUpperCase('vi-VN');
+        const lower = raw.toLocaleLowerCase('vi-VN');
+        if (raw === upper && raw !== lower) {
+            return raw
+                .toLocaleLowerCase('vi-VN')
+                .split(/\s+/)
+                .map(word => word.charAt(0).toLocaleUpperCase('vi-VN') + word.slice(1))
+                .join(' ');
+        }
+        return raw.charAt(0).toLocaleUpperCase('vi-VN') + raw.slice(1);
+    }
+
+    function isSectionHeading(block) {
+        const text = (block || '').replace(/\s+/g, ' ').trim();
+        if (!text || text.length > 60) return false;
+
+        const stripped = text.replace(/[:：]\s*$/, '');
+        const upper = stripped.toLocaleUpperCase('vi-VN');
+        const lower = stripped.toLocaleLowerCase('vi-VN');
+        const isUpperHeading = stripped === upper && stripped !== lower;
+        const isCommonHeading = /^(mô tả sản phẩm|công dụng nổi bật|lưu ý|thành phần|hướng dẫn sử dụng)$/i.test(stripped);
+
+        return isUpperHeading || isCommonHeading;
+    }
+
+    function parseContentBlock(block) {
+        const lines = block.split('\n').map(line => line.trim()).filter(Boolean);
+        const items = [];
+        const bulletPattern = /^[-•*]\s+/;
+        let paragraphLines = [];
+        let bulletItems = [];
+
+        function flushParagraph() {
+            if (!paragraphLines.length) return;
+            items.push({
+                type: 'paragraph',
+                text: paragraphLines.join(' ')
+            });
+            paragraphLines = [];
+        }
+
+        function flushBullets() {
+            if (!bulletItems.length) return;
+            items.push({
+                type: 'list',
+                values: bulletItems.slice()
+            });
+            bulletItems = [];
+        }
+
+        lines.forEach(line => {
+            if (bulletPattern.test(line)) {
+                flushParagraph();
+                bulletItems.push(line.replace(bulletPattern, '').trim());
+                return;
+            }
+            flushBullets();
+            paragraphLines.push(line);
+        });
+
+        flushParagraph();
+        flushBullets();
+        return items;
+    }
+
+    function buildDescriptionSections(rawText) {
+        const cleaned = rawText.replace(/\r\n?/g, '\n').trim();
+        if (!cleaned) return [];
+
+        const blocks = cleaned.split(/\n{2,}/).map(block => block.trim()).filter(Boolean);
+        const sections = [];
+        let currentSection = {
+            title: 'Mô tả sản phẩm',
+            items: []
+        };
+
+        blocks.forEach(block => {
+            if (isSectionHeading(block)) {
+                if (currentSection.items.length) {
+                    sections.push(currentSection);
+                }
+                currentSection = {
+                    title: normalizeHeadingLabel(block),
+                    items: []
+                };
+                return;
+            }
+
+            const parsedItems = parseContentBlock(block);
+            if (parsedItems.length) {
+                currentSection.items.push(...parsedItems);
+            }
+        });
+
+        if (currentSection.items.length) {
+            sections.push(currentSection);
+        }
+
+        if (!sections.length) {
+            sections.push({
+                title: 'Mô tả sản phẩm',
+                items: [{type: 'paragraph', text: cleaned}]
+            });
+        }
+
+        return sections;
+    }
+
+    function getSectionMeta(title) {
+        const normalized = (title || '').toLocaleLowerCase('vi-VN');
+        if (normalized.includes('công dụng')) {
+            return {key: 'usage'};
+        }
+        if (normalized.includes('lưu ý')) {
+            return {key: 'note'};
+        }
+        if (normalized.includes('thành phần')) {
+            return {key: 'ingredient'};
+        }
+        if (normalized.includes('hướng dẫn')) {
+            return {key: 'guide'};
+        }
+        return {key: 'overview'};
+    }
+
+    function renderDescriptionContent() {
+        const rawEl = document.getElementById('description-raw');
+        const renderedEl = document.getElementById('description-rendered');
+        const fallbackEl = document.getElementById('description-fallback');
+        const toggleWrap = document.getElementById('description-toggle-wrap');
+        const toggleBtn = document.getElementById('description-toggle-btn');
+
+        if (!rawEl || !renderedEl || !fallbackEl) return;
+
+        const rawText = (rawEl.textContent || '').trim();
+        if (!rawText) return;
+
+        const sections = buildDescriptionSections(rawText);
+        if (!sections.length) return;
+
+        renderedEl.innerHTML = '';
+
+        function appendEmphasizedText(targetEl, text) {
+            const normalized = (text || '').trim();
+            if (!normalized) return;
+
+            const headingLikePattern = /^([^:]{2,48}):\s+(.+)$/;
+            const matched = normalized.match(headingLikePattern);
+
+            if (!matched) {
+                targetEl.textContent = normalized;
+                return;
+            }
+
+            const label = matched[1].trim();
+            const body = matched[2].trim();
+            const wordCount = label ? label.split(/\s+/).length : 0;
+
+            if (!label || !body || wordCount > 6) {
+                targetEl.textContent = normalized;
+                return;
+            }
+
+            const strong = document.createElement('strong');
+            strong.textContent = label + ': ';
+            targetEl.appendChild(strong);
+            targetEl.appendChild(document.createTextNode(body));
+        }
+
+        const fragment = document.createDocumentFragment();
+        const sectionElements = [];
+        sections.forEach(section => {
+            if (!section.items || !section.items.length) return;
+            const sectionMeta = getSectionMeta(section.title);
+
+            const sectionEl = document.createElement('section');
+            sectionEl.className = 'description-section section-' + sectionMeta.key;
+
+            const title = document.createElement('h3');
+            title.className = 'description-section-title';
+            title.textContent = section.title || 'Mô tả sản phẩm';
+            sectionEl.appendChild(title);
+
+            const sectionBody = document.createElement('div');
+            sectionBody.className = 'description-section-body';
+
+            section.items.forEach(item => {
+                if (item.type === 'paragraph' && item.text) {
+                    const paragraph = document.createElement('p');
+                    appendEmphasizedText(paragraph, item.text);
+                    sectionBody.appendChild(paragraph);
+                    return;
+                }
+
+                if (item.type === 'list' && item.values && item.values.length) {
+                    const list = document.createElement('ul');
+                    list.className = 'description-list';
+                    item.values.forEach(value => {
+                        if (!value) return;
+                        const listItem = document.createElement('li');
+                        listItem.className = 'description-list-item';
+                        appendEmphasizedText(listItem, value);
+                        list.appendChild(listItem);
+                    });
+                    if (list.children.length > 0) {
+                        sectionBody.appendChild(list);
+                    }
+                }
+            });
+
+            if (sectionBody.children.length > 0) {
+                sectionEl.appendChild(sectionBody);
+                fragment.appendChild(sectionEl);
+                sectionElements.push(sectionEl);
+            }
+        });
+
+        if (!sectionElements.length) return;
+
+        renderedEl.appendChild(fragment);
+        renderedEl.hidden = false;
+        fallbackEl.hidden = true;
+
+        const observer = 'IntersectionObserver' in window
+            ? new IntersectionObserver((entries, currentObserver) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        currentObserver.unobserve(entry.target);
+                    }
+                });
+            }, {threshold: 0.2, rootMargin: '0px 0px -10% 0px'})
+            : null;
+
+        function revealSection(sectionEl) {
+            if (!sectionEl) return;
+            if (observer) observer.observe(sectionEl);
+            else sectionEl.classList.add('is-visible');
+        }
+
+        const collapseLimit = 3;
+        let expanded = sectionElements.length <= collapseLimit;
+
+        function applySectionVisibility() {
+            sectionElements.forEach((sectionEl, index) => {
+                const shouldShow = expanded || index < collapseLimit;
+                sectionEl.hidden = !shouldShow;
+                if (shouldShow) revealSection(sectionEl);
+            });
+
+            if (toggleBtn) {
+                toggleBtn.textContent = expanded ? 'Thu gọn' : 'Xem thêm';
+                toggleBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            }
+        }
+
+        if (toggleWrap && toggleBtn && sectionElements.length > collapseLimit) {
+            toggleWrap.hidden = false;
+            toggleBtn.onclick = function () {
+                expanded = !expanded;
+                applySectionVisibility();
+            };
+        } else if (toggleWrap) {
+            toggleWrap.hidden = true;
+            if (toggleBtn) {
+                toggleBtn.onclick = null;
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        applySectionVisibility();
+    }
+
+    renderDescriptionContent();
 
     const tabButtons = document.querySelectorAll('.detail-page-btn');
     const tabContents = document.querySelectorAll('.detail-page-content');
