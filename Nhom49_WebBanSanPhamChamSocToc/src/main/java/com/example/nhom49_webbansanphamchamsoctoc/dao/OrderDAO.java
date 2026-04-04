@@ -5,8 +5,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import org.jdbi.v3.core.Jdbi;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,7 +16,7 @@ public class OrderDAO implements IDAO<Order> {
     private static final AtomicInteger orderCounter = new AtomicInteger(100);
     private final Jdbi jdbi;
 
-        public OrderDAO() {
+    public OrderDAO() {
         this.jdbi = JDBIConnector.getInstance();
         Integer maxId = jdbi.withHandle(handle -> handle.createQuery("SELECT MAX(order_id) FROM orders")
                 .mapTo(Integer.class)
@@ -29,7 +27,7 @@ public class OrderDAO implements IDAO<Order> {
         }
     }
 
-        @Override
+    @Override
     public Order findById(int id) {
         String sql = "SELECT * FROM orders WHERE order_id = :orderId";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -39,7 +37,7 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(null));
     }
 
-        @Override
+    @Override
     public List<Order> findAll() {
         String sql = "SELECT * FROM orders ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -47,7 +45,7 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-        @Override
+    @Override
     public int insert(Order order) {
         String sql = "INSERT INTO orders (order_code, user_id, shipping_address_id, shipping_full_name, " +
                 "shipping_phone, shipping_address, shipping_method, shipping_fee, payment_method, " +
@@ -72,7 +70,7 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(-1));
     }
 
-        @Override
+    @Override
     public boolean update(Order order) {
         String sql = "UPDATE orders SET shipping_full_name = :shippingFullName, shipping_phone = :shippingPhone, shipping_address = :shippingAddress, "
                 +
@@ -95,7 +93,7 @@ public class OrderDAO implements IDAO<Order> {
         return rowsAffected > 0;
     }
 
-        @Override
+    @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM orders WHERE order_id = :orderId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
@@ -106,7 +104,7 @@ public class OrderDAO implements IDAO<Order> {
 
     // Query methods
 
-        public List<Order> findByUserId(int userId) {
+    public List<Order> findByUserId(int userId) {
         String sql = "SELECT * FROM orders WHERE user_id = :userId ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
@@ -114,14 +112,6 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-        public Order findByOrderCode(String orderCode) {
-        String sql = "SELECT * FROM orders WHERE order_code = :orderCode";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("orderCode", orderCode)
-                .map((rs, ctx) -> mapOrder(rs))
-                .findFirst()
-                .orElse(null));
-    }
 
     public List<Order> findRecentOrder(int limit) {
         String sql = "SELECT * FROM orders ORDER BY created_at DESC LIMIT ?";
@@ -131,15 +121,8 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-        public List<Order> findByStatus(String status) {
-        String sql = "SELECT * FROM orders WHERE order_status = :orderStatus ORDER BY created_at DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("orderStatus", status)
-                .map((rs, ctx) -> mapOrder(rs))
-                .list());
-    }
 
-        public List<Order> findByUserIdAndStatus(int userId, String status) {
+    public List<Order> findByUserIdAndStatus(int userId, String status) {
         String sql = "SELECT * FROM orders WHERE user_id = :userId AND order_status = :orderStatus ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
@@ -148,7 +131,7 @@ public class OrderDAO implements IDAO<Order> {
                 .list());
     }
 
-        public int countByUserId(int userId) {
+    public int countByUserId(int userId) {
         String sql = "SELECT COUNT(*) FROM orders WHERE user_id = :userId";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
@@ -157,24 +140,7 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(0));
     }
 
-        public int countByUserIdAndStatus(int userId, String status) {
-        String sql = "SELECT COUNT(*) FROM orders WHERE user_id = :userId AND order_status = :orderStatus";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("userId", userId)
-                .bind("orderStatus", status)
-                .mapTo(Integer.class)
-                .findFirst()
-                .orElse(0));
-    }
 
-    public int countByStatus(String status) {
-        String sql = "SELECT COUNT(*) FROM orders WHERE order_status = :status";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("status", status)
-                .mapTo(Integer.class)
-                .findFirst()
-                .orElse(0));
-    }
 
     public boolean hasUserPurchasedProduct(int userId, int productId) {
         String sql = """
@@ -264,9 +230,7 @@ public class OrderDAO implements IDAO<Order> {
                                 row -> ((Number) row.get("total")).intValue())));
     }
 
-    // Management methods
-
-        public boolean updateStatus(int orderId, String status) {
+    public boolean updateStatus(int orderId, String status) {
         String sql = "UPDATE orders SET order_status = :orderStatus WHERE order_id = :orderId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("orderStatus", status)
@@ -275,11 +239,11 @@ public class OrderDAO implements IDAO<Order> {
         return rowsAffected > 0;
     }
 
-        public String generateOrderCode() {
+    public String generateOrderCode() {
         return "#HD" + orderCounter.incrementAndGet();
     }
 
-        public boolean existsByOrderCode(String orderCode) {
+    public boolean existsByOrderCode(String orderCode) {
         String sql = "SELECT COUNT(*) FROM orders WHERE order_code = :orderCode";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("orderCode", orderCode)
@@ -288,7 +252,7 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(0) > 0);
     }
 
-        public java.util.Map<String, Object> getDailyStats(java.util.Date startDate, java.util.Date endDate) {
+    public java.util.Map<String, Object> getDailyStats(java.util.Date startDate, java.util.Date endDate) {
         // Validate input
         if (startDate == null || endDate == null) {
             java.util.Map<String, Object> defaultResult = new java.util.HashMap<>();
@@ -320,37 +284,6 @@ public class OrderDAO implements IDAO<Order> {
                 }));
     }
 
-        public java.util.Map<String, Object> getStats(java.util.Date startDate, java.util.Date endDate) {
-        return getDailyStats(startDate, endDate);
-    }
-
-        public java.util.List<java.util.Map<String, Object>> getRevenueByPromotion(java.util.Date startDate,
-            java.util.Date endDate) {
-        String sql = "SELECT p.promotion_id, p.promotion_name, p.promotion_type, " +
-                "COALESCE(SUM(oi.total_price), 0) AS revenue " +
-                "FROM promotions p " +
-                "JOIN product_promotions pp ON pp.promotion_id = p.promotion_id " +
-                "JOIN order_items oi ON oi.product_id = pp.product_id " +
-                "JOIN orders o ON o.order_id = oi.order_id " +
-                "WHERE o.created_at >= :startDate AND o.created_at < :endDate " +
-                "AND o.order_status NOT IN ('cancelled') " +
-                "GROUP BY p.promotion_id, p.promotion_name, p.promotion_type " +
-                "ORDER BY revenue DESC";
-
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("startDate", startDate)
-                .bind("endDate", endDate)
-                .map((rs, ctx) -> {
-                    java.util.Map<String, Object> row = new java.util.HashMap<>();
-                    row.put("promotionId", rs.getInt("promotion_id"));
-                    row.put("promotionName", rs.getString("promotion_name"));
-                    row.put("promotionType", rs.getString("promotion_type"));
-                    row.put("revenue", rs.getBigDecimal("revenue"));
-                    return row;
-                })
-                .list());
-    }
-
     public int countOrders() {
         String sql = "SELECT COUNT(*) FROM orders";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -360,20 +293,23 @@ public class OrderDAO implements IDAO<Order> {
 
         );
     }
-    public List<Integer> getRevenueByWeek(){
+
+    public List<Integer> getRevenueByWeek() {
         String sql = "SELECT DAYOFWEEK(created_at) as d, SUM(total_amount) as total FROM orders GROUP BY DAYOFWEEK(created_At)";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .map((rs,ctx)-> rs.getInt("total"))
+                        .map((rs, ctx) -> rs.getInt("total"))
                         .list());
     }
-    public List<Integer> getRevenueByMonth(){
+
+    public List<Integer> getRevenueByMonth() {
         String sql = "SELECT MONTH(created_at) as m, SUM(total_amount) as total FROM orders GROUP BY MONTH(created_At)";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .map((rs,ctx)-> rs.getInt("total"))
-                .list());
+                        .map((rs, ctx) -> rs.getInt("total"))
+                        .list());
     }
+
     public List<Integer> getRevenueByYear() {
         String sql = "SELECT YEAR(created_at) as Y, SUM(total_amount) as total FROM orders GROUP BY YEAR(created_At)";
         return jdbi.withHandle(handle ->
@@ -381,31 +317,33 @@ public class OrderDAO implements IDAO<Order> {
                         .map((rs, ctx) -> rs.getInt("total"))
                         .list());
     }
-        public long totalRevenue() {
-            // Hỗ trợ nhiều biến thể trạng thái hoàn thành
-            String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE order_status = 'completed'";
-            return jdbi.withHandle(handle -> handle.createQuery(sql)
-                    .mapTo(Long.class)
-                    .findFirst()
-                    .orElse(0L));
-        }
-        public List<Integer> getOrderStatusStats(){
-            String sql = "SELECT SUM(CASE WHEN order_status IN ('completed','done') THEN 1 ELSE 0 END) AS completed,SUM(CASE WHEN order_status IN ('cancelled','canceled') THEN 1 ELSE 0 END) AS cancelled, SUM(CASE WHEN order_status = 'pending' THEN 1 ELSE 0 END) AS pending FROM orders";
-        return jdbi.withHandle(handle->
+
+    public long totalRevenue() {
+        // Hỗ trợ nhiều biến thể trạng thái hoàn thành
+        String sql = "SELECT COALESCE(SUM(total_amount),0) FROM orders WHERE order_status = 'completed'";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .mapTo(Long.class)
+                .findFirst()
+                .orElse(0L));
+    }
+
+    public List<Integer> getOrderStatusStats() {
+        String sql = "SELECT SUM(CASE WHEN order_status IN ('completed','done') THEN 1 ELSE 0 END) AS completed,SUM(CASE WHEN order_status IN ('cancelled','canceled') THEN 1 ELSE 0 END) AS cancelled, SUM(CASE WHEN order_status = 'pending' THEN 1 ELSE 0 END) AS pending FROM orders";
+        return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
-                        .map((rs,ctx)->List.of(
+                        .map((rs, ctx) -> List.of(
                                 rs.getInt("completed"),
                                 rs.getInt("cancelled"),
                                 rs.getInt("pending")
                         ))
                         .findFirst()
-                        .orElse(List.of(0,0,0))
+                        .orElse(List.of(0, 0, 0))
         );
-        }
+    }
     // Helper method;
 
     // Helper method
-        private Order mapOrder(java.sql.ResultSet rs) throws java.sql.SQLException {
+    private Order mapOrder(java.sql.ResultSet rs) throws java.sql.SQLException {
         Order order = new Order();
         order.setOrderId(rs.getInt("order_id"));
         order.setOrderCode(rs.getString("order_code"));

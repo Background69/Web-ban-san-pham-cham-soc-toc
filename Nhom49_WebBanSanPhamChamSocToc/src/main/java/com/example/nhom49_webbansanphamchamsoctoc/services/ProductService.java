@@ -10,12 +10,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductImage;
-import com.example.nhom49_webbansanphamchamsoctoc.model.Promotion;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -57,11 +52,6 @@ public class ProductService {
         return product;
     }
 
-    public List<Product> getAllProducts(int page, int pageSize) {
-        List<Product> products = productDAO.findWithPagination(page, pageSize);
-        enrichProductsWithBasicDetails(products);
-        return products;
-    }
 
     public List<Product> getAllProducts() {
         List<Product> products = productDAO.findAll();
@@ -69,16 +59,6 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> getProductsForAdmin(String search, Integer categoryId, Integer brandId, int page,
-            int pageSize) {
-        List<Product> products = productDAO.findByFilters(search, categoryId, brandId, page, pageSize);
-        enrichProductsWithBasicDetails(products);
-        return products;
-    }
-
-    public int countProductsForAdmin(String search, Integer categoryId, Integer brandId) {
-        return productDAO.countByFilters(search, categoryId, brandId);
-    }
 
     public List<Product> getProductsByBrand(int brandId) {
         List<Product> products = productDAO.findByBrand(brandId);
@@ -86,7 +66,7 @@ public class ProductService {
         return products;
     }
 
-        public List<Product> getRelatedProducts(int productId, int categoryId, int limit) {
+    public List<Product> getRelatedProducts(int productId, int categoryId, int limit) {
         List<Product> products = productDAO.findRelatedProducts(productId, categoryId, limit);
         enrichProductsWithBasicDetails(products);
         return products;
@@ -98,14 +78,6 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> searchProducts(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return List.of();
-        }
-        List<Product> products = productDAO.search(keyword.trim());
-        enrichProductsWithBasicDetails(products);
-        return products;
-    }
 
     public List<Product> searchProductsExcludingOnSale(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -122,11 +94,6 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> getFeaturedProductsExcludingOnSale() {
-        List<Product> products = filterOutOnSale(productDAO.findFeatured());
-        enrichProductsWithBasicDetails(products);
-        return products;
-    }
 
     public List<Product> getOnSaleProducts() {
         List<Product> products = productDAO.findOnSale();
@@ -144,144 +111,18 @@ public class ProductService {
         return productDAO.countOnSale();
     }
 
-        public List<Product> getFlashSaleProducts() {
-        List<Product> products = productDAO.findFlashSale();
-        enrichProductsWithBasicDetails(products);
-        return products;
-    }
-
-        public Product getProductWithPromotions(int productId) {
-        Product product = productDAO.findByIdWithRelations(productId);
-        if (product != null) {
-            enrichProductWithDetails(product);
-            calculateFinalPrice(product);
-        }
-        return product;
-    }
-
-        public Product getProductBySlugWithPromotions(String slug) {
-        Product product = productDAO.findBySlug(slug);
-        if (product != null) {
-            Product withRelations = productDAO.findByIdWithRelations(product.getProductId());
-            if (withRelations != null) {
-                product.setHairConditions(withRelations.getHairConditions());
-                product.setPromotions(withRelations.getPromotions());
-            }
-            enrichProductWithDetails(product);
-            calculateFinalPrice(product);
-        }
-        return product;
-    }
-
-        public BigDecimal calculateFinalPrice(Product product) {
-        if (product == null) {
-            return BigDecimal.ZERO;
-        }
-
-        ProductVariant defaultVariant = product.getDefaultVariant();
-        BigDecimal finalPrice = BigDecimal.ZERO;
-        if (defaultVariant != null) {
-            if (defaultVariant.getSalePrice() != null && defaultVariant.getSalePrice().compareTo(BigDecimal.ZERO) > 0) {
-                finalPrice = defaultVariant.getSalePrice();
-            } else if (defaultVariant.getOriginalPrice() != null) {
-                finalPrice = defaultVariant.getOriginalPrice();
-            }
-        }
-
-        product.setFinalPrice(finalPrice);
-        product.setActivePromotion(findFirstActivePromotion(product.getPromotions()));
-        return finalPrice;
-    }
-
-    private Promotion findFirstActivePromotion(List<Promotion> promotions) {
-        if (promotions == null || promotions.isEmpty()) {
-            return null;
-        }
-        LocalDateTime now = LocalDateTime.now();
-        for (Promotion promotion : promotions) {
-            if (promotion == null || !promotion.isActive() || promotion.getStartDate() == null || promotion.getEndDate() == null) {
-                continue;
-            }
-            if (!now.isBefore(promotion.getStartDate()) && !now.isAfter(promotion.getEndDate())) {
-                return promotion;
-            }
-        }
-        return null;
-    }
-
-        public List<Product> getProductsByBrand(int brandId, int page, int pageSize) {
+    public List<Product> getProductsByBrand(int brandId, int page, int pageSize) {
         List<Product> products = productDAO.findByBrandWithPagination(brandId, page, pageSize);
         enrichProductsWithBasicDetails(products);
         return products;
     }
 
-        public int countProductsByBrand(int brandId) {
+    public int countProductsByBrand(int brandId) {
         return productDAO.countByBrand(brandId);
     }
 
-        public List<Product> getProductsByCategory(int categoryId, int page, int pageSize) {
-        List<Product> products = productDAO.findByCategoryWithPagination(categoryId, page, pageSize);
-        enrichProductsWithBasicDetails(products);
-        return products;
-    }
 
-        public int getTotalPagesByCategory(int categoryId, int pageSize) {
-        int totalProducts = productDAO.countByCategory(categoryId);
-        return (int) Math.ceil((double) totalProducts / pageSize);
-    }
-
-        public int createProduct(Product product) {
-        if (product == null || !isValidProduct(product)) {
-            return -1;
-        }
-
-        if (product.getProductSlug() == null || product.getProductSlug().isEmpty()) {
-            product.setProductSlug(SlugUtil.generateSlug(product.getProductName()));
-        }
-
-        int productId = productDAO.insert(product);
-        if (productId > 0) {
-            saveVariants(productId, product.getVariants());
-        }
-        return productId;
-    }
-
-        public boolean updateProduct(Product product) {
-        if (product == null || product.getProductId() <= 0 || !isValidProduct(product)) {
-            return false;
-        }
-
-        Product existingProduct = productDAO.findById(product.getProductId());
-        if (existingProduct != null && !existingProduct.getProductName().equals(product.getProductName())) {
-            product.setProductSlug(SlugUtil.generateSlug(product.getProductName()));
-        }
-
-        boolean updated = productDAO.update(product);
-        if (!updated) {
-            return false;
-        }
-
-        if (product.getVariants() != null) {
-            variantDAO.deleteByProductId(product.getProductId());
-            saveVariants(product.getProductId(), product.getVariants());
-        }
-        return true;
-    }
-
-        public boolean deleteProduct(int productId) {
-        return productDAO.softDelete(productId);
-    }
-
-        public int getTotalPages(int pageSize) {
-        int totalProducts = productDAO.countAll();
-        return (int) Math.ceil((double) totalProducts / pageSize);
-    }
-
-    public List<ProductImage> getProductImages(int productId) {
-        return imageDAO.findByProductId(productId);
-    }
-
-        private void enrichProductWithDetails(Product product) {
+    private void enrichProductWithDetails(Product product) {
         List<ProductVariant> variants = variantDAO.findByProductId(product.getProductId());
         List<ProductImage> images = imageDAO.findByProductId(product.getProductId());
         product.setVariants(variants);
@@ -324,7 +165,7 @@ public class ProductService {
         return filtered;
     }
 
-        private void enrichProductsWithBasicDetails(List<Product> products) {
+    private void enrichProductsWithBasicDetails(List<Product> products) {
         if (products == null || products.isEmpty()) {
             return;
         }
@@ -384,35 +225,4 @@ public class ProductService {
         product.setSoldPercent(soldPercent);
     }
 
-    private void saveVariants(int productId, List<ProductVariant> variants) {
-        if (variants == null || variants.isEmpty()) {
-            return;
-        }
-
-        boolean defaultSet = false;
-        for (ProductVariant variant : variants) {
-            if (variant.isDefault()) {
-                defaultSet = true;
-                break;
-            }
-        }
-
-        for (int i = 0; i < variants.size(); i++) {
-            ProductVariant variant = variants.get(i);
-            variant.setProductId(productId);
-            if (!defaultSet) {
-                variant.setDefault(i == 0);
-            }
-            variantDAO.insert(variant);
-        }
-    }
-
-    private boolean isValidProduct(Product product) {
-        return product.getProductName() != null &&
-                !product.getProductName().trim().isEmpty() &&
-                product.getProductName().length() <= 255;
-    }
 }
-
-
-

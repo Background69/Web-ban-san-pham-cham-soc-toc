@@ -109,10 +109,6 @@
         <div class="alert alert-danger">${error}</div>
     </c:if>
 
-    <div class="demo-note">
-        Đây là luồng thanh toán <strong>Sandbox/Demo</strong> dùng cho đồ án. Không kết nối ngân hàng thật và không xử lý tiền thật.
-    </div>
-
     <div class="bank-transfer-card">
         <div class="bank-transfer-head d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
@@ -177,8 +173,6 @@
                     </c:if>
 
                     <div class="mt-3 d-flex gap-2 flex-wrap">
-                        <a href="${pageContext.request.contextPath}/payment/bank-transfer?transactionId=${paymentTransaction.transactionId}"
-                           class="btn btn-outline-secondary">Làm mới trạng thái</a>
                         <c:if test="${not empty order}">
                             <a href="${pageContext.request.contextPath}/orders/${order.orderId}"
                                class="btn btn-primary">Xem chi tiết đơn hàng</a>
