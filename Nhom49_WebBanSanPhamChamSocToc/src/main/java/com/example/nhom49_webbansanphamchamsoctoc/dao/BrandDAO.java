@@ -20,7 +20,7 @@ public class BrandDAO implements IDAO<Brand> {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    
+
     @Override
     public int insert(Brand brand) {
         String sql = "INSERT INTO brands (brand_name, brand_slug, logo_url, origin, short_description, full_description) " +
@@ -40,7 +40,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    
+
     @Override
     public boolean update(Brand brand) {
         String sql = "UPDATE brands SET brand_name = :brandName, brand_slug = :brandSlug, logo_url = :logoUrl, origin = :origin, " +
@@ -59,7 +59,7 @@ public class BrandDAO implements IDAO<Brand> {
         return rowsAffected > 0;
     }
 
-    
+
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM brands WHERE brand_id = :brandId";
@@ -71,7 +71,7 @@ public class BrandDAO implements IDAO<Brand> {
         return rowsAffected > 0;
     }
 
-    
+
     @Override
     public List<Brand> findAll() {
         String sql = "SELECT * FROM brands ORDER BY created_at DESC";
@@ -82,7 +82,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    
+
     @Override
     public Brand findById(int id) {
         String sql = "SELECT * FROM brands WHERE brand_id = :id";
@@ -95,7 +95,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    
+
     public Brand findBySlug(String slug) {
         String sql = "SELECT * FROM brands WHERE brand_slug = :slug";
         return jdbi.withHandle(handle ->
@@ -107,7 +107,7 @@ public class BrandDAO implements IDAO<Brand> {
         );
     }
 
-    
+
     private Brand mapBrand(java.sql.ResultSet rs) throws java.sql.SQLException {
         Brand brand = new Brand();
         brand.setBrandId(rs.getInt("brand_id"));
@@ -121,7 +121,7 @@ public class BrandDAO implements IDAO<Brand> {
         return brand;
     }
 
-    
+
     public List<String> findAllOrigins() {
         String sql = "SELECT DISTINCT origin FROM brands WHERE origin IS NOT NULL AND origin != '' ORDER BY origin";
         return jdbi.withHandle(handle ->

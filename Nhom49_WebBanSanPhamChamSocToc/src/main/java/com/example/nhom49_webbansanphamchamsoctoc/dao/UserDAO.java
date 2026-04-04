@@ -2,7 +2,6 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
@@ -111,18 +110,6 @@ public class UserDAO implements IDAO<User> {
                 .orElse(null));
     }
 
-    public User authenticate(String emailOrUsername, String password) {
-        User user = findByEmail(emailOrUsername);
-        if (user == null) {
-            user = findByUsername(emailOrUsername);
-        }
-
-        if (user != null && user.isActive() && PasswordUtil.verifyPassword(password, user.getPassword())) {
-            return user;
-        }
-        return null;
-    }
-
     public boolean existsByEmail(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE email = :email";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -136,18 +123,6 @@ public class UserDAO implements IDAO<User> {
         String sql = "SELECT COUNT(*) FROM users WHERE username = :username";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("username", username)
-                .mapTo(Integer.class)
-                .findFirst()
-                .orElse(0) > 0);
-    }
-
-    public boolean existsByPhone(String phone) {
-        if (phone == null || phone.isBlank()) {
-            return false;
-        }
-        String sql = "SELECT COUNT(*) FROM users WHERE phone = :phone";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("phone", phone.trim())
                 .mapTo(Integer.class)
                 .findFirst()
                 .orElse(0) > 0);
@@ -174,27 +149,11 @@ public class UserDAO implements IDAO<User> {
         return rowsAffected > 0;
     }
 
-    public List<User> findByRole(String role) {
-        String sql = "SELECT * FROM users WHERE role = :role ORDER BY created_at DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("role", role)
-                .map((rs, ctx) -> mapUser(rs))
-                .list());
-    }
 
     public boolean updateActiveStatus(int userId, boolean isActive) {
         String sql = "UPDATE users SET is_active = :isActive WHERE user_id = :userId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
                 .bind("isActive", isActive)
-                .bind("userId", userId)
-                .execute());
-        return rowsAffected > 0;
-    }
-
-    public boolean updateRole(int userId, String role) {
-        String sql = "UPDATE users SET role = :role WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
-                .bind("role", role)
                 .bind("userId", userId)
                 .execute());
         return rowsAffected > 0;

@@ -1261,11 +1261,27 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
 .reviewer-avatar {
     width: 45px;
     height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.reviewer-avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.reviewer-avatar-fallback {
+    width: 100%;
+    height: 100%;
     background: var(--brand-soft);
     border-radius: 50%;
     display: flex;
@@ -1273,20 +1289,31 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
 }
 
-.reviewer-avatar i {
+.reviewer-avatar-fallback i {
     font-size: 20px;
     color: var(--brand);
+}
+
+.reviewer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
 }
 
 .reviewer-name {
     font-size: 15px;
     font-weight: 600;
     color: #333;
+    line-height: 1.35;
+    word-break: break-word;
 }
 
 .review-date {
     font-size: 13px;
     color: #888;
+    line-height: 1.4;
+    word-break: break-word;
 }
 
 .review-rating {
@@ -1462,6 +1489,25 @@ h1, h2, h3, h4, h5, h6 {
         width: 40%;
     }
 
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .reviewer-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .reviewer-avatar-fallback i {
+        font-size: 18px;
+    }
+
+    .review-rating {
+        padding-left: 52px;
+    }
+
     /* Sticky Cart Bar for Mobile */
     .sticky-cart-bar {
         position: fixed;
@@ -1518,6 +1564,15 @@ h1, h2, h3, h4, h5, h6 {
 
     .description-content {
         padding: 16px;
+    }
+
+    .reviewer-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .review-rating {
+        padding-left: 48px;
     }
 
     .specs-table th,

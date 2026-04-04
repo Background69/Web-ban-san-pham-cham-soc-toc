@@ -11,6 +11,7 @@ public class Review implements Serializable {
     private int reviewId;
     private int productId;
     private Integer userId;
+    private User reviewer;
     private String reviewerName;
     private int rating; // 1-5 sao
     private String content;
@@ -48,6 +49,14 @@ public class Review implements Serializable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public User getReviewer() {
+        return reviewer;
+    }
+
+    public void setReviewer(User reviewer) {
+        this.reviewer = reviewer;
     }
 
     public String getReviewerName() {

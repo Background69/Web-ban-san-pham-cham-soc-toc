@@ -54,25 +54,6 @@ public class OrderStatusHistoryDAO implements IDAO<OrderStatusHistory> {
         return false;
     }
 
-    public List<OrderStatusHistory> findByOrderId(int orderId) {
-        String sql = "SELECT * FROM order_status_history WHERE order_id = :orderId ORDER BY created_at DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("orderId", orderId)
-                .map((rs, ctx) -> mapHistory(rs))
-                .list());
-    }
-
-    public int insertWithTransaction(OrderStatusHistory entity) {
-        return jdbi.inTransaction(handle -> handle.createUpdate(
-                        "INSERT INTO order_status_history (order_id, status, note) VALUES (:orderId, :status, :note)")
-                .bind("orderId", entity.getOrderId())
-                .bind("status", entity.getStatus())
-                .bind("note", entity.getNote())
-                .executeAndReturnGeneratedKeys("history_id")
-                .mapTo(Integer.class)
-                .findFirst()
-                .orElse(-1));
-    }
 
     private OrderStatusHistory mapHistory(java.sql.ResultSet rs) throws java.sql.SQLException {
         OrderStatusHistory history = new OrderStatusHistory();

@@ -83,23 +83,6 @@ public class PaymentTransactionDAO implements IDAO<PaymentTransaction> {
                 .execute() > 0);
     }
 
-    public PaymentTransaction findByOrderTempId(String orderTempId) {
-        String sql = "SELECT * FROM payment_transactions WHERE order_temp_id = :orderTempId ORDER BY created_at DESC LIMIT 1";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("orderTempId", orderTempId)
-                .map((rs, ctx) -> mapPaymentTransaction(rs))
-                .findFirst()
-                .orElse(null));
-    }
-
-    public List<PaymentTransaction> findByUserId(int userId) {
-        String sql = "SELECT * FROM payment_transactions WHERE user_id = :userId ORDER BY created_at DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("userId", userId)
-                .map((rs, ctx) -> mapPaymentTransaction(rs))
-                .list());
-    }
-
     public PaymentTransaction findByIdAndUserId(int transactionId, int userId) {
         String sql = "SELECT * FROM payment_transactions WHERE transaction_id = :transactionId AND user_id = :userId";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -138,14 +121,6 @@ public class PaymentTransactionDAO implements IDAO<PaymentTransaction> {
                 .execute() > 0);
     }
 
-    public boolean markSuccessAndAttachOrder(int transactionId, int orderId) {
-        return jdbi.inTransaction(handle -> handle.createUpdate(
-                        "UPDATE payment_transactions SET status = 'SUCCESS', confirmed_at = NOW(), order_id = :orderId WHERE transaction_id = :transactionId")
-                .bind("orderId", orderId)
-                .bind("transactionId", transactionId)
-                .execute() > 0);
-    }
-
     private PaymentTransaction mapPaymentTransaction(java.sql.ResultSet rs) throws java.sql.SQLException {
         PaymentTransaction tx = new PaymentTransaction();
         tx.setTransactionId(rs.getInt("transaction_id"));
@@ -166,4 +141,3 @@ public class PaymentTransactionDAO implements IDAO<PaymentTransaction> {
         return tx;
     }
 }
-
