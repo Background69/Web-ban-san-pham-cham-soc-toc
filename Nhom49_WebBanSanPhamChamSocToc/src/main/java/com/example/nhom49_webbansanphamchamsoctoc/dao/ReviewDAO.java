@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Review;
+import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -28,10 +29,17 @@ public class ReviewDAO implements IDAO<Review> {
 
 
     public List<Review> findByProductId(int productId) {
-        String sql = "SELECT * FROM reviews WHERE product_id = :productId ORDER BY created_at DESC";
+        String sql = "SELECT r.*, " +
+                "u.user_id AS reviewer_user_id, u.username AS reviewer_username, " +
+                "u.full_name AS reviewer_full_name, u.avatar AS reviewer_avatar, " +
+                "u.auth_provider AS reviewer_auth_provider " +
+                "FROM reviews r " +
+                "LEFT JOIN users u ON r.user_id = u.user_id " +
+                "WHERE r.product_id = :productId " +
+                "ORDER BY r.created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("productId", productId)
-                .map((rs, ctx) -> mapReview(rs))
+                .map((rs, ctx) -> mapReviewWithReviewer(rs))
                 .list());
     }
 
@@ -146,6 +154,21 @@ public class ReviewDAO implements IDAO<Review> {
         review.setRating(rs.getInt("rating"));
         review.setContent(rs.getString("content"));
         review.setCreatedAt(rs.getTimestamp("created_at"));
+        return review;
+    }
+
+    private Review mapReviewWithReviewer(java.sql.ResultSet rs) throws java.sql.SQLException {
+        Review review = mapReview(rs);
+        int reviewerUserId = rs.getInt("reviewer_user_id");
+        if (!rs.wasNull()) {
+            User reviewer = new User();
+            reviewer.setUserId(reviewerUserId);
+            reviewer.setUsername(rs.getString("reviewer_username"));
+            reviewer.setFullName(rs.getString("reviewer_full_name"));
+            reviewer.setAvatar(rs.getString("reviewer_avatar"));
+            reviewer.setAuthProvider(rs.getString("reviewer_auth_provider"));
+            review.setReviewer(reviewer);
+        }
         return review;
     }
 }
