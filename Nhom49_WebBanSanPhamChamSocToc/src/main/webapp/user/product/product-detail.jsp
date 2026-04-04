@@ -611,21 +611,71 @@
 
                 <div class="reviews-list">
                     <c:forEach var="review" items="${reviews}">
+                        <c:set var="reviewerAvatarRaw"
+                               value="${review.reviewer != null ? review.reviewer.avatar : ''}"/>
+                        <c:set var="reviewerAvatarValue"
+                               value="${not empty reviewerAvatarRaw ? reviewerAvatarRaw.trim() : ''}"/>
+                        <c:set var="hasReviewerAvatar"
+                               value="${not empty reviewerAvatarValue && reviewerAvatarValue != 'avatar/avatar.jpg'}"/>
+                        <c:set var="reviewerAvatarSrc" value=""/>
+                        <c:if test="${hasReviewerAvatar}">
+                            <c:choose>
+                                <c:when test="${reviewerAvatarValue.startsWith('http')}">
+                                    <c:set var="reviewerAvatarSrc" value="${reviewerAvatarValue}"/>
+                                </c:when>
+                                <c:when test="${reviewerAvatarValue.startsWith('/static/')}">
+                                    <c:set var="reviewerAvatarSrc"
+                                           value="${pageContext.request.contextPath}${reviewerAvatarValue}"/>
+                                </c:when>
+                                <c:when test="${reviewerAvatarValue.startsWith('static/')}">
+                                    <c:set var="reviewerAvatarSrc"
+                                           value="${pageContext.request.contextPath}/${reviewerAvatarValue}"/>
+                                </c:when>
+                                <c:when test="${reviewerAvatarValue.startsWith('/')}">
+                                    <c:set var="reviewerAvatarSrc"
+                                           value="${pageContext.request.contextPath}${reviewerAvatarValue}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="reviewerAvatarSrc"
+                                           value="${pageContext.request.contextPath}/static/${reviewerAvatarValue}"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
                         <div class="review-item">
                             <div class="review-header">
                                 <div class="reviewer-info">
-                                                    <span class="reviewer-name">
-                                                        <c:choose>
-                                                            <c:when test="${not empty review.reviewerName}">
-                                                                ${review.reviewerName}
-                                                            </c:when>
-                                                            <c:otherwise>Ẩn danh</c:otherwise>
-                                                        </c:choose>
-                                                    </span>
-                                    <span class="review-date">
-                                                        <fmt:formatDate value="${review.createdAt}"
-                                                                        pattern="dd/MM/yyyy"/>
-                                                    </span>
+                                    <div class="reviewer-avatar">
+                                        <c:choose>
+                                            <c:when test="${hasReviewerAvatar}">
+                                                <img src="${reviewerAvatarSrc}"
+                                                     alt="Avatar người đánh giá"
+                                                     class="reviewer-avatar-image"
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <div class="reviewer-avatar-fallback" style="display: none;">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="reviewer-avatar-fallback">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="reviewer-meta">
+                                        <span class="reviewer-name">
+                                            <c:choose>
+                                                <c:when test="${not empty review.reviewerName}">
+                                                    ${review.reviewerName}
+                                                </c:when>
+                                                <c:otherwise>Ẩn danh</c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                        <span class="review-date">
+                                            <fmt:formatDate value="${review.createdAt}"
+                                                            pattern="dd/MM/yyyy"/>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="review-rating">
                                     <c:forEach begin="1" end="5" var="i">
