@@ -47,7 +47,7 @@ public class UserDAO implements IDAO<User> {
                 .bind("password", user.getPassword())
                 .bind("phone", user.getPhone())
                 .bind("avatar", user.getAvatar() != null ? user.getAvatar() : "avatar/avatar.jpg")
-                .bind("role", user.getRole() != null ? user.getRole() : "Khach hang")
+                .bind("role", user.getRole() != null ? user.getRole() : "Khách hàng")
                 .bind("isActive", user.isActive())
                 .bind("googleId", user.getGoogleId())
                 .bind("authProvider", user.getAuthProvider() != null ? user.getAuthProvider() : "LOCAL")

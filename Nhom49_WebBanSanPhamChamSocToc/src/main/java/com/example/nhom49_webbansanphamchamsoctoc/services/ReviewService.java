@@ -60,29 +60,6 @@ public class ReviewService {
         return null;
     }
 
-    public boolean updateReview(int reviewId, int rating, String content) {
-        if (!isValidRating(rating) || content == null || content.trim().isEmpty()) {
-            return false;
-        }
-
-        Review review = reviewDAO.findById(reviewId);
-        if (review == null) {
-            return false;
-        }
-
-        review.setRating(rating);
-        review.setContent(content.trim());
-
-        boolean updated = reviewDAO.update(review);
-        if (updated) {
-            // Update product rating
-            updateProductRating(review.getProductId());
-        }
-
-        return updated;
-    }
-
-
     public boolean isValidRating(int rating) {
         return rating >= 1 && rating <= 5;
     }
