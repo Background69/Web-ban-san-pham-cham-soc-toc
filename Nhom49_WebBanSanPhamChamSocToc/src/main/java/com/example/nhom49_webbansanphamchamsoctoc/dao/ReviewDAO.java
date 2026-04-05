@@ -95,13 +95,8 @@ public class ReviewDAO implements IDAO<Review> {
 
     @Override
     public boolean update(Review review) {
-        String sql = "UPDATE reviews SET rating = :rating, content = :content WHERE review_id = :reviewId";
-        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
-                .bind("rating", review.getRating())
-                .bind("content", review.getContent())
-                .bind("reviewId", review.getReviewId())
-                .execute());
-        return rowsAffected > 0;
+        // Review is immutable after creation: update operation is disabled.
+        return false;
     }
 
     @Override

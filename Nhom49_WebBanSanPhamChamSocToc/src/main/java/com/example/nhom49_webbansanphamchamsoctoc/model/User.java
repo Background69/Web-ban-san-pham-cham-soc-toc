@@ -11,7 +11,7 @@ public class User implements Serializable {
     private String password;
     private String phone;
     private String avatar;
-    private String role; // 'Admin' or 'Khach hang'
+    private String role; // 'Admin' or 'Khách hàng'
     private boolean isActive;
     private String authProvider; // LOCAL, GOOGLE
     private Timestamp createdAt;
