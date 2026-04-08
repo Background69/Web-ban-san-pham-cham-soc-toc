@@ -38,7 +38,7 @@ public class Product implements Serializable {
     private List<HairCondition> hairConditions;
     private List<Promotion> promotions;
 
-    // Transient fields for display
+    // Transient/computed fields for display (not persisted in products table)
     private String categoryName;
     private String brandName;
     private String primaryImageUrl;
@@ -47,7 +47,7 @@ public class Product implements Serializable {
     private int soldQuantity;
     private int soldPercent;
 
-    // Transient fields for promotion display
+    // Transient/computed fields for promotion display (not persisted in products table)
     private BigDecimal finalPrice;
     private Promotion activePromotion;
 

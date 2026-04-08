@@ -118,6 +118,7 @@ public class BrandDAO implements IDAO<Brand> {
         brand.setShortDescription(rs.getString("short_description"));
         brand.setFullDescription(rs.getString("full_description"));
         brand.setCreatedAt(rs.getTimestamp("created_at"));
+        brand.setUpdatedAt(rs.getTimestamp("updated_at"));
         return brand;
     }
 
