@@ -115,7 +115,7 @@ public class PendingRegistrationDAO {
             user.setPassword(pending.getPasswordHash());
             user.setPhone(pending.getPhone());
             user.setAvatar("avatar/avatar.jpg");
-            user.setRole("Khach hang");
+            user.setRole("Khách hàng");
             user.setActive(true);
             user.setGoogleId(null);
             user.setAuthProvider("LOCAL");

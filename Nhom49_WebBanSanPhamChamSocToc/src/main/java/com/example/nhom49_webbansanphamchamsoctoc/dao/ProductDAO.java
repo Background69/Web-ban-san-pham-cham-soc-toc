@@ -163,8 +163,16 @@ public class ProductDAO implements IDAO<Product> {
 
     public List<Product> findOnSale() {
         String sql = """
-                SELECT p.*
+                SELECT p.*, COALESCE(sold.sold_quantity, 0) AS sold_quantity
                 FROM products p
+                LEFT JOIN (
+                    SELECT oi.product_id, SUM(oi.quantity) AS sold_quantity
+                    FROM order_items oi
+                    JOIN orders o ON o.order_id = oi.order_id
+                    WHERE oi.product_id IS NOT NULL
+                      AND o.order_status <> 'cancelled'
+                    GROUP BY oi.product_id
+                ) sold ON sold.product_id = p.product_id
                 WHERE p.is_deleted = FALSE
                   AND (
                         p.is_on_sale = TRUE
@@ -186,8 +194,16 @@ public class ProductDAO implements IDAO<Product> {
 
     public List<Product> findOnSale(int limit, int offset) {
         String sql = """
-                SELECT p.*
+                SELECT p.*, COALESCE(sold.sold_quantity, 0) AS sold_quantity
                 FROM products p
+                LEFT JOIN (
+                    SELECT oi.product_id, SUM(oi.quantity) AS sold_quantity
+                    FROM order_items oi
+                    JOIN orders o ON o.order_id = oi.order_id
+                    WHERE oi.product_id IS NOT NULL
+                      AND o.order_status <> 'cancelled'
+                    GROUP BY oi.product_id
+                ) sold ON sold.product_id = p.product_id
                 WHERE p.is_deleted = FALSE
                   AND (
                         p.is_on_sale = TRUE

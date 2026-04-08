@@ -98,9 +98,19 @@ public class HairConditionDAO implements IDAO<HairCondition> {
             h.setConditionId(rs.getInt("condition_id"));
             h.setConditionName(rs.getString("condition_name"));
             h.setConditionSlug(rs.getString("condition_slug"));
+            h.setCreatedAt(getOptionalTimestamp(rs, "created_at"));
+            h.setUpdatedAt(getOptionalTimestamp(rs, "updated_at"));
             return h;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private java.sql.Timestamp getOptionalTimestamp(ResultSet rs, String columnLabel) {
+        try {
+            return rs.getTimestamp(columnLabel);
+        } catch (SQLException ignored) {
+            return null;
         }
     }
 
