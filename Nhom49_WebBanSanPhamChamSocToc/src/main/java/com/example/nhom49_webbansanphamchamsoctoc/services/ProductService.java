@@ -98,12 +98,14 @@ public class ProductService {
     public List<Product> getOnSaleProducts() {
         List<Product> products = productDAO.findOnSale();
         enrichProductsWithBasicDetails(products);
+        normalizeFlashSaleProducts(products);
         return products;
     }
 
     public List<Product> getOnSaleProducts(int limit, int offset) {
         List<Product> products = productDAO.findOnSale(limit, offset);
         enrichProductsWithBasicDetails(products);
+        normalizeFlashSaleProducts(products);
         return products;
     }
 
@@ -216,13 +218,30 @@ public class ProductService {
         }
         int remaining = Math.max(0, remainingStock);
         int soldQuantity = Math.max(0, product.getSoldQuantity());
-        int totalStock = remaining + soldQuantity;
+        long totalStockLong = (long) remaining + soldQuantity;
+        int totalStock = (int) Math.min(Integer.MAX_VALUE, Math.max(0L, totalStockLong));
         int soldPercent = totalStock > 0 ? (int) Math.round((soldQuantity * 100.0) / totalStock) : 0;
+        soldPercent = Math.max(0, Math.min(100, soldPercent));
 
+        // Runtime-only stock summary on Product (products table does not have stock_quantity).
         product.setStockQuantity(totalStock);
         product.setRemainingStock(remaining);
         product.setSoldQuantity(soldQuantity);
         product.setSoldPercent(soldPercent);
+    }
+
+    private void normalizeFlashSaleProducts(List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            return;
+        }
+        for (Product product : products) {
+            if (product == null) {
+                continue;
+            }
+            // Flash sale list đã được DAO chọn theo (is_on_sale OR promotion active),
+            // nên chuẩn hóa để tầng view luôn hiểu đây là sản phẩm đang sale.
+            product.setOnSale(true);
+        }
     }
 
 }

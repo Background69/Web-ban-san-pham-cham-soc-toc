@@ -16,7 +16,6 @@ public class Review implements Serializable {
     private int rating; // 1-5 sao
     private String content;
     private Timestamp createdAt;
-    private Timestamp updatedAt;
     // --- Product info for My Reviews display (populated via JOIN) ---
     private String productName;
     private String productSlug;
@@ -89,14 +88,6 @@ public class Review implements Serializable {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getProductName() {
