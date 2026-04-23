@@ -51,6 +51,7 @@ public class LoginController extends HttpServlet {
 
         if (user == null) {
             request.setAttribute("error", authService.getLastError());
+            request.setAttribute("showPasswordSetupLink", authService.isGoogleLinkedNoPasswordError());
             request.setAttribute("email", email);
             request.setAttribute("redirect", redirect);
             request.getRequestDispatcher("/authentication/login.jsp").forward(request, response);

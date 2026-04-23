@@ -11,6 +11,10 @@ import jakarta.servlet.http.HttpSession;
 
 public class AuthenticationService {
 
+    public static final String GOOGLE_LINKED_NO_PASSWORD_MESSAGE =
+            "Tài khoản này đã liên kết với Google nhưng chưa có mật khẩu. " +
+                    "Vui lòng đăng nhập bằng Google hoặc thiết lập mật khẩu.";
+
     private final UserDAO userDAO;
     private String lastError;
 
@@ -20,6 +24,10 @@ public class AuthenticationService {
 
     public String getLastError() {
         return lastError;
+    }
+
+    public boolean isGoogleLinkedNoPasswordError() {
+        return GOOGLE_LINKED_NO_PASSWORD_MESSAGE.equals(lastError);
     }
 
     public User login(String emailOrUsername, String password) {
@@ -46,12 +54,30 @@ public class AuthenticationService {
             lastError = "Tài khoản đã bị khóa";
             return null;
         }
+        if (isGoogleLinkedAccount(user) && !hasLocalPassword(user)) {
+            lastError = GOOGLE_LINKED_NO_PASSWORD_MESSAGE;
+            return null;
+        }
         if (!PasswordUtil.verifyPassword(password, user.getPassword())) {
             lastError = "Mật khẩu không đúng";
             return null;
         }
 
         return user;
+    }
+
+    private boolean isGoogleLinkedAccount(User user) {
+        if (user == null) {
+            return false;
+        }
+        String googleId = user.getGoogleId();
+        return (googleId != null && !googleId.isBlank())
+                || "GOOGLE".equalsIgnoreCase(user.getAuthProvider());
+    }
+
+    private boolean hasLocalPassword(User user) {
+        String storedPassword = user.getPassword();
+        return storedPassword != null && !storedPassword.isBlank();
     }
 
     public String validateUserInput(String email, String fullname, String username, String phone, String password, String confirmPassword) {
