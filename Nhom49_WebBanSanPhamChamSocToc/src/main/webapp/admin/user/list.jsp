@@ -133,7 +133,7 @@
                 document.getElementById("detailEmail").value = user.email|| "";
                 document.getElementById("detailPhone").value = user.phone || "";
                 document.getElementById("detailRole").value = user.role || "";
-                document.getElementById("userModal").style.display = "block";
+                document.getElementById("userModal").style.display = "flex";
 
             });
 
