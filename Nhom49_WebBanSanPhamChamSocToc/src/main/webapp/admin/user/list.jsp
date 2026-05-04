@@ -82,7 +82,7 @@
     <div class="modal-content">
         <span class="btn-close" onclick="closeModal()">&times;</span>
         <h2>Chi tiết người dùng</h2>
-        <form action="${pageContext.request.contextPath}/admin/user" method="post">
+        <form action="${pageContext.request.contextPath}/admin/users" method="post">
             <input type="hidden" name="action" value="update-profile">
             <input type ="hidden" name="id" id="detailUserId">
             <p><b>ID:</b> <span id="detailId"></span></p>
