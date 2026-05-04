@@ -133,7 +133,7 @@
             </table>
         </div>
         <!--chart-->
-        <div style = "margin-bottom: 20px">
+        <div class="filter-box">
             <select id="filterRevenue" onchange="loadChart()">
                 <option value="week" ${type=='week'? 'selected':''} >Theo tuần</option>
                 <option value="month" ${type=='month'? 'selected':''} >Theo tháng</option>
@@ -223,6 +223,7 @@
             },
             options: {
                 responsive:true,
+                maintainAspectRadio: false,
                 animation: {
                     duration: 800
                 },
