@@ -63,10 +63,8 @@
                     <td>${user.phone}</td>
                     <td>${user.role}</td>
                     <td>
-                        <a
-                                href="${pageContext.request.contextPath}/admin/users?action=detail&id=${user.userId}">
-                            Chi tiết
-                        </a>
+                       <button type="button" class="action-btn edit"
+                               onclick="openUserDetail(${user.userId})">Chi tiết</button>
                     </td>
                 </tr>
             </c:forEach>
@@ -80,6 +78,70 @@
         </table>
     </main>
 </div>
+<div id="userModal" class="modal">
+    <div class="modal-content">
+        <span class="btn-close" onclick="closeModal()">&times;</span>
+        <h2>Chi tiết người dùng</h2>
+        <form action="${pageContext.request.contextPath}/admin/user" method="post">
+            <input type="hidden" name="action" value="update-profile">
+            <input type ="hidden" name="id" id="detailUserId">
+            <p><b>ID:</b> <span id="detailId"></span></p>
+            <div class="form-row">
+            <label>Tên người dùng</label>
+            <input type="text"
+                    name="username"
+                    id="detailName"
+                    required>
+            </div>
+            <div class="form-row">
+                <label>Email</label>
+                <input type="email"
+                       name="email"
+                       id="detailEmail"
+                       required>
+            </div>
+            <div class="form-row">
+                <label>SĐT</label>
+                <input type="text"
+                       name="phone"
+                       id="detailPhone"
+                       required>
+            </div>
+            <div class="form-row">
+                <label>Vai trò</label>
+                <select name="role" id="detailRole">
+                    <option value="Khách hàng">Khách hàng</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function openUserDetail(id){
+        fetch(
+            "${pageContext.request.contextPath}/admin/users?action=detail&id=" +id
+        )
+            .then(res => res.json())
+            .then(user => {
+                document.getElementById("detailUserId").value = user.userId;
+                document.getElementById("detailId").innerText = "#U" + user.userId;
+                document.getElementById("detailName").value = user.username|| "";
+                document.getElementById("detailEmail").value = user.email|| "";
+                document.getElementById("detailPhone").value = user.phone || "";
+                document.getElementById("detailRole").value = user.role || "";
+                document.getElementById("userModal").style.display = "block";
+
+            });
+
+    }
+    function closeModal(){
+        document.getElementById("userModal").style.display = "none";
+    }
+</script>
 </body>
 
 </html>
