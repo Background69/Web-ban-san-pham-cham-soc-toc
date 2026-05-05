@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
+import com.google.gson.Gson;
 
 @WebServlet(name = "UserManagementController", value = "/admin/users")
 public class UserManagementController extends HttpServlet {
@@ -35,9 +36,10 @@ public class UserManagementController extends HttpServlet {
                 return;
             }
             User user = userService.getUserById(id);
-            request.setAttribute("user", user);
-            request.getRequestDispatcher("/admin/user/detail.jsp")
-                    .forward(request, response);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String json = new Gson().toJson(user);
+            response.getWriter().write(json);
             return;
         }
 
@@ -82,7 +84,7 @@ public class UserManagementController extends HttpServlet {
 
             userService.updateProfile(existing);
 
-            response.sendRedirect(request.getContextPath() + "/admin/users?action=detail&id=" + id);
+            response.sendRedirect(request.getContextPath() + "/admin/users");
             return;
         }
 
