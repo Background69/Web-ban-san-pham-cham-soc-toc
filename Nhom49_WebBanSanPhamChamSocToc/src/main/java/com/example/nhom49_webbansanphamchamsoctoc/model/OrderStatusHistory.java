@@ -1,8 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class OrderStatusHistory {
+public class OrderStatusHistory implements Serializable {
     private int historyId;
     private int orderId;
     private String status;

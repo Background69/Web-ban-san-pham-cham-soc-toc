@@ -1,12 +1,13 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Model ShippingAddress - Bảng shipping_addresses trong database
  * Quản lý địa chỉ giao hàng của người dùng
  */
-public class ShippingAddress {
+public class ShippingAddress implements Serializable {
     private int addressId;
     private int userId;
     private String fullName;

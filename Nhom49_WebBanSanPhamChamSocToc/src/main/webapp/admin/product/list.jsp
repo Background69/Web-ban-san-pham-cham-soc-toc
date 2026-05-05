@@ -341,7 +341,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="modal-title">Thêm sản phẩm</h2>
-            <button class="close" type="button" onclick="closeModal()">Ã—</button>
+            <button class="close" type="button" onclick="closeModal()">&times;</button>
         </div>
 
         <form action="${pageContext.request.contextPath}/admin/products" method="post"

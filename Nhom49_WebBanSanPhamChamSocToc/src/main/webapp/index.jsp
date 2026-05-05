@@ -109,7 +109,7 @@
                                             </c:if>
                                         </c:if>
                                     </div>
-                                    <c:if test="${product.onSale && product.stockQuantity > 0}">
+                                    <c:if test="${product.stockQuantity > 0}">
                                         <div class="stock-progress">
                                             <div class="stock-progress-bar">
                                                 <div class="stock-progress-fill"

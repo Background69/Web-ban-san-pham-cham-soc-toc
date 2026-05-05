@@ -83,7 +83,7 @@
                                    data-product-id="${product.productId}">Thêm vào giỏ</a>
                             </div>
 
-                            <c:if test="${product.onSale && product.stockQuantity > 0}">
+                            <c:if test="${product.stockQuantity > 0}">
                                 <div class="stock-progress">
                                     <div class="stock-progress-bar">
                                         <div class="stock-progress-fill"

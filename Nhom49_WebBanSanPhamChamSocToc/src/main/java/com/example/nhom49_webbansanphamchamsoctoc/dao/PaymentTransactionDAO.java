@@ -83,28 +83,41 @@ public class PaymentTransactionDAO implements IDAO<PaymentTransaction> {
                 .execute() > 0);
     }
 
-    public PaymentTransaction findByOrderTempId(String orderTempId) {
-        String sql = "SELECT * FROM payment_transactions WHERE order_temp_id = :orderTempId ORDER BY created_at DESC LIMIT 1";
+    public PaymentTransaction findByIdAndUserId(int transactionId, int userId) {
+        String sql = "SELECT * FROM payment_transactions WHERE transaction_id = :transactionId AND user_id = :userId";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("orderTempId", orderTempId)
+                .bind("transactionId", transactionId)
+                .bind("userId", userId)
                 .map((rs, ctx) -> mapPaymentTransaction(rs))
                 .findFirst()
                 .orElse(null));
     }
 
-    public List<PaymentTransaction> findByUserId(int userId) {
-        String sql = "SELECT * FROM payment_transactions WHERE user_id = :userId ORDER BY created_at DESC";
+    public PaymentTransaction findLatestByOrderId(int orderId) {
+        String sql = "SELECT * FROM payment_transactions WHERE order_id = :orderId ORDER BY created_at DESC LIMIT 1";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("userId", userId)
+                .bind("orderId", orderId)
                 .map((rs, ctx) -> mapPaymentTransaction(rs))
-                .list());
+                .findFirst()
+                .orElse(null));
     }
 
-    public boolean markSuccessAndAttachOrder(int transactionId, int orderId) {
-        return jdbi.inTransaction(handle -> handle.createUpdate(
-                        "UPDATE payment_transactions SET status = 'SUCCESS', confirmed_at = NOW(), order_id = :orderId WHERE transaction_id = :transactionId")
+    public boolean existsByOrderIdAndStatus(int orderId, String status) {
+        String sql = "SELECT COUNT(*) FROM payment_transactions WHERE order_id = :orderId AND status = :status";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("orderId", orderId)
-                .bind("transactionId", transactionId)
+                .bind("status", status)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0) > 0);
+    }
+
+    public boolean markExpiredByOrderId(int orderId) {
+        String sql = "UPDATE payment_transactions " +
+                "SET status = 'EXPIRED', confirmed_at = NULL " +
+                "WHERE order_id = :orderId AND status = 'PENDING'";
+        return jdbi.withHandle(handle -> handle.createUpdate(sql)
+                .bind("orderId", orderId)
                 .execute() > 0);
     }
 
@@ -128,4 +141,3 @@ public class PaymentTransactionDAO implements IDAO<PaymentTransaction> {
         return tx;
     }
 }
-

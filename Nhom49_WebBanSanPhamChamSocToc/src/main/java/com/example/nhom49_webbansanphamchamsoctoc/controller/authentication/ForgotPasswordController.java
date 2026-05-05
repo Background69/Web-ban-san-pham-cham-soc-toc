@@ -41,7 +41,7 @@ public class ForgotPasswordController extends HttpServlet {
         String email = request.getParameter("email");
         email = (email != null) ? email.trim() : "";
 
-        String commonMsg = "Neu email ton tai trong he thong, chung toi da gui ma OTP dat lai mat khau.";
+        String commonMsg = "Nếu email tồn tại trong hệ thống, chúng tôi đã gửi mã OTP đặt lại mật khẩu.";
 
         if (validateEmail(request, response, email, commonMsg)) return;
 
@@ -75,7 +75,7 @@ public class ForgotPasswordController extends HttpServlet {
         boolean sent = emailService.sendResetPasswordOtpEmail(email, otpCode, verifyOtpLink, OTP_EXPIRY_MINUTES);
 
         if (!sent) {
-            request.setAttribute("error", "Khong gui duoc email. Vui long thu lai sau.");
+            request.setAttribute("error", "Không gửi được email. Vui lòng thử lại sau.");
             request.getRequestDispatcher("/authentication/forgot-password.jsp").forward(request, response);
             return;
         }
@@ -86,7 +86,6 @@ public class ForgotPasswordController extends HttpServlet {
         request.getSession().setAttribute("otpLastSentAt", now);
         request.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
 
-        request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
         request.getSession().setAttribute("otpPendingUserId", user.getUserId());
         request.getSession().setAttribute("otpPendingEmail", email);
         request.getSession().setAttribute("otpPurpose", "FORGOT_PASSWORD");

@@ -1,8 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class PendingRegistration {
+public class PendingRegistration implements Serializable {
     private int pendingId;
     private String email;
     private String username;

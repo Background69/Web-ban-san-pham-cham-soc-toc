@@ -220,7 +220,6 @@ public class OrderService {
 
 
     // Order calculation methods
-
     public BigDecimal calculateSubtotal(List<OrderItem> items) {
         return items.stream()
                 .map(OrderItem::getTotalPrice)
@@ -255,26 +254,6 @@ public class OrderService {
         return order;
     }
 
-    public Order getOrderByCode(String orderCode) {
-        Order order = orderDao.findByOrderCode(orderCode);
-        if (order != null) {
-            enrichOrderWithItems(order);
-        }
-        return order;
-    }
-
-    public List<Order> getAllOrders() {
-        List<Order> orders = orderDao.findAll();
-        enrichOrdersWithItems(orders);
-        return orders;
-    }
-
-
-    public List<Order> getOrdersByStatus(String status) {
-        List<Order> orders = orderDao.findByStatus(status);
-        enrichOrdersWithItems(orders);
-        return orders;
-    }
 
     public List<Order> getOrdersByUserAndStatus(int userId, String status) {
         List<Order> orders = orderDao.findByUserIdAndStatus(userId, status);
@@ -286,11 +265,6 @@ public class OrderService {
         return orderDao.countByUserId(userId);
     }
 
-    public int countOrdersByUserAndStatus(int userId, String status) {
-        return orderDao.countByUserIdAndStatus(userId, status);
-    }
-
-    // Order management methods
 
     /**
      * Cập nhật trạng thái đơn hàng.
@@ -406,37 +380,6 @@ public class OrderService {
                         status.equals("cancelled"));
     }
 
-    public String getOrderStatusDisplayName(String status) {
-        switch (status) {
-            case "pending":
-                return "Chờ xác nhận";
-            case "confirmed":
-                return "Đã xác nhận";
-            case "shipping":
-                return "Đang giao hàng";
-            case "completed":
-                return "Hoàn thành";
-            case "cancelled":
-                return "Đã hủy";
-            default:
-                return status;
-        }
-    }
-
-    private boolean decrementStock(List<OrderItem> orderItems) {
-        if (orderItems == null || orderItems.isEmpty()) {
-            return true;
-        }
-        for (OrderItem item : orderItems) {
-            if (item.getVariantId() == null) {
-                return false;
-            }
-            if (!variantDao.decrementStock(item.getVariantId(), item.getQuantity())) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     public BigDecimal getTotalSpendingByUser(int userId) {
         return orderDao.getTotalSpendingByUser(userId);

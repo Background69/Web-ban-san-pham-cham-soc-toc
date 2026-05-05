@@ -52,7 +52,7 @@ public class ResendOtpController extends HttpServlet {
 
         if (lastSentAt != null && now - lastSentAt < cooldownMillis) {
             long remainingSec = (cooldownMillis - (now - lastSentAt) + 999) / 1000;
-            req.setAttribute("error", "Vui long doi " + remainingSec + " giay de gui lai OTP.");
+            req.setAttribute("error", "Vui lòng đợi " + remainingSec + " giây để gửi lại OTP.");
             req.getRequestDispatcher("/authentication/otp-verification.jsp").forward(req, res);
             return;
         }
@@ -102,7 +102,7 @@ public class ResendOtpController extends HttpServlet {
         }
 
         if (!sent) {
-            req.setAttribute("error", "Khong gui duoc OTP. Vui long thu lai sau.");
+            req.setAttribute("error", "Không gửi được OTP. Vui lòng thử lại sau.");
             req.getRequestDispatcher("/authentication/otp-verification.jsp").forward(req, res);
             return;
         }
@@ -112,8 +112,7 @@ public class ResendOtpController extends HttpServlet {
 
         req.getSession().setAttribute("otpLastSentAt", now);
         req.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
-        req.getSession().setAttribute("otpLastSentAt", now);
-        req.setAttribute("message", "Da gui lai OTP. Vui long kiem tra email.");
+        req.setAttribute("message", "Đã gửi lại OTP. Vui lòng kiểm tra email.");
         req.getRequestDispatcher("/authentication/otp-verification.jsp").forward(req, res);
     }
 }

@@ -6,9 +6,6 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
 
-/**
- * Lớp ProductImageDao.
- */
 public class ProductImgDAO implements IDAO<ProductImage> {
 
     private final Jdbi jdbi;
@@ -20,7 +17,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
         this.jdbi = JDBIConnector.getInstance();
     }
 
-    
+
     @Override
     public List<ProductImage> findAll() {
         String sql = "SELECT * FROM product_images";
@@ -29,7 +26,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
                 .list());
     }
 
-    
+
     public List<ProductImage> findByProductId(int productId) {
         String sql = "SELECT * FROM product_images WHERE product_id = :productId ORDER BY is_primary DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -38,7 +35,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
                 .list());
     }
 
-    
+
     public ProductImage findPrimaryByProductId(int productId) {
         String sql = "SELECT * FROM product_images WHERE product_id = :productId AND is_primary = true LIMIT 1";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -48,7 +45,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
                 .orElse(null));
     }
 
-    
+
     @Override
     public ProductImage findById(int id) {
         String sql = "SELECT * FROM product_images WHERE image_id = :id";
@@ -59,7 +56,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
                 .orElse(null));
     }
 
-    
+
     @Override
     public int insert(ProductImage image) {
         String sql = "INSERT INTO product_images (product_id, image_url, is_primary) VALUES (:productId, :imageUrl, :isPrimary)";
@@ -73,7 +70,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
                 .orElse(-1));
     }
 
-    
+
     @Override
     public boolean update(ProductImage image) {
         String sql = "UPDATE product_images SET image_url = :imageUrl, is_primary = :isPrimary WHERE image_id = :imageId";
@@ -85,7 +82,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
         return rowsAffected > 0;
     }
 
-    
+
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM product_images WHERE image_id = :imageId";
@@ -95,16 +92,6 @@ public class ProductImgDAO implements IDAO<ProductImage> {
         return rowsAffected > 0;
     }
 
-    
-    public boolean deleteByProductId(int productId) {
-        String sql = "DELETE FROM product_images WHERE product_id = :productId";
-        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
-                .bind("productId", productId)
-                .execute());
-        return rowsAffected > 0;
-    }
-
-    
     public boolean setAllNonPrimary(int productId) {
         String sql = "UPDATE product_images SET is_primary = false WHERE product_id = :productId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
@@ -115,9 +102,6 @@ public class ProductImgDAO implements IDAO<ProductImage> {
 
     /**
      * Lấy primary image URLs cho danh sách product IDs.
-     *
-     * @param productIds Danh sách product IDs.
-     * @return Map từ productId -> imageUrl.
      */
     public java.util.Map<Integer, String> getPrimaryImagesByProductIds(java.util.List<Integer> productIds) {
         if (productIds == null || productIds.isEmpty()) {
@@ -135,7 +119,7 @@ public class ProductImgDAO implements IDAO<ProductImage> {
                         (v1, v2) -> v1)));
     }
 
-    
+
     private ProductImage mapImage(java.sql.ResultSet rs) throws java.sql.SQLException {
         ProductImage image = new ProductImage();
         image.setImageId(rs.getInt("image_id"));

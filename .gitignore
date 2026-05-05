@@ -121,3 +121,5 @@ build
 
 # Ignore Kotlin plugin data
 .kotlin
+/Nhom49_WebBanSanPhamChamSocToc/.gradle/
+/Nhom49_WebBanSanPhamChamSocToc/.gradle-bootstrap/

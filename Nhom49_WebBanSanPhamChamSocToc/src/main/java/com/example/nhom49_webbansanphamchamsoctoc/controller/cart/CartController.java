@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.cart;
 
 import com.example.nhom49_webbansanphamchamsoctoc.model.CartItem;
 import com.example.nhom49_webbansanphamchamsoctoc.services.CartService;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -35,6 +36,8 @@ public class CartController extends HttpServlet {
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("subtotal", subtotal);
         request.setAttribute("cartCount", cartCount);
+        request.setAttribute("successMessage", SessionUtil.getAndClearSuccessMessage(session));
+        request.setAttribute("errorMessage", SessionUtil.getAndClearErrorMessage(session));
 
         request.getRequestDispatcher("/user/cart/cart.jsp").forward(request, response);
     }

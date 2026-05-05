@@ -1,5 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Model Product - Bảng products trong database
  * Quản lý thông tin sản phẩm chăm sóc tóc
  */
-public class Product {
+public class Product implements Serializable {
     private int productId;
     private String productName;
     private String productSlug;
@@ -37,7 +38,7 @@ public class Product {
     private List<HairCondition> hairConditions;
     private List<Promotion> promotions;
 
-    // Transient fields for display
+    // Transient/computed fields for display (not persisted in products table)
     private String categoryName;
     private String brandName;
     private String primaryImageUrl;
@@ -46,7 +47,7 @@ public class Product {
     private int soldQuantity;
     private int soldPercent;
 
-    // Transient fields for promotion display
+    // Transient/computed fields for promotion display (not persisted in products table)
     private BigDecimal finalPrice;
     private Promotion activePromotion;
 
