@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {
         "/checkout", "/checkout/*",
+        "/payment", "/payment/*",
         "/profile", "/profile/*",
         "/orders", "/orders/*"
 })

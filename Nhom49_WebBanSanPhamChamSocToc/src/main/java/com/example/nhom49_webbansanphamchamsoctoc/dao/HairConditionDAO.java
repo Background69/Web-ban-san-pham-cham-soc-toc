@@ -16,20 +16,21 @@ public class HairConditionDAO implements IDAO<HairCondition> {
 
     @Override
     public HairCondition findById(int id) {
-                 String sql ="SELECT * FROM hair_conditions WHERE condition_id=:id";
-                 return jdbi.withHandle(handle -> handle.createQuery(sql)
-                 .bind("id", id)
-                .map((rs,ctx)-> mapHairCondition(rs))
+        String sql = "SELECT * FROM hair_conditions WHERE condition_id=:id";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("id", id)
+                .map((rs, ctx) -> mapHairCondition(rs))
                 .findFirst()
                 .orElse(null));
     }
+
     @Override
     public List<HairCondition> findAll() {
         String sql = "SELECT condition_id, condition_name, condition_slug FROM hair_conditions";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
 
-                        .map((rs, ctx)->mapHairCondition(rs))
+                        .map((rs, ctx) -> mapHairCondition(rs))
                         .list()
         );
     }
@@ -77,27 +78,39 @@ public class HairConditionDAO implements IDAO<HairCondition> {
                         .bind("id", entity.getConditionId())
                         .execute()
         );
-       return rows >0;
-}
+        return rows > 0;
+    }
+
     @Override
     public boolean delete(int id) {
         int rows = jdbi.withHandle(handle ->
                 handle.createUpdate(
-                        "DELETE FROM hair_conditions WHERE condition_id =:id")
-                        .bind("id",id)
+                                "DELETE FROM hair_conditions WHERE condition_id =:id")
+                        .bind("id", id)
                         .execute()
         );
-        return rows >0;
+        return rows > 0;
     }
+
     private HairCondition mapHairCondition(ResultSet rs) {
         try {
             HairCondition h = new HairCondition();
             h.setConditionId(rs.getInt("condition_id"));
             h.setConditionName(rs.getString("condition_name"));
             h.setConditionSlug(rs.getString("condition_slug"));
+            h.setCreatedAt(getOptionalTimestamp(rs, "created_at"));
+            h.setUpdatedAt(getOptionalTimestamp(rs, "updated_at"));
             return h;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private java.sql.Timestamp getOptionalTimestamp(ResultSet rs, String columnLabel) {
+        try {
+            return rs.getTimestamp(columnLabel);
+        } catch (SQLException ignored) {
+            return null;
         }
     }
 

@@ -42,9 +42,9 @@ public class RemoveCartController extends HttpServlet {
         }
 
         if (success) {
-            session.setAttribute("success", "Da xoa san pham khoi gio hang.");
+            session.setAttribute("success", "Đã xóa sản phẩm khỏi giỏ hàng.");
         } else {
-            session.setAttribute("error", message != null ? message : "Khong the xoa san pham khoi gio hang.");
+            session.setAttribute("error", message != null ? message : "Không thể xóa sản phẩm khỏi giỏ hàng.");
         }
 
         response.sendRedirect(request.getContextPath() + "/cart");

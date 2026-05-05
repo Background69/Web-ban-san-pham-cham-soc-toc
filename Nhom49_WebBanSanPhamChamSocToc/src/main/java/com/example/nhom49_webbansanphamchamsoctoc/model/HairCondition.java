@@ -1,12 +1,13 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Model HairCondition - Bảng hair_conditions trong database
  * Quản lý các tình trạng tóc (Khô xơ, Hư tổn, Gàu, Rụng tóc...)
  */
-public class HairCondition {
+public class HairCondition implements Serializable {
     private int conditionId;
     private String conditionName;
     private String conditionSlug;

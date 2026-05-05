@@ -2,16 +2,9 @@ package com.example.nhom49_webbansanphamchamsoctoc.services;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
-import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
-import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
-import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
-/**
- * Service class cho User management
- */
 public class UserService {
 
     private final UserDAO userDAO;
@@ -26,62 +19,12 @@ public class UserService {
         return authService.login(emailOrUsername, password);
     }
 
-    public boolean isActiveUser(User user) {
-        return authService.isActiveUser(user);
-    }
-
-    public User register(String email, String username, String password) {
-        if (!isValidEmail(email) || !isValidUsername(username) || !PasswordUtil.isValidPassword(password)) {
-            return null;
-        }
-
-        if (userDAO.existsByEmail(email) || userDAO.existsByUsername(username)) {
-            return null;
-        }
-
-        User user = new User();
-        user.setEmail(email);
-        user.setUsername(username);
-        user.setPassword(PasswordUtil.hashPassword(password));
-        user.setRole("Khách hàng");
-        user.setActive(true);
-        user.setAuthProvider("LOCAL");
-        int userId = userDAO.insert(user);
-        if (userId > 0) {
-            user.setUserId(userId);
-            return user;
-        }
-        return null;
-    }
-
-    public boolean isEmailExists(String email) {
-        return userDAO.existsByEmail(email);
-    }
-
     public List<User> getAllUsers() {
         return userDAO.findAll();
     }
 
     public User getUserById(int userId) {
         return userDAO.findById(userId);
-    }
-
-    public User getUserByEmail(String email) {
-        return userDAO.findByEmail(email);
-    }
-
-    public boolean changePassword(int userId, String oldPassword, String newPassword) {
-        User user = userDAO.findById(userId);
-        if (user == null || !PasswordUtil.verifyPassword(oldPassword, user.getPassword())) {
-            return false;
-        }
-
-        if (!PasswordUtil.isValidPassword(newPassword)) {
-            return false;
-        }
-
-        String hashedNewPassword = PasswordUtil.hashPassword(newPassword);
-        return userDAO.updatePassword(userId, hashedNewPassword);
     }
 
     public User findOrCreateGoogleUser(GoogleOAuthService.GoogleUserInfo googleInfo) {
@@ -119,26 +62,6 @@ public class UserService {
         return null;
     }
 
-    public boolean linkGoogleAccount(int userId, String googleId) {
-        if (googleId == null || googleId.isEmpty()) {
-            return false;
-        }
-
-        User existingUser = userDAO.findByGoogleId(googleId);
-        if (existingUser != null && existingUser.getUserId() != userId) {
-            return false;
-        }
-
-        return userDAO.updateGoogleId(userId, googleId);
-    }
-
-    public User findByGoogleId(String googleId) {
-        if (googleId == null || googleId.isEmpty()) {
-            return null;
-        }
-        return userDAO.findByGoogleId(googleId);
-    }
-
     private String generateUsernameFromGoogleName(String name, String email) {
         String baseUsername;
 
@@ -162,35 +85,12 @@ public class UserService {
         return username;
     }
 
-    private boolean isValidEmail(String email) {
-        return ValidationUtil.validateEmail(email) == null;
-    }
-
-    private boolean isValidUsername(String username) {
-        return ValidationUtil.validateUsername(username) == null;
-    }
-
-    public List<User> getUsersByRole(String role) {
-        return userDAO.findByRole(role);
-    }
-
     public boolean toggleUserActive(int userId) {
         User user = userDAO.findById(userId);
         if (user == null) {
             return false;
         }
         return userDAO.updateActiveStatus(userId, !user.isActive());
-    }
-
-    public boolean changeUserRole(int userId, String newRole) {
-        if (newRole == null || newRole.isEmpty()) {
-            return false;
-        }
-        return userDAO.updateRole(userId, newRole);
-    }
-
-    public void setCurrentUser(HttpSession session, User user) {
-        SessionUtil.setCurrentUser(session, user);
     }
 
     public boolean updateProfile(User user) {

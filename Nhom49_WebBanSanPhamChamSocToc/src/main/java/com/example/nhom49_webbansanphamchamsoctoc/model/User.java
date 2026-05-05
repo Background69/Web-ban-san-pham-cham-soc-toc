@@ -1,8 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class User {
+public class User implements Serializable {
     private int userId;
     private String email;
     private String username;
@@ -10,7 +11,7 @@ public class User {
     private String password;
     private String phone;
     private String avatar;
-    private String role; // 'Admin' or 'Khach hang'
+    private String role; // 'Admin' or 'Khách hàng'
     private boolean isActive;
     private String authProvider; // LOCAL, GOOGLE
     private Timestamp createdAt;

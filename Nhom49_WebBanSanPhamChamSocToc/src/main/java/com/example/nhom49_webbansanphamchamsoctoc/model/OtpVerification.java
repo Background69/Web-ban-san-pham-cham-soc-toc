@@ -1,8 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class OtpVerification {
+public class OtpVerification implements Serializable {
     private int otpId;
     private int userId;
     private String otpCode;
@@ -11,6 +12,9 @@ public class OtpVerification {
     private int attempts;
     private boolean verified;
     private Timestamp createdAt;
+
+    public OtpVerification() {
+    }
 
     public int getOtpId() {
         return otpId;

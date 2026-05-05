@@ -71,4 +71,45 @@ public class DBProperties {
         if (env != null && !env.isBlank()) return env;
         return null;
     }
+
+    public String getBankTransferProvider() {
+        return envOrProp("BANK_TRANSFER_PROVIDER", "bank.transfer.provider", "vietqr");
+    }
+
+    public String getBankTransferClientId() {
+        return envOrProp("BANK_TRANSFER_CLIENT_ID", "bank.transfer.clientId", "");
+    }
+
+    public String getBankTransferApiKey() {
+        return envOrProp("BANK_TRANSFER_API_KEY", "bank.transfer.apiKey", "");
+    }
+
+    public String getBankTransferAccountNo() {
+        return envOrProp("BANK_TRANSFER_ACCOUNT_NO", "bank.transfer.accountNo", "");
+    }
+
+    public String getBankTransferAccountName() {
+        return envOrProp("BANK_TRANSFER_ACCOUNT_NAME", "bank.transfer.accountName", "");
+    }
+
+    public String getBankTransferAcqId() {
+        return envOrProp("BANK_TRANSFER_ACQ_ID", "bank.transfer.acqId", "");
+    }
+
+    public String getBankTransferBankName() {
+        return envOrProp("BANK_TRANSFER_BANK_NAME", "bank.transfer.bankName", "");
+    }
+
+    public String getBankTransferTemplate() {
+        return envOrProp("BANK_TRANSFER_TEMPLATE", "bank.transfer.template", "compact");
+    }
+
+    public int getBankTransferExpireMinutes() {
+        String value = envOrProp("BANK_TRANSFER_EXPIRE_MINUTES", "bank.transfer.expireMinutes", "30");
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return 30;
+        }
+    }
 }

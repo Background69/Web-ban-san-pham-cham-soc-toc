@@ -21,9 +21,9 @@ public class EmailService {
     public EmailService() {
         Properties config = loadConfig();
 
-        EMAIL_USERNAME = mustGet(config, "mail.username").trim();
-        EMAIL_PASSWORD = mustGet(config, "mail.app_password").replaceAll("\\s+", "");
-        EMAIL_FROM_NAME = config.getProperty("mail.from_name", "HairGlow").trim();
+        EMAIL_USERNAME = mustGet(config, "MAIL_USERNAME", "mail.username").trim();
+        EMAIL_PASSWORD = mustGet(config, "MAIL_APP_PASSWORD", "mail.app_password").replaceAll("\\s+", "");
+        EMAIL_FROM_NAME = envOrProp(config, "MAIL_FROM_NAME", "mail.from_name", "HairGlow").trim();
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -45,6 +45,36 @@ public class EmailService {
         });
 
         session.setDebug(false);
+    }
+
+    private static Properties loadConfig() {
+        try (InputStream is = EmailService.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
+            if (is == null) {
+                throw new RuntimeException("Không tìm thấy " + CONFIG_FILE + " trong src/main/resources");
+            }
+            Properties p = new Properties();
+            p.load(is);
+            return p;
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi load " + CONFIG_FILE + ": " + e.getMessage(), e);
+        }
+    }
+
+    private static String envOrProp(Properties p, String envKey, String propKey, String defaultValue) {
+        String envVal = System.getenv(envKey);
+        if (envVal != null && !envVal.isBlank()) {
+            return envVal;
+        }
+        return p.getProperty(propKey, defaultValue);
+    }
+
+    private static String mustGet(Properties p, String envKey, String propKey) {
+        String value = envOrProp(p, envKey, propKey, null);
+        if (value == null || value.isBlank() || value.startsWith("YOUR_")) {
+            throw new RuntimeException("Thiếu cấu hình mail: biến môi trường " + envKey
+                    + " hoặc key " + propKey + " trong " + CONFIG_FILE);
+        }
+        return value;
     }
 
     public boolean sendResetPasswordOtpEmail(String toEmail, String otpCode, String verifyLink, int expiryMinutes) {
@@ -104,27 +134,5 @@ public class EmailService {
             System.out.println("Lỗi gửi email");
             return false;
         }
-    }
-
-
-    private static Properties loadConfig() {
-        try (InputStream is = EmailService.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
-            if (is == null) {
-                throw new RuntimeException("Không tìm thấy " + CONFIG_FILE + " trong src/main/resources");
-            }
-            Properties p = new Properties();
-            p.load(is);
-            return p;
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi load " + CONFIG_FILE + ": " + e.getMessage(), e);
-        }
-    }
-
-    private static String mustGet(Properties p, String key) {
-        String v = p.getProperty(key);
-        if (v == null || v.isBlank()) {
-            throw new RuntimeException("Thiếu cấu hình: " + key + " trong " + CONFIG_FILE);
-        }
-        return v;
     }
 }

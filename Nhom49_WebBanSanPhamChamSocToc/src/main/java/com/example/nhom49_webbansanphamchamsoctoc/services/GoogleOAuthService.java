@@ -20,28 +20,25 @@ import java.util.Properties;
  */
 public class GoogleOAuthService {
 
+    private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static final NetHttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private final String clientId;
     private final String clientSecret;
     private final String redirectUri;
     private final String[] scopes;
-
-    private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final NetHttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-
     private final GoogleAuthorizationCodeFlow flow;
     private final GoogleIdTokenVerifier verifier;
 
     /**
      * Constructor - Tải cấu hình từ properties file
-     * @throws RuntimeException nếu thiếu cấu hình
      */
     public GoogleOAuthService() {
         Properties props = loadProperties();
 
-        this.clientId = props.getProperty("google.client.id");
-        this.clientSecret = props.getProperty("google.client.secret");
-        this.redirectUri = props.getProperty("google.redirect.uri");
-        String scopesStr = props.getProperty("google.scopes", "openid,email,profile");
+        this.clientId = envOrProp(props, "GOOGLE_CLIENT_ID", "google.client.id", null);
+        this.clientSecret = envOrProp(props, "GOOGLE_CLIENT_SECRET", "google.client.secret", null);
+        this.redirectUri = envOrProp(props, "GOOGLE_REDIRECT_URI", "google.redirect.uri", null);
+        String scopesStr = envOrProp(props, "GOOGLE_SCOPES", "google.scopes", "openid,email,profile");
         this.scopes = scopesStr.split(",");
 
         // Validate cấu hình
@@ -70,36 +67,6 @@ public class GoogleOAuthService {
     }
 
     /**
-     * Constructor cho testing
-     */
-    public GoogleOAuthService(String clientId, String clientSecret, String redirectUri) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.redirectUri = redirectUri;
-        this.scopes = new String[]{"openid", "email", "profile"};
-
-        validateConfiguration();
-
-        GoogleClientSecrets.Details web = new GoogleClientSecrets.Details();
-        web.setClientId(clientId);
-        web.setClientSecret(clientSecret);
-        GoogleClientSecrets clientSecrets = new GoogleClientSecrets().setWeb(web);
-
-        this.flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT,
-                JSON_FACTORY,
-                clientSecrets,
-                Arrays.asList(scopes)
-        )
-                .setAccessType("offline")
-                .build();
-
-        this.verifier = new GoogleIdTokenVerifier.Builder(HTTP_TRANSPORT, JSON_FACTORY)
-                .setAudience(Collections.singletonList(clientId))
-                .build();
-    }
-
-    /**
      * Tải properties từ file
      */
     private Properties loadProperties() {
@@ -114,6 +81,14 @@ public class GoogleOAuthService {
             throw new RuntimeException("Không thể đọc file google-oauth.properties", e);
         }
         return props;
+    }
+
+    private String envOrProp(Properties props, String envKey, String propKey, String defaultValue) {
+        String envVal = System.getenv(envKey);
+        if (envVal != null && !envVal.isBlank()) {
+            return envVal;
+        }
+        return props.getProperty(propKey, defaultValue);
     }
 
     /**
@@ -133,6 +108,7 @@ public class GoogleOAuthService {
 
     /**
      * Tạo URL để redirect user đến Google OAuth
+     *
      * @param state Tham số state để chống CSRF
      * @return URL xác thực Google
      */
@@ -145,6 +121,7 @@ public class GoogleOAuthService {
 
     /**
      * Xử lý authorization code từ Google callback
+     *
      * @param authorizationCode Mã xác thực từ Google
      * @return Thông tin người dùng Google
      */
@@ -174,14 +151,6 @@ public class GoogleOAuthService {
         throw new RuntimeException("Không thể xác thực ID token từ Google");
     }
 
-    // Getters cho testing
-    public String getClientId() {
-        return clientId;
-    }
-
-    public String getRedirectUri() {
-        return redirectUri;
-    }
 
     /**
      * Class chứa thông tin user từ Google

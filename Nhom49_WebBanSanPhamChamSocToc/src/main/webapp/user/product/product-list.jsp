@@ -364,12 +364,15 @@
                                     <a
                                             href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                         <img alt="${product.productName}" class="product-image"
-                                             src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}"
+                                             src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : (product.primaryImage != null and not empty product.primaryImage.imageUrl ? product.primaryImage.imageUrl : 'images/default-product.png')}"
+                                             loading="lazy"
                                              onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/images/default-product.png'">
                                     </a>
                                 </div>
                                 <div class="product-body">
-                                    <h3 class="product-title">${product.productName}</h3>
+                                    <h3 class="product-title">
+                                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">${product.productName}</a>
+                                    </h3>
                                     <div class="product-small-details">
                                         <p>
                                                                 <span>${product.brand != null ? product.brand.brandName

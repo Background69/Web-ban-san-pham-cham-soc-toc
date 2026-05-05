@@ -1,20 +1,21 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Model Review - Bảng reviews trong database
  * Quản lý đánh giá sản phẩm từ khách hàng
  */
-public class Review {
+public class Review implements Serializable {
     private int reviewId;
     private int productId;
     private Integer userId;
+    private User reviewer;
     private String reviewerName;
     private int rating; // 1-5 sao
     private String content;
     private Timestamp createdAt;
-    private Timestamp updatedAt;
     // --- Product info for My Reviews display (populated via JOIN) ---
     private String productName;
     private String productSlug;
@@ -49,6 +50,14 @@ public class Review {
         this.userId = userId;
     }
 
+    public User getReviewer() {
+        return reviewer;
+    }
+
+    public void setReviewer(User reviewer) {
+        this.reviewer = reviewer;
+    }
+
     public String getReviewerName() {
         return reviewerName;
     }
@@ -79,14 +88,6 @@ public class Review {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getProductName() {

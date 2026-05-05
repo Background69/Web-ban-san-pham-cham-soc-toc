@@ -3,8 +3,10 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Cart;
 import com.example.nhom49_webbansanphamchamsoctoc.model.CartItem;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
+import com.example.nhom49_webbansanphamchamsoctoc.model.PaymentTransaction;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ShippingAddress;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.services.BankTransferService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.CartService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.OrderService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ShippingService;
@@ -26,12 +28,14 @@ public class CheckoutController extends HttpServlet {
     private OrderService orderService;
     private ShippingService shippingService;
     private CartService cartService;
+    private BankTransferService bankTransferService;
 
     @Override
     public void init() throws ServletException {
         orderService = new OrderService();
         shippingService = new ShippingService();
         cartService = new CartService();
+        bankTransferService = new BankTransferService();
     }
 
     @Override
@@ -129,6 +133,26 @@ public class CheckoutController extends HttpServlet {
         if (order != null) {
             cartService.clearCart(session);
             cartService.clearCartInDatabase(user.getUserId());
+
+            if ("bank_transfer".equalsIgnoreCase(order.getPaymentMethod())) {
+                PaymentTransaction transaction = bankTransferService.createTransactionForOrder(order, user.getUserId());
+                if (transaction == null) {
+                    SessionUtil.setErrorMessage(session,
+                            bankTransferService.getLastError() != null
+                                    ? bankTransferService.getLastError()
+                                    : "Không thể tạo giao dịch chuyển khoản. Vui lòng thử lại.");
+                    response.sendRedirect(request.getContextPath() + "/orders/" + order.getOrderId());
+                    return;
+                }
+
+                if (bankTransferService.getLastError() != null) {
+                    SessionUtil.setErrorMessage(session, bankTransferService.getLastError());
+                }
+                response.sendRedirect(request.getContextPath() + "/payment/bank-transfer?transactionId="
+                        + transaction.getTransactionId());
+                return;
+            }
+
             response.sendRedirect(request.getContextPath() + "/orders/" + order.getOrderId());
         } else {
             request.setAttribute("error", orderService.getLastError() != null ?

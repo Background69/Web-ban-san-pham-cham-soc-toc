@@ -430,6 +430,17 @@
             </a>
         </div>
 
+        <c:if test="${not empty success}">
+            <div style="background: #d1fae5; color: #065f46; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;">
+                ${success}
+            </div>
+        </c:if>
+        <c:if test="${not empty error}">
+            <div style="background: #fee2e2; color: #991b1b; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px;">
+                ${error}
+            </div>
+        </c:if>
+
         <!-- Info Cards -->
         <div class="info-grid">
             <!-- Customer Info -->
@@ -471,6 +482,59 @@
                     <span class="info-value">${order.paymentMethodDisplayName}</span>
                 </div>
             </div>
+
+            <c:if test="${not empty paymentTransaction}">
+                <div class="info-card">
+                    <h3>Giao dịch chuyển khoản</h3>
+                    <div class="info-row">
+                        <span class="info-label">Mã giao dịch</span>
+                        <span class="info-value">#${paymentTransaction.transactionId}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Trạng thái</span>
+                        <span class="info-value">${paymentTransaction.status}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Số tiền</span>
+                        <span class="info-value">
+                            <fmt:formatNumber value="${paymentTransaction.amount}" type="number"/>₫
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Nội dung CK</span>
+                        <span class="info-value">${paymentTransaction.transferContent}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Ngân hàng</span>
+                        <span class="info-value">${paymentTransaction.bankName}</span>
+                    </div>
+                    <c:if test="${not empty paymentTransaction.expiresAt}">
+                        <div class="info-row">
+                            <span class="info-label">Hạn thanh toán</span>
+                            <span class="info-value">
+                                <fmt:formatDate value="${paymentTransaction.expiresAt}" pattern="dd/MM/yyyy HH:mm:ss"/>
+                            </span>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty paymentTransaction.confirmedAt}">
+                        <div class="info-row">
+                            <span class="info-label">Đã xác nhận lúc</span>
+                            <span class="info-value">
+                                <fmt:formatDate value="${paymentTransaction.confirmedAt}" pattern="dd/MM/yyyy HH:mm:ss"/>
+                            </span>
+                        </div>
+                    </c:if>
+                    <c:if test="${paymentTransaction.status == 'PENDING'}">
+                        <div style="margin-top: 14px;">
+                            <a href="<c:url value='/admin/orders?action=confirmPayment&transactionId=${paymentTransaction.transactionId}'/>"
+                               class="btn btn-primary"
+                               onclick="return confirm('Xác nhận đã nhận tiền cho giao dịch này?')">
+                                Xác nhận đã nhận tiền
+                            </a>
+                        </div>
+                    </c:if>
+                </div>
+            </c:if>
         </div>
 
         <!-- Products Table -->
@@ -575,11 +639,14 @@
 
         <!-- Actions -->
         <div class="actions-bar">
-            <c:if test="${order.orderStatus == 'pending'}">
+            <c:if test="${order.orderStatus == 'pending' && (order.paymentMethod != 'bank_transfer' || (not empty paymentTransaction && paymentTransaction.status == 'SUCCESS'))}">
                 <a href="<c:url value='/admin/orders?action=updateStatus&id=${order.orderId}&status=confirmed&from=detail'/>"
                    class="btn btn-primary">
                     Xác nhận đơn
                 </a>
+            </c:if>
+            <c:if test="${order.orderStatus == 'pending' && order.paymentMethod == 'bank_transfer' && (empty paymentTransaction || paymentTransaction.status != 'SUCCESS')}">
+                <span class="btn btn-secondary">Chờ xác nhận thanh toán chuyển khoản</span>
             </c:if>
             <c:if test="${order.orderStatus == 'confirmed'}">
                 <a href="<c:url value='/admin/orders?action=updateStatus&id=${order.orderId}&status=shipping&from=detail'/>"

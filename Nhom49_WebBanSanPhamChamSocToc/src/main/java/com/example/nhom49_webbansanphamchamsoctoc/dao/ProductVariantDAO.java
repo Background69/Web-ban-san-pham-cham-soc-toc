@@ -48,10 +48,6 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         );
     }
 
-    public ProductVariant findDefault(int productId) {
-        return findDefaultByProductId(productId);
-    }
-
     public Map<Integer, Integer> getTotalStockByProductIds(List<Integer> productIds) {
         if (productIds == null || productIds.isEmpty()) {
             return Map.of();
@@ -155,10 +151,6 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
                         .execute()
         );
         return rowsAffected > 0;
-    }
-
-    public boolean decreaseStock(int variantId, int quantity) {
-        return decrementStock(variantId, quantity);
     }
 
     /**

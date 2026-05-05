@@ -1,15 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
-import com.example.nhom49_webbansanphamchamsoctoc.model.HairCondition;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
-import com.example.nhom49_webbansanphamchamsoctoc.model.Promotion;
 import org.jdbi.v3.core.Jdbi;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ProductDAO implements IDAO<Product> {
 
@@ -38,94 +32,6 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(null));
     }
 
-    /**
-     * Tìm sản phẩm theo ID kèm theo HairConditions và Promotions.
-     * Sử dụng kỹ thuật LinkedHashMap reducer để tránh n+1 query.
-     *
-     * @param productId ID sản phẩm.
-     * @return Product với đầy đủ hairConditions và promotions.
-     */
-    public Product findByIdWithRelations(int productId) {
-        String sql = """
-                SELECT
-                    p.*,
-                    hc.condition_id AS hc_condition_id,
-                    hc.condition_name AS hc_condition_name,
-                    hc.condition_slug AS hc_condition_slug,
-                    pr.promotion_id AS pr_promotion_id,
-                    pr.promotion_name AS pr_promotion_name,
-                    pr.promotion_type AS pr_promotion_type,
-                    pr.badge_text AS pr_badge_text,
-                    pr.start_date AS pr_start_date,
-                    pr.end_date AS pr_end_date,
-                    pr.is_active AS pr_is_active
-                FROM products p
-                LEFT JOIN product_hair_conditions phc ON p.product_id = phc.product_id
-                LEFT JOIN hair_conditions hc ON phc.condition_id = hc.condition_id
-                LEFT JOIN product_promotions pp ON p.product_id = pp.product_id
-                LEFT JOIN promotions pr ON pp.promotion_id = pr.promotion_id
-                WHERE p.product_id = :productId
-                  AND p.is_deleted = FALSE
-                """;
-
-        return jdbi.withHandle(handle -> {
-            Map<Integer, Product> productMap = new LinkedHashMap<>();
-            Map<Integer, HairCondition> conditionMap = new HashMap<>();
-            Map<Integer, Promotion> promotionMap = new HashMap<>();
-
-            handle.createQuery(sql)
-                    .bind("productId", productId)
-                    .map((rs, ctx) -> {
-                        // Get or create Product
-                        int pId = rs.getInt("product_id");
-                        Product product = productMap.computeIfAbsent(pId, id -> {
-                            try {
-                                Product p = mapProduct(rs);
-                                p.setHairConditions(new java.util.ArrayList<>());
-                                p.setPromotions(new java.util.ArrayList<>());
-                                return p;
-                            } catch (java.sql.SQLException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-
-                        // Map HairCondition if present
-                        int hcId = rs.getInt("hc_condition_id");
-                        if (!rs.wasNull() && !conditionMap.containsKey(hcId)) {
-                            HairCondition hc = new HairCondition();
-                            hc.setConditionId(hcId);
-                            hc.setConditionName(rs.getString("hc_condition_name"));
-                            hc.setConditionSlug(rs.getString("hc_condition_slug"));
-                            conditionMap.put(hcId, hc);
-                            product.getHairConditions().add(hc);
-                        }
-
-                        // Map Promotion if present
-                        int prId = rs.getInt("pr_promotion_id");
-                        if (!rs.wasNull() && !promotionMap.containsKey(prId)) {
-                            Promotion pr = new Promotion();
-                            pr.setPromotionId(prId);
-                            pr.setPromotionName(rs.getString("pr_promotion_name"));
-                            pr.setPromotionType(rs.getString("pr_promotion_type"));
-                            pr.setBadgeText(rs.getString("pr_badge_text"));
-                            java.sql.Timestamp start = rs.getTimestamp("pr_start_date");
-                            java.sql.Timestamp end = rs.getTimestamp("pr_end_date");
-                            pr.setStartDate(start != null ? start.toLocalDateTime() : null);
-                            pr.setEndDate(end != null ? end.toLocalDateTime() : null);
-                            pr.setActive(rs.getBoolean("pr_is_active"));
-                            promotionMap.put(prId, pr);
-                            product.getPromotions().add(pr);
-                        }
-
-                        return product;
-                    })
-                    .list();
-
-            return productMap.values().stream().findFirst().orElse(null);
-        });
-    }
-
-    
     @Override
     public List<Product> findAll() {
         String sql = "SELECT * FROM products WHERE is_deleted = FALSE ORDER BY created_at DESC";
@@ -134,7 +40,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    
+
     @Override
     public int insert(Product product) {
         String sql = "INSERT INTO products (product_name, product_slug, brand_id, category_id, origin, " +
@@ -158,7 +64,7 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(-1));
     }
 
-    
+
     @Override
     public boolean update(Product product) {
         String sql = "UPDATE products SET product_name = :productName, product_slug = :productSlug, brand_id = :brandId, category_id = :categoryId, "
@@ -182,7 +88,7 @@ public class ProductDAO implements IDAO<Product> {
         return rowsAffected > 0;
     }
 
-    
+
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM products WHERE product_id = :productId";
@@ -199,18 +105,8 @@ public class ProductDAO implements IDAO<Product> {
                 .execute() > 0);
     }
 
-    // Query methods
 
-    
-    public List<Product> findByCategory(int categoryId) {
-        String sql = "SELECT * FROM products WHERE category_id = :categoryId AND is_deleted = FALSE ORDER BY created_at DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("categoryId", categoryId)
-                .map((rs, ctx) -> mapProduct(rs))
-                .list());
-    }
 
-    
     public List<Product> findByBrand(int brandId) {
         String sql = "SELECT * FROM products WHERE brand_id = :brandId AND is_deleted = FALSE ORDER BY created_at DESC";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -232,7 +128,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    
+
     public List<Product> search(String keyword) {
         String sql = "SELECT * FROM products WHERE (product_name LIKE :searchPattern OR short_description LIKE :searchPattern) AND is_deleted = FALSE "
                 +
@@ -240,14 +136,6 @@ public class ProductDAO implements IDAO<Product> {
         String searchPattern = "%" + keyword + "%";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("searchPattern", searchPattern)
-                .map((rs, ctx) -> mapProduct(rs))
-                .list());
-    }
-
-    
-    public List<Product> findFeatured() {
-        String sql = "SELECT * FROM products WHERE is_featured = true AND is_deleted = FALSE ORDER BY created_at DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .map((rs, ctx) -> mapProduct(rs))
                 .list());
     }
@@ -272,11 +160,19 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    
+
     public List<Product> findOnSale() {
         String sql = """
-                SELECT p.*
+                SELECT p.*, COALESCE(sold.sold_quantity, 0) AS sold_quantity
                 FROM products p
+                LEFT JOIN (
+                    SELECT oi.product_id, SUM(oi.quantity) AS sold_quantity
+                    FROM order_items oi
+                    JOIN orders o ON o.order_id = oi.order_id
+                    WHERE oi.product_id IS NOT NULL
+                      AND o.order_status <> 'cancelled'
+                    GROUP BY oi.product_id
+                ) sold ON sold.product_id = p.product_id
                 WHERE p.is_deleted = FALSE
                   AND (
                         p.is_on_sale = TRUE
@@ -298,8 +194,16 @@ public class ProductDAO implements IDAO<Product> {
 
     public List<Product> findOnSale(int limit, int offset) {
         String sql = """
-                SELECT p.*
+                SELECT p.*, COALESCE(sold.sold_quantity, 0) AS sold_quantity
                 FROM products p
+                LEFT JOIN (
+                    SELECT oi.product_id, SUM(oi.quantity) AS sold_quantity
+                    FROM order_items oi
+                    JOIN orders o ON o.order_id = oi.order_id
+                    WHERE oi.product_id IS NOT NULL
+                      AND o.order_status <> 'cancelled'
+                    GROUP BY oi.product_id
+                ) sold ON sold.product_id = p.product_id
                 WHERE p.is_deleted = FALSE
                   AND (
                         p.is_on_sale = TRUE
@@ -345,20 +249,6 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(0));
     }
 
-    
-    public List<Product> findFlashSale() {
-        String sql = "SELECT p.* FROM products p " +
-                "JOIN product_variants pv ON p.product_id = pv.product_id " +
-                "WHERE pv.is_default = true AND pv.original_price > 0 AND p.is_deleted = FALSE " +
-                "AND pv.sale_price IS NOT NULL AND pv.sale_price > 0 " +
-                "AND ((pv.original_price - pv.sale_price) / pv.original_price * 100) > 30 " +
-                "ORDER BY p.created_at DESC";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .map((rs, ctx) -> mapProduct(rs))
-                .list());
-    }
-
-    
     public List<Product> findByBrandWithPagination(int brandId, int page, int pageSize) {
         int offset = (page - 1) * pageSize;
         String sql = "SELECT * FROM products WHERE brand_id = :brandId AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
@@ -370,7 +260,7 @@ public class ProductDAO implements IDAO<Product> {
                 .list());
     }
 
-    
+
     public int countByBrand(int brandId) {
         String sql = "SELECT COUNT(*) FROM products WHERE brand_id = :brandId AND is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -380,32 +270,6 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(0));
     }
 
-    // Pagination methods
-
-    
-    public List<Product> findWithPagination(int page, int pageSize) {
-        int offset = (page - 1) * pageSize;
-        String sql = "SELECT * FROM products WHERE is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("pageSize", pageSize)
-                .bind("offset", offset)
-                .map((rs, ctx) -> mapProduct(rs))
-                .list());
-    }
-
-    
-    public List<Product> findByCategoryWithPagination(int categoryId, int page, int pageSize) {
-        int offset = (page - 1) * pageSize;
-        String sql = "SELECT * FROM products WHERE category_id = :categoryId AND is_deleted = FALSE ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("categoryId", categoryId)
-                .bind("pageSize", pageSize)
-                .bind("offset", offset)
-                .map((rs, ctx) -> mapProduct(rs))
-                .list());
-    }
-
-    
     public int countAll() {
         String sql = "SELECT COUNT(*) FROM products WHERE is_deleted = FALSE";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
@@ -414,76 +278,6 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(0));
     }
 
-    
-    public int countByCategory(int categoryId) {
-        String sql = "SELECT COUNT(*) FROM products WHERE category_id = :categoryId AND is_deleted = FALSE";
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("categoryId", categoryId)
-                .mapTo(Integer.class)
-                .findFirst()
-                .orElse(0));
-    }
-
-    public List<Product> findByFilters(String search, Integer categoryId, Integer brandId, int page, int pageSize) {
-        int offset = (page - 1) * pageSize;
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE is_deleted = FALSE");
-        Map<String, Object> params = new HashMap<>();
-
-        if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (product_name LIKE :search OR short_description LIKE :search)");
-            params.put("search", "%" + search.trim() + "%");
-        }
-        if (categoryId != null) {
-            sql.append(" AND category_id = :categoryId");
-            params.put("categoryId", categoryId);
-        }
-        if (brandId != null) {
-            sql.append(" AND brand_id = :brandId");
-            params.put("brandId", brandId);
-        }
-
-        sql.append(" ORDER BY created_at DESC LIMIT :pageSize OFFSET :offset");
-        params.put("pageSize", pageSize);
-        params.put("offset", offset);
-
-        return jdbi.withHandle(handle -> {
-            var query = handle.createQuery(sql.toString());
-            for (var entry : params.entrySet()) {
-                query.bind(entry.getKey(), entry.getValue());
-            }
-            return query.map((rs, ctx) -> mapProduct(rs)).list();
-        });
-    }
-
-    public int countByFilters(String search, Integer categoryId, Integer brandId) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE is_deleted = FALSE");
-        Map<String, Object> params = new HashMap<>();
-
-        if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (product_name LIKE :search OR short_description LIKE :search)");
-            params.put("search", "%" + search.trim() + "%");
-        }
-        if (categoryId != null) {
-            sql.append(" AND category_id = :categoryId");
-            params.put("categoryId", categoryId);
-        }
-        if (brandId != null) {
-            sql.append(" AND brand_id = :brandId");
-            params.put("brandId", brandId);
-        }
-
-        return jdbi.withHandle(handle -> {
-            var query = handle.createQuery(sql.toString());
-            for (var entry : params.entrySet()) {
-                query.bind(entry.getKey(), entry.getValue());
-            }
-            return query.mapTo(Integer.class).findFirst().orElse(0);
-        });
-    }
-
-    // Rating update
-
-    
     public boolean updateRating(int productId, double avgRating, int reviewCount) {
         String sql = "UPDATE products SET average_rating = :averageRating, review_count = :reviewCount WHERE product_id = :productId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
@@ -495,7 +289,6 @@ public class ProductDAO implements IDAO<Product> {
     }
 
     // Helper method
-    
     private Product mapProduct(java.sql.ResultSet rs) throws java.sql.SQLException {
         Product product = new Product();
         product.setProductId(rs.getInt("product_id"));

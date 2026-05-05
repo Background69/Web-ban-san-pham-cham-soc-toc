@@ -6,9 +6,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
 
 import java.util.List;
 
-/**
- * Service class cho Category business logic
- */
 public class CategoryService {
 
     private final CategoryDAO categoryDAO;
@@ -17,33 +14,15 @@ public class CategoryService {
         this.categoryDAO = new CategoryDAO();
     }
 
-    /**
-     * Lấy tất cả categories
-     */
     public List<Category> getAllCategories() {
         return categoryDAO.findAll();
     }
 
-    /**
-     * Lấy category theo ID
-     */
     public Category getCategoryById(int categoryId) {
         return categoryDAO.findById(categoryId);
     }
 
-    /**
-     * Lấy category theo slug
-     */
-    public Category getCategoryBySlug(String slug) {
-        if (slug == null || slug.trim().isEmpty()) {
-            return null;
-        }
-        return categoryDAO.findBySlug(slug);
-    }
 
-    /**
-     * Tạo category mới với auto-generate slug
-     */
     public int createCategory(Category category) {
         if (category == null || !isValidCategory(category)) {
             return -1;
@@ -63,9 +42,6 @@ public class CategoryService {
         return categoryDAO.insert(category);
     }
 
-    /**
-     * Cập nhật category, regenerate slug nếu tên thay đổi
-     */
     public boolean updateCategory(Category category) {
         if (category == null || category.getCategoryId() <= 0 || !isValidCategory(category)) {
             return false;
@@ -90,23 +66,17 @@ public class CategoryService {
         return categoryDAO.update(category);
     }
 
-    /**
-     * Xóa category
-     */
+
     public boolean deleteCategory(int categoryId) {
         return categoryDAO.delete(categoryId);
     }
 
-    /**
-     * Kiểm tra slug đã tồn tại chưa
-     */
+
     public boolean isSlugExists(String slug) {
         return categoryDAO.findBySlug(slug) != null;
     }
 
-    /**
-     * Validate category data
-     */
+
     private boolean isValidCategory(Category category) {
         return category.getCategoryName() != null &&
                 !category.getCategoryName().trim().isEmpty() &&

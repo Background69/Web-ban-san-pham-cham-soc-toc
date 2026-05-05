@@ -1,9 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class PaymentTransaction {
+public class PaymentTransaction implements Serializable {
     private int transactionId;
     private String orderTempId;
     private Integer orderId;
