@@ -99,6 +99,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .btn-add {
@@ -535,6 +536,25 @@ body {
             opacity: 1;
             transform: translateY(0);
         }
+}
+.toolbar{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.toolbar input{
+    width: 400px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+.toolbar select{
+    width: 140px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
 }
 
 
