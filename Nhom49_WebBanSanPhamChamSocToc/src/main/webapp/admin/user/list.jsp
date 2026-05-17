@@ -62,6 +62,7 @@
                 <th>Email</th>
                 <th>SĐT</th>
                 <th>Vai trò</th>
+                <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
             </thead>
@@ -77,6 +78,16 @@
                     <td>
                        <button type="button" class="action-btn edit"
                                onclick="openUserDetail(${user.userId})">Chi tiết</button>
+                        <form method="post"
+                              action="${pageContext.request.contextPath}/admin/users"
+                              style="display: inline">
+                            <input type="hidden" name="action" value="toggle-status">
+                            <input type="hidden" name="id" value="${user.userId}">
+                            <button type="submit"
+                                    class="action-btn ${user.active ? 'lock-btn': 'unlock-btn'}">
+                                ${user.active ? 'Khoá' : 'Mở'}
+                            </button>
+                        </form>
                     </td>
                 </tr>
             </c:forEach>
