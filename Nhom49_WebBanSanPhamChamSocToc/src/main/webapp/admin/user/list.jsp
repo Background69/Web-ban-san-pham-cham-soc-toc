@@ -40,18 +40,19 @@
     <main class="content">
         <div class="header">
             <h1>Quản lý người dùng</h1>
-        </div>
+
         <div class="toolbar">
             <input
                 type="text"
                 id="search-input"
                 placeholder="Tìm theo tên, email, số điện thoại..."
-                onkeyup="filterUsers">
+                onkeyup="filterUsers()">
             <select id="sortselect" onchange="sortUsers()">
                 <option value="">Sắp xếp</option>
                 <option value="asc">Từ A-Z</option>
                 <option value="desc">Từ Z-A</option>
             </select>
+        </div>
         </div>
         <table class="product-table">
             <thead>
@@ -152,11 +153,11 @@
     function closeModal(){
         document.getElementById("userModal").style.display = "none";
     }
-    function filterUser(){
-        let keyword = document.getElementById("searchInput")
+    function filterUsers(){
+        let keyword = document.getElementById("search-input")
             .value
             .toLowerCase();
-        let rows=document.querySelectorAll("#userTableBody");
+        let rows=document.querySelectorAll("#userTableBody tr");
         rows.forEach(row => {
             let text = row.innerText.toLowerCase();
             if (text.includes(keyword)) {
