@@ -41,7 +41,18 @@
         <div class="header">
             <h1>Quản lý người dùng</h1>
         </div>
-
+        <div class="toolbar">
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Tìm theo tên, email, số điện thoại..."
+                onkeyup="filterUsers">
+            <select id="sortselect" onchange="sortUsers()">
+                <option value="">Sắp xếp</option>
+                <option value="asc">Từ A-Z</option>
+                <option value="desc">Từ Z-A</option>
+            </select>
+        </div>
         <table class="product-table">
             <thead>
             <tr>
@@ -54,7 +65,7 @@
             </tr>
             </thead>
 
-            <tbody>
+            <tbody id="userTableBody">
             <c:forEach var="user" items="${users}">
                 <tr>
                     <td>#U${user.userId}</td>
@@ -140,6 +151,37 @@
     }
     function closeModal(){
         document.getElementById("userModal").style.display = "none";
+    }
+    function filterUser(){
+        let keyword = document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+        let rows=document.querySelectorAll("#userTableBody");
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            if (text.includes(keyword)) {
+                row.style.display=""
+            } else {
+                row.style.display="none"
+            }
+        });
+    }
+    function sortUsers(){
+        let tbody = document.getElementById("userTableBody");
+        let rows = Array.from(tbody.querySelectorAll("tr"));
+        let sortType = document.getElementById("sortselect").value;
+        rows.sort((a, b) => {
+            let nameA = a.cells[1].innerText.toLowerCase();
+            let nameB = b.cells[1].innerText.toLowerCase();
+            if (sortType === "asc"){
+                return nameA.localeCompare(nameB)
+            }
+            if (sortType === "desc"){
+                return nameB.localeCompare(nameA)
+            }
+            return 0;
+        });
+        rows.forEach(row=> tbody.appendChild(row));
     }
 </script>
 </body>
