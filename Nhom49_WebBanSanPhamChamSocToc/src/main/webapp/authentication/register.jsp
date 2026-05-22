@@ -19,7 +19,8 @@
     <div class="login-container">
         <div class="login-box">
             <div class="logo-container">
-                <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo" alt="HairGlow Logo">
+                <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png" class="logo"
+                     alt="HairGlow Logo">
             </div>
 
             <h2>Đăng ký</h2>
@@ -29,7 +30,7 @@
                 <div class="error-msg">${error}</div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/auth/register" method="post" novalidate>
+            <form id="registerForm" action="${pageContext.request.contextPath}/auth/register" method="post" novalidate>
 
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -105,14 +106,15 @@
 <script>
     // Form validation
     (function () {
-        const form = document.querySelector('form');
+        const form = document.getElementById('registerForm');
+        if (!form) return;
         const fields = {
-            email:    document.getElementById('email'),
-            fullname: document.getElementById('fullname'),
-            username: document.getElementById('username'),
-            phone:    document.getElementById('phone'),
-            password: document.getElementById('password'),
-            confirm:  document.getElementById('confirm')
+            email: form.querySelector('#email'),
+            fullname: form.querySelector('#fullname'),
+            username: form.querySelector('#username'),
+            phone: form.querySelector('#phone'),
+            password: form.querySelector('#password'),
+            confirm: form.querySelector('#confirm')
         };
 
         function setInvalid(input, message) {
@@ -141,52 +143,100 @@
         function validateEmail() {
             const input = fields.email;
             const value = input.value.trim();
-            if (value === '') { setInvalid(input, 'Email không được để trống'); return false; }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { setInvalid(input, 'Email không đúng định dạng'); return false; }
-            setValid(input); return true;
+            if (value === '') {
+                setInvalid(input, 'Email không được để trống');
+                return false;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                setInvalid(input, 'Email không đúng định dạng');
+                return false;
+            }
+            setValid(input);
+            return true;
         }
 
         function validateFullname() {
             const input = fields.fullname;
             const value = input.value.trim().replace(/\s+/g, ' ');
-            if (value === '') { setInvalid(input, 'Họ tên không được để trống'); return false; }
-            if (value.length < 10 || value.length > 30) { setInvalid(input, 'Họ tên phải từ 10 đến 30 ký tự'); return false; }
-            if (!/^[\p{L}\s]+$/u.test(value)) { setInvalid(input, 'Họ tên chỉ được chứa chữ cái và khoảng trắng'); return false; }
-            setValid(input); return true;
+            if (value === '') {
+                setInvalid(input, 'Họ tên không được để trống');
+                return false;
+            }
+            if (value.length < 10 || value.length > 30) {
+                setInvalid(input, 'Họ tên phải từ 10 đến 30 ký tự');
+                return false;
+            }
+            if (!/^[\p{L}\s]+$/u.test(value)) {
+                setInvalid(input, 'Họ tên chỉ được chứa chữ cái và khoảng trắng');
+                return false;
+            }
+            setValid(input);
+            return true;
         }
 
         function validateUsername() {
             const input = fields.username;
             const value = input.value.trim();
-            if (value === '') { setInvalid(input, 'Tên đăng nhập không được để trống'); return false; }
-            if (value.length < 3 || value.length > 50) { setInvalid(input, 'Tên đăng nhập phải từ 3 đến 50 ký tự'); return false; }
-            if (!/^\w+$/.test(value)) { setInvalid(input, 'Tên đăng nhập chỉ được chứa chữ cái, số và dấu _'); return false; }
-            setValid(input); return true;
+            if (value === '') {
+                setInvalid(input, 'Tên đăng nhập không được để trống');
+                return false;
+            }
+            if (value.length < 3 || value.length > 50) {
+                setInvalid(input, 'Tên đăng nhập phải từ 3 đến 50 ký tự');
+                return false;
+            }
+            if (!/^\w+$/.test(value)) {
+                setInvalid(input, 'Tên đăng nhập chỉ được chứa chữ cái, số và dấu _');
+                return false;
+            }
+            setValid(input);
+            return true;
         }
 
         function validatePhone() {
             const input = fields.phone;
             input.value = input.value.replace(/\D/g, '').slice(0, 11);
             const value = input.value;
-            if (value === '') { resetField(input); return true; }
-            if (!/^\d{10,11}$/.test(value)) { setInvalid(input, 'Số điện thoại phải gồm 10 đến 11 chữ số'); return false; }
-            setValid(input); return true;
+            if (value === '') {
+                resetField(input);
+                return true;
+            }
+            if (!/^\d{10,11}$/.test(value)) {
+                setInvalid(input, 'Số điện thoại phải gồm 10 đến 11 chữ số');
+                return false;
+            }
+            setValid(input);
+            return true;
         }
 
         function validatePassword() {
             const input = fields.password;
             const value = input.value;
-            if (value === '') { setInvalid(input, 'Mật khẩu không được để trống'); return false; }
-            if (value.length < 6 || value.length > 100) { setInvalid(input, 'Mật khẩu phải từ 6 đến 100 ký tự'); return false; }
-            setValid(input); return true;
+            if (value === '') {
+                setInvalid(input, 'Mật khẩu không được để trống');
+                return false;
+            }
+            if (value.length < 6 || value.length > 100) {
+                setInvalid(input, 'Mật khẩu phải từ 6 đến 100 ký tự');
+                return false;
+            }
+            setValid(input);
+            return true;
         }
 
         function validateConfirm() {
             const input = fields.confirm;
             const value = input.value;
-            if (value === '') { setInvalid(input, 'Vui lòng xác nhận mật khẩu'); return false; }
-            if (value !== fields.password.value) { setInvalid(input, 'Mật khẩu xác nhận không khớp'); return false; }
-            setValid(input); return true;
+            if (value === '') {
+                setInvalid(input, 'Vui lòng xác nhận mật khẩu');
+                return false;
+            }
+            if (value !== fields.password.value) {
+                setInvalid(input, 'Mật khẩu xác nhận không khớp');
+                return false;
+            }
+            setValid(input);
+            return true;
         }
 
         const validators = {
@@ -200,24 +250,11 @@
 
             input.addEventListener('input', () => {
                 validators[key]();
-                if (key === 'password' && fields.confirm.classList.contains('is-invalid', 'is-valid')) {
+                if (key === 'password' && (fields.confirm.classList.contains('is-invalid') || fields.confirm.classList.contains('is-valid'))) {
                     validateConfirm();
                 }
             });
         });
-
-        function getEmptyMessage(key) {
-            const messages = {
-                email:    'Email không được để trống',
-                fullname: 'Họ tên không được để trống',
-                username: 'Tên đăng nhập không được để trống',
-                phone:    '',
-                password: 'Mật khẩu không được để trống',
-                confirm:  'Vui lòng xác nhận mật khẩu'
-            };
-            return messages[key];
-        }
-
         form.addEventListener('submit', function (e) {
             const results = [
                 validateEmail(), validateFullname(), validateUsername(),
