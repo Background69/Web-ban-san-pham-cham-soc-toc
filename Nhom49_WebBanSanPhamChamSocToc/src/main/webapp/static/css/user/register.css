@@ -8,7 +8,9 @@
     --brand: #4a9e63;
     --brand-2: #2c5940;
 
-    --focus: rgba(29, 78, 216, .18);
+    --success: #10b981;
+    --error: #ef4444;
+
     --shadow: 0 18px 45px rgba(0, 0, 0, .12);
 }
 
@@ -19,23 +21,27 @@
     font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 }
 
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+
 body.register-page main {
-    background: linear-gradient(
-            135deg,
-            rgba(124, 164, 84, .95),
-            rgba(106, 138, 58, .95)
-    ) !important;
-    min-height: calc(100vh - 150px) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 32px 12px !important;
+    background: radial-gradient(900px 420px at 50% 30%, rgba(165, 200, 127, .22), rgba(165, 200, 127, 0) 60%), #f6f7f9;
+    min-height: calc(100vh - 150px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 12px;
 }
 
 body.register-page .login-container {
     width: 100%;
     max-width: 440px;
 }
+
+/* ============================================================
+   CARD
+   ============================================================ */
 
 body.register-page .login-box {
     background: var(--card);
@@ -64,20 +70,27 @@ body.register-page .login-box > p {
     margin-bottom: 22px;
 }
 
+/* ============================================================
+   FORM GROUPS
+   ============================================================ */
+
 body.register-page .form-group,
 body.register-page .password-wrapper {
     margin-bottom: 14px;
     text-align: left;
 }
 
-body.register-page .form-group label,
-body.register-page .password-wrapper label {
+body.register-page .form-group label {
     display: block;
     margin-bottom: 6px;
     font-size: 13px;
     font-weight: 700;
     color: var(--text);
 }
+
+/* ============================================================
+   INPUTS — base styles
+   ============================================================ */
 
 body.register-page .form-group input,
 body.register-page .password-wrapper input {
@@ -89,7 +102,8 @@ body.register-page .password-wrapper input {
     font-size: 14px;
     color: var(--text);
     background: #fff;
-    transition: .2s ease;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    outline: none;
 }
 
 body.register-page .form-group input::placeholder,
@@ -97,19 +111,56 @@ body.register-page .password-wrapper input::placeholder {
     color: #9ca3af;
 }
 
-
 body.register-page .form-group input:hover,
 body.register-page .password-wrapper input:hover {
     border-color: rgba(31, 61, 42, 0.4);
 }
 
-body.register-page .form-group input:focus,
-body.register-page .password-wrapper input:focus {
+/* Focus default — only when no validation state applied */
+body.register-page .form-group input:focus:not(.is-invalid):not(.is-valid),
+body.register-page .password-wrapper input:focus:not(.is-invalid):not(.is-valid) {
     border-color: rgba(31, 61, 42, 0.6);
+    box-shadow: 0 0 0 3px rgba(31, 61, 42, 0.08);
 }
+
+/* ============================================================
+   INPUTS — validation states
+   ============================================================ */
+
+body.register-page input.is-invalid {
+    border-color: var(--error) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+body.register-page input.is-valid {
+    border-color: var(--success) !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+}
+
+body.register-page .form-error {
+    display: block;
+    min-height: 16px;
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 5px;
+}
+
+/* ============================================================
+   PASSWORD WRAPPER — label + toggle icon positioning
+   ============================================================ */
 
 body.register-page .password-wrapper {
     position: relative;
+    padding-top: 20px;
+}
+
+body.register-page .password-wrapper label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
 }
 
 body.register-page .password-wrapper input {
@@ -119,20 +170,24 @@ body.register-page .password-wrapper input {
 body.register-page .password-wrapper .toggle-password {
     position: absolute;
     right: 12px;
-    top: 50%;
+    top: calc(20px + 19px);
     transform: translateY(-50%);
     font-size: 17px;
     color: #6b7280;
     cursor: pointer;
     padding: 6px;
     border-radius: 8px;
-    transition: .2s ease;
+    line-height: 1;
 }
 
 body.register-page .password-wrapper .toggle-password:hover {
     background: #f3f4f6;
     color: #111827;
 }
+
+/* ============================================================
+   SUBMIT BUTTON
+   ============================================================ */
 
 body.register-page .btn-primary {
     width: 100%;
@@ -146,7 +201,7 @@ body.register-page .btn-primary {
     cursor: pointer;
     margin-top: 8px;
     margin-bottom: 14px;
-    transition: .2s ease;
+    transition: filter .2s ease, box-shadow .2s ease, transform .1s ease;
 }
 
 body.register-page .btn-primary:hover {
@@ -157,6 +212,10 @@ body.register-page .btn-primary:hover {
 body.register-page .btn-primary:active {
     transform: translateY(1px);
 }
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
 
 body.register-page .or-divider {
     display: flex;
@@ -179,6 +238,10 @@ body.register-page .or-divider span {
     font-weight: 700;
 }
 
+/* ============================================================
+   GOOGLE BUTTON
+   ============================================================ */
+
 body.register-page .social-login {
     margin-bottom: 14px;
 }
@@ -195,8 +258,8 @@ body.register-page .google-btn {
     font-weight: 800;
     font-size: 14px;
     color: #111827;
-    cursor: pointer;
-    transition: .2s ease;
+    text-decoration: none;
+    transition: background .2s ease, box-shadow .2s ease;
 }
 
 body.register-page .google-btn:hover {
@@ -208,6 +271,10 @@ body.register-page .google-btn img {
     width: 18px;
     height: 18px;
 }
+
+/* ============================================================
+   FOOTER LINKS & SERVER ERROR
+   ============================================================ */
 
 body.register-page .signup-text {
     font-size: 13px;
@@ -235,6 +302,10 @@ body.register-page .error-msg {
     text-align: left;
 }
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
 @media (max-width: 420px) {
     body.register-page .login-box {
         padding: 26px 18px 22px;
@@ -243,58 +314,4 @@ body.register-page .error-msg {
     body.register-page .login-box h2 {
         font-size: 24px;
     }
-}
-
-body.register-page main {
-    background: linear-gradient(
-            135deg,
-            rgba(124, 164, 84, .95),
-            rgba(106, 138, 58, .95)
-    ) !important;
-}
-
-body.register-page main {
-    background: radial-gradient(900px 420px at 50% 30%, rgba(165, 200, 127, .22), rgba(165, 200, 127, 0) 60%),
-    #f6f7f9 !important;
-}
-
-body.register-page .password-wrapper {
-    position: relative;
-    padding-top: 20px;
-    margin-bottom: 14px;
-    text-align: left;
-}
-
-body.register-page .password-wrapper label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-}
-
-body.register-page .password-wrapper input {
-    width: 100%;
-    height: 38px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    font-size: 14px;
-    color: var(--text);
-    background: #fff;
-}
-
-body.register-page .password-wrapper .toggle-password {
-    position: absolute;
-    right: 12px;
-    top: calc(20px + 22px);
-    transform: translateY(-50%);
-    font-size: 17px;
-    color: #6b7280;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 8px;
-    line-height: 1;
 }
