@@ -70,7 +70,6 @@
                            placeholder="Nhập mật khẩu" required
                            aria-describedby="passwordError">
                     <small id="passwordError" class="form-error"></small>
-                    <i class="fas fa-eye toggle-password" data-target="password"></i>
                 </div>
 
                 <div class="password-wrapper">
@@ -79,7 +78,6 @@
                            placeholder="Nhập lại mật khẩu" required
                            aria-describedby="confirmError">
                     <small id="confirmError" class="form-error"></small>
-                    <i class="fas fa-eye toggle-password" data-target="confirm"></i>
                 </div>
 
                 <button type="submit" class="btn-primary">Đăng ký</button>
@@ -105,17 +103,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Toggle password visibility
-    document.querySelectorAll('.toggle-password').forEach(icon => {
-        icon.addEventListener('click', function () {
-            const input = document.getElementById(this.getAttribute('data-target'));
-            const isPassword = input.type === 'password';
-            input.type = isPassword ? 'text' : 'password';
-            this.classList.toggle('fa-eye', !isPassword);
-            this.classList.toggle('fa-eye-slash', isPassword);
-        });
-    });
-
     // Form validation
     (function () {
         const form = document.querySelector('form');
@@ -210,12 +197,6 @@
         // focus → bắt đầu validate realtime ngay từ lần nhập đầu tiên
         Object.keys(fields).forEach(key => {
             const input = fields[key];
-
-            input.addEventListener('focus', () => {
-                // Chỉ trigger invalid nếu đã có giá trị, còn rỗng thì chờ input
-                if (input.value !== '') validators[key]();
-                else setInvalid(input, getEmptyMessage(key));
-            });
 
             input.addEventListener('input', () => {
                 validators[key]();

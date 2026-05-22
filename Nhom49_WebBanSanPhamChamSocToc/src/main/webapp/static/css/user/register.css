@@ -146,7 +146,7 @@ body.register-page .form-error {
 }
 
 /* ============================================================
-   PASSWORD WRAPPER — label + toggle icon positioning
+   PASSWORD WRAPPER — label
    ============================================================ */
 
 body.register-page .password-wrapper {
@@ -161,28 +161,6 @@ body.register-page .password-wrapper label {
     font-size: 13px;
     font-weight: 700;
     color: var(--text);
-}
-
-body.register-page .password-wrapper input {
-    padding-right: 44px;
-}
-
-body.register-page .password-wrapper .toggle-password {
-    position: absolute;
-    right: 12px;
-    top: calc(20px + 19px);
-    transform: translateY(-50%);
-    font-size: 17px;
-    color: #6b7280;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 8px;
-    line-height: 1;
-}
-
-body.register-page .password-wrapper .toggle-password:hover {
-    background: #f3f4f6;
-    color: #111827;
 }
 
 /* ============================================================
