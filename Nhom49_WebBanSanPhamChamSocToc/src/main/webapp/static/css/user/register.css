@@ -139,10 +139,12 @@ body.register-page input.is-valid {
 
 body.register-page .form-error {
     display: block;
-    min-height: 16px;
+    height: 18px;
+    line-height: 18px;
     font-size: 12px;
     color: var(--error);
     margin-top: 5px;
+    overflow: hidden;
 }
 
 /* ============================================================

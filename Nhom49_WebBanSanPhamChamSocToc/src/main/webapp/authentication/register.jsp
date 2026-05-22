@@ -69,8 +69,7 @@
                     <label for="password">Mật khẩu</label>
                     <input class="form-control" type="password" id="password" name="password"
                            placeholder="Nhập mật khẩu" required
-                           aria-describedby="passwordHelp passwordError">
-
+                           aria-describedby="passwordError">
                     <small id="passwordError" class="form-error"></small>
                 </div>
 
