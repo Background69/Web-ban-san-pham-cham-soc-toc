@@ -69,7 +69,8 @@
                     <label for="password">Mật khẩu</label>
                     <input class="form-control" type="password" id="password" name="password"
                            placeholder="Nhập mật khẩu" required
-                           aria-describedby="passwordError">
+                           aria-describedby="passwordHelp passwordError">
+
                     <small id="passwordError" class="form-error"></small>
                 </div>
 
@@ -212,14 +213,32 @@
         function validatePassword() {
             const input = fields.password;
             const value = input.value;
+
             if (value === '') {
-                setInvalid(input, 'Mật khẩu không được để trống');
+                resetField(input);
                 return false;
             }
-            if (value.length < 6 || value.length > 100) {
-                setInvalid(input, 'Mật khẩu phải từ 6 đến 100 ký tự');
+
+            if (value.length < 8) {
+                setInvalid(input, 'Mật khẩu phải có ít nhất 8 ký tự');
                 return false;
             }
+
+            if (!/[A-Z]/.test(value)) {
+                setInvalid(input, 'Mật khẩu phải có ít nhất 1 chữ cái viết hoa');
+                return false;
+            }
+
+            if (!/\d/.test(value)) {
+                setInvalid(input, 'Mật khẩu phải có ít nhất 1 chữ số');
+                return false;
+            }
+
+            if (value.length > 100) {
+                setInvalid(input, 'Mật khẩu không được quá 100 ký tự');
+                return false;
+            }
+
             setValid(input);
             return true;
         }
@@ -255,6 +274,7 @@
                 }
             });
         });
+
         form.addEventListener('submit', function (e) {
             const results = [
                 validateEmail(), validateFullname(), validateUsername(),
