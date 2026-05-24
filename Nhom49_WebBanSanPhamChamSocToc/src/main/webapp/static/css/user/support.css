@@ -287,6 +287,40 @@
     color: var(--primary);
 }
 
+.support-steps {
+    list-style: none;
+    counter-reset: support-step;
+    padding: 0 16px 16px;
+}
+
+.support-steps li {
+    counter-increment: support-step;
+    position: relative;
+    margin: 10px 0;
+    padding-left: 34px;
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+.support-steps li::before {
+    content: counter(support-step);
+
+    position: absolute;
+    left: 0;
+    top: 2px;
+
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background: #d97706;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+}
 
 /* ============================================================
    GUIDE STEPS
@@ -599,8 +633,33 @@
     padding: 0 16px 16px;
 }
 
+.faq-answer ul {
+    list-style: none;
+    padding: 0 16px 16px;
+}
+
+.faq-answer ul li {
+    position: relative;
+    margin: 9px 0;
+    padding-left: 28px;
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+.faq-answer ul li::before {
+    content: "\f058";
+    font-family: "Font Awesome 6 Free", serif;
+    font-weight: 900;
+
+    position: absolute;
+    left: 0;
+    top: 1px;
+
+    color: var(--primary-2);
+}
+
 .faq-item.active .faq-answer {
-    max-height: 260px;
+    max-height: 900px;
     opacity: 1;
     transform: translateY(0);
 }
