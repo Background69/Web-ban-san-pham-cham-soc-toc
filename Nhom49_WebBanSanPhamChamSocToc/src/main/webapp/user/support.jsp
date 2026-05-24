@@ -209,8 +209,35 @@
         <section id="faq" class="support-section">
             <h2><i class="fas fa-question-circle"></i> Câu hỏi thường gặp</h2>
 
+            <div class="faq-categories">
+                <button class="faq-category active" type="button" data-category="all">
+                    <i class="fas fa-layer-group"></i>
+                    Tất cả
+                </button>
+
+                <button class="faq-category" type="button" data-category="shipping">
+                    <i class="fas fa-truck"></i>
+                    Giao nhận
+                </button>
+
+                <button class="faq-category" type="button" data-category="return">
+                    <i class="fas fa-exchange-alt"></i>
+                    Đổi trả
+                </button>
+
+                <button class="faq-category" type="button" data-category="product">
+                    <i class="fas fa-spray-can"></i>
+                    Sản phẩm
+                </button>
+
+                <button class="faq-category" type="button" data-category="promotion">
+                    <i class="fas fa-tags"></i>
+                    Ưu đãi
+                </button>
+            </div>
+
             <div class="faq-list">
-                <div class="faq-item">
+                <div class="faq-item" data-category="shipping">
                     <button class="faq-question" type="button">
                         <span>Làm sao để theo dõi đơn hàng?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -221,7 +248,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-item" data-category="product">
                     <button class="faq-question" type="button">
                         <span>Sản phẩm có phải hàng chính hãng không?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -232,7 +259,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-item" data-category="shipping">
                     <button class="faq-question" type="button">
                         <span>Tôi có thể hủy đơn hàng không?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -243,7 +270,7 @@
                     </div>
                 </div>
 
-                <div class="faq-item">
+                <div class="faq-item" data-category="promotion">
                     <button class="faq-question" type="button">
                         <span>Làm sao để nhận mã giảm giá?</span>
                         <i class="fas fa-chevron-down"></i>
@@ -265,29 +292,16 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
-    document.querySelectorAll('.faq-question').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const faqItem = this.closest('.faq-item');
-            const isActive = faqItem.classList.contains('active');
-
-            document.querySelectorAll('.faq-item').forEach(item => {
-                item.classList.remove('active');
-                item.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
-            });
-
-            if (!isActive) {
-                faqItem.classList.add('active');
-                this.setAttribute('aria-expanded', 'true');
-            }
-        });
-    });
-
     (function () {
         const form = document.getElementById('supportSearchForm');
         const input = document.getElementById('supportSearchInput');
         const suggestionsBox = document.getElementById('supportSuggestions');
         const faqItems = Array.from(document.querySelectorAll('#faq .faq-item'));
+        const faqButtons = document.querySelectorAll('.faq-question');
+        const categoryButtons = document.querySelectorAll('.faq-category');
         const emptyMessage = document.getElementById('faqEmpty');
+
+        let currentCategory = 'all';
 
         if (!form || !input || !suggestionsBox) return;
 
@@ -299,11 +313,56 @@
             return item.textContent.toLowerCase();
         }
 
-        function filterFaq(keyword) {
+        function closeAllFaq() {
+            faqItems.forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.faq-question')?.setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        faqButtons.forEach(button => {
+            button.setAttribute('aria-expanded', 'false');
+
+            button.addEventListener('click', function () {
+                const faqItem = this.closest('.faq-item');
+                const isActive = faqItem.classList.contains('active');
+
+                closeAllFaq();
+
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                    this.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                currentCategory = this.dataset.category;
+
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                closeAllFaq();
+                applyFilter();
+                suggestionsBox.classList.remove('show');
+            });
+        });
+
+        function matchCategory(item) {
+            return currentCategory === 'all' || item.dataset.category === currentCategory;
+        }
+
+        function matchKeyword(item, keyword) {
+            return keyword === '' || getFaqText(item).includes(keyword);
+        }
+
+        function applyFilter() {
+            const keyword = input.value.trim().toLowerCase();
             let visibleCount = 0;
 
             faqItems.forEach(item => {
-                const isMatched = keyword === '' || getFaqText(item).includes(keyword);
+                const isMatched = matchCategory(item) && matchKeyword(item, keyword);
 
                 item.classList.toggle('is-hidden', !isMatched);
 
@@ -319,8 +378,10 @@
             }
         }
 
-        function renderSuggestions(keyword) {
+        function renderSuggestions() {
             suggestionsBox.innerHTML = '';
+
+            const keyword = input.value.trim().toLowerCase();
 
             if (keyword === '') {
                 suggestionsBox.classList.remove('show');
@@ -328,7 +389,7 @@
             }
 
             const matchedItems = faqItems
-                .filter(item => getFaqText(item).includes(keyword))
+                .filter(item => matchCategory(item) && matchKeyword(item, keyword))
                 .slice(0, 5);
 
             if (matchedItems.length === 0) {
@@ -357,6 +418,7 @@
                     });
 
                     item.classList.add('active');
+                    item.querySelector('.faq-question')?.setAttribute('aria-expanded', 'true');
 
                     item.scrollIntoView({
                         behavior: 'smooth',
@@ -371,18 +433,14 @@
         }
 
         input.addEventListener('input', function () {
-            const keyword = input.value.trim().toLowerCase();
-
-            filterFaq(keyword);
-            renderSuggestions(keyword);
+            applyFilter();
+            renderSuggestions();
         });
 
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-
-            const keyword = input.value.trim().toLowerCase();
-            filterFaq(keyword);
-            renderSuggestions(keyword);
+            applyFilter();
+            renderSuggestions();
         });
 
         document.addEventListener('click', function (e) {
