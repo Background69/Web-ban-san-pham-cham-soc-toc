@@ -34,11 +34,21 @@
 
         <!-- Tìm kiếm -->
         <div class="support-search">
-            <form action="${pageContext.request.contextPath}/support" method="get">
-                <input type="text" name="q" placeholder="Tìm kiếm câu hỏi thường gặp..."
-                       value="<c:out value='${searchQuery}' default=""/>">
-                <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
+            <form id="supportSearchForm" action="${pageContext.request.contextPath}/support" method="get"
+                  autocomplete="off">
+                <input
+                        id="supportSearchInput"
+                        type="text"
+                        name="q"
+                        placeholder="Bạn cần hỗ trợ gì? Nhập từ khóa như đổi trả, thanh toán, vận chuyển..."
+                        value="<c:out value='${searchQuery}' default=""/>"
+                >
+                <button type="submit" aria-label="Tìm kiếm">
+                    <i class="fas fa-search"></i>
+                </button>
             </form>
+
+            <div id="supportSuggestions" class="support-suggestions"></div>
         </div>
 
         <!-- Thông tin liên hệ nhanh -->
@@ -258,21 +268,126 @@
             const faqItem = this.closest('.faq-item');
             const isActive = faqItem.classList.contains('active');
 
-            // Đóng tất cả
             document.querySelectorAll('.faq-item').forEach(item => {
                 item.classList.remove('active');
-                item.querySelector('.faq-question').setAttribute("aria-expanded", "false");
+                item.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
             });
 
-            // Nếu mục vừa click chưa active -> mở
             if (!isActive) {
                 faqItem.classList.add('active');
-                this.setAttribute("aria-expanded", "true");
-            } else {
-                this.setAttribute("aria-expanded", "false");
+                this.setAttribute('aria-expanded', 'true');
             }
         });
     });
+
+    (function () {
+        const form = document.getElementById('supportSearchForm');
+        const input = document.getElementById('supportSearchInput');
+        const suggestionsBox = document.getElementById('supportSuggestions');
+        const faqItems = Array.from(document.querySelectorAll('#faq .faq-item'));
+        const emptyMessage = document.getElementById('faqEmpty');
+
+        if (!form || !input || !suggestionsBox) return;
+
+        function getFaqTitle(item) {
+            return item.querySelector('.faq-question span')?.textContent.trim() || '';
+        }
+
+        function getFaqText(item) {
+            return item.textContent.toLowerCase();
+        }
+
+        function filterFaq(keyword) {
+            let visibleCount = 0;
+
+            faqItems.forEach(item => {
+                const isMatched = keyword === '' || getFaqText(item).includes(keyword);
+
+                item.classList.toggle('is-hidden', !isMatched);
+
+                if (isMatched) {
+                    visibleCount++;
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            if (emptyMessage) {
+                emptyMessage.classList.toggle('show', visibleCount === 0);
+            }
+        }
+
+        function renderSuggestions(keyword) {
+            suggestionsBox.innerHTML = '';
+
+            if (keyword === '') {
+                suggestionsBox.classList.remove('show');
+                return;
+            }
+
+            const matchedItems = faqItems
+                .filter(item => getFaqText(item).includes(keyword))
+                .slice(0, 5);
+
+            if (matchedItems.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'support-suggestion-empty';
+                empty.textContent = 'Không có gợi ý phù hợp';
+                suggestionsBox.appendChild(empty);
+                suggestionsBox.classList.add('show');
+                return;
+            }
+
+            matchedItems.forEach(item => {
+                const title = getFaqTitle(item);
+
+                const suggestion = document.createElement('div');
+                suggestion.className = 'support-suggestion-item';
+                suggestion.textContent = title;
+
+                suggestion.addEventListener('click', function () {
+                    input.value = title;
+                    suggestionsBox.classList.remove('show');
+
+                    faqItems.forEach(faq => {
+                        faq.classList.toggle('is-hidden', faq !== item);
+                        faq.classList.remove('active');
+                    });
+
+                    item.classList.add('active');
+                    item.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                });
+
+                suggestionsBox.appendChild(suggestion);
+            });
+
+            suggestionsBox.classList.add('show');
+        }
+
+        input.addEventListener('input', function () {
+            const keyword = input.value.trim().toLowerCase();
+
+            filterFaq(keyword);
+            renderSuggestions(keyword);
+        });
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const keyword = input.value.trim().toLowerCase();
+            filterFaq(keyword);
+            renderSuggestions(keyword);
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!form.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.remove('show');
+            }
+        });
+    })();
 </script>
 
 </body>
