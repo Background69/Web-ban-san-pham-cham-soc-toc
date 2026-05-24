@@ -71,11 +71,6 @@
                 <tr onclick="openUserDetail(${user.userId})" class="clickable-row">
 
                     <td>#U${user.userId}</td>
-                    <td>
-                        <div class="user-cell">
-                            <div class="avatar"> ${user.username.substring(0,1).toUpperCase()}</div>
-                        </div>
-                    </td>
                     <td>${user.username}</td>
                     <td>${user.email}</td>
                     <td>${user.phone}</td>
@@ -163,6 +158,12 @@
     }
     function closeModal(){
         document.getElementById("userModal").style.display = "none";
+    }
+    window.onclick =function (event){
+        let modal = document.getElementById("userModal");
+        if (event.target === modal){
+            closeModal();
+        }
     }
     function filterUsers(){
         let keyword = document.getElementById("search-input")
