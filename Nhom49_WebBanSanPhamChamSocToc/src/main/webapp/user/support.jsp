@@ -254,6 +254,8 @@
                     </div>
                 </div>
             </div>
+
+            <p id="faqEmpty" class="faq-empty">Không tìm thấy câu hỏi phù hợp.</p>
         </section>
 
     </div>
@@ -350,11 +352,12 @@
                     suggestionsBox.classList.remove('show');
 
                     faqItems.forEach(faq => {
-                        faq.classList.toggle('is-hidden', faq !== item);
+                        faq.classList.remove('is-hidden');
                         faq.classList.remove('active');
                     });
 
                     item.classList.add('active');
+
                     item.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center'
