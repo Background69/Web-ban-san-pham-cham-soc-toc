@@ -112,6 +112,15 @@ yarn.lock
 /test/
 /Nhom49_WebBanSanPhamChamSocToc/src/main/resources/
 /Nhom49_WebBanSanPhamChamSocToc/test/
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+
+# Ignore Kotlin plugin data
+.kotlin
 /Nhom49_WebBanSanPhamChamSocToc/.gradle/
 /Nhom49_WebBanSanPhamChamSocToc/.gradle-bootstrap/
 /Nhom49_WebBanSanPhamChamSocToc/build/
