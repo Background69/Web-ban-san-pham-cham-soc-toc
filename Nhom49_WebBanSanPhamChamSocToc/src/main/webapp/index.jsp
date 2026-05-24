@@ -56,18 +56,14 @@
             <div class="banner-container">
                 <div class="slider" id="banner-slider">
                     <div class="banner-slides">
-                        <div class="item active" id="slide-1">
-                            <img alt="Banner HairGlow 1" class="banner-image"
-                                 src="${pageContext.request.contextPath}/static/assets/images/banner1.png">
-                        </div>
-                        <div class="item" id="slide-2">
-                            <img alt="Banner HairGlow 2" class="banner-image"
-                                 src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
-                        </div>
-                        <div class="item" id="slide-3">
-                            <img alt="Banner HairGlow 3" class="banner-image"
-                                 src="${pageContext.request.contextPath}/static/assets/images/banner3.png">
-                        </div>
+                        <c:forEach var="banner" items="${requestScope.activeBanners}" varStatus="status">
+                            <div class="item ${status.first ? 'active' : ''}" id="slide-${status.index + 1}">
+                                <img
+                                        alt="${banner.title}"
+                                        class="banner-image"
+                                        src="${banner.imageUrl}">
+                            </div>
+                        </c:forEach>
                     </div>
                     <button aria-label="Slide trước" class="nav prev" type="button">&#10094;</button>
                     <button aria-label="Slide sau" class="nav next" type="button">&#10095;</button>
@@ -626,10 +622,10 @@
 
             function resetAutoSlide() {
                 clearInterval(autoSlideInterval);
-                autoSlideInterval = setInterval(nextSlide, 5500);
+                autoSlideInterval = setInterval(nextSlide, 4000);
             }
 
-            autoSlideInterval = setInterval(nextSlide, 5500);
+            autoSlideInterval = setInterval(nextSlide, 4000);
         })();
 
         (function initFlashSaleSlider() {
