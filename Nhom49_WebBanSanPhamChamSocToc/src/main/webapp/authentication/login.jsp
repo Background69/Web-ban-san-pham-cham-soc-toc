@@ -30,6 +30,11 @@
             <c:if test="${not empty error}">
                 <div class="error-msg">${error}</div>
             </c:if>
+            <c:if test="${showPasswordSetupLink}">
+                <div class="options">
+                    <a href="${pageContext.request.contextPath}/auth/forgot-password">Thiết lập mật khẩu</a>
+                </div>
+            </c:if>
             <c:if test="${not empty sessionScope.success}">
                 <div class="success-msg">${sessionScope.success}</div>
                 <c:remove var="success" scope="session"/>
