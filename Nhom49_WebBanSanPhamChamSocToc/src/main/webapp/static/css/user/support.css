@@ -1,10 +1,13 @@
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: 'Roboto', system-ui, -apple-system,
-    BlinkMacSystemFont, 'Segoe UI',
-    Arial, sans-serif;
+    BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 }
 
 :root {
@@ -18,10 +21,15 @@
     --shadow: 0 10px 28px rgba(0, 0, 0, .08);
 }
 
+
+/* ============================================================
+   PAGE LAYOUT
+   ============================================================ */
+
 .support-main {
     background: var(--bg);
-    padding: 0 0 56px;
     color: var(--text);
+    padding-bottom: 56px;
 }
 
 .support-container {
@@ -29,13 +37,19 @@
     margin: 0 auto;
 }
 
+
+/* ============================================================
+   BANNER
+   ============================================================ */
+
 .support-banner {
     height: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(0deg, rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)),
-    url("../../assets/images/banner.jpg");
+    background:
+            linear-gradient(0deg, rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)),
+            url("../../assets/images/banner.jpg");
     background-size: cover;
     background-position: center;
 }
@@ -49,55 +63,142 @@
 .support-banner-content h1 {
     font-size: 40px;
     font-weight: 900;
-    margin: 0 0 10px;
+    margin-bottom: 10px;
     letter-spacing: .2px;
 }
 
 .support-banner-content p {
-    margin: 0;
     font-size: 15px;
     opacity: .95;
 }
 
+
+/* ============================================================
+   SEARCH BOX
+   ============================================================ */
+
 .support-search {
-    margin-top: -26px;
-    margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
+    margin-top: -34px;
+    margin-bottom: 24px;
 }
 
 .support-search form {
     display: flex;
     align-items: center;
-    background: var(--card);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    border-radius: 999px;
     overflow: hidden;
+    background: var(--card);
+    border: 1px solid rgba(0, 155, 124, 0.25);
+    border-radius: 999px;
+    box-shadow: 0 16px 36px rgba(0, 107, 92, 0.16);
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.support-search form:focus-within {
+    border-color: #5eead4;
+    box-shadow:
+            0 0 0 4px rgba(94, 234, 212, 0.22),
+            0 18px 42px rgba(0, 107, 92, 0.20);
+    transform: translateY(-1px);
 }
 
 .support-search input {
     flex: 1;
+    min-width: 0;
     border: 0;
     outline: 0;
-    padding: 14px 18px;
+    padding: 16px 20px;
     font-size: 15px;
+    color: var(--text);
     background: transparent;
 }
 
+.support-search input::placeholder {
+    color: #78908a;
+}
+
 .support-search button {
-    width: 56px;
-    height: 50px;
+    width: 58px;
+    height: 54px;
     border: 0;
     outline: 0;
-    background: var(--primary);
     color: #fff;
     cursor: pointer;
-    transition: background .2s ease;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    transition: filter .2s ease;
 }
 
 .support-search button:hover {
-    background: var(--primary-2);
+    filter: brightness(1.08);
 }
 
+
+/* ============================================================
+   SEARCH SUGGESTIONS DROPDOWN
+   ============================================================ */
+
+.support-suggestions {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 18px;
+    right: 18px;
+    z-index: 100;
+
+    display: none;
+    padding: 8px;
+    overflow: hidden;
+
+    background: #fff;
+    border: 1px solid rgba(0, 155, 124, 0.18);
+    border-radius: 18px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.14);
+}
+
+.support-suggestions.show {
+    display: block;
+}
+
+.support-suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 14px;
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+
+    transition: background .15s ease, color .15s ease, transform .15s ease;
+}
+
+.support-suggestion-item::before {
+    content: "\f059";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--primary);
+}
+
+.support-suggestion-item:hover {
+    color: var(--primary);
+    background: rgba(0, 155, 124, 0.09);
+    transform: translateX(2px);
+}
+
+.support-suggestion-empty {
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+
+/* ============================================================
+   QUICK CONTACT
+   ============================================================ */
 
 .contact-quick {
     display: grid;
@@ -107,26 +208,29 @@
 }
 
 .contact-item {
+    min-height: 140px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    padding: 18px;
     background: var(--card);
     border: 1px solid var(--border);
-    box-shadow: var(--shadow);
     border-radius: 16px;
-    padding: 18px;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    min-height: 140px;
+    box-shadow: var(--shadow);
 }
 
 .contact-icon {
     width: 48px;
     height: 48px;
-    border-radius: 14px;
+    flex: 0 0 48px;
+
     display: grid;
     place-items: center;
-    background: rgba(0, 107, 92, .10);
+
     color: var(--primary);
-    flex: 0 0 48px;
+    background: rgba(0, 107, 92, .10);
+    border-radius: 14px;
 }
 
 .contact-icon i {
@@ -145,57 +249,50 @@
 }
 
 .contact-body p {
-    margin: 0 0 6px;
+    margin-bottom: 6px;
     font-weight: 800;
     color: var(--text);
     word-break: break-word;
 }
 
 .contact-body span {
-    color: var(--muted);
     font-size: 13px;
+    color: var(--muted);
 }
 
-.chat-btn {
-    margin-top: 10px;
-    width: 100%;
-    max-width: 320px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 107, 92, .25);
-    background: rgba(0, 107, 92, .08);
-    color: var(--primary);
-    font-weight: 800;
-    cursor: pointer;
-    transition: all .2s ease;
-}
 
-.chat-btn:hover {
-    background: rgba(0, 107, 92, .14);
-    transform: translateY(-1px);
-}
+/* ============================================================
+   COMMON SECTION CARD
+   ============================================================ */
 
 .support-section {
+    margin: 16px 0;
+    padding: 18px;
+
     background: var(--card);
     border: 1px solid var(--border);
-    box-shadow: var(--shadow);
     border-radius: 16px;
-    padding: 18px;
-    margin: 16px 0;
+    box-shadow: var(--shadow);
 }
 
 .support-section h2 {
     display: flex;
     align-items: center;
     gap: 10px;
+
+    margin-bottom: 14px;
     font-size: 18px;
     font-weight: 900;
-    margin: 0 0 14px;
 }
 
 .support-section h2 i {
     color: var(--primary);
 }
+
+
+/* ============================================================
+   GUIDE STEPS
+   ============================================================ */
 
 .guide-steps {
     display: grid;
@@ -204,10 +301,10 @@
 }
 
 .step {
-    border: 1px solid var(--border);
-    border-radius: 14px;
     padding: 14px;
     background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
     transition: transform .15s ease, box-shadow .15s ease;
 }
 
@@ -219,27 +316,33 @@
 .step-number {
     width: 36px;
     height: 36px;
-    border-radius: 12px;
     display: grid;
     place-items: center;
-    background: var(--primary);
-    color: #fff;
-    font-weight: 900;
+
     margin-bottom: 10px;
+    border-radius: 12px;
+
+    color: #fff;
+    background: var(--primary);
+    font-weight: 900;
 }
 
 .step h4 {
-    margin: 0 0 6px;
+    margin-bottom: 6px;
     font-size: 15px;
     font-weight: 900;
 }
 
 .step p {
-    margin: 0;
     color: var(--muted);
     font-size: 13px;
     line-height: 1.5;
 }
+
+
+/* ============================================================
+   POLICY CONTENT
+   ============================================================ */
 
 .policy-content h4 {
     margin: 12px 0 8px;
@@ -258,6 +361,11 @@
     line-height: 1.55;
 }
 
+
+/* ============================================================
+   PAYMENT METHODS
+   ============================================================ */
+
 .payment-methods {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -265,10 +373,10 @@
 }
 
 .method {
-    border: 1px solid var(--border);
-    border-radius: 14px;
     padding: 14px;
     background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
 }
 
 .method i {
@@ -283,11 +391,15 @@
 }
 
 .method p {
-    margin: 0;
     color: var(--muted);
     font-size: 13px;
     line-height: 1.5;
 }
+
+
+/* ============================================================
+   SHIPPING TABLE
+   ============================================================ */
 
 .shipping-info {
     overflow-x: auto;
@@ -295,22 +407,22 @@
 
 .shipping-table {
     width: 100%;
-    border-collapse: collapse;
     min-width: 640px;
+    border-collapse: collapse;
 }
 
-.shipping-table thead th {
-    background: rgba(0, 107, 92, .08);
+.shipping-table th {
+    padding: 12px;
     text-align: left;
     font-weight: 900;
-    padding: 12px;
+    background: rgba(0, 107, 92, .08);
     border-bottom: 1px solid var(--border);
 }
 
 .shipping-table td {
     padding: 12px;
-    border-bottom: 1px solid var(--border);
     color: var(--muted);
+    border-bottom: 1px solid var(--border);
 }
 
 .note {
@@ -323,29 +435,40 @@
     color: var(--primary);
 }
 
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+
 .faq-list {
     display: grid;
     gap: 10px;
 }
 
 .faq-item {
-    border: 1px solid var(--border);
-    border-radius: 14px;
     overflow: hidden;
     background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.faq-item.is-hidden {
+    display: none;
 }
 
 .faq-question {
     width: 100%;
-    border: 0;
-    background: #fff;
-    padding: 14px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
-    font-weight: 900;
+    justify-content: space-between;
+
+    padding: 14px;
+    border: 0;
+
     color: var(--text);
+    background: #fff;
+    font-weight: 900;
+    cursor: pointer;
 }
 
 .faq-question i {
@@ -357,8 +480,8 @@
     display: none;
     padding: 0 14px 14px;
     color: var(--muted);
-    line-height: 1.6;
     font-size: 14px;
+    line-height: 1.6;
 }
 
 .faq-item.active .faq-answer {
@@ -369,20 +492,24 @@
     transform: rotate(180deg);
 }
 
-/* Responsive */
+.faq-empty {
+    display: none;
+    padding: 14px;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+}
+
+.faq-empty.show {
+    display: block;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
 @media (max-width: 992px) {
-    .contact-quick {
-        grid-template-columns: 1fr;
-    }
-
-    .guide-steps {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .payment-methods {
-        grid-template-columns: 1fr 1fr;
-    }
-
     .support-banner {
         height: 260px;
     }
@@ -390,22 +517,39 @@
     .support-banner-content h1 {
         font-size: 30px;
     }
+
+    .contact-quick {
+        grid-template-columns: 1fr;
+    }
+
+    .guide-steps,
+    .payment-methods {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 @media (max-width: 576px) {
-    .guide-steps {
-        grid-template-columns: 1fr;
-    }
-
-    .payment-methods {
-        grid-template-columns: 1fr;
-    }
-
     .support-banner-content h1 {
         font-size: 26px;
     }
 
-    .chat-btn {
-        max-width: 100%;
+    .guide-steps,
+    .payment-methods {
+        grid-template-columns: 1fr;
+    }
+
+    .support-search input {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+
+    .support-search button {
+        width: 52px;
+        height: 50px;
+    }
+
+    .support-suggestions {
+        left: 8px;
+        right: 8px;
     }
 }
