@@ -47,9 +47,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background:
-            linear-gradient(0deg, rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)),
-            url("../../assets/images/banner.jpg");
+    background: linear-gradient(0deg, rgba(0, 0, 0, .45), rgba(0, 0, 0, .45)),
+    url("../../assets/images/banner.jpg");
     background-size: cover;
     background-position: center;
 }
@@ -97,9 +96,8 @@
 
 .support-search form:focus-within {
     border-color: #5eead4;
-    box-shadow:
-            0 0 0 4px rgba(94, 234, 212, 0.22),
-            0 18px 42px rgba(0, 107, 92, 0.20);
+    box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.22),
+    0 18px 42px rgba(0, 107, 92, 0.20);
     transform: translateY(-1px);
 }
 
@@ -344,21 +342,70 @@
    POLICY CONTENT
    ============================================================ */
 
+.policy-content {
+    color: #4b5563;
+    font-size: 15px;
+    line-height: 1.75;
+}
+
 .policy-content h4 {
-    margin: 12px 0 8px;
-    font-size: 14px;
+    margin: 14px 0 10px;
+    color: var(--text);
+    font-size: 15px;
     font-weight: 900;
 }
 
 .policy-content ul,
 .policy-content ol {
-    margin: 0 0 8px 18px;
+    list-style: none;
+    margin: 0 0 10px;
 }
 
 .policy-content li {
-    margin: 6px 0;
-    color: var(--muted);
-    line-height: 1.55;
+    position: relative;
+    margin: 9px 0;
+    padding-left: 32px;
+    color: #4b5563;
+}
+
+.policy-content ul li::before {
+    content: "\f058";
+    font-family: "Font Awesome 6 Free", serif;
+    font-weight: 900;
+
+    position: absolute;
+    left: 0;
+    top: 1px;
+
+    color: var(--primary-2);
+}
+
+.policy-content ol {
+    counter-reset: return-step;
+}
+
+.policy-content ol li {
+    counter-increment: return-step;
+}
+
+.policy-content ol li::before {
+    content: counter(return-step);
+
+    position: absolute;
+    left: 0;
+    top: 1px;
+
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background: #d97706;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
 }
 
 
@@ -437,7 +484,56 @@
 
 
 /* ============================================================
-   FAQ
+   FAQ CATEGORIES
+   ============================================================ */
+
+.faq-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.faq-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 9px 14px;
+    border: 1px solid rgba(0, 155, 124, 0.2);
+    border-radius: 999px;
+
+    background: #fff;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+
+    transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.faq-category i {
+    color: var(--primary);
+}
+
+.faq-category:hover {
+    transform: translateY(-1px);
+    background: rgba(0, 155, 124, 0.08);
+}
+
+.faq-category.active {
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    box-shadow: 0 10px 22px rgba(0, 107, 92, 0.18);
+}
+
+.faq-category.active i {
+    color: #fff;
+}
+
+
+/* ============================================================
+   FAQ ACCORDION
    ============================================================ */
 
 .faq-list {
@@ -450,6 +546,12 @@
     background: #fff;
     border: 1px solid var(--border);
     border-radius: 14px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.faq-item:hover {
+    border-color: rgba(0, 155, 124, 0.28);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
 }
 
 .faq-item.is-hidden {
@@ -462,30 +564,45 @@
     align-items: center;
     justify-content: space-between;
 
-    padding: 14px;
+    padding: 15px 16px;
     border: 0;
 
     color: var(--text);
     background: #fff;
+    font-size: 15px;
     font-weight: 900;
+    text-align: left;
     cursor: pointer;
 }
 
 .faq-question i {
     color: var(--primary);
-    transition: transform .2s ease;
+    transition: transform .25s ease;
 }
 
 .faq-answer {
-    display: none;
-    padding: 0 14px 14px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-4px);
+
+    color: #4b5563;
+    font-size: 15px;
+    line-height: 1.75;
+
+    transition: max-height .28s ease,
+    opacity .22s ease,
+    transform .22s ease;
+}
+
+.faq-answer p {
+    padding: 0 16px 16px;
 }
 
 .faq-item.active .faq-answer {
-    display: block;
+    max-height: 260px;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .faq-item.active .faq-question i {
