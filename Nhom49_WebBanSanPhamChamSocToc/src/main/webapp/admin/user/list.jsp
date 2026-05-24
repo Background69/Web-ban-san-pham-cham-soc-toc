@@ -63,31 +63,31 @@
                 <th>SĐT</th>
                 <th>Vai trò</th>
                 <th>Trạng thái</th>
-                <th>Hành động</th>
             </tr>
             </thead>
 
             <tbody id="userTableBody">
             <c:forEach var="user" items="${users}">
-                <tr>
+                <tr onclick="openUserDetail(${user.userId})" class="clickable-row">
+
                     <td>#U${user.userId}</td>
+                    <td>
+                        <div class="user-cell">
+                            <div class="avatar"> ${user.username.substring(0,1).toUpperCase()}</div>
+                        </div>
+                    </td>
                     <td>${user.username}</td>
                     <td>${user.email}</td>
                     <td>${user.phone}</td>
-                    <td>${user.role}</td>
                     <td>
-                       <button type="button" class="action-btn edit"
-                               onclick="openUserDetail(${user.userId})">Chi tiết</button>
-                        <form method="post"
-                              action="${pageContext.request.contextPath}/admin/users"
-                              style="display: inline">
-                            <input type="hidden" name="action" value="toggle-status">
-                            <input type="hidden" name="id" value="${user.userId}">
-                            <button type="submit"
-                                    class="action-btn ${user.active ? 'lock-btn': 'unlock-btn'}">
-                                ${user.active ? 'Khoá' : 'Mở'}
-                            </button>
-                        </form>
+                        <span class="role-badge ${user.role == 'Admin' ? 'role-admin' : 'role-customer'}">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="${user.active ? 'status-active': 'status-lock'}">
+                            ${user.active ? 'Hoạt động' : 'Đã khoá'}
+                        </span>
                     </td>
                 </tr>
             </c:forEach>
