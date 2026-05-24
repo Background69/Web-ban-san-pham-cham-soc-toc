@@ -123,3 +123,5 @@ build
 .kotlin
 /Nhom49_WebBanSanPhamChamSocToc/.gradle/
 /Nhom49_WebBanSanPhamChamSocToc/.gradle-bootstrap/
+/Nhom49_WebBanSanPhamChamSocToc/build/
+src/main/resources/db.properties
