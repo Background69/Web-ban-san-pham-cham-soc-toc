@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HairGlow | Sản phẩm chăm sóc tóc</title>
     <link
-            href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Montserrat:wght@700;800&display=swap"
             rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
@@ -164,7 +164,8 @@
                 <c:choose>
                     <c:when test="${not empty featuredProducts}">
                         <c:set var="trendProduct" value="${featuredProducts[0]}"/>
-                        <a class="social-main-link" href="${pageContext.request.contextPath}/product/${trendProduct.productSlug}">
+                        <a class="social-main-link"
+                           href="${pageContext.request.contextPath}/product/${trendProduct.productSlug}">
                             <div class="social-main-media">
                                 <img alt="${trendProduct.productName}"
                                      src="${pageContext.request.contextPath}/static/${trendProduct.primaryImage != null ? trendProduct.primaryImage.imageUrl : 'images/default-product.png'}">
@@ -204,17 +205,21 @@
                                 <c:if test="${status.index < 4}">
                                     <li>
                                         <a href="${pageContext.request.contextPath}/products?category=${category.categorySlug}">
-                                            ${category.categoryName}
+                                                ${category.categoryName}
                                         </a>
                                     </li>
                                 </c:if>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <li><a href="${pageContext.request.contextPath}/products?category=shampoo">Dầu gội làm sạch dịu nhẹ</a></li>
-                            <li><a href="${pageContext.request.contextPath}/products?category=conditioner">Dầu xả phục hồi độ ẩm</a></li>
-                            <li><a href="${pageContext.request.contextPath}/products?category=serum">Serum dưỡng và bảo vệ tóc</a></li>
-                            <li><a href="${pageContext.request.contextPath}/products?category=hair-tools">Dụng cụ tạo kiểu</a></li>
+                            <li><a href="${pageContext.request.contextPath}/products?category=shampoo">Dầu gội làm sạch
+                                dịu nhẹ</a></li>
+                            <li><a href="${pageContext.request.contextPath}/products?category=conditioner">Dầu xả phục
+                                hồi độ ẩm</a></li>
+                            <li><a href="${pageContext.request.contextPath}/products?category=serum">Serum dưỡng và bảo
+                                vệ tóc</a></li>
+                            <li><a href="${pageContext.request.contextPath}/products?category=hair-tools">Dụng cụ tạo
+                                kiểu</a></li>
                         </c:otherwise>
                     </c:choose>
                 </ul>
@@ -275,79 +280,79 @@
 
             <c:choose>
                 <c:when test="${not empty saleProducts}">
-                    <div class="flash-sale-slider-container">
+                    <div class="flash-sale-slider-wrap">
                         <button class="flash-sale-nav prev" id="flash-sale-prev" type="button"
                                 aria-label="Sản phẩm trước">
                             <i class="fas fa-chevron-left"></i>
                         </button>
-                        <div class="flash-sale-slider">
-                            <div class="flash-sale-track stagger-fade" id="flash-sale-track">
-                                <c:forEach var="product" items="${saleProducts}">
-                                    <article class="product-item flash-sale-item">
-                                        <div class="product-img">
-                                            <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
-                                                <div class="flash-sale-badge">
-                                                    -${product.defaultVariant.discountPercent}%
-                                                </div>
-                                            </c:if>
+                        <div class="flash-sale-track stagger-fade" id="flash-sale-track">
+                            <c:forEach var="product" items="${saleProducts}">
+                                <article class="product-item flash-sale-item">
+                                    <div class="product-img">
+                                        <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                                            <div class="flash-sale-badge">
+                                                -${product.defaultVariant.discountPercent}%
+                                            </div>
+                                        </c:if>
+                                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${pageContext.request.contextPath}/static/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
+                                        </a>
+                                    </div>
+                                    <div class="product-body">
+                                        <h3 class="product-title">
                                             <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                                <img alt="${product.productName}" class="product-image"
-                                                     src="${pageContext.request.contextPath}/static/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
+                                                    ${product.productName}
                                             </a>
-                                        </div>
-                                        <div class="product-body">
-                                            <h3 class="product-title">
-                                                <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                                        ${product.productName}
-                                                </a>
-                                            </h3>
-                                            <div class="product-footer">
-                                                <div class="product-price">
-                                                    <c:if test="${product.defaultVariant != null}">
-                                                        <p class="price-current">
+                                        </h3>
+                                        <div class="product-footer">
+                                            <div class="product-price">
+                                                <c:if test="${product.defaultVariant != null}">
+                                                    <p class="price-current">
+                                                        <fmt:formatNumber
+                                                                value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                                type="number"/>&#8363;
+                                                    </p>
+                                                    <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                                        <p class="price-old">
                                                             <fmt:formatNumber
-                                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                                    value="${product.defaultVariant.originalPrice}"
                                                                     type="number"/>&#8363;
                                                         </p>
-                                                        <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                                            <p class="price-old">
-                                                                <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
-                                                                                  type="number"/>&#8363;
-                                                            </p>
-                                                            <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
-                                                        </c:if>
+                                                        <p class="badge-discount">
+                                                            -${product.defaultVariant.discountPercent}%</p>
                                                     </c:if>
-                                                </div>
-                                                <c:if test="${product.stockQuantity > 0}">
-                                                    <div class="stock-progress">
-                                                        <div class="stock-progress-bar">
-                                                            <div class="stock-progress-fill"
-                                                                 style="width: ${product.soldPercent}%"></div>
-                                                        </div>
-                                                        <div class="stock-progress-text">
-                                                            Đã bán ${product.soldQuantity}/${product.stockQuantity}
-                                                        </div>
-                                                    </div>
                                                 </c:if>
-                                                <form class="action-buttons"
-                                                      action="${pageContext.request.contextPath}/cart/add"
-                                                      method="post">
-                                                    <input type="hidden" name="productId" value="${product.productId}">
-                                                    <input type="hidden" name="quantity" value="1">
-                                                    <button type="submit" name="action" value="add_to_cart"
-                                                            class="btn btn-outline-cart">
-                                                        Thêm vào giỏ
-                                                    </button>
-                                                    <button type="submit" name="action" value="buy_now"
-                                                            class="btn btn-buy-now">
-                                                        Mua ngay
-                                                    </button>
-                                                </form>
                                             </div>
+                                            <c:if test="${product.stockQuantity > 0}">
+                                                <div class="stock-progress">
+                                                    <div class="stock-progress-bar">
+                                                        <div class="stock-progress-fill"
+                                                             style="width: ${product.soldPercent}%"></div>
+                                                    </div>
+                                                    <div class="stock-progress-text">
+                                                        Đã bán ${product.soldQuantity}/${product.stockQuantity}
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                            <form class="action-buttons"
+                                                  action="${pageContext.request.contextPath}/cart/add"
+                                                  method="post">
+                                                <input type="hidden" name="productId" value="${product.productId}">
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" name="action" value="buy_now"
+                                                        class="btn btn-buy-now">
+                                                    Mua ngay
+                                                </button>
+                                                <button type="submit" name="action" value="add_to_cart"
+                                                        class="btn btn-icon-cart" aria-label="Thêm vào giỏ">
+                                                    <i class="fas fa-cart-plus"></i>
+                                                </button>
+                                            </form>
                                         </div>
-                                    </article>
-                                </c:forEach>
-                            </div>
+                                    </div>
+                                </article>
+                            </c:forEach>
                         </div>
                         <button class="flash-sale-nav next" id="flash-sale-next" type="button"
                                 aria-label="Sản phẩm tiếp theo">
@@ -437,9 +442,11 @@
 
                                             <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
                                                 <p class="price-old">
-                                                    <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>&#8363;
+                                                    <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
+                                                                      type="number"/>&#8363;
                                                 </p>
-                                                <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                                <p class="badge-discount">
+                                                    -${product.defaultVariant.discountPercent}%</p>
                                             </c:if>
                                         </c:if>
                                     </div>
@@ -626,131 +633,126 @@
         })();
 
         (function initFlashSaleSlider() {
-            const track = document.getElementById('flash-sale-track');
-            const prevBtn = document.getElementById('flash-sale-prev');
-            const nextBtn = document.getElementById('flash-sale-next');
+            var track = document.getElementById('flash-sale-track');
+            var prevBtn = document.getElementById('flash-sale-prev');
+            var nextBtn = document.getElementById('flash-sale-next');
 
             if (!track || !prevBtn || !nextBtn) {
                 return;
             }
 
-            const items = Array.prototype.slice.call(track.querySelectorAll('.flash-sale-item'));
+            var items = track.querySelectorAll('.flash-sale-item');
             if (items.length === 0) {
                 prevBtn.style.display = 'none';
                 nextBtn.style.display = 'none';
                 return;
             }
 
-            let currentPosition = 0;
-            let maxPosition = 0;
-            let stepSize = 0;
-            let isDragging = false;
-            let startX = 0;
-            let startPosition = 0;
+            function getScrollStep() {
+                var item = items[0];
+                var style = window.getComputedStyle(track);
+                var gap = parseFloat(style.columnGap || style.gap || '0');
+                return item.getBoundingClientRect().width + gap;
+            }
 
             function updateNavState() {
-                const atStart = currentPosition <= 0;
-                const atEnd = currentPosition >= maxPosition;
-
+                var atStart = track.scrollLeft <= 1;
+                var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
                 prevBtn.disabled = atStart;
                 nextBtn.disabled = atEnd;
                 prevBtn.classList.toggle('is-disabled', atStart);
                 nextBtn.classList.toggle('is-disabled', atEnd);
             }
 
-            function updateSliderPosition() {
-                track.style.transform = 'translateX(' + (-currentPosition) + 'px)';
-                updateNavState();
-            }
-
-            function calculateSlider() {
-                const style = window.getComputedStyle(track);
-                const gap = parseFloat(style.columnGap || style.gap || '0');
-                const itemWidth = items[0].getBoundingClientRect().width;
-                stepSize = itemWidth + gap;
-
-                const viewportWidth = track.parentElement.clientWidth;
-                const visibleItems = Math.max(1, Math.floor((viewportWidth + gap) / stepSize));
-                maxPosition = Math.max(0, (items.length - visibleItems) * stepSize);
-                currentPosition = Math.min(currentPosition, maxPosition);
-                updateSliderPosition();
-            }
+            track.addEventListener('scroll', updateNavState, {passive: true});
 
             prevBtn.addEventListener('click', function () {
-                currentPosition = Math.max(0, currentPosition - stepSize);
-                updateSliderPosition();
+                track.scrollBy({left: -getScrollStep(), behavior: 'smooth'});
             });
 
             nextBtn.addEventListener('click', function () {
-                currentPosition = Math.min(maxPosition, currentPosition + stepSize);
-                updateSliderPosition();
+                track.scrollBy({left: getScrollStep(), behavior: 'smooth'});
             });
 
-            track.addEventListener('mousedown', function (event) {
+            var isDragging = false;
+            var startX = 0;
+            var scrollStart = 0;
+            var rafId = null;
+            var targetScroll = 0;
+
+            track.addEventListener('mousedown', function (e) {
                 isDragging = true;
-                startX = event.pageX;
-                startPosition = currentPosition;
-                track.classList.add('dragging');
+                startX = e.pageX;
+                scrollStart = track.scrollLeft;
+                track.style.scrollBehavior = 'auto';
+                track.style.cursor = 'grabbing';
+                track.style.userSelect = 'none';
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', function (e) {
+                if (!isDragging) return;
+                targetScroll = scrollStart + (startX - e.pageX);
+                if (rafId) return;
+                rafId = requestAnimationFrame(function () {
+                    track.scrollLeft = targetScroll;
+                    rafId = null;
+                });
             });
 
             window.addEventListener('mouseup', function () {
+                if (!isDragging) return;
                 isDragging = false;
-                track.classList.remove('dragging');
-            });
-
-            window.addEventListener('mousemove', function (event) {
-                if (!isDragging) {
-                    return;
+                track.style.scrollBehavior = '';
+                track.style.cursor = '';
+                track.style.userSelect = '';
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
                 }
-                const distance = (startX - event.pageX) * 1.2;
-                currentPosition = Math.max(0, Math.min(maxPosition, startPosition + distance));
-                updateSliderPosition();
             });
 
-            track.addEventListener('touchstart', function (event) {
-                startX = event.touches[0].pageX;
-                startPosition = currentPosition;
-            }, {passive: true});
-
-            track.addEventListener('touchmove', function (event) {
-                const distance = (startX - event.touches[0].pageX) * 1.2;
-                currentPosition = Math.max(0, Math.min(maxPosition, startPosition + distance));
-                updateSliderPosition();
-            }, {passive: true});
-
-            window.addEventListener('resize', calculateSlider);
-            calculateSlider();
+            updateNavState();
         })();
 
         (function initFlashSaleCountdown() {
-            const hoursEl = document.getElementById('flash-sale-hours');
-            const minutesEl = document.getElementById('flash-sale-minutes');
-            const secondsEl = document.getElementById('flash-sale-seconds');
+            var hoursEl = document.getElementById('flash-sale-hours');
+            var minutesEl = document.getElementById('flash-sale-minutes');
+            var secondsEl = document.getElementById('flash-sale-seconds');
 
             if (!hoursEl || !minutesEl || !secondsEl) {
                 return;
             }
 
+            function animateIfChanged(el, newText) {
+                if (el.textContent !== newText) {
+                    el.textContent = newText;
+                    el.classList.remove('tick');
+                    void el.offsetWidth;
+                    el.classList.add('tick');
+                }
+            }
+
             function updateCountdown() {
-                const now = new Date();
-                const endOfDay = new Date();
+                var now = new Date();
+                var endOfDay = new Date();
                 endOfDay.setHours(23, 59, 59, 999);
-                const diff = endOfDay - now;
+                var diff = endOfDay - now;
 
                 if (diff <= 0) {
-                    hoursEl.textContent = '00';
-                    minutesEl.textContent = '00';
-                    secondsEl.textContent = '00';
+                    animateIfChanged(hoursEl, '00');
+                    animateIfChanged(minutesEl, '00');
+                    animateIfChanged(secondsEl, '00');
                     return;
                 }
 
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                var hours = Math.floor(diff / (1000 * 60 * 60));
+                var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-                hoursEl.textContent = String(hours).padStart(2, '0');
-                minutesEl.textContent = String(minutes).padStart(2, '0');
-                secondsEl.textContent = String(seconds).padStart(2, '0');
+                animateIfChanged(hoursEl, String(hours).padStart(2, '0'));
+                animateIfChanged(minutesEl, String(minutes).padStart(2, '0'));
+                animateIfChanged(secondsEl, String(seconds).padStart(2, '0'));
             }
 
             updateCountdown();
