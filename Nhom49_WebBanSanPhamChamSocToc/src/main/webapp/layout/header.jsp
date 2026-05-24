@@ -394,10 +394,10 @@
                     <form action="${pageContext.request.contextPath}/search" class="search-form" method="get">
                         <input class="input" id="search" name="q" placeholder="Bạn muốn tìm sản phẩm nào"
                                type="text">
-                        <button aria-label="reset button " class="reset-button" type="reset">
+                        <button aria-label="Xóa từ khóa tìm kiếm" class="reset-button" type="reset">
                             <i class="fas fa-times"></i>
                         </button>
-                        <button aria-label="search button suggest" class="search-button" type="submit">
+                        <button aria-label="Tìm kiếm sản phẩm" class="search-button" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
                     </form>
