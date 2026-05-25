@@ -227,13 +227,18 @@
         <div class="profile-header-content">
             <div class="profile-avatar-section">
                 <div class="profile-avatar">
+                    <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
                     <c:choose>
-                        <c:when test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                            <img src="${sessionScope.currentUser.avatar}"
-                                 alt="Avatar">
-                        </c:when>
-                        <c:otherwise>
+                        <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
                             <i class="fas fa-user default-avatar-icon"></i>
+                        </c:when>
+
+                        <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
+                            <img src="${avatarUrl}" alt="Avatar">
+                        </c:when>
+
+                        <c:otherwise>
+                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar">
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -286,15 +291,18 @@
                         <div class="review-product-info">
                             <div class="review-product-image">
                                 <c:choose>
+                                    <c:when test="${not empty review.productImageUrl && (review.productImageUrl.startsWith('https://') || review.productImageUrl.startsWith('https://'))}">
+                                        <img src="${review.productImageUrl}" alt="${review.productName}">
+                                    </c:when>
+
                                     <c:when test="${not empty review.productImageUrl}">
                                         <img src="${pageContext.request.contextPath}/static/${review.productImageUrl}"
                                              alt="${review.productName}">
                                     </c:when>
+
                                     <c:otherwise>
-                                        <div
-                                                style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f0f0f0;">
-                                            <i class="fas fa-image"
-                                               style="color:#ccc;font-size:24px;"></i>
+                                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f0f0f0;">
+                                            <i class="fas fa-image" style="color:#ccc;font-size:24px;"></i>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>

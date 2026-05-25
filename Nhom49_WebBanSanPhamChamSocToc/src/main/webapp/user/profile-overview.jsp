@@ -27,13 +27,18 @@
             <!-- Avatar Section -->
             <div class="profile-avatar-section">
                 <div class="profile-avatar">
+                    <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
                     <c:choose>
-                        <c:when test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
-                            <img src="${sessionScope.currentUser.avatar}"
-                                 alt="Avatar">
-                        </c:when>
-                        <c:otherwise>
+                        <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
                             <i class="fas fa-user default-avatar-icon"></i>
+                        </c:when>
+
+                        <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
+                            <img src="${avatarUrl}" alt="Avatar">
+                        </c:when>
+
+                        <c:otherwise>
+                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar">
                         </c:otherwise>
                     </c:choose>
                 </div>

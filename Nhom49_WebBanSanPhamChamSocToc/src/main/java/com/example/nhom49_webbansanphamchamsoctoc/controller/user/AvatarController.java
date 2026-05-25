@@ -52,10 +52,10 @@ public class AvatarController extends HttpServlet {
 
             // Validate file type
             String contentType = filePart.getContentType();
-            if (!contentType.equals("image/jpeg")
-                    && !contentType.equals("image/png")
-                    && !contentType.equals("image/webp")
-                    && !contentType.equals("image/gif")) {
+            if (!"image/jpeg".equals(contentType)
+                    && !"image/png".equals(contentType)
+                    && !"image/webp".equals(contentType)
+                    && !"image/gif".equals(contentType)) {
                 request.getSession().setAttribute("error", "Vui lòng chọn file ảnh hợp lệ (JPG, PNG, GIF, WebP)");
                 response.sendRedirect(request.getContextPath() + "/profile/edit");
                 return;
