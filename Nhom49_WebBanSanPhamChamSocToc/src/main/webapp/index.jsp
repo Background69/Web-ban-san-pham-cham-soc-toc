@@ -14,7 +14,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/animation.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css?v=20260426-1">
+          href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css">
 </head>
 <body class="home-page">
 <jsp:include page="/layout/header.jsp"/>
@@ -122,10 +122,44 @@
             <c:when test="${not empty topCategories}">
                 <div class="categories-grid stagger-fade">
                     <c:forEach var="category" items="${topCategories}">
-                        <a class="category-item"
+                        <a class="category-item category-${category.categorySlug}"
                            href="${pageContext.request.contextPath}/products?category=${category.categorySlug}">
-                            <span class="category-name">${category.categoryName}</span>
-                            <span class="category-pill">Khám phá</span>
+                            <span class="category-bg"></span>
+                            <span class="category-icon">
+                                    <c:choose>
+                                        <c:when test="${category.categorySlug == 'dau-goi'}">
+                                            <i class="fas fa-shower"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'dau-xa'}">
+                                            <i class="fas fa-spray-can"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'kem-u'}">
+                                            <i class="fas fa-spa"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'serum'}">
+                                            <i class="fas fa-droplet"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'tri-gau'}">
+                                            <i class="fas fa-shield-heart"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'sap-gel'}">
+                                            <i class="fas fa-wand-magic-sparkles"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'tinh-dau'}">
+                                            <i class="fas fa-bottle-droplet"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'phu-kien'}">
+                                            <i class="fas fa-comb"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fas fa-leaf"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                            <span class="category-content">
+                                <span class="category-name">${category.categoryName}</span>
+                                <span class="category-pill">Khám phá ngay</span>
+                            </span>
                         </a>
                     </c:forEach>
                 </div>
