@@ -1,9 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
+import com.cloudinary.utils.ObjectUtils;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProfileService;
+import com.example.nhom49_webbansanphamchamsoctoc.util.CloudinaryConfig;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,11 +13,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
-@WebServlet(name = "AvatarController", urlPatterns = { "/profile/avatar" })
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1 MB
+@WebServlet(name = "AvatarController", urlPatterns = {"/profile/avatar"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024, // 1 MB
         maxFileSize = 1024 * 1024 * 2, // 2 MB
         maxRequestSize = 1024 * 1024 * 5 // 5 MB
 )
@@ -50,29 +52,38 @@ public class AvatarController extends HttpServlet {
 
             // Validate file type
             String contentType = filePart.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
+            if (!contentType.equals("image/jpeg")
+                    && !contentType.equals("image/png")
+                    && !contentType.equals("image/webp")
+                    && !contentType.equals("image/gif")) {
                 request.getSession().setAttribute("error", "Vui lòng chọn file ảnh hợp lệ (JPG, PNG, GIF, WebP)");
                 response.sendRedirect(request.getContextPath() + "/profile/edit");
                 return;
             }
 
-            // Get file extension
-            String fileName = filePart.getSubmittedFileName();
-            String extension = fileName.substring(fileName.lastIndexOf("."));
-            String newFileName = "avatar_" + currentUser.getUserId() + "_" + System.currentTimeMillis() + extension;
+            byte[] fileBytes = filePart.getInputStream().readAllBytes();
 
-            // Save to avatars directory in static folder
-            String uploadDir = getServletContext().getRealPath("/static/avatars");
-            File uploadDirFile = new File(uploadDir);
-            if (!uploadDirFile.exists()) {
-                uploadDirFile.mkdirs();
+            Map<?, ?> result = CloudinaryConfig.getInstance()
+                    .uploader()
+                    .upload(
+                            fileBytes,
+                            ObjectUtils.asMap(
+                                    "folder", "avatars",
+                                    "public_id", "avatar_" + currentUser.getUserId(),
+                                    "overwrite", true,
+                                    "invalidate", true,
+                                    "resource_type", "image"
+                            )
+                    );
+
+            String avatarUrl = (String) result.get("secure_url");
+
+            if (avatarUrl == null || avatarUrl.isBlank()) {
+                request.getSession().setAttribute("error", "Không lấy được URL ảnh từ Cloudinary");
+                response.sendRedirect(request.getContextPath() + "/profile/edit");
+                return;
             }
 
-            String filePath = uploadDir + File.separator + newFileName;
-            filePart.write(filePath);
-
-            // Update user avatar in database using ProfileService
-            String avatarUrl = "avatars/" + newFileName;
             boolean success = profileService.updateAvatar(currentUser.getUserId(), avatarUrl);
 
             if (success) {
@@ -84,7 +95,7 @@ public class AvatarController extends HttpServlet {
                 request.getSession().setAttribute("error", profileService.getLastError());
             }
         } catch (Exception e) {
-            request.getSession().setAttribute("error", "Có lỗi xảy ra khi tải ảnh: " + e.getMessage());
+            request.getSession().setAttribute("error", "Có lỗi xảy ra khi tải ảnh. Vui lòng thử lại.");
         }
 
         response.sendRedirect(request.getContextPath() + "/profile/edit");
