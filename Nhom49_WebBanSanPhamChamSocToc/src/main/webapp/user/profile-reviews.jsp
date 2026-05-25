@@ -228,8 +228,8 @@
             <div class="profile-avatar-section">
                 <div class="profile-avatar">
                     <c:choose>
-                        <c:when test="${not empty user.avatar && user.avatar != 'avatar/avatar.jpg'}">
-                            <img src="${pageContext.request.contextPath}/static/${user.avatar}"
+                        <c:when test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
+                            <img src="${sessionScope.currentUser.avatar}"
                                  alt="Avatar">
                         </c:when>
                         <c:otherwise>
@@ -239,8 +239,8 @@
                 </div>
             </div>
             <div class="profile-info">
-                <h1 class="profile-name">${user.username}</h1>
-                <p class="profile-username">@${user.username}</p>
+                <h1 class="profile-name">${sessionScope.currentUser.username}</h1>
+                <p class="profile-username">@${sessionScope.currentUser.username}</p>
             </div>
         </div>
     </div>

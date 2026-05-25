@@ -69,8 +69,8 @@
                 <div class="avatar-preview position-relative"
                      style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
                     <c:choose>
-                        <c:when test="${not empty user.avatar && user.avatar != 'avatar/avatar.jpg'}">
-                            <img src="${pageContext.request.contextPath}/static/${user.avatar}" alt="Avatar"
+                        <c:when test="${not empty sessionScope.currentUser.avatar && sessionScope.currentUser.avatar != 'avatar/avatar.jpg'}">
+                            <img src="${sessionScope.currentUser.avatar}" alt="Avatar"
                                  id="avatarPreview" style="width: 100%; height: 100%; object-fit: cover;">
                         </c:when>
                         <c:otherwise>

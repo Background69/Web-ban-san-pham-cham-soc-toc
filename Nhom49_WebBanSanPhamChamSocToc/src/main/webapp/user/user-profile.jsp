@@ -71,9 +71,9 @@
                         <div class="col-12 col-lg-6">
                             <h6 class="text-uppercase text-muted">Thông tin tài khoản</h6>
                             <div class="mt-3">
-                                <div class="mb-2"><strong>Email:</strong> ${user.email}</div>
-                                <div class="mb-2"><strong>Tên đăng nhập:</strong> ${user.username}</div>
-                                <div class="mb-2"><strong>Số điện thoại:</strong> ${user.phone}</div>
+                                <div class="mb-2"><strong>Email:</strong> ${sessionScope.currentUser.email}</div>
+                                <div class="mb-2"><strong>Tên đăng nhập:</strong> ${sessionScope.currentUser.username}</div>
+                                <div class="mb-2"><strong>Số điện thoại:</strong> ${sessionScope.currentUser.phone}</div>
                             </div>
                         </div>
 
