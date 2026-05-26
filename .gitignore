@@ -129,3 +129,5 @@ build
 src/main/resources/db.properties
 /archive/
 /Nhom49_WebBanSanPhamChamSocToc/compose.yml
+# Database config
+db.properties
