@@ -40,8 +40,20 @@
     <main class="content">
         <div class="header">
             <h1>Quản lý người dùng</h1>
-        </div>
 
+        <div class="toolbar">
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Tìm theo tên, email, số điện thoại..."
+                onkeyup="filterUsers()">
+            <select id="sortselect" onchange="sortUsers()">
+                <option value="">Sắp xếp</option>
+                <option value="asc">Từ A-Z</option>
+                <option value="desc">Từ Z-A</option>
+            </select>
+        </div>
+        </div>
         <table class="product-table">
             <thead>
             <tr>
@@ -50,28 +62,37 @@
                 <th>Email</th>
                 <th>SĐT</th>
                 <th>Vai trò</th>
+                <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
             </thead>
 
-            <tbody>
+            <tbody id="userTableBody">
             <c:forEach var="user" items="${users}">
                 <tr>
                     <td>#U${user.userId}</td>
                     <td>${user.username}</td>
                     <td>${user.email}</td>
                     <td>${user.phone}</td>
-                    <td>${user.role}</td>
                     <td>
-                       <button type="button" class="action-btn edit"
-                               onclick="openUserDetail(${user.userId})">Chi tiết</button>
+                        <span class="role-badge ${user.role == 'Admin' ? 'role-admin' : 'role-customer'}">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="${user.active ? 'status-active': 'status-lock'}">
+                            ${user.active ? 'Hoạt động' : 'Đã khoá'}
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="action-btn edit" onclick="openUserDetail(${user.userId})">Sửa</button>
                     </td>
                 </tr>
             </c:forEach>
 
             <c:if test="${empty users}">
                 <tr>
-                    <td colspan="6" style="text-align:center">Không có dữ liệu</td>
+                    <td colspan="7" style="text-align:center">Không có dữ liệu</td>
                 </tr>
             </c:if>
             </tbody>
@@ -79,43 +100,98 @@
     </main>
 </div>
 <div id="userModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content user-modal">
+
         <span class="btn-close" onclick="closeModal()">&times;</span>
+
         <h2>Chi tiết người dùng</h2>
+
         <form action="${pageContext.request.contextPath}/admin/users" method="post">
+
             <input type="hidden" name="action" value="update-profile">
-            <input type ="hidden" name="id" id="detailUserId">
-            <p><b>ID:</b> <span id="detailId"></span></p>
-            <div class="form-row">
-            <label>Tên người dùng</label>
-            <input type="text"
-                    name="username"
-                    id="detailName"
-                    required>
+            <input type="hidden" name="id" id="detailUserId">
+
+            <div class="modal-body">
+                <div class="user-preview">
+
+                    <div class="avatar-circle">
+                        👤
+                    </div>
+
+                    <h3 id="previewName">Tên người dùng</h3>
+
+                    <span id="previewStatus" class="status-pill active">
+                        ● Hoạt động
+                    </span>
+
+                    <div class="preview-info">
+                        <p>
+                            <strong>ID:</strong>
+                            <span id="detailId"></span>
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            <span id="previewEmail"></span>
+                        </p>
+
+                        <p>
+                            <strong>SĐT:</strong>
+                            <span id="previewPhone"></span>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="user-form">
+
+                    <div class="form-row">
+                        <label>Tên người dùng</label>
+                        <input type="text"
+                               name="username"
+                               id="detailName"
+                               required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Email</label>
+                        <input type="email"
+                               name="email"
+                               id="detailEmail"
+                               required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Số điện thoại</label>
+                        <input type="text"
+                               name="phone"
+                               id="detailPhone"
+                               required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Vai trò</label>
+
+                        <select name="role" id="detailRole">
+                            <option value="Khách hàng">Khách hàng</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+
+                </div>
+
             </div>
-            <div class="form-row">
-                <label>Email</label>
-                <input type="email"
-                       name="email"
-                       id="detailEmail"
-                       required>
-            </div>
-            <div class="form-row">
-                <label>SĐT</label>
-                <input type="text"
-                       name="phone"
-                       id="detailPhone"
-                       required>
-            </div>
-            <div class="form-row">
-                <label>Vai trò</label>
-                <select name="role" id="detailRole">
-                    <option value="Khách hàng">Khách hàng</option>
-                    <option value="Admin">Admin</option>
-                </select>
-            </div>
-            <div class="actions">
-                <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+            <div class="modal-actions">
+
+                <button class="btn btn-primary" type="submit">
+                    Lưu thay đổi
+                </button>
+
+                <button type="button"
+                        id="toggleStatusBtn"
+                        class="btn btn-danger">
+                    Khoá tài khoản
+                </button>
+
             </div>
         </form>
     </div>
@@ -133,6 +209,31 @@
                 document.getElementById("detailEmail").value = user.email|| "";
                 document.getElementById("detailPhone").value = user.phone || "";
                 document.getElementById("detailRole").value = user.role || "";
+                document.getElementById("previewName").innerText = user.username || "";
+                document.getElementById("previewEmail").innerText = user.email || "";
+                document.getElementById("previewPhone").innerText = user.phone || "";
+                const status = document.getElementById("previewStatus");
+                const toggleBtn = document.getElementById("toggleStatusBtn");
+                status.classList.remove("active","lock");
+                toggleBtn.classList.remove("btn-danger", "btn-success");
+                if(user.active){
+
+                    status.innerText = "● Hoạt động";
+                    status.classList.add("active");
+
+                    toggleBtn.innerText = "Khoá tài khoản";
+                    toggleBtn.classList.remove("btn-success");
+                    toggleBtn.classList.add("btn-danger");
+
+                } else {
+
+                    status.innerText = "● Đã khoá";
+                    status.classList.add("lock");
+
+                    toggleBtn.innerText = "Mở khoá tài khoản";
+                    toggleBtn.classList.remove("btn-danger");
+                    toggleBtn.classList.add("btn-success");
+                }
                 document.getElementById("userModal").style.display = "flex";
 
             });
@@ -140,6 +241,43 @@
     }
     function closeModal(){
         document.getElementById("userModal").style.display = "none";
+    }
+    window.onclick =function (event){
+        let modal = document.getElementById("userModal");
+        if (event.target === modal){
+            closeModal();
+        }
+    }
+    function filterUsers(){
+        let keyword = document.getElementById("search-input")
+            .value
+            .toLowerCase();
+        let rows=document.querySelectorAll("#userTableBody tr");
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            if (text.includes(keyword)) {
+                row.style.display=""
+            } else {
+                row.style.display="none"
+            }
+        });
+    }
+    function sortUsers(){
+        let tbody = document.getElementById("userTableBody");
+        let rows = Array.from(tbody.querySelectorAll("tr"));
+        let sortType = document.getElementById("sortselect").value;
+        rows.sort((a, b) => {
+            let nameA = a.cells[1].innerText.toLowerCase();
+            let nameB = b.cells[1].innerText.toLowerCase();
+            if (sortType === "asc"){
+                return nameA.localeCompare(nameB)
+            }
+            if (sortType === "desc"){
+                return nameB.localeCompare(nameA)
+            }
+            return 0;
+        });
+        rows.forEach(row=> tbody.appendChild(row));
     }
 </script>
 </body>
