@@ -23,7 +23,7 @@
 
     <div class="profile-info">
         <div class="profile-left">
-            <img src="${pageContext.request.contextPath}/${sessionScope.currentUser.avatar}" alt="avatar">
+            <img src="${sessionScope.currentUser.avatar}" alt="avatar">
 
             <h3>${sessionScope.currentUser.username}</h3>
 

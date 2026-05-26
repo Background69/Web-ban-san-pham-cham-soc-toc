@@ -27,13 +27,18 @@
             <!-- Avatar Section -->
             <div class="profile-avatar-section">
                 <div class="profile-avatar">
+                    <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
                     <c:choose>
-                        <c:when test="${not empty user.avatar && user.avatar != 'avatar/avatar.jpg'}">
-                            <img src="${pageContext.request.contextPath}/static/${user.avatar}"
-                                 alt="Avatar">
-                        </c:when>
-                        <c:otherwise>
+                        <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
                             <i class="fas fa-user default-avatar-icon"></i>
+                        </c:when>
+
+                        <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
+                            <img src="${avatarUrl}" alt="Avatar">
+                        </c:when>
+
+                        <c:otherwise>
+                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar">
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -42,37 +47,37 @@
             <!-- Profile Info -->
             <div class="profile-info">
                 <h1 class="profile-name">
-                    ${user.username}
-                    <c:if test="${user.authProvider == 'GOOGLE'}">
+                    ${sessionScope.currentUser.username}
+                    <c:if test="${sessionScope.currentUser.authProvider == 'GOOGLE'}">
                         <span class="verified-badge"><i class="fas fa-check"></i> Google</span>
                     </c:if>
                 </h1>
-                <p class="profile-username">@${user.username}</p>
+                <p class="profile-username">@${sessionScope.currentUser.username}</p>
 
                 <div class="profile-meta">
                     <div class="profile-meta-item">
                         <i class="fas fa-envelope"></i>
-                        <span>${user.email}</span>
+                        <span>${sessionScope.currentUser.email}</span>
                     </div>
-                    <c:if test="${not empty user.phone}">
+                    <c:if test="${not empty sessionScope.currentUser.phone}">
                         <div class="profile-meta-item">
                             <i class="fas fa-phone"></i>
-                            <span>${user.phone}</span>
+                            <span>${sessionScope.currentUser.phone}</span>
                         </div>
                     </c:if>
                     <div class="profile-meta-item">
                         <i class="fas fa-user-tag"></i>
-                        <span>${user.role}</span>
+                        <span>${sessionScope.currentUser.role}</span>
                     </div>
                 </div>
 
                 <div class="profile-badges">
-                    <c:if test="${user.authProvider == 'GOOGLE'}">
+                    <c:if test="${sessionScope.currentUser.authProvider == 'GOOGLE'}">
                                         <span class="profile-badge badge-success">
                                             <i class="fab fa-google"></i> Google
                                         </span>
                     </c:if>
-                    <c:if test="${user.active}">
+                    <c:if test="${sessionScope.currentUser.active}">
                                         <span class="profile-badge badge-success">
                                             <i class="fas fa-check-circle"></i> Đang hoạt động
                                         </span>
