@@ -14,7 +14,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/animation.css">
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css?v=20260426-1">
+          href="${pageContext.request.contextPath}/static/css/user/style_for_main-page.css">
 </head>
 <body class="home-page">
 <jsp:include page="/layout/header.jsp"/>
@@ -56,18 +56,14 @@
             <div class="banner-container">
                 <div class="slider" id="banner-slider">
                     <div class="banner-slides">
-                        <div class="item active" id="slide-1">
-                            <img alt="Banner HairGlow 1" class="banner-image"
-                                 src="${pageContext.request.contextPath}/static/assets/images/banner1.png">
-                        </div>
-                        <div class="item" id="slide-2">
-                            <img alt="Banner HairGlow 2" class="banner-image"
-                                 src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
-                        </div>
-                        <div class="item" id="slide-3">
-                            <img alt="Banner HairGlow 3" class="banner-image"
-                                 src="${pageContext.request.contextPath}/static/assets/images/banner3.png">
-                        </div>
+                        <c:forEach var="banner" items="${requestScope.activeBanners}" varStatus="status">
+                            <div class="item ${status.first ? 'active' : ''}" id="slide-${status.index + 1}">
+                                <img
+                                        alt="${banner.title}"
+                                        class="banner-image"
+                                        src="${banner.imageUrl}">
+                            </div>
+                        </c:forEach>
                     </div>
                     <button aria-label="Slide trước" class="nav prev" type="button">&#10094;</button>
                     <button aria-label="Slide sau" class="nav next" type="button">&#10095;</button>
@@ -126,10 +122,44 @@
             <c:when test="${not empty topCategories}">
                 <div class="categories-grid stagger-fade">
                     <c:forEach var="category" items="${topCategories}">
-                        <a class="category-item"
+                        <a class="category-item category-${category.categorySlug}"
                            href="${pageContext.request.contextPath}/products?category=${category.categorySlug}">
-                            <span class="category-name">${category.categoryName}</span>
-                            <span class="category-pill">Khám phá</span>
+                            <span class="category-bg"></span>
+                            <span class="category-icon">
+                                    <c:choose>
+                                        <c:when test="${category.categorySlug == 'dau-goi'}">
+                                            <i class="fas fa-shower"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'dau-xa'}">
+                                            <i class="fas fa-spray-can"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'kem-u'}">
+                                            <i class="fas fa-spa"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'serum'}">
+                                            <i class="fas fa-droplet"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'tri-gau'}">
+                                            <i class="fas fa-shield-heart"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'sap-gel'}">
+                                            <i class="fas fa-wand-magic-sparkles"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'tinh-dau'}">
+                                            <i class="fas fa-bottle-droplet"></i>
+                                        </c:when>
+                                        <c:when test="${category.categorySlug == 'phu-kien'}">
+                                            <i class="fas fa-comb"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fas fa-leaf"></i>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                            <span class="category-content">
+                                <span class="category-name">${category.categoryName}</span>
+                                <span class="category-pill">Khám phá ngay</span>
+                            </span>
                         </a>
                     </c:forEach>
                 </div>
@@ -626,10 +656,10 @@
 
             function resetAutoSlide() {
                 clearInterval(autoSlideInterval);
-                autoSlideInterval = setInterval(nextSlide, 5500);
+                autoSlideInterval = setInterval(nextSlide, 4000);
             }
 
-            autoSlideInterval = setInterval(nextSlide, 5500);
+            autoSlideInterval = setInterval(nextSlide, 4000);
         })();
 
         (function initFlashSaleSlider() {
