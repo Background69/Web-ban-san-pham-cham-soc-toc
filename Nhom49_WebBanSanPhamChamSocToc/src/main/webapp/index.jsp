@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HairGlow | Sản phẩm chăm sóc tóc</title>
     <link
-            href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Montserrat:wght@700;800&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Montserrat:wght@700;800&family=Playfair+Display:wght@400;500;600;700&display=swap"
             rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
@@ -527,32 +527,38 @@
             </c:otherwise>
         </c:choose>
     </section>
-
     <section class="brands-container section-animate" id="brands-container">
         <div class="section-head section-head-center">
-            <p class="section-kicker">Thương Hiệu</p>
-            <h2 class="section-title">Đối tác được quan tâm nhiều</h2>
+            <p class="section-kicker">Trusted Partners</p>
+            <h2 class="section-title">Thương hiệu đồng hành cùng HairGlow</h2>
             <p class="section-subtitle">
-                Tập hợp các thương hiệu chăm sóc tóc phổ biến để bạn dễ so sánh và lựa chọn.
+                Tuyển chọn các hãng chăm sóc tóc uy tín, đảm bảo chất lượng và nguồn gốc rõ ràng cho mọi sản phẩm.
             </p>
         </div>
 
         <c:choose>
             <c:when test="${not empty brands}">
-                <div class="brands-grid brands-grid-compact stagger-fade">
+                <div class="brands-showcase stagger-fade">
                     <c:forEach var="brand" items="${brands}" varStatus="status">
                         <c:if test="${status.index < 12}">
-                            <a class="brand-item"
-                               href="${pageContext.request.contextPath}/products?brand=${brand.brandSlug}">
-                                <c:choose>
-                                    <c:when test="${not empty brand.logoUrl}">
-                                        <img src="${pageContext.request.contextPath}/static/${brand.logoUrl}"
-                                             alt="${brand.brandName}">
-                                    </c:when>
-                                    <c:otherwise>
-                                        ${brand.brandName}
-                                    </c:otherwise>
-                                </c:choose>
+                            <a class="brand-card"
+                               href="${pageContext.request.contextPath}/products?brand=${brand.brandSlug}"
+                               title="Xem sản phẩm của ${brand.brandName}">
+                                <div class="brand-logo-wrap">
+                                    <c:choose>
+                                        <c:when test="${not empty brand.logoUrl}">
+                                            <img class="brand-logo-img"
+                                                 src="${pageContext.request.contextPath}/static/${brand.logoUrl}"
+                                                 alt="Logo ${brand.brandName}"
+                                                 loading="lazy">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="stylized-brand-name">
+                                                <span>${brand.brandName}</span>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                             </a>
                         </c:if>
                     </c:forEach>
@@ -560,7 +566,7 @@
                 <c:if test="${brands.size() > 12}">
                     <div class="brands-view-more">
                         <a href="${pageContext.request.contextPath}/brands" class="btn btn-outline-primary">
-                            Xem tất cả thương hiệu
+                            Khám phá tất cả thương hiệu <i class="fas fa-arrow-right" style="margin-left:6px"></i>
                         </a>
                     </div>
                 </c:if>
