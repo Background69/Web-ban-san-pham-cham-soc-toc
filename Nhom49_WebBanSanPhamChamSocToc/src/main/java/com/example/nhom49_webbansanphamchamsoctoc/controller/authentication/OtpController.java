@@ -2,13 +2,17 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
+import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -17,6 +21,7 @@ import java.time.LocalDateTime;
 public class OtpController extends HttpServlet {
     private final OtpVerificationDAO otpVerificationDAO = new OtpVerificationDAO();
     private final PendingRegistrationDAO pendingRegistrationDAO = new PendingRegistrationDAO();
+    private final UserDAO userDAO = new UserDAO();
 
     private static final int MAX_OTP_ATTEMPTS = 5;
 
@@ -197,11 +202,25 @@ public class OtpController extends HttpServlet {
             return;
         }
 
+        User newUser = userDAO.findById(newUserId);
+        if (newUser != null) {
+            HttpSession session = req.getSession(true);
+            SessionUtil.setCurrentUser(session, newUser);
+            session.setMaxInactiveInterval(30 * 60);
+        }
+        String redirectUrl = (String) req.getSession().getAttribute("registerRedirectUrl");
+        req.getSession().removeAttribute("registerRedirectUrl");
         req.getSession().removeAttribute("otpPendingRegistrationId");
         clearOtpSession(req);
 
-        req.getSession().setAttribute("success", "Xác minh đăng ký thành công, vui lòng đăng nhập.");
-        resp.sendRedirect(req.getContextPath() + "/auth/login");
+        String targetUrl;
+        if (redirectUrl != null && !redirectUrl.isBlank()) {
+            String separator = redirectUrl.contains("?") ? "&" : "?";
+            targetUrl = req.getContextPath() + redirectUrl + separator + "registerSuccess=true";
+        } else {
+            targetUrl = req.getContextPath() + "/?registerSuccess=true";
+        }
+        resp.sendRedirect(targetUrl);
     }
 
     private void clearOtpSession(HttpServletRequest req) {
