@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -408,8 +409,24 @@
                 <c:choose>
                     <%-- TRẠNG THÁI: CHƯA ĐĂNG NHẬP --%>
                     <c:when test="${empty sessionScope.currentUser}">
+                        <%-- Build redirect URL from current page (URI - contextPath + queryString) --%>
+                        <c:set var="_headerRedirectPath" value="${requestScope['jakarta.servlet.forward.request_uri'] != null
+                            ? requestScope['jakarta.servlet.forward.request_uri']
+                            : pageContext.request.requestURI}"/>
+                        <c:set var="_headerRedirectPath" value="${fn:substringAfter(_headerRedirectPath, pageContext.request.contextPath)}"/>
+                        <c:set var="_headerQueryString" value="${requestScope['jakarta.servlet.forward.query_string'] != null
+                            ? requestScope['jakarta.servlet.forward.query_string']
+                            : pageContext.request.queryString}"/>
+                        <c:if test="${not empty _headerQueryString}">
+                            <c:set var="_headerRedirectPath" value="${_headerRedirectPath}?${_headerQueryString}"/>
+                        </c:if>
+                        <c:url var="_headerLoginUrl" value="/auth/login">
+                            <c:if test="${not empty _headerRedirectPath && _headerRedirectPath != '/' && !fn:startsWith(_headerRedirectPath, '/auth/')}">
+                                <c:param name="redirect" value="${_headerRedirectPath}"/>
+                            </c:if>
+                        </c:url>
                         <div class="account">
-                            <a href="${pageContext.request.contextPath}/auth/login">
+                            <a href="${_headerLoginUrl}">
                                 <i class="fas fa-user"></i>
                                 <span class="login-text">Đăng nhập</span>
                             </a>

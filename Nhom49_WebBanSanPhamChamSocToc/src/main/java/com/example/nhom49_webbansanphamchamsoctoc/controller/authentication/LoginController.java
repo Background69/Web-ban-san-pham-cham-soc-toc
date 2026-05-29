@@ -80,6 +80,17 @@ public class LoginController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/");
     }
 
+    /**
+     * Validates and normalizes the redirect URL to prevent Open Redirect attacks.
+     * Only allows internal paths (starting with /). Rejects:
+     * - Absolute URLs (http://, https://)
+     * - Protocol-relative URLs (//)
+     * - JavaScript/data URIs
+     * - Empty or blank values
+     *
+     * @param redirect the raw redirect parameter from the request
+     * @return a safe, normalized internal path starting with /, or null if invalid
+     */
     private String normalizeRedirect(String redirect) {
         if (redirect == null) {
             return null;
@@ -88,7 +99,17 @@ public class LoginController extends HttpServlet {
         if (trimmed.isEmpty()) {
             return null;
         }
+        // Block absolute URLs
         if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+            return null;
+        }
+        // Block protocol-relative URLs (//evil.com)
+        if (trimmed.startsWith("//")) {
+            return null;
+        }
+        // Block javascript: and data: URIs
+        String lower = trimmed.toLowerCase();
+        if (lower.startsWith("javascript:") || lower.startsWith("data:")) {
             return null;
         }
         return trimmed.startsWith("/") ? trimmed : "/" + trimmed;
