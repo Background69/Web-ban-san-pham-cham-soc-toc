@@ -4,8 +4,6 @@ import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Image;
 import org.jdbi.v3.core.Jdbi;
 
-import java.util.Objects;
-
 public class ImageDAO {
     private final Jdbi jdbi;
 
@@ -28,29 +26,29 @@ public class ImageDAO {
 
     public Image findByTitle(String title) {
         return jdbi.withHandle(handle ->
-                Objects.requireNonNull(handle.createQuery("SELECT * FROM image WHERE title = :title")
+                handle.createQuery("SELECT * FROM image WHERE title = :title")
                         .bind("title", title)
                         .map((rs, ctx) -> new Image(
                                 rs.getInt("id"),
                                 rs.getString("title"),
                                 rs.getString("image_url")
                         ))
-                        .findOne()
-                        .orElse(null))
+                        .findFirst()
+                        .orElse(null)
         );
     }
 
     public Image findById(int id) {
         return jdbi.withHandle(handle ->
-                Objects.requireNonNull(handle.createQuery("SELECT * FROM image WHERE id = :id")
+                handle.createQuery("SELECT * FROM image WHERE id = :id")
                         .bind("id", id)
                         .map((rs, ctx) -> new Image(
                                 rs.getInt("id"),
                                 rs.getString("title"),
                                 rs.getString("image_url")
                         ))
-                        .findOne()
-                        .orElse(null))
+                        .findFirst()
+                        .orElse(null)
         );
     }
 
