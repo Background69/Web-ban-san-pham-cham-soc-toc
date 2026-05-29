@@ -392,7 +392,8 @@
 
             <div class="center-header">
                 <div class="search-bar">
-                    <form action="${pageContext.request.contextPath}/search" class="search-form" method="get">
+                    <form action="${pageContext.request.contextPath}/search" class="search-form"
+                          method="get">
                         <input class="input" id="search" name="q" placeholder="Bạn muốn tìm sản phẩm nào"
                                type="text">
                         <button aria-label="Xóa từ khóa tìm kiếm" class="reset-button" type="reset">
@@ -413,15 +414,18 @@
                         <c:set var="_headerRedirectPath" value="${requestScope['jakarta.servlet.forward.request_uri'] != null
                             ? requestScope['jakarta.servlet.forward.request_uri']
                             : pageContext.request.requestURI}"/>
-                        <c:set var="_headerRedirectPath" value="${fn:substringAfter(_headerRedirectPath, pageContext.request.contextPath)}"/>
+                        <c:set var="_headerRedirectPath"
+                               value="${fn:substringAfter(_headerRedirectPath, pageContext.request.contextPath)}"/>
                         <c:set var="_headerQueryString" value="${requestScope['jakarta.servlet.forward.query_string'] != null
                             ? requestScope['jakarta.servlet.forward.query_string']
                             : pageContext.request.queryString}"/>
                         <c:if test="${not empty _headerQueryString}">
-                            <c:set var="_headerRedirectPath" value="${_headerRedirectPath}?${_headerQueryString}"/>
+                            <c:set var="_headerRedirectPath"
+                                   value="${_headerRedirectPath}?${_headerQueryString}"/>
                         </c:if>
                         <c:url var="_headerLoginUrl" value="/auth/login">
-                            <c:if test="${not empty _headerRedirectPath && _headerRedirectPath != '/' && !fn:startsWith(_headerRedirectPath, '/auth/')}">
+                            <c:if
+                                    test="${not empty _headerRedirectPath && _headerRedirectPath != '/' && !fn:startsWith(_headerRedirectPath, '/auth/')}">
                                 <c:param name="redirect" value="${_headerRedirectPath}"/>
                             </c:if>
                         </c:url>
@@ -446,16 +450,20 @@
                                     <c:set var="resolvedAvatarSrc" value="${avatarValue}"/>
                                 </c:when>
                                 <c:when test="${avatarValue.startsWith('/static/')}">
-                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}${avatarValue}"/>
+                                    <c:set var="resolvedAvatarSrc"
+                                           value="${pageContext.request.contextPath}${avatarValue}"/>
                                 </c:when>
                                 <c:when test="${avatarValue.startsWith('static/')}">
-                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}/${avatarValue}"/>
+                                    <c:set var="resolvedAvatarSrc"
+                                           value="${pageContext.request.contextPath}/${avatarValue}"/>
                                 </c:when>
                                 <c:when test="${avatarValue.startsWith('/')}">
-                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}${avatarValue}"/>
+                                    <c:set var="resolvedAvatarSrc"
+                                           value="${pageContext.request.contextPath}${avatarValue}"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <c:set var="resolvedAvatarSrc" value="${pageContext.request.contextPath}/static/${avatarValue}"/>
+                                    <c:set var="resolvedAvatarSrc"
+                                           value="${pageContext.request.contextPath}/static/${avatarValue}"/>
                                 </c:otherwise>
                             </c:choose>
                         </c:if>
@@ -466,11 +474,12 @@
                                 <span class="cart-text">Giỏ hàng</span>
                                 <span class="cart-count badge" id="header-cart-count"
                                       style="${sessionScope.cartCount == null || sessionScope.cartCount == 0 ? 'display:none;' : ''}">
-                                                        <c:choose>
-                                                            <c:when test="${sessionScope.cartCount > 99}">99+</c:when>
-                                                            <c:otherwise>${sessionScope.cartCount}</c:otherwise>
-                                                        </c:choose>
-                                                    </span>
+                                                            <c:choose>
+                                                                <c:when test="${sessionScope.cartCount > 99}">99+
+                                                                </c:when>
+                                                                <c:otherwise>${sessionScope.cartCount}</c:otherwise>
+                                                            </c:choose>
+                                                        </span>
                             </a>
                         </div>
 
@@ -481,11 +490,11 @@
                                 <div class="user-avatar-wrapper">
                                     <c:choose>
                                         <c:when test="${hasCustomAvatar}">
-                                            <img src="${resolvedAvatarSrc}"
-                                                 alt="Avatar"
+                                            <img src="${resolvedAvatarSrc}" alt="Avatar"
                                                  class="user-avatar"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="default-avatar" style="display: none;">
+                                            <div class="default-avatar"
+                                                 style="display: none;">
                                                 <i class="fas fa-user"></i>
                                             </div>
                                         </c:when>
@@ -523,8 +532,8 @@
                                         </c:choose>
                                     </div>
                                     <div class="dropdown-user-info">
-                                                                        <span
-                                                                                class="dropdown-username">${sessionScope.currentUser.username}</span>
+                                                                            <span
+                                                                                    class="dropdown-username">${sessionScope.currentUser.username}</span>
                                         <span
                                                 class="dropdown-email">${sessionScope.currentUser.email}</span>
                                     </div>
@@ -598,28 +607,33 @@
                                     class="fas fa-jar text-warning me-2"></i>Kem ủ – Mặt nạ tóc</a></li>
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/products?category=serum"><i
-                                    class="fas fa-flask text-danger me-2"></i>Serum – Dầu dưỡng tóc</a></li>
+                                    class="fas fa-flask text-danger me-2"></i>Serum – Dầu dưỡng tóc</a>
+                            </li>
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/products?category=hair-care-products"><i
                                     class="fas fa-spray-can text-success me-2"></i>Xịt dưỡng – Tinh chất
                                 dưỡng</a></li>
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/products?category=hair-chemical-product"><i
-                                    class="fas fa-magic text-purple me-2"></i>Thuốc uốn – Duỗi – Nhuộm</a>
+                                    class="fas fa-magic text-purple me-2"></i>Thuốc uốn – Duỗi –
+                                Nhuộm</a>
                             </li>
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/products?category=hair-styling-products"><i
-                                    class="fas fa-cut text-secondary me-2"></i>Gôm – Sáp – Gel tạo kiểu</a>
+                                    class="fas fa-cut text-secondary me-2"></i>Gôm – Sáp – Gel tạo
+                                kiểu</a>
                             </li>
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/products?category=dry-shampoo"><i
                                     class="fas fa-wind text-info me-2"></i>Dầu gội khô</a></li>
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/products?category=hair-serum"><i
-                                    class="fas fa-seedling text-success me-2"></i>Tinh chất mọc tóc</a></li>
+                                    class="fas fa-seedling text-success me-2"></i>Tinh chất mọc tóc</a>
+                            </li>
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/products?category=hair-loss"><i
-                                    class="fas fa-medkit text-danger me-2"></i>Sản phẩm trị gàu / nấm / rụng
+                                    class="fas fa-medkit text-danger me-2"></i>Sản phẩm trị gàu / nấm /
+                                rụng
                                 tóc</a>
                             </li>
                             <li><a class="dropdown-item"
@@ -878,4 +892,245 @@
             });
         });
     });
+</script>
+
+<%--Welcome Modal nếu đăng ký thành công --%>
+
+<div id="hg-welcome-overlay" class="hg-welcome-overlay" style="display:none;"
+     onclick="HairGlow.closeWelcomeModal()">
+    <div class="hg-welcome-modal" onclick="event.stopPropagation()">
+        <div class="hg-welcome-check">
+            <svg class="hg-welcome-check-svg" viewBox="0 0 80 80">
+                <circle class="hg-check-circle" cx="40" cy="40" r="36" fill="none" stroke="#3B5838"
+                        stroke-width="3"/>
+                <path class="hg-check-mark" d="M24 42 L35 53 L56 28" fill="none" stroke="#3B5838"
+                      stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="hg-check-glow"></div>
+        </div>
+
+        <h2 class="hg-welcome-title">Chào mừng bạn!</h2>
+        <p class="hg-welcome-message">
+            Chào mừng bạn đến với mái nhà <strong>HairGlow</strong>!<br>
+            Tài khoản của bạn đã được khởi tạo thành công.<br>
+            Hãy bắt đầu hành trình nâng niu mái tóc của mình ngay nhé!
+        </p>
+        <button class="hg-welcome-btn" onclick="HairGlow.closeWelcomeModal()">
+            <i class="fas fa-sparkles" style="margin-right:8px;"></i>Khám phá ngay
+        </button>
+    </div>
+</div>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap');
+
+    .hg-welcome-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .hg-welcome-overlay.hg-show {
+        opacity: 1;
+    }
+
+    .hg-welcome-modal {
+        position: relative;
+        background: linear-gradient(165deg, #fefcf7 0%, #f5f0e8 50%, #eee8da 100%);
+        border-radius: 20px;
+        padding: 44px 40px 36px;
+        max-width: 460px;
+        width: 92%;
+        text-align: center;
+        box-shadow: 0 24px 80px rgba(59, 88, 56, 0.25),
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(59, 88, 56, 0.12);
+        transform: scale(0.85) translateY(30px);
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hg-welcome-overlay.hg-show .hg-welcome-modal {
+        transform: scale(1) translateY(0);
+    }
+
+    .hg-welcome-check {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+    }
+
+    .hg-welcome-check-svg {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .hg-check-circle {
+        stroke-dasharray: 226;
+        stroke-dashoffset: 226;
+        animation: hg-draw-circle 0.6s 0.3s ease-out forwards;
+    }
+
+    .hg-check-mark {
+        stroke-dasharray: 60;
+        stroke-dashoffset: 60;
+        animation: hg-draw-check 0.4s 0.8s ease-out forwards;
+    }
+
+    @keyframes hg-draw-circle {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes hg-draw-check {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    .hg-check-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100px;
+        height: 100px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(59, 88, 56, 0.2) 0%, transparent 70%);
+        animation: hg-glow-pulse 2s ease-in-out infinite;
+        z-index: 1;
+    }
+
+    @keyframes hg-glow-pulse {
+
+        0%,
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.6;
+        }
+
+        50% {
+            transform: translate(-50%, -50%) scale(1.35);
+            opacity: 1;
+        }
+    }
+
+    .hg-welcome-title {
+        font-family: 'Playfair Display', 'Georgia', serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: #3B5838;
+        margin: 0 0 14px;
+        letter-spacing: 0.5px;
+    }
+
+    .hg-welcome-message {
+        font-family: 'Roboto', sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #555;
+        margin: 0 0 28px;
+    }
+
+    .hg-welcome-message strong {
+        color: #3B5838;
+        font-weight: 700;
+    }
+
+    .hg-welcome-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 36px;
+        border: none;
+        border-radius: 50px;
+        background: linear-gradient(135deg, #3B5838 0%, #4e7a4a 50%, #5a8f55 100%);
+        color: #fff;
+        font-family: 'Roboto', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(59, 88, 56, 0.35);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hg-welcome-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+        border-radius: inherit;
+    }
+
+    .hg-welcome-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(59, 88, 56, 0.45);
+        background: linear-gradient(135deg, #4e7a4a 0%, #5a8f55 50%, #6ba366 100%);
+    }
+
+    .hg-welcome-btn:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 480px) {
+        .hg-welcome-modal {
+            padding: 32px 24px 28px;
+            max-width: 340px;
+        }
+
+        .hg-welcome-title {
+            font-size: 24px;
+        }
+
+        .hg-welcome-message {
+            font-size: 14px;
+        }
+    }
+</style>
+
+<script>
+    HairGlow.closeWelcomeModal = function () {
+        var overlay = document.getElementById('hg-welcome-overlay');
+        if (!overlay) return;
+        overlay.classList.remove('hg-show');
+        setTimeout(function () {
+            overlay.style.display = 'none';
+        }, 400);
+    };
+
+    (function () {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('registerSuccess') !== 'true') return;
+
+        params.delete('registerSuccess');
+        var newUrl = window.location.pathname;
+        var remaining = params.toString();
+        if (remaining) newUrl += '?' + remaining;
+        window.history.replaceState({}, '', newUrl);
+
+        var overlay = document.getElementById('hg-welcome-overlay');
+        if (!overlay) return;
+        overlay.style.display = 'flex';
+        void overlay.offsetWidth;
+        overlay.classList.add('hg-show');
+
+        setTimeout(function () {
+            HairGlow.closeWelcomeModal();
+        }, 5000);
+    })();
 </script>

@@ -86,7 +86,12 @@
 
             <p class="signup-text">
                 Chưa có tài khoản?
-                <a href="${pageContext.request.contextPath}/auth/register">Đăng ký</a>
+                <c:url var="_loginToRegisterUrl" value="/auth/register">
+                    <c:if test="${not empty _loginRedirect}">
+                        <c:param name="redirect" value="${_loginRedirect}"/>
+                    </c:if>
+                </c:url>
+                <a href="${_loginToRegisterUrl}">Đăng ký</a>
 
             </p>
         </div>
