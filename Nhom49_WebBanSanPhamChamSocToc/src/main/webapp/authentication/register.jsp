@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -30,7 +31,13 @@
                 <div class="error-msg">${error}</div>
             </c:if>
 
-            <form id="registerForm" action="${pageContext.request.contextPath}/auth/register" method="post" novalidate>
+            <form id="registerForm" action="${pageContext.request.contextPath}/auth/register"
+                  method="post" novalidate>
+                <c:set var="_regRedirect"
+                       value="${not empty param.redirect ? param.redirect : redirect}"/>
+                <c:if test="${not empty _regRedirect}">
+                    <input type="hidden" name="redirect" value="${fn:escapeXml(_regRedirect)}">
+                </c:if>
 
                 <div class="form-group">
                     <label for="email">Email</label>
