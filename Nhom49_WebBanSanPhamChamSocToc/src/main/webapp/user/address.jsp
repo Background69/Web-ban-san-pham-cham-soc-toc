@@ -12,6 +12,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/profile.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/address-form.css">
 </head>
 
 <body class="profile-page">
@@ -97,7 +98,9 @@
                                 <div class="address-detail">
                                         ${address.specificAddress},
                                         ${address.wardName},
+                                    <c:if test="${not empty address.districtName}">
                                         ${address.districtName},
+                                    </c:if>
                                         ${address.provinceName}
                                 </div>
                                 <div class="address-actions">
@@ -129,77 +132,76 @@
             </c:choose>
         </div>
 
-        <!-- Add New Address Form -->
-        <div class="mt-4 pt-4 border-top">
-            <h5 class="fw-semibold mb-3">
-                <i class="fas fa-plus-circle text-primary me-2"></i>Thêm địa chỉ mới
-            </h5>
+        <div class="address-form-section">
+            <div class="section-title">
+                <i class="fas fa-plus-circle" style="color: var(--addr-accent); margin-right: 6px;"></i>Thêm địa chỉ mới
+            </div>
+            <p class="section-subtitle">Vui lòng điền đầy đủ thông tin để giao hàng chính xác.</p>
+
             <form action="${pageContext.request.contextPath}/profile/addresses/add" method="post"
-                  class="profile-form">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="fullName">Họ và tên</label>
-                            <input type="text" class="form-control" name="fullName" id="fullName" required
-                                   placeholder="Nhập họ tên người nhận">
-                        </div>
+                  id="addressForm">
+
+                <div class="address-form-grid">
+
+                    <!-- Họ và tên -->
+                    <div class="addr-form-group">
+                        <label for="fullName">Họ và tên <span class="required">*</span></label>
+                        <input type="text" class="addr-input" name="fullName" id="fullName"
+                               placeholder="Nhập họ tên người nhận" required>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="phone">Số điện thoại</label>
-                            <input type="text" class="form-control" name="phone" id="phone" required
-                                   placeholder="Nhập số điện thoại">
-                        </div>
+
+                    <!-- Số điện thoại -->
+                    <div class="addr-form-group">
+                        <label for="phone">Số điện thoại <span class="required">*</span></label>
+                        <input type="tel" class="addr-input" name="phone" id="phone"
+                               placeholder="Nhập số điện thoại" required>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="province">Tỉnh/Thành phố</label>
-                            <select class="form-control" name="provinceCode" id="province" required>
-                                <option value="">-- Chọn Tỉnh/Thành phố --</option>
-                            </select>
-                            <input type="hidden" name="provinceName" id="provinceName">
-                        </div>
+
+                    <!-- Tỉnh/Thành phố -->
+                    <div class="addr-form-group">
+                        <label>Tỉnh/Thành phố <span class="required">*</span></label>
+                        <div class="addr-custom-select" id="addrProvince"></div>
+                        <input type="hidden" name="provinceCode" id="provinceCode">
+                        <input type="hidden" name="provinceName" id="provinceName">
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="district">Quận/Huyện</label>
-                            <select class="form-control" name="districtCode" id="district" required
-                                    disabled>
-                                <option value="">-- Chọn Quận/Huyện --</option>
-                            </select>
-                            <input type="hidden" name="districtName" id="districtName">
-                        </div>
+
+                    <!-- Quận/Huyện  -->
+                    <div class="addr-form-group">
+                        <label>Quận/Huyện <span class="required">*</span></label>
+                        <div class="addr-custom-select" id="addrDistrict"></div>
+                        <input type="hidden" name="districtCode" id="districtCode">
+                        <input type="hidden" name="districtName" id="districtName">
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="ward">Phường/Xã</label>
-                            <select class="form-control" name="wardCode" id="ward" required disabled>
-                                <option value="">-- Chọn Phường/Xã --</option>
-                            </select>
-                            <input type="hidden" name="wardName" id="wardName">
-                        </div>
+
+                    <!-- Phường/Xã  -->
+                    <div class="addr-form-group">
+                        <label>Phường/Xã <span class="required">*</span></label>
+                        <div class="addr-custom-select" id="addrWard"></div>
+                        <input type="hidden" name="wardCode" id="wardCode">
+                        <input type="hidden" name="wardName" id="wardName">
                     </div>
-                    <div class="col-12">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="specificAddress">Địa chỉ cụ thể</label>
-                            <textarea class="form-control" name="specificAddress" id="specificAddress"
-                                      rows="2" required placeholder="Số nhà, tên đường..."></textarea>
-                        </div>
+
+                    <!-- Địa chỉ cụ thể -->
+                    <div class="addr-form-group">
+                        <label for="specificAddress">Địa chỉ cụ thể <span class="required">*</span></label>
+                        <input type="text" class="addr-input" name="specificAddress" id="specificAddress"
+                               placeholder="Số nhà, tên đường, ngõ..." required>
                     </div>
-                    <div class="col-12">
-                        <div class="form-group mb-0">
-                            <label class="form-label" for="note">Ghi chú (tùy chọn)</label>
-                            <textarea class="form-control" name="note" id="note" rows="2"
-                                      placeholder="Ghi chú cho shipper..."></textarea>
-                        </div>
+
+                    <!-- Ghi chú -->
+                    <div class="addr-form-group full-width">
+                        <label for="note">Ghi chú cho shipper</label>
+                        <textarea class="addr-textarea" name="note" id="note" rows="2"
+                                  placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..."></textarea>
                     </div>
                 </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-profile btn-profile-primary">
-                        <i class="fas fa-plus me-1"></i> Thêm địa chỉ
+
+                <div style="margin-top: 24px; display: flex; gap: 12px; align-items: center;">
+                    <button type="submit" class="addr-submit-btn" id="addrSubmitBtn">
+                        <i class="fas fa-plus"></i> Thêm địa chỉ
                     </button>
                     <a href="${pageContext.request.contextPath}/profile"
-                       class="btn-profile btn-profile-outline">
+                       style="font-size: 0.88rem; color: var(--addr-text-muted); text-decoration: none;">
                         Quay lại
                     </a>
                 </div>
@@ -212,91 +214,20 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Vietnam Address API
-    const API_URL = 'https://provinces.open-api.vn/api';
+    document.body.dataset.contextPath = '${pageContext.request.contextPath}';
+</script>
+<script src="${pageContext.request.contextPath}/static/js/address.js"></script>
 
-    document.addEventListener('DOMContentLoaded', function () {
-        loadProvinces();
-    });
+<script>
+    document.getElementById('addressForm').addEventListener('submit', function (e) {
+        const pCode = document.getElementById('provinceCode').value;
+        const dCode = document.getElementById('districtCode').value;
+        const wCode = document.getElementById('wardCode').value;
 
-    async function loadProvinces() {
-        try {
-            const response = await fetch(API_URL + '/p/');
-            const provinces = await response.json();
-            const select = document.getElementById('province');
-            provinces.forEach(p => {
-                const option = document.createElement('option');
-                option.value = p.code;
-                option.textContent = p.name;
-                option.dataset.name = p.name;
-                select.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error loading provinces:', error);
+        if (!pCode || !dCode || !wCode) {
+            e.preventDefault();
+            alert('Vui lòng chọn đầy đủ Tỉnh/Thành phố, Quận/Huyện và Phường/Xã.');
         }
-    }
-
-    document.getElementById('province').addEventListener('change', async function () {
-        const provinceCode = this.value;
-        const provinceName = this.options[this.selectedIndex].dataset.name || '';
-        document.getElementById('provinceName').value = provinceName;
-
-        const districtSelect = document.getElementById('district');
-        const wardSelect = document.getElementById('ward');
-
-        districtSelect.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
-        wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-        districtSelect.disabled = true;
-        wardSelect.disabled = true;
-
-        if (provinceCode) {
-            try {
-                const response = await fetch(API_URL + '/p/' + provinceCode + '?depth=2');
-                const data = await response.json();
-                data.districts.forEach(d => {
-                    const option = document.createElement('option');
-                    option.value = d.code;
-                    option.textContent = d.name;
-                    option.dataset.name = d.name;
-                    districtSelect.appendChild(option);
-                });
-                districtSelect.disabled = false;
-            } catch (error) {
-                console.error('Error loading districts:', error);
-            }
-        }
-    });
-
-    document.getElementById('district').addEventListener('change', async function () {
-        const districtCode = this.value;
-        const districtName = this.options[this.selectedIndex].dataset.name || '';
-        document.getElementById('districtName').value = districtName;
-
-        const wardSelect = document.getElementById('ward');
-        wardSelect.innerHTML = '<option value="">-- Chọn Phường/Xã --</option>';
-        wardSelect.disabled = true;
-
-        if (districtCode) {
-            try {
-                const response = await fetch(API_URL + '/d/' + districtCode + '?depth=2');
-                const data = await response.json();
-                data.wards.forEach(w => {
-                    const option = document.createElement('option');
-                    option.value = w.code;
-                    option.textContent = w.name;
-                    option.dataset.name = w.name;
-                    wardSelect.appendChild(option);
-                });
-                wardSelect.disabled = false;
-            } catch (error) {
-                console.error('Error loading wards:', error);
-            }
-        }
-    });
-
-    document.getElementById('ward').addEventListener('change', function () {
-        const wardName = this.options[this.selectedIndex].dataset.name || '';
-        document.getElementById('wardName').value = wardName;
     });
 </script>
 
