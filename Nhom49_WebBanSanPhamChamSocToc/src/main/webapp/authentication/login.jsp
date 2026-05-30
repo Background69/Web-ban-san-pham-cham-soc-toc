@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 
 <!DOCTYPE html>
@@ -40,8 +41,9 @@
                 <c:remove var="success" scope="session"/>
             </c:if>
             <form action="${pageContext.request.contextPath}/auth/login" method="post" autocomplete="on">
-                <c:if test="${not empty param.redirect}">
-                    <input type="hidden" name="redirect" value="${param.redirect}">
+                <c:set var="_loginRedirect" value="${not empty param.redirect ? param.redirect : redirect}"/>
+                <c:if test="${not empty _loginRedirect}">
+                    <input type="hidden" name="redirect" value="${fn:escapeXml(_loginRedirect)}">
                 </c:if>
                 <div class="form-group">
                     <label for="email">Email hoặc Username</label>
@@ -68,8 +70,8 @@
                 <div class="or-divider"><span>Hoặc</span></div>
 
                 <c:url var="googleLoginUrl" value="/auth/google">
-                    <c:if test="${not empty param.redirect}">
-                        <c:param name="redirect" value="${param.redirect}"/>
+                    <c:if test="${not empty _loginRedirect}">
+                        <c:param name="redirect" value="${_loginRedirect}"/>
                     </c:if>
                 </c:url>
 
@@ -84,7 +86,12 @@
 
             <p class="signup-text">
                 Chưa có tài khoản?
-                <a href="${pageContext.request.contextPath}/auth/register">Đăng ký</a>
+                <c:url var="_loginToRegisterUrl" value="/auth/register">
+                    <c:if test="${not empty _loginRedirect}">
+                        <c:param name="redirect" value="${_loginRedirect}"/>
+                    </c:if>
+                </c:url>
+                <a href="${_loginToRegisterUrl}">Đăng ký</a>
 
             </p>
         </div>

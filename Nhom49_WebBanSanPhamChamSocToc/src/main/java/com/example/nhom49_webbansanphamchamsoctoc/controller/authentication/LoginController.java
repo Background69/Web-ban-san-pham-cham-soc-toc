@@ -91,6 +91,13 @@ public class LoginController extends HttpServlet {
         if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
             return null;
         }
+        if (trimmed.startsWith("//")) {
+            return null;
+        }
+        String lower = trimmed.toLowerCase();
+        if (lower.startsWith("javascript:") || lower.startsWith("data:")) {
+            return null;
+        }
         return trimmed.startsWith("/") ? trimmed : "/" + trimmed;
     }
 }
