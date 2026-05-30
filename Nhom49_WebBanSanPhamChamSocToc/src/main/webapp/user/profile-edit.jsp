@@ -49,18 +49,10 @@
             </h3>
         </div>
 
-        <c:if test="${not empty success}">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fas fa-check-circle me-2"></i>${success}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </c:if>
-        <c:if test="${not empty error}">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-circle me-2"></i>${error}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </c:if>
+        <div id="flashMessage"
+             data-success="${requestScope.flashSuccess}"
+             data-error="${requestScope.flashError}">
+        </div>
 
         <!-- Avatar Upload Section -->
         <div class="profile-form mb-4" style="padding-bottom: 20px; border-bottom: 1px solid #dee2e6;">
@@ -209,97 +201,109 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ========== TOAST NOTIFICATION SYSTEM ==========
-    function showToast(message, type = 'success', duration = 3000) {
+    function showToast(message, type, duration) {
         const toastContainer = document.getElementById('toastContainer');
-        if (!toastContainer) return;
+        if (!toastContainer) return null;
 
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
+        type = type || 'success';
+        duration = duration || 3000;
 
-        const icons = {
-            success: '<i class="fas fa-check-circle"></i>',
-            error: '<i class="fas fa-exclamation-circle"></i>',
-            warning: '<i class="fas fa-exclamation-triangle"></i>',
-            info: '<i class="fas fa-info-circle"></i>',
-            loading: '<i class="fas fa-spinner toast-spinner"></i>'
+        if (!message || message === 'true' || message === 'false') {
+            return null;
+        }
+
+        const iconMap = {
+            success: 'fas fa-check-circle',
+            error: 'fas fa-exclamation-circle',
+            warning: 'fas fa-exclamation-triangle',
+            loading: 'fas fa-spinner app-toast-spinner'
         };
 
-        toast.innerHTML = `
-        <div class="toast-icon ${type}">
-            ${icons[type] || icons.info}
-        </div>
-        <div class="toast-content">${message}</div>
-    `;
+        const toast = document.createElement('div');
+        toast.className = 'app-toast ' + type;
+
+        const iconWrapper = document.createElement('div');
+        iconWrapper.className = 'app-toast-icon';
+
+        const icon = document.createElement('i');
+        icon.className = iconMap[type] || iconMap.success;
+
+        iconWrapper.appendChild(icon);
+
+        const messageWrapper = document.createElement('div');
+        messageWrapper.className = 'app-toast-message';
+        messageWrapper.textContent = message;
+
+        toast.appendChild(iconWrapper);
+        toast.appendChild(messageWrapper);
 
         toastContainer.appendChild(toast);
 
         if (type !== 'loading') {
-            setTimeout(() => {
+            setTimeout(function () {
                 toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 300);
+
+                setTimeout(function () {
+                    toast.remove();
+                }, 300);
             }, duration);
         }
 
         return toast;
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    function readFlashMessage() {
+        const flashMessage = document.getElementById('flashMessage');
+        if (!flashMessage) return;
+
+        const successMessage = flashMessage.dataset.success;
+        const errorMessage = flashMessage.dataset.error;
+
+        if (successMessage && successMessage !== 'true' && successMessage !== 'false') {
+            showToast(successMessage, 'success', 3000);
+            return;
+        }
+
+        if (errorMessage && errorMessage !== 'true' && errorMessage !== 'false') {
+            showToast(errorMessage, 'error', 3000);
+        }
+    }
+
+    function handleAvatarSubmit() {
         const avatarForm = document.getElementById('avatarForm');
         const uploadBtn = document.getElementById('uploadBtn');
         const avatarFile = document.getElementById('avatarFile');
 
+        if (!avatarForm) return;
+
         let isSubmittingAvatar = false;
 
-        if (avatarForm) {
-            avatarForm.addEventListener('submit', function (e) {
-                if (isSubmittingAvatar) {
-                    e.preventDefault();
-                    return;
-                }
+        avatarForm.addEventListener('submit', function (e) {
+            if (isSubmittingAvatar) {
+                e.preventDefault();
+                return;
+            }
 
-                if (!avatarFile || !avatarFile.files || avatarFile.files.length === 0) {
-                    e.preventDefault();
-                    showToast('Vui lòng chọn ảnh đại diện trước khi lưu.', 'warning', 3000);
-                    return;
-                }
+            if (!avatarFile || !avatarFile.files || avatarFile.files.length === 0) {
+                e.preventDefault();
+                showToast('Vui lòng chọn ảnh đại diện trước khi lưu.', 'warning', 3000);
+                return;
+            }
 
-                isSubmittingAvatar = true;
-
-                if (uploadBtn) {
-                    uploadBtn.disabled = true;
-                    uploadBtn.style.opacity = '0.6';
-                    uploadBtn.style.cursor = 'not-allowed';
-                    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...';
-                }
-            });
-        }
-
-        const successAlert = document.querySelector('.alert-success');
-        const errorAlert = document.querySelector('.alert-danger');
-
-        if (successAlert) {
-            const message = successAlert.innerText.replace(/×/g, '').trim();
-
-            showToast(message, 'success', 3000);
-
-            successAlert.style.display = 'none';
-        }
-
-        if (errorAlert) {
-            const message = errorAlert.innerText.replace(/×/g, '').trim();
-
-            showToast(message, 'error', 3000);
-
-            errorAlert.style.display = 'none';
+            isSubmittingAvatar = true;
 
             if (uploadBtn) {
-                uploadBtn.disabled = false;
-                uploadBtn.style.opacity = '1';
-                uploadBtn.style.cursor = 'pointer';
-                uploadBtn.innerHTML = '<i class="fas fa-save me-1"></i> Lưu avatar';
+                uploadBtn.disabled = true;
+                uploadBtn.style.opacity = '0.65';
+                uploadBtn.style.cursor = 'not-allowed';
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...';
             }
-        }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        readFlashMessage();
+        handleAvatarSubmit();
     });
 
     function validateUsername(input) {

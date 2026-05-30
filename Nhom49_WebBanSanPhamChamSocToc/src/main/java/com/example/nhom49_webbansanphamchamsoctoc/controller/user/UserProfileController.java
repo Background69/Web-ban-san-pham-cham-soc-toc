@@ -249,17 +249,21 @@ public class UserProfileController extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session == null) return;
 
-        Object success = session.getAttribute("success");
-        Object error = session.getAttribute("error");
+        Object flashSuccess = session.getAttribute("flashSuccess");
+        Object flashError = session.getAttribute("flashError");
 
-        if (success != null) {
-            request.setAttribute("success", success);
-            session.removeAttribute("success");
+        if (flashSuccess != null) {
+            request.setAttribute("flashSuccess", flashSuccess);
+            session.removeAttribute("flashSuccess");
         }
 
-        if (error != null) {
-            request.setAttribute("error", error);
-            session.removeAttribute("error");
+        if (flashError != null) {
+            request.setAttribute("flashError", flashError);
+            session.removeAttribute("flashError");
         }
+
+        // Dọn dữ liệu cũ ếu trước đó từng set nhầm success/error = true/false
+        session.removeAttribute("success");
+        session.removeAttribute("error");
     }
 }
