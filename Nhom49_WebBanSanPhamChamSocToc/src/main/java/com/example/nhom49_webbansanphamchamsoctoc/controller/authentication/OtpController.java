@@ -2,17 +2,13 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.authentication;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
-import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -21,9 +17,9 @@ import java.time.LocalDateTime;
 public class OtpController extends HttpServlet {
     private final OtpVerificationDAO otpVerificationDAO = new OtpVerificationDAO();
     private final PendingRegistrationDAO pendingRegistrationDAO = new PendingRegistrationDAO();
-    private final UserDAO userDAO = new UserDAO();
 
     private static final int MAX_OTP_ATTEMPTS = 5;
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -62,6 +58,10 @@ public class OtpController extends HttpServlet {
      * Phân tích mục đích OTP từ session để xác định luồng xử lý tiếp theo.
      * Nếu không tìm thấy hoặc không hợp lệ, sẽ chuyển hướng về trang đăng nhập.
      * Mục đích OTP được lưu trong session khi gửi OTP, ví dụ: "FORGOT_PASSWORD" hoặc "REGISTER".
+     * @param req
+     * @param resp
+     * @return
+     * @throws IOException
      */
     private OtpVerificationDAO.OtpPurpose parseOtpPurpose(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
@@ -81,10 +81,15 @@ public class OtpController extends HttpServlet {
 
     /**
      * Xử lý xác nhận OTP cho trường hợp quên mật khẩu.
-     * luồng:
+     * luồng: 
      * - Kiểm tra session để lấy userId đang chờ OTP
      * - Truy vấn OTP mới nhất cho userId đó với mục đích FORGOT_PASSWORD, kiểm tra tồn tại, thời hạn, số lần thử, và mã OTP
      * - Nếu hợp lệ, đánh dấu OTP đã xác minh, lưu userId đã xác minh vào session, và chuyển hướng đến trang đặt lại mật khẩu
+     * @param req
+     * @param resp
+     * @param otpCode
+     * @throws ServletException
+     * @throws IOException
      */
     private void handleForgotPasswordOtp(HttpServletRequest req, HttpServletResponse resp, String otpCode)
             throws ServletException, IOException {
@@ -96,7 +101,8 @@ public class OtpController extends HttpServlet {
         }
 
         OtpVerification otp = otpVerificationDAO.findLatestOtpByUserId(
-                otpPendingUserId, OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD);
+                otpPendingUserId, OtpVerificationDAO.OtpPurpose.FORGOT_PASSWORD
+        );
 
         if (otp == null) {
             forwardWithError(req, resp, "Mã OTP không hợp lệ.");
@@ -145,6 +151,11 @@ public class OtpController extends HttpServlet {
      * - Kiểm tra session để lấy pendingRegistrationId đang chờ OTP
      * - Truy vấn PendingRegistration theo ID đó, kiểm tra tồn tại, đã xác minh hay chưa, thời hạn OTP, số lần thử, và mã OTP
      * - Nếu hợp lệ, tạo tài khoản mới dựa trên thông tin trong PendingRegistration, đánh dấu PendingRegistration đã xác minh, xóa thông tin OTP liên quan trong session, và chuyển hướng đến trang đăng nhập với thông báo thành công
+     * @param req
+     * @param resp
+     * @param otpCode
+     * @throws ServletException
+     * @throws IOException
      */
     private void handleRegisterOtp(HttpServletRequest req, HttpServletResponse resp, String otpCode)
             throws ServletException, IOException {
@@ -186,25 +197,11 @@ public class OtpController extends HttpServlet {
             return;
         }
 
-        User newUser = userDAO.findById(newUserId);
-        if (newUser != null) {
-            HttpSession session = req.getSession(true);
-            SessionUtil.setCurrentUser(session, newUser);
-            session.setMaxInactiveInterval(30 * 60);
-        }
-        String redirectUrl = (String) req.getSession().getAttribute("registerRedirectUrl");
-        req.getSession().removeAttribute("registerRedirectUrl");
         req.getSession().removeAttribute("otpPendingRegistrationId");
         clearOtpSession(req);
 
-        String targetUrl;
-        if (redirectUrl != null && !redirectUrl.isBlank()) {
-            String separator = redirectUrl.contains("?") ? "&" : "?";
-            targetUrl = req.getContextPath() + redirectUrl + separator + "registerSuccess=true";
-        } else {
-            targetUrl = req.getContextPath() + "/?registerSuccess=true";
-        }
-        resp.sendRedirect(targetUrl);
+        req.getSession().setAttribute("success", "Xác minh đăng ký thành công, vui lòng đăng nhập.");
+        resp.sendRedirect(req.getContextPath() + "/auth/login");
     }
 
     private void clearOtpSession(HttpServletRequest req) {
@@ -214,8 +211,7 @@ public class OtpController extends HttpServlet {
         req.getSession().removeAttribute("otpLastSentAt");
     }
 
-    private void forwardWithError(HttpServletRequest req, HttpServletResponse resp, String error)
-            throws ServletException, IOException {
+    private void forwardWithError(HttpServletRequest req, HttpServletResponse resp, String error) throws ServletException, IOException {
         req.setAttribute("error", error);
         req.getRequestDispatcher("/authentication/otp-verification.jsp").forward(req, resp);
     }

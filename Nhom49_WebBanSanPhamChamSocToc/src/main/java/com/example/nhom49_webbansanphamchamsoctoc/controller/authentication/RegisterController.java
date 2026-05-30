@@ -38,10 +38,6 @@ public class RegisterController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
-        String redirect = request.getParameter("redirect");
-        if (redirect != null && !redirect.isBlank()) {
-            request.setAttribute("redirect", redirect);
-        }
 
         request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
     }
@@ -58,7 +54,8 @@ public class RegisterController extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
 
         String validationError = authService.validateUserInput(
-                email, fullname, username, phone, password, confirmPassword);
+                email, fullname, username, phone, password, confirmPassword
+        );
         if (validationError != null) {
             request.setAttribute("error", validationError);
             request.setAttribute("email", email);
@@ -74,7 +71,8 @@ public class RegisterController extends HttpServlet {
         java.sql.Timestamp expiry = Timestamp.valueOf(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
 
         int pendingId = pendingRegistrationDAO.upsertPending(
-                email, username, fullname, phone, passwordHash, otpCode, expiry);
+                email, username, fullname, phone, passwordHash, otpCode, expiry
+        );
         if (pendingId <= 0) {
             request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại.");
             request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
@@ -92,6 +90,7 @@ public class RegisterController extends HttpServlet {
         request.getSession().setAttribute("otpPendingRegistrationId", pendingId);
         request.getSession().setAttribute("otpPendingEmail", email);
 
+
         if (!sent) {
             request.setAttribute("error", "Không gửi được email OTP. Vui lòng thử lại.");
             request.getRequestDispatcher("/authentication/otp-verification.jsp").forward(request, response);
@@ -105,12 +104,6 @@ public class RegisterController extends HttpServlet {
         request.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
 
         request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
-
-        String redirect = trim(request.getParameter("redirect"));
-        if (!redirect.isEmpty()) {
-            request.getSession().setAttribute("registerRedirectUrl", redirect);
-        }
-
         response.sendRedirect(request.getContextPath() + "/auth/verify-otp");
     }
 
