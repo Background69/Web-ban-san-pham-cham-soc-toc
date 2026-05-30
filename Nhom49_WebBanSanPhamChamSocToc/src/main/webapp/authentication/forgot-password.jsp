@@ -43,8 +43,14 @@
                            placeholder="Nhập email của bạn" required autocomplete="email">
                 </div>
 
-                <button type="submit" class="btn-login">Gửi mã OTP</button>
+                <button type="submit" id="btnSendOtp" class="btn-login">Gửi mã OTP</button>
             </form>
+
+            <p class="spam-hint">
+                <i class="fa-solid fa-circle-info"></i>
+                Nếu chưa thấy mã gửi đến hòm thư chính sau 30 giây,
+                hãy kiểm tra cả hộp thư rác (Spam) hoặc thư quảng cáo.
+            </p>
 
             <div class="mt-3 text-center">
                 <a href="${pageContext.request.contextPath}/auth/verify-otp">Đã có mã OTP? Nhập mã tại đây</a>
@@ -61,5 +67,19 @@
 <%@ include file="/layout/footer.jsp" %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+(function () {
+    var form = document.querySelector('form[action$="/auth/forgot-password"]');
+    if (!form) return;
+
+    form.addEventListener("submit", function () {
+        var btn = document.getElementById("btnSendOtp");
+        if (btn) {
+            btn.classList.add("btn-loading");
+            btn.disabled = true;
+        }
+    });
+})();
+</script>
 </body>
 </html>

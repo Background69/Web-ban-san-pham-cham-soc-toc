@@ -235,6 +235,54 @@ a.google-btn img {
     text-align: left;
 }
 
+/* ─── Loading Spinner for Submit Buttons ────────────────────────── */
+
+@keyframes spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-login.btn-loading,
+.btn-resend.btn-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-login.btn-loading::after,
+.btn-resend.btn-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2.5px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.65s linear infinite;
+}
+
+/* ─── Spam / Junk Mail Hint ─────────────────────────────────────── */
+
+.spam-hint {
+    font-size: 13px;
+    font-style: italic;
+    color: #6C757D;
+    margin-top: 14px;
+    line-height: 1.55;
+    text-align: center;
+}
+
+.spam-hint i {
+    margin-right: 4px;
+    font-size: 12px;
+    color: #8B7355;
+}
+
 @media (max-width: 420px) {
     .login-box {
         padding: 32px 22px 26px;

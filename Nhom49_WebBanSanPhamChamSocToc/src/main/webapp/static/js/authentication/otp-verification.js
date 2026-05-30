@@ -2,8 +2,6 @@
 
 (function () {
 
-    // ─── Helpers ────────────────────────────────────────────────────────────
-
     function $(id) {
         return document.getElementById(id);
     }
@@ -18,7 +16,10 @@
         return Number.isFinite(n) ? n : fallback;
     }
 
-    // ─── OTP Inputs ─────────────────────────────────────────────────────────
+    function clearOtpError() {
+        var container = document.querySelector(".otp-inputs");
+        if (container) container.classList.remove("shake-error");
+    }
 
     function wireOtpInputs() {
         for (var i = 1; i <= 6; i++) {
@@ -32,6 +33,7 @@
                         var next = $("otp" + (idx + 1));
                         if (next) next.focus();
                     }
+                    clearOtpError();
                 });
 
                 input.addEventListener("keydown", function (e) {
@@ -54,6 +56,7 @@
 
                     var focusEl = $("otp" + Math.min(digits.length + 1, 6));
                     if (focusEl) focusEl.focus();
+                    clearOtpError();
                 });
 
             })(i);
@@ -63,18 +66,44 @@
         if (first) first.focus();
     }
 
-    // Gọi từ form onsubmit="combineOtp()"
-    window.combineOtp = function () {
+    // Gọi từ form onsubmit="return combineOtp(event)"
+    window.combineOtp = function (e) {
         var otp = "";
         for (var i = 1; i <= 6; i++) {
             var input = $("otp" + i);
             otp += input ? input.value : "";
         }
+
+        // Nếu chưa đủ 6 số → chặn submit
+        if (otp.length < 6) {
+            if (e) e.preventDefault();
+
+            var container = document.querySelector(".otp-inputs");
+            if (container) {
+                container.classList.remove("shake-error");
+                void container.offsetWidth;
+                container.classList.add("shake-error");
+
+                container.addEventListener("animationend", function handler() {
+                    container.removeEventListener("animationend", handler);
+                }, { once: true });
+            }
+
+            for (var j = 1; j <= 6; j++) {
+                var el = $("otp" + j);
+                if (el && el.value === "") {
+                    el.focus();
+                    break;
+                }
+            }
+            return false;
+        }
+
+        // Đủ 6 số → gom vào hidden field và cho phép submit
         var fullOtp = $("fullOtp");
         if (fullOtp) fullOtp.value = otp;
+        return true;
     };
-
-    // ─── Timers ─────────────────────────────────────────────────────────────
 
     function startTimers(otpExpiryAt, otpLastSentAt, cooldownSeconds) {
         var resendBtn = document.querySelector(
@@ -113,7 +142,6 @@
         setInterval(tick, 1000);
     }
 
-    // ─── Init ────────────────────────────────────────────────────────────────
 
     window.addEventListener("DOMContentLoaded", function () {
         wireOtpInputs();
