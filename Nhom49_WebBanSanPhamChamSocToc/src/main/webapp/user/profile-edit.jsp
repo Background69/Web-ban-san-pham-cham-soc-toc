@@ -17,197 +17,180 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <main class="profile-container">
-    <!-- Tab Navigation -->
-    <div class="tab-navigation">
-        <a href="${pageContext.request.contextPath}/profile" class="tab-link active">
-            <i class="fas fa-home"></i>
-            <span>Tổng quan</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/orders" class="tab-link">
-            <i class="fas fa-box"></i>
-            <span>Đơn hàng</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/addresses" class="tab-link">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Địa chỉ</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/reviews" class="tab-link">
-            <i class="fas fa-star"></i>
-            <span>Đánh giá</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/change-password" class="tab-link">
-            <i class="fas fa-lock"></i>
-            <span>Bảo mật</span>
-        </a>
-    </div>
+    <c:set var="activeTab" value="edit" scope="request"/>
 
-    <!-- Tab Content -->
-    <div class="tab-content">
-        <div class="tab-content-header">
-            <h3 class="tab-content-title">
-                <i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ
-            </h3>
-        </div>
+    <div class="account-layout">
+        <jsp:include page="/user/layout/account-sidebar.jsp"/>
 
-        <div id="flashMessage"
-             data-success="${requestScope.flashSuccess}"
-             data-error="${requestScope.flashError}">
-        </div>
-
-        <!-- Avatar Upload Section -->
-        <div class="profile-form avatar-section">
-            <h5 class="avatar-section-title">
-                <i class="fas fa-camera"></i>
-                Ảnh đại diện
-            </h5>
-
-            <div class="avatar-upload-layout">
-                <div class="avatar-preview">
-                    <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
-
-                    <c:choose>
-                        <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
-                            <i class="fas fa-user default-avatar-icon" id="defaultAvatarIcon"></i>
-
-                            <img src="" alt="Avatar" id="avatarPreview" class="avatar-preview-img avatar-hidden">
-                        </c:when>
-
-                        <c:when test="${avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')}">
-                            <img src="${avatarUrl}" alt="Avatar" id="avatarPreview" class="avatar-preview-img"
-                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
-
-                            <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
-                        </c:when>
-
-                        <c:otherwise>
-                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}"
-                                 alt="Avatar"
-                                 id="avatarPreview"
-                                 class="avatar-preview-img"
-                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
-
-                            <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
-                        </c:otherwise>
-                    </c:choose>
+        <div class="account-main">
+            <div class="tab-content">
+                <div class="tab-content-header">
+                    <h3 class="tab-content-title">
+                        <i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ
+                    </h3>
                 </div>
 
-                <div class="avatar-upload-actions">
-                    <form action="${pageContext.request.contextPath}/profile/avatar"
-                          method="post"
-                          enctype="multipart/form-data"
-                          id="avatarForm">
-
-                        <input type="file"
-                               name="avatar"
-                               id="avatarFile"
-                               accept="image/jpeg,image/png,image/gif,image/webp"
-                               class="avatar-file-input"
-                               onchange="previewAvatar(this)">
-
-                        <button type="button"
-                                class="btn-profile btn-profile-outline"
-                                onclick="document.getElementById('avatarFile').click()">
-                            <i class="fas fa-upload"></i>
-                            Chọn ảnh
-                        </button>
-
-                        <button type="submit"
-                                class="btn-profile btn-profile-primary avatar-save-btn"
-                                id="uploadBtn">
-                            <i class="fas fa-save"></i>
-                            Lưu avatar
-                        </button>
-                    </form>
-
-                    <div class="form-hint avatar-hint">
-                        Chấp nhận: JPG, PNG, GIF, WebP. Tối đa 2MB.
-                    </div>
+                <div id="flashMessage"
+                     data-success="${requestScope.flashSuccess}"
+                     data-error="${requestScope.flashError}">
                 </div>
-            </div>
-        </div>
 
-        <!-- Profile Edit Form -->
-        <div class="profile-form">
-            <form action="${pageContext.request.contextPath}/profile/edit" method="post">
-                <div class="form-group">
-                    <label class="form-label" for="email">
-                        <i class="fas fa-envelope me-1"></i> Email
-                    </label>
-                    <input type="email" class="form-control" id="email" value="${user.email}" disabled>
-                    <div class="form-hint">
-                        <i class="fas fa-lock me-1"></i> Email không thể thay đổi
+                <!-- Avatar Upload Section -->
+                <div class="profile-form avatar-section">
+                    <h5 class="avatar-section-title">
+                        <i class="fas fa-camera"></i>
+                        Ảnh đại diện
+                    </h5>
+
+                    <div class="avatar-upload-layout">
+                        <div class="avatar-preview">
+                            <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
+
+                            <c:choose>
+                                <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
+                                    <i class="fas fa-user default-avatar-icon" id="defaultAvatarIcon"></i>
+
+                                    <img src="" alt="Avatar" id="avatarPreview" class="avatar-preview-img avatar-hidden">
+                                </c:when>
+
+                                <c:when test="${avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')}">
+                                    <img src="${avatarUrl}" alt="Avatar" id="avatarPreview" class="avatar-preview-img"
+                                         onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
+
+                                    <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
+                                </c:when>
+
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/static/${avatarUrl}"
+                                         alt="Avatar"
+                                         id="avatarPreview"
+                                         class="avatar-preview-img"
+                                         onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
+
+                                    <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+
+                        <div class="avatar-upload-actions">
+                            <form action="${pageContext.request.contextPath}/profile/avatar"
+                                  method="post"
+                                  enctype="multipart/form-data"
+                                  id="avatarForm">
+
+                                <input type="file"
+                                       name="avatar"
+                                       id="avatarFile"
+                                       accept="image/jpeg,image/png,image/gif,image/webp"
+                                       class="avatar-file-input"
+                                       onchange="previewAvatar(this)">
+
+                                <button type="button"
+                                        class="btn-profile btn-profile-outline"
+                                        onclick="document.getElementById('avatarFile').click()">
+                                    <i class="fas fa-upload"></i>
+                                    Chọn ảnh
+                                </button>
+
+                                <button type="submit"
+                                        class="btn-profile btn-profile-primary avatar-save-btn"
+                                        id="uploadBtn">
+                                    <i class="fas fa-save"></i>
+                                    Lưu avatar
+                                </button>
+                            </form>
+
+                            <div class="form-hint avatar-hint">
+                                Chấp nhận: JPG, PNG, GIF, WebP. Tối đa 2MB.
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="fullname">
-                        <i class="fas fa-user me-1"></i> Họ tên
-                    </label>
-                    <input type="text" class="form-control" id="fullname"
-                           name="fullname"
-                           value="${user.fullName}"
-                           required minlength="10" maxlength="30"
-                           pattern="[A-Za-zÀ-ỹ\s]+"
-                           oninput="validateFullname(this)">
-                    <div class="form-hint" id="fullnameHint">
-                        Chỉ chứa chữ cái
-                    </div>
-                </div>
+                <!-- Profile Edit Form -->
+                <div class="profile-form">
+                    <form action="${pageContext.request.contextPath}/profile/edit" method="post">
+                        <div class="form-group">
+                            <label class="form-label" for="email">
+                                <i class="fas fa-envelope me-1"></i> Email
+                            </label>
+                            <input type="email" class="form-control" id="email" value="${user.email}" disabled>
+                            <div class="form-hint">
+                                <i class="fas fa-lock me-1"></i> Email không thể thay đổi
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="username">
-                        <i class="fas fa-user me-1"></i> Tên đăng nhập
-                    </label>
-                    <input type="text" class="form-control" id="username" name="username"
-                           value="${user.username}" required minlength="3" maxlength="50"
-                           pattern="[a-zA-Z0-9_]+" oninput="validateUsername(this)">
-                    <div class="form-hint" id="usernameHint">
-                        Chỉ chứa chữ cái, số và dấu gạch dưới (_)
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label class="form-label" for="fullname">
+                                <i class="fas fa-user me-1"></i> Họ tên
+                            </label>
+                            <input type="text" class="form-control" id="fullname"
+                                   name="fullname"
+                                   value="${user.fullName}"
+                                   required minlength="2" maxlength="30"
+                                   pattern="[A-Za-zÀ-ỹ\s]+"
+                                   oninput="debounceValidateFullname(this)">
+                            <div class="form-hint" id="fullnameHint">
+                                Chỉ chứa chữ cái
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="phone">
-                        <i class="fas fa-phone me-1"></i> Số điện thoại
-                    </label>
-                    <input type="tel" class="form-control" id="phone" name="phone" value="${user.phone}"
-                           pattern="[0-9]{10,11}" placeholder="VD: 0912345678" oninput="validatePhone(this)">
-                    <div class="form-hint" id="phoneHint">
-                        Nhập số điện thoại 10-11 chữ số
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label class="form-label" for="username">
+                                <i class="fas fa-user me-1"></i> Tên đăng nhập
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   value="${user.username}" required minlength="3" maxlength="50"
+                                   pattern="[a-zA-Z0-9_]+" oninput="validateUsername(this)">
+                            <div class="form-hint" id="usernameHint">
+                                Chỉ chứa chữ cái, số và dấu gạch dưới (_)
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-shield-alt me-1"></i> Phương thức đăng nhập
-                    </label>
-                    <div class="d-flex align-items-center gap-2 p-3 bg-light rounded">
-                        <c:choose>
-                            <c:when test="${user.authProvider == 'GOOGLE'}">
-                                <i class="fab fa-google text-danger" style="font-size: 24px;"></i>
-                                <span>Đăng nhập bằng Google</span>
-                                <span class="profile-badge badge-success ms-auto">
+                        <div class="form-group">
+                            <label class="form-label" for="phone">
+                                <i class="fas fa-phone me-1"></i> Số điện thoại
+                            </label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="${user.phone}"
+                                   pattern="[0-9]{10,11}" placeholder="VD: 0912345678" oninput="validatePhone(this)">
+                            <div class="form-hint" id="phoneHint">
+                                Nhập số điện thoại 10-11 chữ số
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-shield-alt me-1"></i> Phương thức đăng nhập
+                            </label>
+                            <div class="d-flex align-items-center gap-2 p-3 bg-light rounded">
+                                <c:choose>
+                                    <c:when test="${user.authProvider == 'GOOGLE'}">
+                                        <i class="fab fa-google text-danger" style="font-size: 24px;"></i>
+                                        <span>Đăng nhập bằng Google</span>
+                                        <span class="profile-badge badge-success ms-auto">
                                                 <i class="fas fa-check"></i> Đã liên kết
                                             </span>
-                            </c:when>
-                            <c:otherwise>
-                                <i class="fas fa-envelope text-primary" style="font-size: 24px;"></i>
-                                <span>Đăng nhập bằng Email/Mật khẩu</span>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fas fa-envelope text-primary" style="font-size: 24px;"></i>
+                                        <span>Đăng nhập bằng Email/Mật khẩu</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn-profile btn-profile-primary">
-                        <i class="fas fa-save me-1"></i> Lưu thay đổi
-                    </button>
-                    <a href="${pageContext.request.contextPath}/profile"
-                       class="btn-profile btn-profile-outline">
-                        Hủy
-                    </a>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-profile btn-profile-primary">
+                                <i class="fas fa-save me-1"></i> Lưu thay đổi
+                            </button>
+                            <a href="${pageContext.request.contextPath}/profile"
+                               class="btn-profile btn-profile-outline">
+                                Hủy
+                            </a>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </main>
@@ -324,6 +307,15 @@
         handleAvatarSubmit();
     });
 
+    let fullnameValidationTimer = null;
+
+    function debounceValidateFullname(input) {
+        clearTimeout(fullnameValidationTimer);
+        fullnameValidationTimer = setTimeout(function () {
+            validateFullname(input);
+        }, 2000);
+    }
+
     function validateUsername(input) {
         const hint = document.getElementById('usernameHint');
         const value = input.value;
@@ -358,10 +350,10 @@
             return;
         }
 
-        if (value.length < 10 || value.length > 30) {
+        if (value.length < 2 || value.length > 30) {
             input.classList.add('is-invalid');
             input.classList.remove('is-valid');
-            hint.innerHTML = '<i class="fas fa-times-circle me-1"></i> Họ tên phải từ 10–30 ký tự';
+            hint.innerHTML = '<i class="fas fa-times-circle me-1"></i> Họ tên phải từ 2–30 ký tự';
             hint.style.color = '#ef4444';
             return;
         }

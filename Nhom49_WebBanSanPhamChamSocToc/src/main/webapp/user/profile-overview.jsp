@@ -21,8 +21,14 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <main class="profile-container">
-    <!-- Profile Header Card -->
-    <div class="profile-header-card">
+    <c:set var="activeTab" value="overview" scope="request"/>
+
+    <div class="account-layout">
+        <jsp:include page="/user/layout/account-sidebar.jsp"/>
+
+        <div class="account-main">
+            <!-- Profile Header Card -->
+            <div class="profile-header-card">
         <div class="profile-header-content">
             <!-- Avatar Section -->
             <div class="profile-avatar-section">
@@ -114,57 +120,33 @@
         </div>
     </div>
 
-    <!-- Tab Navigation -->
-    <div class="tab-navigation">
-        <a href="${pageContext.request.contextPath}/profile" class="tab-link active">
-            <i class="fas fa-home"></i>
-            <span>Tổng quan</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/orders" class="tab-link">
-            <i class="fas fa-box"></i>
-            <span>Đơn hàng</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/addresses" class="tab-link">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Địa chỉ</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/reviews" class="tab-link">
-            <i class="fas fa-star"></i>
-            <span>Đánh giá</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/change-password" class="tab-link">
-            <i class="fas fa-lock"></i>
-            <span>Bảo mật</span>
-        </a>
-    </div>
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3 class="quick-actions-title">Thao tác nhanh</h3>
+                <div class="quick-actions-grid">
+                    <a href="${pageContext.request.contextPath}/profile/orders" class="quick-action-btn">
+                        <i class="fas fa-box"></i>
+                        <span>Xem đơn hàng</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/profile/addresses" class="quick-action-btn">
+                        <i class="fas fa-plus"></i>
+                        <span>Thêm địa chỉ</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/profile/change-password"
+                       class="quick-action-btn">
+                        <i class="fas fa-key"></i>
+                        <span>Đổi mật khẩu</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/store" class="quick-action-btn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Mua sắm</span>
+                    </a>
+                </div>
+            </div>
 
-    <!-- Quick Actions -->
-    <div class="quick-actions">
-        <h3 class="quick-actions-title">Thao tác nhanh</h3>
-        <div class="quick-actions-grid">
-            <a href="${pageContext.request.contextPath}/profile/orders" class="quick-action-btn">
-                <i class="fas fa-box"></i>
-                <span>Xem đơn hàng</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/addresses" class="quick-action-btn">
-                <i class="fas fa-plus"></i>
-                <span>Thêm địa chỉ</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/change-password"
-               class="quick-action-btn">
-                <i class="fas fa-key"></i>
-                <span>Đổi mật khẩu</span>
-            </a>
-            <a href="${pageContext.request.contextPath}/store" class="quick-action-btn">
-                <i class="fas fa-shopping-bag"></i>
-                <span>Mua sắm</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- Tab Content -->
-    <div class="tab-content">
-        <div class="row g-4">
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <div class="row g-4">
             <!-- Account Info -->
             <div class="col-12 col-lg-6">
                 <div class="tab-content-header"
@@ -176,25 +158,25 @@
                 <div class="info-list">
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">Email</span>
-                        <span class="fw-medium">${user.email}</span>
+                        <span class="fw-medium">${sessionScope.user.email}</span>
                     </div>
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">Tên đăng nhập</span>
-                        <span class="fw-medium">${user.username}</span>
+                        <span class="fw-medium">${sessionScope.user.username}</span>
                     </div>
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">Số điện thoại</span>
-                        <span class="fw-medium">${not empty user.phone ? user.phone : 'Chưa cập nhật'}</span>
+                        <span class="fw-medium">${not empty sessionScope.user.phone ? sessionScope.user.phone : 'Chưa cập nhật'}</span>
                     </div>
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">Vai trò</span>
-                        <span class="fw-medium">${user.role}</span>
+                        <span class="fw-medium">${sessionScope.user.role}</span>
                     </div>
                     <div class="d-flex justify-content-between py-2">
                         <span class="text-muted">Đăng nhập bằng</span>
                         <span class="fw-medium">
                                             <c:choose>
-                                                <c:when test="${user.authProvider == 'GOOGLE'}">
+                                                <c:when test="${sessionScope.user.authProvider == 'GOOGLE'}">
                                                     <i class="fab fa-google text-danger me-1"></i> Google
                                                 </c:when>
                                                 <c:otherwise>
@@ -334,6 +316,8 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
+            </div>
+                </div>
             </div>
         </div>
     </div>
