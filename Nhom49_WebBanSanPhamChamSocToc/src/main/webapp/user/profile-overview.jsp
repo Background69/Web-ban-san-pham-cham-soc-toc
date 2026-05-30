@@ -29,152 +29,128 @@
         <div class="account-main">
             <!-- Profile Header Card -->
             <div class="profile-header-card">
-        <div class="profile-header-content">
-            <!-- Avatar Section -->
-            <div class="profile-avatar-section">
-                <div class="profile-avatar">
-                    <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
-                    <c:choose>
-                        <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
-                            <i class="fas fa-user default-avatar-icon"></i>
-                        </c:when>
+                <div class="profile-header-content">
+                    <!-- Avatar Section -->
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar">
+                            <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
+                            <c:choose>
+                                <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
+                                    <i class="fas fa-user default-avatar-icon"></i>
+                                </c:when>
 
-                        <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
-                            <img src="${avatarUrl}" alt="Avatar">
-                        </c:when>
+                                <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
+                                    <img src="${avatarUrl}" alt="Avatar">
+                                </c:when>
 
-                        <c:otherwise>
-                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar">
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
-
-            <!-- Profile Info -->
-            <div class="profile-info">
-                <h1 class="profile-name">
-                    ${sessionScope.currentUser.username}
-                    <c:if test="${sessionScope.currentUser.authProvider == 'GOOGLE'}">
-                        <span class="verified-badge"><i class="fas fa-check"></i> Google</span>
-                    </c:if>
-                </h1>
-                <p class="profile-username">@${sessionScope.currentUser.username}</p>
-
-                <div class="profile-meta">
-                    <div class="profile-meta-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>${sessionScope.currentUser.email}</span>
-                    </div>
-                    <c:if test="${not empty sessionScope.currentUser.phone}">
-                        <div class="profile-meta-item">
-                            <i class="fas fa-phone"></i>
-                            <span>${sessionScope.currentUser.phone}</span>
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar">
+                                </c:otherwise>
+                            </c:choose>
                         </div>
-                    </c:if>
-                    <div class="profile-meta-item">
-                        <i class="fas fa-user-tag"></i>
-                        <span>${sessionScope.currentUser.role}</span>
                     </div>
-                </div>
 
-                <div class="profile-badges">
-                    <c:if test="${sessionScope.currentUser.authProvider == 'GOOGLE'}">
+                    <!-- Profile Info -->
+                    <div class="profile-info">
+                        <h1 class="profile-name">
+                            ${sessionScope.currentUser.username}
+                            <c:if test="${sessionScope.currentUser.authProvider == 'GOOGLE'}">
+                                <span class="verified-badge"><i class="fas fa-check"></i> Google</span>
+                            </c:if>
+                        </h1>
+                        <p class="profile-username">@${sessionScope.currentUser.username}</p>
+
+                        <div class="profile-meta">
+                            <div class="profile-meta-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>${sessionScope.currentUser.email}</span>
+                            </div>
+                            <c:if test="${not empty sessionScope.currentUser.phone}">
+                                <div class="profile-meta-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>${sessionScope.currentUser.phone}</span>
+                                </div>
+                            </c:if>
+                            <div class="profile-meta-item">
+                                <i class="fas fa-user-tag"></i>
+                                <span>${sessionScope.currentUser.role}</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-badges">
+                            <c:if test="${sessionScope.currentUser.authProvider == 'GOOGLE'}">
                                         <span class="profile-badge badge-success">
                                             <i class="fab fa-google"></i> Google
                                         </span>
-                    </c:if>
-                    <c:if test="${sessionScope.currentUser.active}">
+                            </c:if>
+                            <c:if test="${sessionScope.currentUser.active}">
                                         <span class="profile-badge badge-success">
                                             <i class="fas fa-check-circle"></i> Đang hoạt động
                                         </span>
-                    </c:if>
+                            </c:if>
+                        </div>
+                    </div>
+
+                    <!-- Profile Actions -->
+                    <div class="profile-actions">
+                        <a href="${pageContext.request.contextPath}/profile/edit"
+                           class="btn-profile btn-profile-primary">
+                            <i class="fas fa-pen"></i> Chỉnh sửa
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <!-- Profile Actions -->
-            <div class="profile-actions">
-                <a href="${pageContext.request.contextPath}/profile/edit"
-                   class="btn-profile btn-profile-primary">
-                    <i class="fas fa-pen"></i> Chỉnh sửa
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-value">${stats.totalOrders != null ? stats.totalOrders : 0}</div>
-            <div class="stat-label">Đơn hàng</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">
-                <fmt:formatNumber value="${stats.totalSpending != null ? stats.totalSpending : 0}"
-                                  type="number" maxFractionDigits="0"/>đ
-            </div>
-            <div class="stat-label">Chi tiêu</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${stats.totalAddresses != null ? stats.totalAddresses : 0}</div>
-            <div class="stat-label">Địa chỉ</div>
-        </div>
-    </div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h3 class="quick-actions-title">Thao tác nhanh</h3>
-                <div class="quick-actions-grid">
-                    <a href="${pageContext.request.contextPath}/profile/orders" class="quick-action-btn">
-                        <i class="fas fa-box"></i>
-                        <span>Xem đơn hàng</span>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/profile/addresses" class="quick-action-btn">
-                        <i class="fas fa-plus"></i>
-                        <span>Thêm địa chỉ</span>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/profile/change-password"
-                       class="quick-action-btn">
-                        <i class="fas fa-key"></i>
-                        <span>Đổi mật khẩu</span>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/store" class="quick-action-btn">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span>Mua sắm</span>
-                    </a>
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalOrders != null ? stats.totalOrders : 0}</div>
+                    <div class="stat-label">Đơn hàng</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">
+                        <fmt:formatNumber value="${stats.totalSpending != null ? stats.totalSpending : 0}"
+                                          type="number" maxFractionDigits="0"/>đ
+                    </div>
+                    <div class="stat-label">Chi tiêu</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.totalAddresses != null ? stats.totalAddresses : 0}</div>
+                    <div class="stat-label">Địa chỉ</div>
                 </div>
             </div>
 
             <!-- Tab Content -->
             <div class="tab-content">
                 <div class="row g-4">
-            <!-- Account Info -->
-            <div class="col-12 col-lg-6">
-                <div class="tab-content-header"
-                     style="border-bottom: none; padding-bottom: 0; margin-bottom: 15px;">
-                    <h4 class="tab-content-title">
-                        <i class="fas fa-user-circle"></i> Thông tin tài khoản
-                    </h4>
-                </div>
-                <div class="info-list">
-                    <div class="d-flex justify-content-between py-2 border-bottom">
-                        <span class="text-muted">Email</span>
-                        <span class="fw-medium">${sessionScope.user.email}</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-2 border-bottom">
-                        <span class="text-muted">Tên đăng nhập</span>
-                        <span class="fw-medium">${sessionScope.user.username}</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-2 border-bottom">
-                        <span class="text-muted">Số điện thoại</span>
-                        <span class="fw-medium">${not empty sessionScope.user.phone ? sessionScope.user.phone : 'Chưa cập nhật'}</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-2 border-bottom">
-                        <span class="text-muted">Vai trò</span>
-                        <span class="fw-medium">${sessionScope.user.role}</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-2">
-                        <span class="text-muted">Đăng nhập bằng</span>
-                        <span class="fw-medium">
+                    <!-- Account Info -->
+                    <div class="col-12 col-lg-6">
+                        <div class="tab-content-header"
+                             style="border-bottom: none; padding-bottom: 0; margin-bottom: 15px;">
+                            <h4 class="tab-content-title">
+                                <i class="fas fa-user-circle"></i> Thông tin tài khoản
+                            </h4>
+                        </div>
+                        <div class="info-list">
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Email</span>
+                                <span class="fw-medium">${sessionScope.user.email}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Tên đăng nhập</span>
+                                <span class="fw-medium">${sessionScope.user.username}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Số điện thoại</span>
+                                <span class="fw-medium">${not empty sessionScope.user.phone ? sessionScope.user.phone : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Vai trò</span>
+                                <span class="fw-medium">${sessionScope.user.role}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span class="text-muted">Đăng nhập bằng</span>
+                                <span class="fw-medium">
                                             <c:choose>
                                                 <c:when test="${sessionScope.user.authProvider == 'GOOGLE'}">
                                                     <i class="fab fa-google text-danger me-1"></i> Google
@@ -184,91 +160,91 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Default Address -->
-            <div class="col-12 col-lg-6">
-                <div class="tab-content-header"
-                     style="border-bottom: none; padding-bottom: 0; margin-bottom: 15px;">
-                    <h4 class="tab-content-title">
-                        <i class="fas fa-map-marker-alt"></i> Địa chỉ mặc định
-                    </h4>
-                    <a href="${pageContext.request.contextPath}/profile/addresses"
-                       class="btn-profile btn-profile-outline"
-                       style="padding: 6px 12px; font-size: 13px;">
-                        <i class="fas fa-cog"></i> Quản lý
-                    </a>
-                </div>
-                <c:choose>
-                    <c:when test="${not empty defaultAddress}">
-                        <div class="address-card is-default">
-                            <div class="address-card-header">
+                    <!-- Default Address -->
+                    <div class="col-12 col-lg-6">
+                        <div class="tab-content-header"
+                             style="border-bottom: none; padding-bottom: 0; margin-bottom: 15px;">
+                            <h4 class="tab-content-title">
+                                <i class="fas fa-map-marker-alt"></i> Địa chỉ mặc định
+                            </h4>
+                            <a href="${pageContext.request.contextPath}/profile/addresses"
+                               class="btn-profile btn-profile-outline"
+                               style="padding: 6px 12px; font-size: 13px;">
+                                <i class="fas fa-cog"></i> Quản lý
+                            </a>
+                        </div>
+                        <c:choose>
+                            <c:when test="${not empty defaultAddress}">
+                                <div class="address-card is-default">
+                                    <div class="address-card-header">
                                                 <span class="address-type">
                                                     <i class="fas fa-home"></i> Địa chỉ giao hàng
                                                 </span>
-                                <span class="address-default-badge">Mặc định</span>
-                            </div>
-                            <div class="address-name">${defaultAddress.fullName}</div>
-                            <div class="address-phone">
-                                <i class="fas fa-phone-alt me-1"></i> ${defaultAddress.phone}
-                            </div>
-                            <div class="address-detail">
-                                    ${defaultAddress.specificAddress},
-                                    ${defaultAddress.wardName},
-                                    ${defaultAddress.districtName},
-                                    ${defaultAddress.provinceName}
-                            </div>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-state" style="padding: 40px 20px;">
-                            <div class="empty-state-icon" style="width: 70px; height: 70px;">
-                                <i class="fas fa-map-marker-alt" style="font-size: 28px;"></i>
-                            </div>
-                            <h5 class="empty-state-title" style="font-size: 16px;">Chưa có địa chỉ</h5>
-                            <p class="empty-state-text" style="font-size: 13px;">Thêm địa chỉ giao hàng
-                                để đặt hàng
-                                nhanh hơn</p>
-                            <a href="${pageContext.request.contextPath}/profile/addresses"
-                               class="btn-profile btn-profile-primary"
-                               style="padding: 8px 16px; font-size: 13px;">
-                                <i class="fas fa-plus"></i> Thêm địa chỉ
+                                        <span class="address-default-badge">Mặc định</span>
+                                    </div>
+                                    <div class="address-name">${defaultAddress.fullName}</div>
+                                    <div class="address-phone">
+                                        <i class="fas fa-phone-alt me-1"></i> ${defaultAddress.phone}
+                                    </div>
+                                    <div class="address-detail">
+                                            ${defaultAddress.specificAddress},
+                                            ${defaultAddress.wardName},
+                                            ${defaultAddress.districtName},
+                                            ${defaultAddress.provinceName}
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state" style="padding: 40px 20px;">
+                                    <div class="empty-state-icon" style="width: 70px; height: 70px;">
+                                        <i class="fas fa-map-marker-alt" style="font-size: 28px;"></i>
+                                    </div>
+                                    <h5 class="empty-state-title" style="font-size: 16px;">Chưa có địa chỉ</h5>
+                                    <p class="empty-state-text" style="font-size: 13px;">Thêm địa chỉ giao hàng
+                                        để đặt hàng
+                                        nhanh hơn</p>
+                                    <a href="${pageContext.request.contextPath}/profile/addresses"
+                                       class="btn-profile btn-profile-primary"
+                                       style="padding: 8px 16px; font-size: 13px;">
+                                        <i class="fas fa-plus"></i> Thêm địa chỉ
+                                    </a>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="col-12">
+                        <div class="tab-content-header"
+                             style="border-bottom: none; padding-bottom: 0; margin-bottom: 15px;">
+                            <h4 class="tab-content-title">
+                                <i class="fas fa-history"></i> Đơn hàng gần đây
+                            </h4>
+                            <a href="${pageContext.request.contextPath}/profile/orders"
+                               class="btn-profile btn-profile-outline"
+                               style="padding: 6px 12px; font-size: 13px;">
+                                Xem tất cả <i class="fas fa-arrow-right ms-1"></i>
                             </a>
                         </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-
-            <!-- Recent Orders -->
-            <div class="col-12">
-                <div class="tab-content-header"
-                     style="border-bottom: none; padding-bottom: 0; margin-bottom: 15px;">
-                    <h4 class="tab-content-title">
-                        <i class="fas fa-history"></i> Đơn hàng gần đây
-                    </h4>
-                    <a href="${pageContext.request.contextPath}/profile/orders"
-                       class="btn-profile btn-profile-outline"
-                       style="padding: 6px 12px; font-size: 13px;">
-                        Xem tất cả <i class="fas fa-arrow-right ms-1"></i>
-                    </a>
-                </div>
-                <c:choose>
-                    <c:when test="${not empty recentOrders}">
-                        <c:forEach var="order" items="${recentOrders}" end="2">
-                            <div class="order-card">
-                                <div class="order-card-header">
-                                    <div class="order-info">
-                                        <span class="order-id">Đơn #${order.orderCode}</span>
-                                        <span class="order-date">
+                        <c:choose>
+                            <c:when test="${not empty recentOrders}">
+                                <c:forEach var="order" items="${recentOrders}" end="2">
+                                    <div class="order-card">
+                                        <div class="order-card-header">
+                                            <div class="order-info">
+                                                <span class="order-id">Đơn #${order.orderCode}</span>
+                                                <span class="order-date">
                                                             <i class="far fa-clock"></i>
                                                             <fmt:formatDate value="${order.createdAt}"
                                                                             pattern="dd/MM/yyyy"/>
                                                         </span>
-                                    </div>
-                                    <span
-                                            class="order-status status-${order.orderStatus != null ? order.orderStatus.toLowerCase() : 'pending'}">
+                                            </div>
+                                            <span
+                                                    class="order-status status-${order.orderStatus != null ? order.orderStatus.toLowerCase() : 'pending'}">
                                                         <c:choose>
                                                             <c:when test="${order.orderStatus == 'pending'}"><i
                                                                     class="fas fa-clock"></i> Chờ xác nhận</c:when>
@@ -283,40 +259,40 @@
                                                             <c:otherwise>${order.orderStatus}</c:otherwise>
                                                         </c:choose>
                                                     </span>
-                                </div>
-                                <div class="order-card-footer">
-                                    <div class="order-total">
-                                        Tổng: <span>
+                                        </div>
+                                        <div class="order-card-footer">
+                                            <div class="order-total">
+                                                Tổng: <span>
                                                             <fmt:formatNumber value="${order.totalAmount}"
                                                                               type="number"/>đ
                                                         </span>
+                                            </div>
+                                            <a href="${pageContext.request.contextPath}/orders/${order.orderId}"
+                                               class="btn-order btn-order-primary">
+                                                <i class="fas fa-eye"></i> Chi tiết
+                                            </a>
+                                        </div>
                                     </div>
-                                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}"
-                                       class="btn-order btn-order-primary">
-                                        <i class="fas fa-eye"></i> Chi tiết
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state" style="padding: 40px 20px;">
+                                    <div class="empty-state-icon" style="width: 70px; height: 70px;">
+                                        <i class="fas fa-shopping-bag" style="font-size: 28px;"></i>
+                                    </div>
+                                    <h5 class="empty-state-title" style="font-size: 16px;">Chưa có đơn hàng</h5>
+                                    <p class="empty-state-text" style="font-size: 13px;">Hãy khám phá và mua sắm
+                                        sản phẩm yêu
+                                        thích</p>
+                                    <a href="${pageContext.request.contextPath}/store"
+                                       class="btn-profile btn-profile-primary"
+                                       style="padding: 8px 16px; font-size: 13px;">
+                                        <i class="fas fa-shopping-bag"></i> Mua sắm ngay
                                     </a>
                                 </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-state" style="padding: 40px 20px;">
-                            <div class="empty-state-icon" style="width: 70px; height: 70px;">
-                                <i class="fas fa-shopping-bag" style="font-size: 28px;"></i>
-                            </div>
-                            <h5 class="empty-state-title" style="font-size: 16px;">Chưa có đơn hàng</h5>
-                            <p class="empty-state-text" style="font-size: 13px;">Hãy khám phá và mua sắm
-                                sản phẩm yêu
-                                thích</p>
-                            <a href="${pageContext.request.contextPath}/store"
-                               class="btn-profile btn-profile-primary"
-                               style="padding: 8px 16px; font-size: 13px;">
-                                <i class="fas fa-shopping-bag"></i> Mua sắm ngay
-                            </a>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
             </div>
         </div>
