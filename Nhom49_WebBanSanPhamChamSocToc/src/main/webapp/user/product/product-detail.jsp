@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -663,18 +663,18 @@
                                         </c:choose>
                                     </div>
                                     <div class="reviewer-meta">
-                                        <span class="reviewer-name">
-                                            <c:choose>
-                                                <c:when test="${not empty review.reviewerName}">
-                                                    ${review.reviewerName}
-                                                </c:when>
-                                                <c:otherwise>Ẩn danh</c:otherwise>
-                                            </c:choose>
-                                        </span>
+                                                        <span class="reviewer-name">
+                                                            <c:choose>
+                                                                <c:when test="${not empty review.reviewerName}">
+                                                                    ${review.reviewerName}
+                                                                </c:when>
+                                                                <c:otherwise>Ẩn danh</c:otherwise>
+                                                            </c:choose>
+                                                        </span>
                                         <span class="review-date">
-                                            <fmt:formatDate value="${review.createdAt}"
-                                                            pattern="dd/MM/yyyy"/>
-                                        </span>
+                                                            <fmt:formatDate value="${review.createdAt}"
+                                                                            pattern="dd/MM/yyyy"/>
+                                                        </span>
                                     </div>
                                 </div>
                                 <div class="review-rating">
@@ -687,6 +687,17 @@
                             <div class="review-content">
                                 <p>${review.content}</p>
                             </div>
+                            <c:if test="${not empty review.images}">
+                                <div class="review-images-grid">
+                                    <c:forEach var="reviewImg" items="${review.images}">
+                                        <div class="review-thumb-item"
+                                             onclick="openReviewLightbox('${pageContext.request.contextPath}/static/${reviewImg.imageUrl}')">
+                                            <img src="${pageContext.request.contextPath}/static/${reviewImg.imageUrl}"
+                                                 alt="Ảnh đánh giá từ khách hàng" loading="lazy">
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
                         </div>
                     </c:forEach>
                     <c:if test="${empty reviews}">
@@ -700,6 +711,15 @@
     </div>
 
 </main>
+
+<div class="review-lightbox-overlay" id="reviewLightbox" onclick="closeReviewLightbox(event)">
+    <button class="review-lightbox-close" id="reviewLightboxClose"
+            onclick="closeReviewLightbox(event)" aria-label="Đóng">&times;
+    </button>
+    <div class="review-lightbox-content">
+        <img id="reviewLightboxImg" src="" alt="Ảnh đánh giá phóng to">
+    </div>
+</div>
 
 <jsp:include page="/layout/footer.jsp"/>
 
@@ -1178,8 +1198,30 @@
             if (actionInput) actionInput.value = 'add_to_cart';
         });
     }
+
+    function openReviewLightbox(src) {
+        var overlay = document.getElementById('reviewLightbox');
+        var img = document.getElementById('reviewLightboxImg');
+        if (!overlay || !img) return;
+
+        img.src = src;
+        overlay.classList.add('is-active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeReviewLightbox(e) {
+        if (e && e.target && e.target.id === 'reviewLightboxImg') return;
+
+        var overlay = document.getElementById('reviewLightbox');
+        if (!overlay) return;
+
+        overlay.classList.remove('is-active');
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeReviewLightbox(null);
+    });
 </script>
-
 </body>
-
 </html>

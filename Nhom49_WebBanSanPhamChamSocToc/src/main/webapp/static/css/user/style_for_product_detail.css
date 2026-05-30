@@ -208,7 +208,6 @@ h1, h2, h3, h4, h5, h6 {
     color: #888;
 }
 
-/* ========== PRICE SECTION - ĐÃ SỬA ========== */
 .product-section-price {
     background: var(--brand-soft);
     border-radius: 16px;
@@ -228,7 +227,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 28px;
     font-weight: 800;
     color: var(--brand);
-    display: inline-block; /* ĐÃ SỬA: Đảm bảo hiển thị */
+    display: inline-block;
     transition: all 0.3s ease; /* Thêm animation */
 }
 
@@ -236,7 +235,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 16px;
     color: var(--text-muted);
     text-decoration: line-through;
-    display: inline-block; /* ĐÃ SỬA: Đảm bảo hiển thị */
+    display: inline-block;
     transition: all 0.3s ease;
 }
 
@@ -247,7 +246,7 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, #ff6b6b, #ff5252);
     padding: 5px 12px;
     border-radius: 20px;
-    display: inline-block; /* ĐÃ SỬA: Đảm bảo hiển thị */
+    display: inline-block;
     transition: all 0.3s ease;
 }
 
@@ -318,7 +317,7 @@ h1, h2, h3, h4, h5, h6 {
 .option-btn:hover {
     border-color: var(--brand);
     background: var(--brand-soft);
-    transform: translateY(-2px); /* ĐÃ SỬA: Thêm hiệu ứng */
+    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(44, 89, 64, 0.15);
 }
 
@@ -327,7 +326,7 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--brand-soft);
     color: var(--brand);
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(44, 89, 64, 0.2); /* ĐÃ SỬA */
+    box-shadow: 0 4px 12px rgba(44, 89, 64, 0.2);
 }
 
 .quantity-selector {
@@ -387,11 +386,10 @@ h1, h2, h3, h4, h5, h6 {
     background: #f0f0f0 !important;
 }
 
-/* Stock Line - ĐÃ SỬA */
 .stock-line {
     margin-top: 10px;
     font-size: 14px;
-    transition: all 0.3s ease; /* Thêm animation */
+    transition: all 0.3s ease;
 }
 
 .in-stock {
@@ -591,7 +589,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* ========== ACTION BUTTONS - ĐÃ SỬA ========== */
+/* ========== ACTION BUTTONS ========== */
 .product-section-btn {
     display: flex;
     gap: 15px;
@@ -1377,7 +1375,7 @@ h1, h2, h3, h4, h5, h6 {
     cursor: move;
 }
 
-/* ========== LOADING STATE - MỚI THÊM ========== */
+/* ========== LOADING STATE ========== */
 .variant-btn.loading {
     opacity: 0.6;
     pointer-events: none;
@@ -1579,5 +1577,185 @@ h1, h2, h3, h4, h5, h6 {
     .specs-table th,
     .specs-table td {
         padding: 10px 12px;
+    }
+}
+
+.review-images-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #e8ede9;
+}
+
+.review-thumb-item {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: #f4f6f3;
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+}
+
+.review-thumb-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.25s ease;
+    pointer-events: none;
+}
+
+.review-thumb-item:hover {
+    border-color: var(--brand, #2c5940);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(44, 89, 64, 0.15);
+}
+
+.review-thumb-item:hover::after {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.review-thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.review-thumb-item:hover img {
+    transform: scale(1.08);
+}
+
+.review-lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.review-lightbox-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.review-lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 26px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100000;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.review-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: rotate(90deg) scale(1.1);
+}
+
+.review-lightbox-content {
+    max-width: 88vw;
+    max-height: 85vh;
+    cursor: default;
+}
+
+.review-lightbox-content img {
+    display: block;
+    max-width: 100%;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transform: scale(0.88);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+}
+
+.review-lightbox-overlay.is-active .review-lightbox-content img {
+    transform: scale(1);
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .review-thumb-item {
+        width: 68px;
+        height: 68px;
+        border-radius: 8px;
+    }
+
+    .review-images-grid {
+        gap: 8px;
+    }
+
+    .review-lightbox-close {
+        top: 12px;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+        font-size: 22px;
+    }
+
+    .review-lightbox-content {
+        max-width: 94vw;
+        max-height: 80vh;
+    }
+
+    .review-lightbox-content img {
+        max-height: 80vh;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .review-thumb-item {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .review-lightbox-overlay,
+    .review-lightbox-content img,
+    .review-thumb-item,
+    .review-thumb-item img {
+        transition: none;
+    }
+
+    .review-lightbox-content img {
+        transform: scale(1);
+        opacity: 1;
     }
 }
