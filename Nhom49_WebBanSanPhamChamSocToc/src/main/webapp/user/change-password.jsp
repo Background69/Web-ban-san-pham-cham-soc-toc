@@ -19,37 +19,18 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <main class="profile-container">
-    <!-- Tab Navigation -->
-    <div class="tab-navigation">
-        <a href="${pageContext.request.contextPath}/profile" class="tab-link">
-            <i class="fas fa-home"></i>
-            <span>Tổng quan</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/orders" class="tab-link">
-            <i class="fas fa-box"></i>
-            <span>Đơn hàng</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/addresses" class="tab-link">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Địa chỉ</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/reviews" class="tab-link">
-            <i class="fas fa-star"></i>
-            <span>Đánh giá</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/change-password" class="tab-link active">
-            <i class="fas fa-lock"></i>
-            <span>Bảo mật</span>
-        </a>
-    </div>
+    <c:set var="activeTab" value="password" scope="request"/>
 
-    <!-- Tab Content -->
-    <div class="tab-content">
-        <div class="tab-content-header">
-            <h3 class="tab-content-title">
-                <i class="fas fa-shield-alt"></i> Bảo mật tài khoản
-            </h3>
-        </div>
+    <div class="account-layout">
+        <jsp:include page="/user/layout/account-sidebar.jsp"/>
+
+        <div class="account-main">
+            <div class="tab-content">
+                <div class="tab-content-header">
+                    <h3 class="tab-content-title">
+                        <i class="fas fa-shield-alt"></i> Bảo mật tài khoản
+                    </h3>
+                </div>
 
         <c:if test="${not empty success}">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -148,6 +129,7 @@
                     </a>
                 </div>
             </form>
+            </div>
         </div>
     </div>
 </main>

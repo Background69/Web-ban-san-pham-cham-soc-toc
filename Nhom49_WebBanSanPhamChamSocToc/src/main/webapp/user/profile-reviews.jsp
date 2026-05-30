@@ -222,67 +222,49 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <main class="profile-container">
-    <!-- Profile Header Card -->
-    <div class="profile-header-card">
-        <div class="profile-header-content">
-            <div class="profile-avatar-section">
-                <div class="profile-avatar">
-                    <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
-                    <c:choose>
-                        <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
-                            <i class="fas fa-user default-avatar-icon"></i>
-                        </c:when>
+    <c:set var="activeTab" value="reviews" scope="request"/>
 
-                        <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
-                            <img src="${avatarUrl}" alt="Avatar">
-                        </c:when>
+    <div class="account-layout">
+        <jsp:include page="/user/layout/account-sidebar.jsp"/>
 
-                        <c:otherwise>
-                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar">
-                        </c:otherwise>
-                    </c:choose>
+        <div class="account-main">
+            <!-- Profile Header Card -->
+            <div class="profile-header-card">
+                <div class="profile-header-content">
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar">
+                            <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
+                            <c:choose>
+                                <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
+                                    <i class="fas fa-user default-avatar-icon"></i>
+                                </c:when>
+
+                                <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
+                                    <img src="${avatarUrl}" alt="Avatar">
+                                </c:when>
+
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar">
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name">${sessionScope.currentUser.username}</h1>
+                        <p class="profile-username">@${sessionScope.currentUser.username}</p>
+                    </div>
                 </div>
             </div>
-            <div class="profile-info">
-                <h1 class="profile-name">${sessionScope.currentUser.username}</h1>
-                <p class="profile-username">@${sessionScope.currentUser.username}</p>
-            </div>
-        </div>
-    </div>
 
-    <!-- Tab Navigation -->
-    <div class="tab-navigation">
-        <a href="${pageContext.request.contextPath}/profile" class="tab-link">
-            <i class="fas fa-home"></i>
-            <span>Tổng quan</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/orders" class="tab-link">
-            <i class="fas fa-box"></i>
-            <span>Đơn hàng</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/addresses" class="tab-link">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Địa chỉ</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/reviews" class="tab-link active">
-            <i class="fas fa-star"></i>
-            <span>Đánh giá</span>
-        </a>
-        <a href="${pageContext.request.contextPath}/profile/change-password" class="tab-link">
-            <i class="fas fa-lock"></i>
-            <span>Bảo mật</span>
-        </a>
-    </div>
-
-    <!-- Reviews Content -->
-    <div class="tab-content">
-        <div class="tab-content-header"
-             style="border-bottom: none; padding-bottom: 0; margin-bottom: 20px;">
-            <h4 class="tab-content-title">
-                <i class="fas fa-star"></i> Đánh giá của tôi
-                <span class="badge bg-primary ms-2">${reviews.size()}</span>
-            </h4>
-        </div>
+            <!-- Reviews Content -->
+            <div class="tab-content">
+                <div class="tab-content-header"
+                     style="border-bottom: none; padding-bottom: 0; margin-bottom: 20px;">
+                    <h4 class="tab-content-title">
+                        <i class="fas fa-star"></i> Đánh giá của tôi
+                        <span class="badge bg-primary ms-2">${reviews.size()}</span>
+                    </h4>
+                </div>
 
         <c:choose>
             <c:when test="${not empty reviews}">
@@ -349,7 +331,9 @@
                     </a>
                 </div>
             </c:otherwise>
-        </c:choose>
+            </c:choose>
+            </div>
+        </div>
     </div>
 </main>
 
