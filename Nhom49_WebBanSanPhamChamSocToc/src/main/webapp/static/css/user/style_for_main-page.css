@@ -980,7 +980,8 @@
     margin: 0;
     font-size: 21px;
     font-weight: 700;
-    color: #b9384b;
+    color: #1B4D3E;
+    transition: color 0.3s ease-in-out;
 }
 
 .home-page .price-old {
@@ -1216,7 +1217,8 @@
     font-size: 20px;
     line-height: 1.2;
     font-weight: 800;
-    color: #c13b52;
+    color: #1B4D3E;
+    transition: color 0.3s ease-in-out;
 }
 
 .home-page .featured-container .price-old {

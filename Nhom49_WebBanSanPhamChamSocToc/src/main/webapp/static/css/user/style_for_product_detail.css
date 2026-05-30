@@ -533,7 +533,8 @@ h1, h2, h3, h4, h5, h6 {
 .related-products .price-current {
     font-size: 16px;
     font-weight: 700;
-    color: #e91e63;
+    color: #1B4D3E;
+    transition: color 0.3s ease-in-out;
 }
 
 .related-products .price-old {
