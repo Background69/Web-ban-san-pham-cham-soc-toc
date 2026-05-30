@@ -262,7 +262,7 @@ public class UserProfileController extends HttpServlet {
             session.removeAttribute("flashError");
         }
 
-        // Dọn dữ liệu cũ ếu trước đó từng set nhầm success/error = true/false
+        // Dọn dữ liệu cũ nếu trước đó từng set nhầm success/error = true/false
         session.removeAttribute("success");
         session.removeAttribute("error");
     }
