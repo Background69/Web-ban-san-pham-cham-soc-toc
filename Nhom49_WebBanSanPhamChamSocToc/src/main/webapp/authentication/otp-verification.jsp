@@ -79,19 +79,18 @@
 
 <script src="${pageContext.request.contextPath}/static/js/authentication/otp-verification.js"></script>
 <script>
-(function () {
-    // Loading spinner cho nút "Gửi lại OTP"
-    var resendForm = document.querySelector('form[action$="/auth/resend-otp"]');
-    if (!resendForm) return;
+    (function () {
+        var resendForm = document.querySelector('form[action$="/auth/resend-otp"]');
+        if (!resendForm) return;
 
-    resendForm.addEventListener("submit", function () {
-        var btn = document.getElementById("resendBtn");
-        if (btn && !btn.disabled) {
-            btn.classList.add("btn-loading");
-            btn.disabled = true;
-        }
-    });
-})();
+        resendForm.addEventListener("submit", function () {
+            var btn = document.getElementById("resendBtn");
+            if (btn && !btn.disabled) {
+                btn.classList.add("btn-loading");
+                btn.disabled = true;
+            }
+        });
+    })();
 </script>
 </body>
 </html>
