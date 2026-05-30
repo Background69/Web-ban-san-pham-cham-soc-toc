@@ -59,7 +59,8 @@ public class AvatarController extends HttpServlet {
                 request.getSession().setAttribute(
                         "flashError",
                         "Vui lòng chọn file ảnh hợp lệ (JPG, PNG, GIF, WebP)."
-                );                response.sendRedirect(request.getContextPath() + "/profile/edit");
+                );
+                response.sendRedirect(request.getContextPath() + "/profile/edit");
                 return;
             }
 
