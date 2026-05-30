@@ -55,55 +55,73 @@
         </div>
 
         <!-- Avatar Upload Section -->
-        <div class="profile-form mb-4" style="padding-bottom: 20px; border-bottom: 1px solid #dee2e6;">
-            <h5 class="mb-3"><i class="fas fa-camera me-2"></i>Ảnh đại diện</h5>
-            <div class="d-flex align-items-center gap-4">
-                <div class="avatar-preview position-relative"
-                     style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+        <div class="profile-form avatar-section">
+            <h5 class="avatar-section-title">
+                <i class="fas fa-camera"></i>
+                Ảnh đại diện
+            </h5>
+
+            <div class="avatar-upload-layout">
+                <div class="avatar-preview">
                     <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
-                    <%-- Case 1: No custom avatar set --%>
+
                     <c:choose>
                         <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
-                            <i class="fas fa-user" id="defaultAvatarIcon"
-                               style="font-size: 48px; color: white;"></i>
-                            <img src="" alt="Avatar" id="avatarPreview"
-                                 style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <i class="fas fa-user default-avatar-icon" id="defaultAvatarIcon"></i>
+
+                            <img src="" alt="Avatar" id="avatarPreview" class="avatar-preview-img avatar-hidden">
                         </c:when>
-                        <%-- Case 2: Cloudinary URL (https://) --%>
+
                         <c:when test="${avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')}">
-                            <img src="${avatarUrl}" alt="Avatar" id="avatarPreview"
-                                 style="width: 100%; height: 100%; object-fit: cover;"
-                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='block';">
-                            <i class="fas fa-user" id="defaultAvatarIcon"
-                               style="font-size: 48px; color: white; display: none;"></i>
+                            <img src="${avatarUrl}" alt="Avatar" id="avatarPreview" class="avatar-preview-img"
+                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
+
+                            <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
                         </c:when>
-                        <%-- Case 3: Local path (static/) --%>
+
                         <c:otherwise>
-                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar"
+                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}"
+                                 alt="Avatar"
                                  id="avatarPreview"
-                                 style="width: 100%; height: 100%; object-fit: cover;"
-                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='block';">
-                            <i class="fas fa-user" id="defaultAvatarIcon"
-                               style="font-size: 48px; color: white; display: none;"></i>
+                                 class="avatar-preview-img"
+                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
+
+                            <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
                         </c:otherwise>
                     </c:choose>
                 </div>
-                <div>
-                    <form action="${pageContext.request.contextPath}/profile/avatar" method="post"
-                          enctype="multipart/form-data" id="avatarForm">
-                        <input type="file" name="avatar" id="avatarFile"
-                               accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;"
+
+                <div class="avatar-upload-actions">
+                    <form action="${pageContext.request.contextPath}/profile/avatar"
+                          method="post"
+                          enctype="multipart/form-data"
+                          id="avatarForm">
+
+                        <input type="file"
+                               name="avatar"
+                               id="avatarFile"
+                               accept="image/jpeg,image/png,image/gif,image/webp"
+                               class="avatar-file-input"
                                onchange="previewAvatar(this)">
-                        <button type="button" class="btn-profile btn-profile-outline"
+
+                        <button type="button"
+                                class="btn-profile btn-profile-outline"
                                 onclick="document.getElementById('avatarFile').click()">
-                            <i class="fas fa-upload me-1"></i> Chọn ảnh
+                            <i class="fas fa-upload"></i>
+                            Chọn ảnh
                         </button>
-                        <button type="submit" class="btn-profile btn-profile-primary ms-2" id="uploadBtn"
-                                style="display: none;">
-                            <i class="fas fa-save me-1"></i> Lưu avatar
+
+                        <button type="submit"
+                                class="btn-profile btn-profile-primary avatar-save-btn"
+                                id="uploadBtn">
+                            <i class="fas fa-save"></i>
+                            Lưu avatar
                         </button>
                     </form>
-                    <div class="form-hint mt-2">Chấp nhận: JPG, PNG, GIF, WebP. Tối đa 2MB.</div>
+
+                    <div class="form-hint avatar-hint">
+                        Chấp nhận: JPG, PNG, GIF, WebP. Tối đa 2MB.
+                    </div>
                 </div>
             </div>
         </div>
@@ -411,11 +429,17 @@
             const defaultIcon = document.getElementById('defaultAvatarIcon');
 
             preview.src = e.target.result;
-            preview.style.display = 'block';
-            if (defaultIcon) defaultIcon.style.display = 'none';
+            preview.classList.remove('avatar-hidden');
+
+            if (defaultIcon) {
+                defaultIcon.classList.add('avatar-hidden');
+            }
 
             // Show upload button
-            document.getElementById('uploadBtn').style.display = 'inline-flex';
+            const uploadBtn = document.getElementById('uploadBtn');
+            if (uploadBtn) {
+                uploadBtn.style.display = 'inline-flex';
+            }
         };
         reader.readAsDataURL(file);
     }
