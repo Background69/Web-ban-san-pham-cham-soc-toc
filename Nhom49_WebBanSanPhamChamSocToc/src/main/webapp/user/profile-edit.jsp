@@ -49,61 +49,79 @@
             </h3>
         </div>
 
-        <c:if test="${not empty success}">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fas fa-check-circle me-2"></i>${success}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </c:if>
-        <c:if test="${not empty error}">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-circle me-2"></i>${error}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </c:if>
+        <div id="flashMessage"
+             data-success="${requestScope.flashSuccess}"
+             data-error="${requestScope.flashError}">
+        </div>
 
         <!-- Avatar Upload Section -->
-        <div class="profile-form mb-4" style="padding-bottom: 20px; border-bottom: 1px solid #dee2e6;">
-            <h5 class="mb-3"><i class="fas fa-camera me-2"></i>Ảnh đại diện</h5>
-            <div class="d-flex align-items-center gap-4">
-                <div class="avatar-preview position-relative"
-                     style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+        <div class="profile-form avatar-section">
+            <h5 class="avatar-section-title">
+                <i class="fas fa-camera"></i>
+                Ảnh đại diện
+            </h5>
+
+            <div class="avatar-upload-layout">
+                <div class="avatar-preview">
                     <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
+
                     <c:choose>
                         <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
-                            <i class="fas fa-user" id="defaultAvatarIcon"
-                               style="font-size: 48px; color: white;"></i>
-                            <img src="" alt="Avatar" id="avatarPreview"
-                                 style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                            <i class="fas fa-user default-avatar-icon" id="defaultAvatarIcon"></i>
+
+                            <img src="" alt="Avatar" id="avatarPreview" class="avatar-preview-img avatar-hidden">
                         </c:when>
 
-                        <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
-                            <img src="${avatarUrl}" alt="Avatar"
-                                 id="avatarPreview" style="width: 100%; height: 100%; object-fit: cover;">
+                        <c:when test="${avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')}">
+                            <img src="${avatarUrl}" alt="Avatar" id="avatarPreview" class="avatar-preview-img"
+                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
+
+                            <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
                         </c:when>
 
                         <c:otherwise>
-                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar"
-                                 id="avatarPreview" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="${pageContext.request.contextPath}/static/${avatarUrl}"
+                                 alt="Avatar"
+                                 id="avatarPreview"
+                                 class="avatar-preview-img"
+                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='flex';">
+
+                            <i class="fas fa-user default-avatar-icon avatar-hidden" id="defaultAvatarIcon"></i>
                         </c:otherwise>
                     </c:choose>
                 </div>
-                <div>
-                    <form action="${pageContext.request.contextPath}/profile/avatar" method="post"
-                          enctype="multipart/form-data" id="avatarForm">
-                        <input type="file" name="avatar" id="avatarFile"
-                               accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;"
+
+                <div class="avatar-upload-actions">
+                    <form action="${pageContext.request.contextPath}/profile/avatar"
+                          method="post"
+                          enctype="multipart/form-data"
+                          id="avatarForm">
+
+                        <input type="file"
+                               name="avatar"
+                               id="avatarFile"
+                               accept="image/jpeg,image/png,image/gif,image/webp"
+                               class="avatar-file-input"
                                onchange="previewAvatar(this)">
-                        <button type="button" class="btn-profile btn-profile-outline"
+
+                        <button type="button"
+                                class="btn-profile btn-profile-outline"
                                 onclick="document.getElementById('avatarFile').click()">
-                            <i class="fas fa-upload me-1"></i> Chọn ảnh
+                            <i class="fas fa-upload"></i>
+                            Chọn ảnh
                         </button>
-                        <button type="submit" class="btn-profile btn-profile-primary ms-2" id="uploadBtn"
-                                style="display: none;">
-                            <i class="fas fa-save me-1"></i> Lưu avatar
+
+                        <button type="submit"
+                                class="btn-profile btn-profile-primary avatar-save-btn"
+                                id="uploadBtn">
+                            <i class="fas fa-save"></i>
+                            Lưu avatar
                         </button>
                     </form>
-                    <div class="form-hint mt-2">Chấp nhận: JPG, PNG, GIF, WebP. Tối đa 2MB.</div>
+
+                    <div class="form-hint avatar-hint">
+                        Chấp nhận: JPG, PNG, GIF, WebP. Tối đa 2MB.
+                    </div>
                 </div>
             </div>
         </div>
@@ -196,8 +214,116 @@
 
 <jsp:include page="/layout/footer.jsp"/>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    function showToast(message, type, duration) {
+        const toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) return null;
+
+        type = type || 'success';
+        duration = duration || 3000;
+
+        if (!message || message === 'true' || message === 'false') {
+            return null;
+        }
+
+        const iconMap = {
+            success: 'fas fa-check-circle',
+            error: 'fas fa-exclamation-circle',
+            warning: 'fas fa-exclamation-triangle',
+            loading: 'fas fa-spinner app-toast-spinner'
+        };
+
+        const toast = document.createElement('div');
+        toast.className = 'app-toast ' + type;
+
+        const iconWrapper = document.createElement('div');
+        iconWrapper.className = 'app-toast-icon';
+
+        const icon = document.createElement('i');
+        icon.className = iconMap[type] || iconMap.success;
+
+        iconWrapper.appendChild(icon);
+
+        const messageWrapper = document.createElement('div');
+        messageWrapper.className = 'app-toast-message';
+        messageWrapper.textContent = message;
+
+        toast.appendChild(iconWrapper);
+        toast.appendChild(messageWrapper);
+
+        toastContainer.appendChild(toast);
+
+        if (type !== 'loading') {
+            setTimeout(function () {
+                toast.classList.add('hide');
+
+                setTimeout(function () {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        return toast;
+    }
+
+    function readFlashMessage() {
+        const flashMessage = document.getElementById('flashMessage');
+        if (!flashMessage) return;
+
+        const successMessage = flashMessage.dataset.success;
+        const errorMessage = flashMessage.dataset.error;
+
+        if (successMessage && successMessage !== 'true' && successMessage !== 'false') {
+            showToast(successMessage, 'success', 3000);
+            return;
+        }
+
+        if (errorMessage && errorMessage !== 'true' && errorMessage !== 'false') {
+            showToast(errorMessage, 'error', 3000);
+        }
+    }
+
+    function handleAvatarSubmit() {
+        const avatarForm = document.getElementById('avatarForm');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const avatarFile = document.getElementById('avatarFile');
+
+        if (!avatarForm) return;
+
+        let isSubmittingAvatar = false;
+
+        avatarForm.addEventListener('submit', function (e) {
+            if (isSubmittingAvatar) {
+                e.preventDefault();
+                return;
+            }
+
+            if (!avatarFile || !avatarFile.files || avatarFile.files.length === 0) {
+                e.preventDefault();
+                showToast('Vui lòng chọn ảnh đại diện trước khi lưu.', 'warning', 3000);
+                return;
+            }
+
+            isSubmittingAvatar = true;
+
+            if (uploadBtn) {
+                uploadBtn.disabled = true;
+                uploadBtn.style.opacity = '0.65';
+                uploadBtn.style.cursor = 'not-allowed';
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...';
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        readFlashMessage();
+        handleAvatarSubmit();
+    });
+
     function validateUsername(input) {
         const hint = document.getElementById('usernameHint');
         const value = input.value;
@@ -303,11 +429,17 @@
             const defaultIcon = document.getElementById('defaultAvatarIcon');
 
             preview.src = e.target.result;
-            preview.style.display = 'block';
-            if (defaultIcon) defaultIcon.style.display = 'none';
+            preview.classList.remove('avatar-hidden');
+
+            if (defaultIcon) {
+                defaultIcon.classList.add('avatar-hidden');
+            }
 
             // Show upload button
-            document.getElementById('uploadBtn').style.display = 'inline-flex';
+            const uploadBtn = document.getElementById('uploadBtn');
+            if (uploadBtn) {
+                uploadBtn.style.display = 'inline-flex';
+            }
         };
         reader.readAsDataURL(file);
     }
