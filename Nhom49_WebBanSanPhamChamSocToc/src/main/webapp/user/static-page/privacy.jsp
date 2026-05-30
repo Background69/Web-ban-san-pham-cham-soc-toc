@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -194,7 +194,7 @@
     </style>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
+<jsp:include page="/layout/header.jsp"/>
 
 <main class="static-page">
     <div class="container">
@@ -338,7 +338,7 @@
     </div>
 </main>
 
-<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
+<jsp:include page="/layout/footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
