@@ -18,26 +18,40 @@
             position: fixed;
             z-index: 9999;
             inset: 0;
-            background: rgba(0, 0, 0, .45)
+            background: rgba(0, 0, 0, .45);
+            padding: 24px 0;
+            overflow: hidden;
         }
 
         .modal-content {
             background: #fff;
             width: min(720px, 92vw);
-            margin: 60px auto;
+            max-height: calc(100vh - 48px);
+            margin: 0 auto;
             border-radius: 12px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, .25)
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content form {
+            margin: 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
 
         .modal-header {
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 18px 20px;
             border-bottom: 1px solid #eee;
-            background: #fff
+            background: #fff;
         }
 
         .modal-title {
@@ -56,18 +70,20 @@
         }
 
         .modal-body {
-            max-height: calc(90vh - 120px);
+            flex: 1;
+            min-height: 0;
             overflow-y: auto;
-            padding: 18px 20px 20px
+            padding: 18px 20px 20px;
         }
 
         .modal-footer {
+            flex-shrink: 0;
             display: flex;
             gap: 10px;
             justify-content: flex-end;
             padding: 14px 20px;
             border-top: 1px solid #eee;
-            background: #fff
+            background: #fff;
         }
 
         .form-grid {
@@ -345,7 +361,7 @@
         </div>
 
         <form action="${pageContext.request.contextPath}/admin/products" method="post"
-              enctype="multipart/form-data" style="margin:0;">
+              enctype="multipart/form-data">
             <input type="hidden" name="action" value="create">
 
             <div class="modal-body">
@@ -443,10 +459,12 @@
 <script>
     function openModal() {
         document.getElementById("productModal").style.display = "block";
+        document.body.style.overflow = "hidden";
     }
 
     function closeModal() {
         document.getElementById("productModal").style.display = "none";
+        document.body.style.overflow = "";
     }
 
     function backdropClose(e) {
