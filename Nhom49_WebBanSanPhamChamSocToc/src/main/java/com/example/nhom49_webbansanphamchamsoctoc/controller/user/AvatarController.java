@@ -87,12 +87,19 @@ public class AvatarController extends HttpServlet {
             boolean success = profileService.updateAvatar(currentUser.getUserId(), avatarUrl);
 
             if (success) {
-                // Update session user
                 currentUser.setAvatar(avatarUrl);
                 SessionUtil.setCurrentUser(request.getSession(), currentUser);
-                request.getSession().setAttribute("success", "Cập nhật ảnh đại diện thành công");
+
+                request.getSession().setAttribute(
+                        "success",
+                        "Ảnh đại diện của bạn đã được cập nhật thành công."
+                );
             } else {
-                request.getSession().setAttribute("error", profileService.getLastError());
+                String errorMessage = profileService.getLastError();
+                request.getSession().setAttribute(
+                        "error",
+                        errorMessage != null ? errorMessage : "Cập nhật ảnh đại diện thất bại."
+                );
             }
         } catch (Exception e) {
             request.getSession().setAttribute("error", "Có lỗi xảy ra khi tải ảnh. Vui lòng thử lại.");

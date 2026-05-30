@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-@WebServlet(name = "UserProfileController", urlPatterns = { "/profile", "/profile/*" })
+@WebServlet(name = "UserProfileController", urlPatterns = {"/profile", "/profile/*"})
 public class UserProfileController extends HttpServlet {
 
     private static final List<String> ORDER_STATUSES = List.of(
@@ -62,6 +62,7 @@ public class UserProfileController extends HttpServlet {
             // Profile Overview - trang tổng quan mới
             showProfileOverview(request, response, currentUser);
         } else if (pathInfo.equals("/edit")) {
+            moveFlashMessage(request);
             request.setAttribute("activeTab", "info");
             request.getRequestDispatcher("/user/profile-edit.jsp").forward(request, response);
         } else if (pathInfo.equals("/addresses")) {
@@ -242,5 +243,23 @@ public class UserProfileController extends HttpServlet {
 
         counts.put("all", total);
         return counts;
+    }
+
+    private void moveFlashMessage(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) return;
+
+        Object success = session.getAttribute("success");
+        Object error = session.getAttribute("error");
+
+        if (success != null) {
+            request.setAttribute("success", success);
+            session.removeAttribute("success");
+        }
+
+        if (error != null) {
+            request.setAttribute("error", error);
+            session.removeAttribute("error");
+        }
     }
 }

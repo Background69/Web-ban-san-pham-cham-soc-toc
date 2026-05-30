@@ -69,6 +69,7 @@
                 <div class="avatar-preview position-relative"
                      style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
                     <c:set var="avatarUrl" value="${sessionScope.currentUser.avatar}"/>
+                    <%-- Case 1: No custom avatar set --%>
                     <c:choose>
                         <c:when test="${empty avatarUrl || avatarUrl == 'avatar/avatar.jpg'}">
                             <i class="fas fa-user" id="defaultAvatarIcon"
@@ -76,15 +77,22 @@
                             <img src="" alt="Avatar" id="avatarPreview"
                                  style="width: 100%; height: 100%; object-fit: cover; display: none;">
                         </c:when>
-
-                        <c:when test="${avatarUrl.startsWith('https://') || avatarUrl.startsWith('https://')}">
-                            <img src="${avatarUrl}" alt="Avatar"
-                                 id="avatarPreview" style="width: 100%; height: 100%; object-fit: cover;">
+                        <%-- Case 2: Cloudinary URL (https://) --%>
+                        <c:when test="${avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')}">
+                            <img src="${avatarUrl}" alt="Avatar" id="avatarPreview"
+                                 style="width: 100%; height: 100%; object-fit: cover;"
+                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='block';">
+                            <i class="fas fa-user" id="defaultAvatarIcon"
+                               style="font-size: 48px; color: white; display: none;"></i>
                         </c:when>
-
+                        <%-- Case 3: Local path (static/) --%>
                         <c:otherwise>
                             <img src="${pageContext.request.contextPath}/static/${avatarUrl}" alt="Avatar"
-                                 id="avatarPreview" style="width: 100%; height: 100%; object-fit: cover;">
+                                 id="avatarPreview"
+                                 style="width: 100%; height: 100%; object-fit: cover;"
+                                 onerror="this.style.display='none'; document.getElementById('defaultAvatarIcon').style.display='block';">
+                            <i class="fas fa-user" id="defaultAvatarIcon"
+                               style="font-size: 48px; color: white; display: none;"></i>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -196,8 +204,104 @@
 
 <jsp:include page="/layout/footer.jsp"/>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // ========== TOAST NOTIFICATION SYSTEM ==========
+    function showToast(message, type = 'success', duration = 3000) {
+        const toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icons = {
+            success: '<i class="fas fa-check-circle"></i>',
+            error: '<i class="fas fa-exclamation-circle"></i>',
+            warning: '<i class="fas fa-exclamation-triangle"></i>',
+            info: '<i class="fas fa-info-circle"></i>',
+            loading: '<i class="fas fa-spinner toast-spinner"></i>'
+        };
+
+        toast.innerHTML = `
+        <div class="toast-icon ${type}">
+            ${icons[type] || icons.info}
+        </div>
+        <div class="toast-content">${message}</div>
+    `;
+
+        toastContainer.appendChild(toast);
+
+        if (type !== 'loading') {
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        return toast;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const avatarForm = document.getElementById('avatarForm');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const avatarFile = document.getElementById('avatarFile');
+
+        let isSubmittingAvatar = false;
+
+        if (avatarForm) {
+            avatarForm.addEventListener('submit', function (e) {
+                if (isSubmittingAvatar) {
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!avatarFile || !avatarFile.files || avatarFile.files.length === 0) {
+                    e.preventDefault();
+                    showToast('Vui lòng chọn ảnh đại diện trước khi lưu.', 'warning', 3000);
+                    return;
+                }
+
+                isSubmittingAvatar = true;
+
+                if (uploadBtn) {
+                    uploadBtn.disabled = true;
+                    uploadBtn.style.opacity = '0.6';
+                    uploadBtn.style.cursor = 'not-allowed';
+                    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...';
+                }
+            });
+        }
+
+        const successAlert = document.querySelector('.alert-success');
+        const errorAlert = document.querySelector('.alert-danger');
+
+        if (successAlert) {
+            const message = successAlert.innerText.replace(/×/g, '').trim();
+
+            showToast(message, 'success', 3000);
+
+            successAlert.style.display = 'none';
+        }
+
+        if (errorAlert) {
+            const message = errorAlert.innerText.replace(/×/g, '').trim();
+
+            showToast(message, 'error', 3000);
+
+            errorAlert.style.display = 'none';
+
+            if (uploadBtn) {
+                uploadBtn.disabled = false;
+                uploadBtn.style.opacity = '1';
+                uploadBtn.style.cursor = 'pointer';
+                uploadBtn.innerHTML = '<i class="fas fa-save me-1"></i> Lưu avatar';
+            }
+        }
+    });
+
     function validateUsername(input) {
         const hint = document.getElementById('usernameHint');
         const value = input.value;
