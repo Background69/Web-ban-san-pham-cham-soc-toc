@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -83,9 +84,14 @@
                     <td>
                         <c:choose>
                             <c:when test="${not empty b.logoUrl}">
-                                <img class="thumb"
-                                     src="${pageContext.request.contextPath}/static/${b.logoUrl}"
-                                     alt="${b.brandName}">
+                                <c:choose>
+                                    <c:when test="${fn:startsWith(b.logoUrl, 'http')}">
+                                        <img class="thumb" src="${b.logoUrl}" alt="${b.brandName}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="thumb" src="${pageContext.request.contextPath}/static/${b.logoUrl}" alt="${b.brandName}">
+                                    </c:otherwise>
+                                </c:choose>
                             </c:when>
                             <c:otherwise>
                                 <div class="thumb-placeholder"></div>

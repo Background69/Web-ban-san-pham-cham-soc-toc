@@ -4,6 +4,9 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.OtpVerificationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.PendingRegistrationDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
+import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.util.RedirectUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -202,6 +205,10 @@ public class OtpController extends HttpServlet {
 
         req.getSession().setAttribute("success", "Xác minh đăng ký thành công, vui lòng đăng nhập.");
         resp.sendRedirect(req.getContextPath() + "/auth/login");
+        String targetUrl = RedirectUtil.buildRedirectUrl(req, redirectUrl, "/");
+
+        String separator = targetUrl.contains("?") ? "&" : "?";
+        resp.sendRedirect(targetUrl + separator + "registerSuccess=true");
     }
 
     private void clearOtpSession(HttpServletRequest req) {

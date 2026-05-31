@@ -764,7 +764,8 @@ main {
 .price-current {
     font-size: 18px;
     font-weight: 700;
-    color: #ff5252;
+    color: #1B4D3E;
+    transition: color 0.3s ease-in-out;
 }
 
 .price-old {

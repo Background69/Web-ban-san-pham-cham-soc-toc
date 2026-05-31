@@ -412,7 +412,7 @@
 .sale-filter input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: #e91e63;
+    accent-color: #1B4D3E;
     cursor: pointer;
 }
 
@@ -656,7 +656,8 @@
 .price-current {
     font-size: 18px;
     font-weight: 700;
-    color: #e91e63;
+    color: #1B4D3E;
+    transition: color 0.3s ease-in-out;
 }
 
 .price-old {
@@ -863,8 +864,9 @@
 .store-page .price-current {
     font-size: 20px;
     font-weight: 700;
-    color: #e23b3b;
+    color: #1B4D3E;
     line-height: 1.1;
+    transition: color 0.3s ease-in-out;
 }
 
 .store-page .price-old {
@@ -1383,12 +1385,12 @@
 }
 
 .wishlist-btn:hover {
-    color: #e91e63;
+    color: #2c5940;
     transform: scale(1.1);
 }
 
 .wishlist-btn.active {
-    color: #e91e63;
+    color: #1B4D3E;
 }
 
 .wishlist-btn.active i {

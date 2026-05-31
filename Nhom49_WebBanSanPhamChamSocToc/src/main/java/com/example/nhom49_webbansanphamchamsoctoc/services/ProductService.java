@@ -129,6 +129,10 @@ public class ProductService {
         List<ProductImage> images = imageDAO.findByProductId(product.getProductId());
         product.setVariants(variants);
         product.setImages(images);
+        ProductImage primaryImage = product.getPrimaryImage();
+        if (primaryImage != null) {
+            product.setPrimaryImageUrl(primaryImage.getImageUrl());
+        }
         int remainingStock = 0;
         if (variants != null) {
             for (ProductVariant variant : variants) {

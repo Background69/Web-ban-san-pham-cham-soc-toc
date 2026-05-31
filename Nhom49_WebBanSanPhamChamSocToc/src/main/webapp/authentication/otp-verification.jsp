@@ -44,7 +44,7 @@
                 </c:if>
 
                 <form action="${pageContext.request.contextPath}/auth/verify-otp" method="post"
-                      onsubmit="combineOtp()">
+                      onsubmit="return combineOtp(event)">
                     <div class="otp-inputs">
                         <input type="text" id="otp1" maxlength="1" inputmode="numeric" autocomplete="one-time-code">
                         <input type="text" id="otp2" maxlength="1" inputmode="numeric">
@@ -64,6 +64,12 @@
                     <button type="submit" id="resendBtn" class="btn-resend">Gửi lại OTP</button>
                 </form>
 
+                <p class="spam-hint">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Nếu chưa thấy mã gửi đến hòm thư chính sau 30 giây,
+                    hãy kiểm tra cả hộp thư rác (Spam) hoặc thư quảng cáo.
+                </p>
+
             </div>
         </div>
     </div>
@@ -72,5 +78,19 @@
 <%@ include file="/layout/footer.jsp" %>
 
 <script src="${pageContext.request.contextPath}/static/js/authentication/otp-verification.js"></script>
+<script>
+    (function () {
+        var resendForm = document.querySelector('form[action$="/auth/resend-otp"]');
+        if (!resendForm) return;
+
+        resendForm.addEventListener("submit", function () {
+            var btn = document.getElementById("resendBtn");
+            if (btn && !btn.disabled) {
+                btn.classList.add("btn-loading");
+                btn.disabled = true;
+            }
+        });
+    })();
+</script>
 </body>
 </html>

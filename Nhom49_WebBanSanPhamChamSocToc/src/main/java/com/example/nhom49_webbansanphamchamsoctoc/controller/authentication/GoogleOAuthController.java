@@ -5,6 +5,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService
 import com.example.nhom49_webbansanphamchamsoctoc.services.GoogleOAuthService;
 import com.example.nhom49_webbansanphamchamsoctoc.services.UserService;
 
+import com.example.nhom49_webbansanphamchamsoctoc.util.RedirectUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -71,9 +72,11 @@ public class GoogleOAuthController extends HttpServlet {
         String state = UUID.randomUUID().toString();
         session.setAttribute("oauth_state", state);
 
-        String redirectAfterLogin = request.getParameter("redirect");
-        if (redirectAfterLogin != null && !redirectAfterLogin.isEmpty()) {
+        String redirectAfterLogin = RedirectUtil.sanitizePath(request.getParameter("redirect"));
+        if (redirectAfterLogin != null) {
             session.setAttribute("redirect_after_login", redirectAfterLogin);
+        } else {
+            session.removeAttribute("redirect_after_login");
         }
 
         String authUrl = googleOAuthService.getAuthorizationUrl(state);
@@ -139,11 +142,9 @@ public class GoogleOAuthController extends HttpServlet {
             String redirectUrl = (String) session.getAttribute("redirect_after_login");
             session.removeAttribute("redirect_after_login");
 
-            if (redirectUrl != null && !redirectUrl.isEmpty()) {
-                response.sendRedirect(contextPath + redirectUrl);
-            } else {
-                response.sendRedirect(contextPath + "/");
-            }
+            response.sendRedirect(
+                    RedirectUtil.buildRedirectUrl(request, redirectUrl, "/")
+            );
 
         } catch (Exception e) {
             log("Google OAuth processing error: " + e.getMessage(), e);

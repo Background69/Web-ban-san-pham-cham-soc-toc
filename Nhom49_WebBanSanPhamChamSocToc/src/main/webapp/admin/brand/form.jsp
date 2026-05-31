@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <c:set var="activeMenu" value="brands"/>
 
@@ -148,7 +149,7 @@
                 <div class="error-message">${branderror}</div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/admin/brands/save" method="post">
+            <form action="${pageContext.request.contextPath}/admin/brands/save" method="post" enctype="multipart/form-data">
                 <!-- Hidden ID for edit -->
                 <c:if test="${brand != null}">
                     <input type="hidden" name="id" value="${brand.brandId}">
@@ -170,13 +171,17 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Logo URL</label>
-                        <input type="text" name="logoUrl" value="${brand.logoUrl}"
-                               placeholder="images/brands/logo.png" id="logoInput">
+                        <label>Logo</label>
+                        <input type="file" name="logo" accept="image/*">
                         <c:if test="${not empty brand.logoUrl}">
-                            <img class="preview-img"
-                                 src="${pageContext.request.contextPath}/static/${brand.logoUrl}"
-                                 alt="Logo preview">
+                            <c:choose>
+                                <c:when test="${fn:startsWith(brand.logoUrl, 'http')}">
+                                    <img class="preview-img" src="${brand.logoUrl}" alt="Logo preview">
+                                </c:when>
+                                <c:otherwise>
+                                    <img class="preview-img" src="${pageContext.request.contextPath}/static/${brand.logoUrl}" alt="Logo preview">
+                                </c:otherwise>
+                            </c:choose>
                         </c:if>
                     </div>
 

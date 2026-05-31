@@ -564,7 +564,7 @@
                                         <c:choose>
                                             <c:when test="${not empty item.productImage}">
                                                 <img class="product-img"
-                                                     src="${pageContext.request.contextPath}/static/${item.productImage}"
+                                                     src="${item.productImage}"
                                                      alt="${item.productName}"
                                                      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                                             </c:when>

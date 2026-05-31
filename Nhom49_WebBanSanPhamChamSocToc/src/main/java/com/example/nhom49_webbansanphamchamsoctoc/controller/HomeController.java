@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "HomeController", urlPatterns = {"/home", ""})
-/**
- * Lớp HomeController.
- */
 public class HomeController extends HttpServlet {
 
     private ProductService productService;
@@ -128,8 +125,8 @@ public class HomeController extends HttpServlet {
                 today);
 
         addBannerIfActive(activeBanners, tetBanner,
-                LocalDate.of(2027, 1, 20),
-                LocalDate.of(2027, 2, 5),
+                LocalDate.of(year, 1, 20),
+                LocalDate.of(year, 2, 5),
                 today);
 
         // Nếu hôm nay không có banner lễ/mùa nào thì fallback banner mặc định
