@@ -380,16 +380,18 @@
 }
 
 .brand-products-section .product-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 24px;
     margin-top: 30px;
 }
 
 .brand-products-section .product-item {
-    width: 100%;
-    max-width: none;
+    width: calc((100% - 72px) / 4);  /* 4 cột, 3 khoảng gap 24px */
+    max-width: calc((100% - 72px) / 4);
     min-width: 0;
+    flex-shrink: 0;
 }
 
 .brand-products-section .product-img {
@@ -460,8 +462,12 @@
 
 @media (max-width: 1199px) {
     .brand-products-section .product-grid {
-        grid-template-columns: repeat(3, 1fr);
         gap: 20px;
+    }
+
+    .brand-products-section .product-item {
+        width: calc((100% - 40px) / 3);  /* 3 cột, 2 khoảng gap 20px */
+        max-width: calc((100% - 40px) / 3);
     }
 }
 
@@ -534,8 +540,12 @@
     }
 
     .brand-products-section .product-grid {
-        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
+    }
+
+    .brand-products-section .product-item {
+        width: calc((100% - 16px) / 2);  /* 2 cột, 1 khoảng gap 16px */
+        max-width: calc((100% - 16px) / 2);
     }
 }
 
@@ -580,8 +590,12 @@
     }
 
     .brand-products-section .product-grid {
-        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
+    }
+
+    .brand-products-section .product-item {
+        width: calc((100% - 12px) / 2);  /* 2 cột, 1 khoảng gap 12px */
+        max-width: calc((100% - 12px) / 2);
     }
 }
 

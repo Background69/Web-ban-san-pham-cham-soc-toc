@@ -2,8 +2,14 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <c:if test="${totalPages > 1}">
-    <%-- Base URL for products --%>
-    <c:set var="baseUrl" value="${pageContext.request.contextPath}/products"/>
+    <c:choose>
+        <c:when test="${not empty paginationBaseUrl}">
+            <c:set var="baseUrl" value="${paginationBaseUrl}"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="baseUrl" value="${pageContext.request.contextPath}/products"/>
+        </c:otherwise>
+    </c:choose>
     <c:set var="hasQuery" value="${not empty paginationQueryString}"/>
 
     <nav class="pagination">
