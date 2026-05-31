@@ -95,15 +95,15 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <!-- Brand Banner -->
-<section class="brand-hero section-animate"
-         <c:choose>
-             <c:when test="${not empty brand.logoUrl}">
-                 style="background-image: url('${pageContext.request.contextPath}/static/assets/${brand.logoUrl}');"
-             </c:when>
-             <c:otherwise>
-                 style="background-image: none;"
-             </c:otherwise>
-         </c:choose>
+<section class="brand-hero section-animate" <c:choose>
+    <c:when test="${not empty brand.logoUrl}">
+        style="background-image:
+        url('${pageContext.request.contextPath}/static/assets/${brand.logoUrl}');"
+    </c:when>
+    <c:otherwise>
+        style="background-image: none;"
+    </c:otherwise>
+</c:choose>
 >
     <div class="brand-hero-overlay"></div>
 
@@ -142,13 +142,13 @@
 
         <div class="brand-hero-meta">
             <c:if test="${not empty brand.origin}">
-                <span class="hero-meta-badge">
-                    <i class="fas fa-globe-asia"></i> ${brand.origin}
-                </span>
+                                        <span class="hero-meta-badge">
+                                            <i class="fas fa-globe-asia"></i> ${brand.origin}
+                                        </span>
             </c:if>
             <span class="hero-meta-badge">
-                <i class="fas fa-box-open"></i> ${totalProducts} sản phẩm
-            </span>
+                                        <i class="fas fa-box-open"></i> ${totalProducts} sản phẩm
+                                    </span>
         </div>
     </div>
 </section>
@@ -183,125 +183,142 @@
         </div>
     </c:if>
 
-    <!-- Products Section -->
-    <section class="brand-products-section store-page">
+    <section class="brand-products-section store-page" id="brand-products-section">
         <div class="brand-products-header">
-            <h2>Sản phẩm của ${brand.brandName}</h2>
+            <h2>Bộ sưu tập của ${brand.brandName}</h2>
             <p class="product-count">${totalProducts} sản phẩm</p>
-            <div class="product-filter-tags">
-                <button class="product-filter-tag active" data-category="all">Tất cả</button>
-                <c:forEach var="category" items="${categories}">
-                    <button class="product-filter-tag"
-                            data-category="${category.categorySlug}">${category.categoryName}</button>
-                </c:forEach>
-            </div>
-        </div>
 
-        <c:choose>
-            <c:when test="${not empty products}">
-                <div class="product-grid stagger-fade">
-                    <c:forEach var="product" items="${products}">
-                        <div class="product-item"
-                             data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
-                            <div class="product-img">
-                                <a
-                                        href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                    <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
-                                </a>
-                            </div>
-                            <div class="product-body">
-                                <h3 class="product-title">${product.productName}</h3>
-                                <div class="product-small-details">
-                                    <p>
-                                                            <span>${product.brand != null ? product.brand.brandName :
-                                                                    ''}</span>
-                                        • <span>${product.category != null ?
-                                            product.category.categoryName : ''}</span>
-                                        • ${product.origin}
-                                    </p>
-                                </div>
-                                <div class="product-rating">
-                                    <div class="rating-stars">
-                                                            <span class="stars">
-                                                                <c:forEach begin="1" end="5" var="i">
-                                                                    <c:choose>
-                                                                        <c:when test="${i <= product.averageRating}">★
-                                                                        </c:when>
-                                                                        <c:otherwise>☆</c:otherwise>
-                                                                    </c:choose>
-                                                                </c:forEach>
-                                                            </span>
-                                    </div>
-                                    <p class="review-count">(${product.reviewCount})</p>
-                                </div>
-                                <c:if test="${not empty product.hairConditions}">
-                                    <div class="product-tags">
-                                        <c:forEach var="condition" items="${product.hairConditions}"
-                                                   varStatus="status">
-                                            <c:if test="${status.index < 2}">
-                                                                    <span
-                                                                            class="tag-chip">${condition.conditionName}</span>
-                                            </c:if>
-                                        </c:forEach>
-                                        <c:if test="${fn:length(product.hairConditions) > 2}">
-                                                                <span
-                                                                        class="tag-chip more">+${fn:length(product.hairConditions)
-                                                                        - 2}</span>
-                                        </c:if>
-                                    </div>
-                                </c:if>
-                                <div class="product-price">
-                                    <c:if test="${product.defaultVariant != null}">
-                                        <p class="price-current">
-                                            <fmt:formatNumber
-                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
-                                                    type="number"/>₫
-                                        </p>
-                                        <c:if
-                                                test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                            <p class="price-old">
-                                                <fmt:formatNumber
-                                                        value="${product.defaultVariant.originalPrice}"
-                                                        type="number"/>₫
-                                            </p>
-                                            <p class="badge-discount">
-                                                -${product.defaultVariant.discountPercent}%</p>
-                                        </c:if>
-                                    </c:if>
-                                </div>
-                                <c:if test="${product.onSale && product.stockQuantity > 0}">
-                                    <div class="stock-progress">
-                                        <div class="stock-progress-bar">
-                                            <div class="stock-progress-fill"
-                                                 style="width: ${product.soldPercent}%"></div>
-                                        </div>
-                                        <div class="stock-progress-text">
-                                            Đã bán ${product.soldQuantity}/${product.stockQuantity}
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <div class="product product-actions">
-                                    <a class="btn"
-                                       href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
-                                        thêm</a>
-                                    <a class="btn primary add-to-cart" href="#"
-                                       data-product-id="${product.productId}">Thêm vào
-                                        giỏ</a>
-                                </div>
-                            </div>
-                        </div>
+            <nav class="collection-filter" id="collectionFilter" aria-label="Lọc theo bộ sưu tập">
+                <div class="collection-filter-track">
+                    <button class="collection-filter-btn is-active" data-collection="all">
+                        <span class="collection-filter-label">Tất cả</span>
+                        <span class="collection-filter-count">${totalProducts}</span>
+                    </button>
+                    <c:forEach var="entry" items="${categoryStats}">
+                        <c:forEach var="category" items="${categories}">
+                            <c:if test="${category.categoryName == entry.key}">
+                                <button class="collection-filter-btn"
+                                        data-collection="${category.categorySlug}">
+                                                        <span
+                                                                class="collection-filter-label">${category.categoryName}</span>
+                                    <span class="collection-filter-count">${entry.value}</span>
+                                </button>
+                            </c:if>
+                        </c:forEach>
                     </c:forEach>
                 </div>
-            </c:when>
-            <c:otherwise>
-                <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
-                    <h3>Chưa có sản phẩm nào</h3>
-                    <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
-                </div>
-            </c:otherwise>
-        </c:choose>
+            </nav>
+        </div>
+
+        <div class="product-grid-wrapper" id="productGridWrapper">
+            <c:choose>
+                <c:when test="${not empty products}">
+                    <div class="product-grid stagger-fade" id="productGrid">
+                        <c:forEach var="product" items="${products}">
+                            <div class="product-item"
+                                 data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
+                                <div class="product-img">
+                                    <a
+                                            href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                        <img alt="${product.productName}" class="product-image"
+                                             src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <h3 class="product-title">${product.productName}</h3>
+                                    <div class="product-small-details">
+                                        <p>
+                                                                <span>${product.brand != null ? product.brand.brandName
+                                                                        : ''}</span>
+                                            • <span>${product.category != null ?
+                                                product.category.categoryName : ''}</span>
+                                            • ${product.origin}
+                                        </p>
+                                    </div>
+                                    <div class="product-rating">
+                                        <div class="rating-stars">
+                                                                <span class="stars">
+                                                                    <c:forEach begin="1" end="5" var="i">
+                                                                        <c:choose>
+                                                                            <c:when
+                                                                                    test="${i <= product.averageRating}">★
+                                                                            </c:when>
+                                                                            <c:otherwise>☆</c:otherwise>
+                                                                        </c:choose>
+                                                                    </c:forEach>
+                                                                </span>
+                                        </div>
+                                        <p class="review-count">(${product.reviewCount})</p>
+                                    </div>
+                                    <c:if test="${not empty product.hairConditions}">
+                                        <div class="product-tags">
+                                            <c:forEach var="condition"
+                                                       items="${product.hairConditions}"
+                                                       varStatus="status">
+                                                <c:if test="${status.index < 2}">
+                                                                        <span
+                                                                                class="tag-chip">${condition.conditionName}</span>
+                                                </c:if>
+                                            </c:forEach>
+                                            <c:if test="${fn:length(product.hairConditions) > 2}">
+                                                                    <span
+                                                                            class="tag-chip more">+${fn:length(product.hairConditions)
+                                                                            - 2}</span>
+                                            </c:if>
+                                        </div>
+                                    </c:if>
+                                    <div class="product-price">
+                                        <c:if test="${product.defaultVariant != null}">
+                                            <p class="price-current">
+                                                <fmt:formatNumber
+                                                        value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                        type="number"/>₫
+                                            </p>
+                                            <c:if
+                                                    test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                                <p class="price-old">
+                                                    <fmt:formatNumber
+                                                            value="${product.defaultVariant.originalPrice}"
+                                                            type="number"/>₫
+                                                </p>
+                                                <p class="badge-discount">
+                                                    -${product.defaultVariant.discountPercent}%</p>
+                                            </c:if>
+                                        </c:if>
+                                    </div>
+                                    <c:if test="${product.onSale && product.stockQuantity > 0}">
+                                        <div class="stock-progress">
+                                            <div class="stock-progress-bar">
+                                                <div class="stock-progress-fill"
+                                                     style="width: ${product.soldPercent}%"></div>
+                                            </div>
+                                            <div class="stock-progress-text">
+                                                Đã bán
+                                                    ${product.soldQuantity}/${product.stockQuantity}
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <div class="product product-actions">
+                                        <a class="btn"
+                                           href="${pageContext.request.contextPath}/product/${product.productSlug}">Xem
+                                            thêm</a>
+                                        <a class="btn primary add-to-cart" href="#"
+                                           data-product-id="${product.productId}">Thêm vào giỏ</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h3>Chưa có sản phẩm nào</h3>
+                        <p>Thương hiệu này chưa có sản phẩm. Vui lòng quay lại sau.</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
 
         <!-- Pagination -->
         <c:if test="${totalPages > 1}">
@@ -314,25 +331,81 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 <script>
-    // ===== ADD TO CART - Đã được xử lý trong header.jsp =====
+    (function () {
+        'use strict';
 
-    // Filter products by category
-    document.querySelectorAll('.product-filter-tag').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.product-filter-tag').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
+        const filterNav = document.getElementById('collectionFilter');
+        const productGrid = document.getElementById('productGrid');
+        const productCount = document.querySelector('.product-count');
 
-            const category = this.dataset.category;
-            document.querySelectorAll('.product-item').forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+        if (!filterNav || !productGrid) return;
+
+        const allButtons = filterNav.querySelectorAll('.collection-filter-btn');
+        const allItems = productGrid.querySelectorAll('.product-item');
+
+        const SLIDE_OUT_DURATION = 350;
+        const PAUSE_BETWEEN = 80;
+        const STAGGER_CLEANUP = 550;
+
+        let isAnimating = false;
+
+        allButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (isAnimating || btn.classList.contains('is-active')) return;
+                isAnimating = true;
+
+                const selectedCollection = btn.dataset.collection;
+
+                allButtons.forEach(function (b) {
+                    b.classList.remove('is-active');
+                });
+                btn.classList.add('is-active');
+
+                btn.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'nearest'});
+
+                productGrid.classList.add('is-animating-out');
+
+                setTimeout(function () {
+                    productGrid.classList.remove('is-animating-out');
+
+                    let visibleCount = 0;
+                    allItems.forEach(function (item) {
+                        if (selectedCollection === 'all' ||
+                            item.dataset.category === selectedCollection) {
+                            item.classList.remove('is-hidden');
+                            visibleCount++;
+                        } else {
+                            item.classList.add('is-hidden');
+                        }
+                    });
+
+                    if (productCount) {
+                        productCount.textContent = visibleCount + ' sản phẩm';
+                    }
+
+                    setTimeout(function () {
+                        productGrid.classList.add('is-stagger-in');
+
+                        setTimeout(function () {
+                            productGrid.classList.remove('is-stagger-in');
+
+                            allItems.forEach(function (item) {
+                                if (!item.classList.contains('is-hidden')) {
+                                    item.style.opacity = '';
+                                    item.style.transform = '';
+                                }
+                            });
+
+                            isAnimating = false;
+
+                        }, STAGGER_CLEANUP);
+
+                    }, PAUSE_BETWEEN);
+
+                }, SLIDE_OUT_DURATION);
             });
         });
-    });
+    })();
 </script>
 </body>
-
 </html>
