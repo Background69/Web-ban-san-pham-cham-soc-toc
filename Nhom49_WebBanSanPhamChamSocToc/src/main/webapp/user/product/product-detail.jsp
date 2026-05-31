@@ -551,14 +551,23 @@
                     <c:when test="${not empty sessionScope.user}">
                         <c:choose>
                             <c:when test="${canReviewStatus == 'CAN_REVIEW'}">
-                                <div class="write-review">
-                                    <h3>Viết đánh giá của bạn</h3>
+                                <div class="write-review write-review-premium">
+                                    <div class="write-review-header">
+                                        <div class="write-review-icon">
+                                            <i class="fa-solid fa-feather-pointed"></i>
+                                        </div>
+                                        <div>
+                                            <h3>Chia sẻ trải nghiệm của bạn</h3>
+                                            <p class="write-review-subtitle">Đánh giá chi tiết giúp cộng đồng HairGlow chọn sản phẩm phù hợp nhất</p>
+                                        </div>
+                                    </div>
                                     <form action="${pageContext.request.contextPath}/review"
-                                          method="post" class="review-form">
+                                          method="post" class="review-form review-form-premium">
                                         <input type="hidden" name="productId"
                                                value="${product.productId}">
-                                        <div class="rating-input">
-                                            <label>Đánh giá:</label>
+
+                                        <div class="rating-input rating-input-main">
+                                            <label><i class="fa-solid fa-star-half-stroke"></i> Đánh giá tổng thể</label>
                                             <div class="star-rating">
                                                 <c:forEach begin="1" end="5" var="i">
                                                     <input type="radio" name="rating" value="${6-i}"
@@ -567,44 +576,116 @@
                                                 </c:forEach>
                                             </div>
                                         </div>
-                                        <div class="review-content-input">
-                                            <label for="reviewContent">Nội dung:</label>
-                                            <textarea name="content" id="reviewContent" rows="4"
-                                                      placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
-                                                      required></textarea>
+
+                                        <div class="criteria-rating-panel">
+                                            <div class="criteria-panel-title">
+                                                <i class="fa-solid fa-spa"></i>
+                                                <span>Đánh giá chi tiết theo tiêu chí</span>
+                                            </div>
+
+                                            <div class="criteria-row" data-criteria="fragrance">
+                                                <div class="criteria-label">
+                                                    <span class="criteria-name">Mùi hương thảo mộc</span>
+                                                </div>
+                                                <div class="criteria-stars" id="criteria-fragrance">
+                                                    <i class="fa-solid fa-star" data-value="1"></i>
+                                                    <i class="fa-solid fa-star" data-value="2"></i>
+                                                    <i class="fa-solid fa-star" data-value="3"></i>
+                                                    <i class="fa-solid fa-star" data-value="4"></i>
+                                                    <i class="fa-solid fa-star" data-value="5"></i>
+                                                </div>
+                                                <input type="hidden" name="criteriaFragrance" value="0">
+                                            </div>
+
+                                            <div class="criteria-row" data-criteria="absorption">
+                                                <div class="criteria-label">
+                                                    <span class="criteria-name">Tốc độ thẩm thấu</span>
+                                                </div>
+                                                <div class="criteria-stars" id="criteria-absorption">
+                                                    <i class="fa-solid fa-star" data-value="1"></i>
+                                                    <i class="fa-solid fa-star" data-value="2"></i>
+                                                    <i class="fa-solid fa-star" data-value="3"></i>
+                                                    <i class="fa-solid fa-star" data-value="4"></i>
+                                                    <i class="fa-solid fa-star" data-value="5"></i>
+                                                </div>
+                                                <input type="hidden" name="criteriaAbsorption" value="0">
+                                            </div>
+
+                                            <div class="criteria-row" data-criteria="effectiveness">
+                                                <div class="criteria-label">
+                                                    <span class="criteria-name">Hiệu quả phục hồi</span>
+                                                </div>
+                                                <div class="criteria-stars" id="criteria-effectiveness">
+                                                    <i class="fa-solid fa-star" data-value="1"></i>
+                                                    <i class="fa-solid fa-star" data-value="2"></i>
+                                                    <i class="fa-solid fa-star" data-value="3"></i>
+                                                    <i class="fa-solid fa-star" data-value="4"></i>
+                                                    <i class="fa-solid fa-star" data-value="5"></i>
+                                                </div>
+                                                <input type="hidden" name="criteriaEffectiveness" value="0">
+                                            </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Gửi đánh
-                                            giá
+
+                                        <div class="review-content-input review-content-premium">
+                                            <label for="reviewContent"><i class="fa-solid fa-pencil"></i> Nội dung đánh giá</label>
+                                            <textarea name="content" id="reviewContent" rows="5"
+                                                      placeholder="Hãy chia sẻ cảm nhận chi tiết về sản phẩm: mùi hương, kết cấu, hiệu quả sau bao lâu sử dụng, bạn có giới thiệu cho bạn bè không?..."
+                                                      required></textarea>
+                                            <div class="textarea-hint">
+                                                <i class="fa-solid fa-lightbulb"></i>
+                                                <span>Mẹo: Đánh giá chi tiết từ 50 ký tự sẽ hữu ích hơn cho mọi người!</span>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-submit-review">
+                                            <i class="fa-solid fa-paper-plane"></i> Gửi đánh giá
                                         </button>
                                     </form>
                                 </div>
                             </c:when>
                             <c:when test="${canReviewStatus == 'ALREADY_REVIEWED'}">
-                                <div class="login-to-review">
-                                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> Bạn
-                                        đã đánh giá sản phẩm này.</p>
+                                <div class="review-lock-box review-lock-box--success">
+                                    <div class="review-lock-icon">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    </div>
+                                    <div class="review-lock-body">
+                                        <p class="review-lock-title">Cảm ơn bạn đã đánh giá!</p>
+                                        <p class="review-lock-text">Bạn đã chia sẻ trải nghiệm về sản phẩm này. Đánh giá của bạn giúp ích rất nhiều cho cộng đồng HairGlow.</p>
+                                    </div>
                                 </div>
                             </c:when>
                             <c:when test="${canReviewStatus == 'ORDER_NOT_COMPLETED'}">
-                                <div class="login-to-review">
-                                    <p><i class="fas fa-clock" style="color: #ffc107;"></i> Đơn hàng của
-                                        bạn đang được xử lý. Vui lòng đợi đơn hàng hoàn thành để đánh
-                                        giá.</p>
+                                <div class="review-lock-box review-lock-box--pending">
+                                    <div class="review-lock-icon">
+                                        <i class="fa-solid fa-hourglass-half"></i>
+                                    </div>
+                                    <div class="review-lock-body">
+                                        <p class="review-lock-title">Đơn hàng đang được xử lý</p>
+                                        <p class="review-lock-text">Vui lòng chờ đơn hàng hoàn tất giao nhận. Bạn sẽ có thể đánh giá ngay sau khi nhận hàng thành công.</p>
+                                    </div>
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <div class="login-to-review">
-                                    <p><i class="fas fa-shopping-bag" style="color: #6c757d;"></i> Bạn
-                                        cần mua sản phẩm này để có thể đánh giá.</p>
+                                <div class="review-lock-box review-lock-box--guard">
+                                    <div class="review-lock-icon">
+                                        <i class="fa-solid fa-shield-halved"></i>
+                                    </div>
+                                    <div class="review-lock-body">
+                                        <p class="review-lock-title">Đánh giá xác thực từ người mua thật</p>
+                                        <p class="review-lock-text">Chỉ những khách hàng đã trải nghiệm sản phẩm mới có thể viết đánh giá, nhằm đảm bảo tính chân thực 100% cho cộng đồng HairGlow.</p>
+                                    </div>
                                 </div>
                             </c:otherwise>
                         </c:choose>
                     </c:when>
                     <c:otherwise>
-                        <div class="login-to-review">
-                            <p>Vui lòng <a
-                                    href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng
-                                nhập</a> để viết đánh giá.</p>
+                        <div class="review-lock-box review-lock-box--login">
+                            <div class="review-lock-icon">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <div class="review-lock-body">
+                                <p class="review-lock-title">Đăng nhập để viết đánh giá</p>
+                                <p class="review-lock-text">Vui lòng <a href="${pageContext.request.contextPath}/auth/login?redirect=/product/${product.productSlug}">đăng nhập tài khoản</a> để chia sẻ trải nghiệm của bạn với cộng đồng HairGlow.</p>
+                            </div>
                         </div>
                     </c:otherwise>
                 </c:choose>
@@ -1222,6 +1303,74 @@
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeReviewLightbox(null);
     });
+
+    (function initCriteriaStars() {
+        var rows = document.querySelectorAll('.criteria-row');
+        if (!rows.length) return;
+
+        rows.forEach(function (row) {
+            var starsContainer = row.querySelector('.criteria-stars');
+            var hiddenInput = row.querySelector('input[type="hidden"]');
+            var stars = starsContainer ? starsContainer.querySelectorAll('i.fa-star') : [];
+            var selectedValue = 0;
+
+            function highlightStars(upTo) {
+                stars.forEach(function (star, idx) {
+                    if (idx < upTo) {
+                        star.classList.add('criteria-star-active');
+                    } else {
+                        star.classList.remove('criteria-star-active');
+                    }
+                });
+            }
+
+            function resetToSelected() {
+                highlightStars(selectedValue);
+            }
+
+            stars.forEach(function (star) {
+                star.addEventListener('mouseenter', function () {
+                    var val = parseInt(this.getAttribute('data-value')) || 0;
+                    highlightStars(val);
+                });
+
+                star.addEventListener('mouseleave', function () {
+                    resetToSelected();
+                });
+
+                star.addEventListener('click', function () {
+                    var val = parseInt(this.getAttribute('data-value')) || 0;
+                    // Allow deselect if clicking the same value
+                    if (val === selectedValue) {
+                        selectedValue = 0;
+                    } else {
+                        selectedValue = val;
+                    }
+                    if (hiddenInput) hiddenInput.value = selectedValue;
+                    highlightStars(selectedValue);
+
+                    // Micro-animation: pulse effect on click
+                    this.style.transform = 'scale(1.4)';
+                    var self = this;
+                    setTimeout(function () {
+                        self.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    })();
+
+    (function initShieldShimmer() {
+        var icons = document.querySelectorAll('.review-lock-box .review-lock-icon i');
+        icons.forEach(function (icon) {
+            setInterval(function () {
+                icon.classList.add('shimmer-pulse');
+                setTimeout(function () {
+                    icon.classList.remove('shimmer-pulse');
+                }, 1200);
+            }, 4000);
+        });
+    })();
 </script>
 </body>
 </html>
