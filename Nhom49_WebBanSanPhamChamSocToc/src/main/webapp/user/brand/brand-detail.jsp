@@ -91,8 +91,14 @@
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
-                        <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                             alt="Logo ${brand.brandName}">
+                        <c:choose>
+                            <c:when test="${fn:startsWith(brand.logoUrl,'http')}">
+                                <img src="${brand.logoUrl}" alt="Logo ${brand.brandName}">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}" alt="Logo ${brand.brandName}">
+                            </c:otherwise>
+                        </c:choose>
                     </c:when>
                     <c:otherwise>
                         <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>

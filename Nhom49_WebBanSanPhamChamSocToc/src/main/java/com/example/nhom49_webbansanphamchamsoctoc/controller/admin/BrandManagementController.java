@@ -5,12 +5,19 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.Brand;
 import com.example.nhom49_webbansanphamchamsoctoc.util.ValidationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+
+import com.example.nhom49_webbansanphamchamsoctoc.util.CloudinaryConfig;
+import com.cloudinary.utils.ObjectUtils;
 
 import java.io.IOException;
+import java.util.Map;
 
+@MultipartConfig
 @WebServlet(urlPatterns = {
         "/admin/brands",
         "/admin/brands/form",
@@ -102,7 +109,7 @@ public class BrandManagementController extends HttpServlet {
         Brand brand = new Brand();
         brand.setBrandName(request.getParameter("brandName"));
         brand.setBrandSlug(request.getParameter("brandSlug"));
-        brand.setLogoUrl(request.getParameter("logoUrl"));
+        // logoUrl will be set after possible upload
         brand.setOrigin(request.getParameter("origin"));
         brand.setShortDescription(request.getParameter("shortDescription"));
         brand.setFullDescription(request.getParameter("fullDescription"));
@@ -113,16 +120,66 @@ public class BrandManagementController extends HttpServlet {
             request.getRequestDispatcher("/admin/brand/form.jsp").forward(request,response);
             return;
         }
+
         try{
-        if (idStr == null || idStr.isEmpty()) {
-          // ADD
-            brandDAO.insert(brand);
-        } else {
-            // UPDATE
-            brand.setBrandId(Integer.parseInt(idStr));
-            brandDAO.update(brand);
-        }
-    } catch (Exception e){
+            boolean isAdd = (idStr == null || idStr.isEmpty());
+            int brandId = -1;
+
+            if (isAdd) {
+                // insert without logo first to obtain id
+                brandId = brandDAO.insert(brand);
+                if (brandId > 0) {
+                    brand.setBrandId(brandId);
+                } else {
+                    throw new RuntimeException("Failed to insert brand");
+                }
+            } else {
+                brandId = Integer.parseInt(idStr);
+                brand.setBrandId(brandId);
+                // update textual fields first
+                brandDAO.update(brand);
+            }
+
+            // Handle uploaded logo file if present
+            Part logoPart = null;
+            try {
+                logoPart = request.getPart("logo");
+            } catch (IllegalStateException | ServletException ignored) {
+                // Not multipart or no file; ignore
+            }
+
+            if (logoPart != null && logoPart.getSize() > 0) {
+                String contentType = logoPart.getContentType();
+                if (!isAllowedImageType(contentType)) {
+                    throw new IOException("Unsupported image type: " + contentType);
+                }
+
+                byte[] fileBytes = logoPart.getInputStream().readAllBytes();
+                String publicId = "brand-" + (brand.getBrandSlug() != null && !brand.getBrandSlug().isBlank() ? brand.getBrandSlug() : brandId) + "-" + java.util.UUID.randomUUID();
+
+                Map<?, ?> result = com.example.nhom49_webbansanphamchamsoctoc.util.CloudinaryConfig.getInstance()
+                        .uploader()
+                        .upload(
+                                fileBytes,
+                                com.cloudinary.utils.ObjectUtils.asMap(
+                                        "folder", "brands",
+                                        "public_id", publicId,
+                                        "overwrite", false,
+                                        "invalidate", true,
+                                        "resource_type", "image"
+                                )
+                        );
+
+                String secureUrl = (String) result.get("secure_url");
+                if (secureUrl == null || secureUrl.isBlank()) {
+                    throw new IOException("Không lấy được URL logo từ Cloudinary");
+                }
+
+                brand.setLogoUrl(secureUrl);
+                brandDAO.update(brand);
+            }
+
+        } catch (Exception e){
             e.printStackTrace();
             request.setAttribute("branderror", "Không thể lưu thương hiệu");
             request.setAttribute("brand", brand);
@@ -132,6 +189,13 @@ public class BrandManagementController extends HttpServlet {
         }
 
         response.sendRedirect(request.getContextPath() + "/admin/brands");
+    }
+
+    private boolean isAllowedImageType(String contentType) {
+        return "image/jpeg".equals(contentType)
+                || "image/png".equals(contentType)
+                || "image/webp".equals(contentType)
+                || "image/gif".equals(contentType);
     }
 
     private void deleteBrand(HttpServletRequest request, HttpServletResponse response)
