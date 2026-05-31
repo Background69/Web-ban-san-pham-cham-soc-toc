@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -282,9 +283,16 @@
 
                     <td>
                         <c:if test="${not empty p.primaryImageUrl}">
-                            <img class="thumb"
-                                 src="${pageContext.request.contextPath}/static/${p.primaryImageUrl}"
-                                 alt="thumb">
+                            <c:choose>
+                                <c:when test="${fn:startsWith(p.primaryImageUrl, 'http')}">
+                                    <img class="thumb" src="${p.primaryImageUrl}" alt="thumb">
+                                </c:when>
+                                <c:otherwise>
+                                    <img class="thumb"
+                                         src="${pageContext.request.contextPath}/${p.primaryImageUrl}"
+                                         alt="thumb">
+                                </c:otherwise>
+                            </c:choose>
                         </c:if>
                     </td>
 

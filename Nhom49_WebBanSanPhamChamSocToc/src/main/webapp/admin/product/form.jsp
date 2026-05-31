@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <c:set var="activeMenu" value="products"/>
 
@@ -341,9 +342,17 @@
                         <input type="file" name="image" accept="image/*">
                         <c:if test="${not empty product.primaryImageUrl}">
                             <div style="margin-top:10px">
-                                <img src="${pageContext.request.contextPath}/static/${product.primaryImageUrl}"
-                                     alt="Current image"
-                                     style="max-width:120px;border-radius:8px;border:1px solid #eee">
+                                <c:choose>
+                                    <c:when test="${fn:startsWith(product.primaryImageUrl, 'http')}">
+                                        <img src="${product.primaryImageUrl}" alt="Current image"
+                                             style="max-width:120px;border-radius:8px;border:1px solid #eee">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="${pageContext.request.contextPath}/${product.primaryImageUrl}"
+                                             alt="Current image"
+                                             style="max-width:120px;border-radius:8px;border:1px solid #eee">
+                                    </c:otherwise>
+                                </c:choose>
                                 <span style="margin-left:10px;color:#666;font-size:13px">Anh hien tai</span>
                             </div>
                         </c:if>

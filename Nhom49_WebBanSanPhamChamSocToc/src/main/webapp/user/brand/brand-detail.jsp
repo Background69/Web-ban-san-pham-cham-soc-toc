@@ -163,8 +163,20 @@
                             <div class="product-img">
                                 <a
                                         href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                    <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
+                                    <c:choose>
+                                        <c:when test="${not empty product.primaryImageUrl and fn:startsWith(product.primaryImageUrl, 'http')}">
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${product.primaryImageUrl}">
+                                        </c:when>
+                                        <c:when test="${not empty product.primaryImageUrl}">
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${pageContext.request.contextPath}/${product.primaryImageUrl}">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </a>
                             </div>
                             <div class="product-body">

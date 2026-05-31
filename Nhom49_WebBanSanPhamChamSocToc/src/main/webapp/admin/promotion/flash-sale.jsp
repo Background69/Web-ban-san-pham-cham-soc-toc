@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <c:set var="activeMenu" value="flash-sale"/>
 
@@ -312,9 +313,16 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${not empty p.primaryImageUrl}">
-                                        <img class="thumb"
-                                             src="${pageContext.request.contextPath}/static/${p.primaryImageUrl}"
-                                             alt="">
+                                        <c:choose>
+                                            <c:when test="${fn:startsWith(p.primaryImageUrl, 'http')}">
+                                                <img class="thumb" src="${p.primaryImageUrl}" alt="">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img class="thumb"
+                                                     src="${pageContext.request.contextPath}/${p.primaryImageUrl}"
+                                                     alt="">
+                                            </c:otherwise>
+                                        </c:choose>
                                     </c:when>
                                     <c:otherwise>
                                         <img class="thumb"
@@ -405,12 +413,19 @@
                             <c:forEach var="p" items="${nonSaleProducts}">
                                 <label class="product-item">
                                     <input type="checkbox" name="productIds" value="${p.productId}">
-                                    <c:choose>
-                                        <c:when test="${not empty p.primaryImageUrl}">
-                                            <img class="thumb"
-                                                 src="${pageContext.request.contextPath}/static/${p.primaryImageUrl}"
-                                                 alt="">
-                                        </c:when>
+                                <c:choose>
+                                    <c:when test="${not empty p.primaryImageUrl}">
+                                        <c:choose>
+                                            <c:when test="${fn:startsWith(p.primaryImageUrl, 'http')}">
+                                                <img class="thumb" src="${p.primaryImageUrl}" alt="">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img class="thumb"
+                                                     src="${pageContext.request.contextPath}/${p.primaryImageUrl}"
+                                                     alt="">
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:when>
                                         <c:otherwise>
                                             <img class="thumb"
                                                  src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png"

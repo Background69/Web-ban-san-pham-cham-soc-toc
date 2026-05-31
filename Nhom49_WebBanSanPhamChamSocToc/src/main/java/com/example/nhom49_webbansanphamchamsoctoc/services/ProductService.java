@@ -127,8 +127,13 @@ public class ProductService {
     private void enrichProductWithDetails(Product product) {
         List<ProductVariant> variants = variantDAO.findByProductId(product.getProductId());
         List<ProductImage> images = imageDAO.findByProductId(product.getProductId());
+        normalizeImageUrls(images);
         product.setVariants(variants);
         product.setImages(images);
+        ProductImage primaryImage = product.getPrimaryImage();
+        if (primaryImage != null) {
+            product.setPrimaryImageUrl(primaryImage.getImageUrl());
+        }
         int remainingStock = 0;
         if (variants != null) {
             for (ProductVariant variant : variants) {
@@ -183,7 +188,9 @@ public class ProductService {
         for (Product product : products) {
             ProductImage primaryImage = imageDAO.findPrimaryByProductId(product.getProductId());
             if (primaryImage != null) {
-                product.setPrimaryImageUrl(primaryImage.getImageUrl());
+                String imageUrl = normalizeImageUrl(primaryImage.getImageUrl());
+                primaryImage.setImageUrl(imageUrl);
+                product.setPrimaryImageUrl(imageUrl);
                 product.setImages(List.of(primaryImage));
             }
 
@@ -242,6 +249,31 @@ public class ProductService {
             // nên chuẩn hóa để tầng view luôn hiểu đây là sản phẩm đang sale.
             product.setOnSale(true);
         }
+    }
+
+    private void normalizeImageUrls(List<ProductImage> images) {
+        if (images == null || images.isEmpty()) {
+            return;
+        }
+        for (ProductImage image : images) {
+            if (image != null) {
+                image.setImageUrl(normalizeImageUrl(image.getImageUrl()));
+            }
+        }
+    }
+
+    private String normalizeImageUrl(String imageUrl) {
+        if (imageUrl == null || imageUrl.isBlank()) {
+            return imageUrl;
+        }
+        String trimmed = imageUrl.trim();
+        if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+            return trimmed;
+        }
+        if (trimmed.startsWith("/static/")) {
+            return trimmed.substring(1);
+        }
+        return "static/" + trimmed;
     }
 
 }
