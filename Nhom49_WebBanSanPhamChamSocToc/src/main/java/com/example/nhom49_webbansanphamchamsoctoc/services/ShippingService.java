@@ -58,8 +58,7 @@ public class ShippingService {
         // Tạo address
         ShippingAddress address = AddressUtil.createAddress(
                 userId, fullName, phone,
-                provinceCode, provinceName,
-                districtCode, districtName,
+                provinceCode, provinceName, districtCode, districtName,
                 wardCode, wardName, specificAddress, note
         );
 

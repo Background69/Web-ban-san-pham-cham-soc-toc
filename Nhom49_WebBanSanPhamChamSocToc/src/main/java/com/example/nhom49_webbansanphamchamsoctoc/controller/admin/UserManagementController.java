@@ -88,7 +88,7 @@ public class UserManagementController extends HttpServlet {
             return;
         }
 
-        if ("delete".equals(action)) {
+        if ("toggle-status".equals(action)) {
             Integer id = ValidationUtil.parseIntSafe(request.getParameter("id"));
             if (id == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
@@ -96,6 +96,7 @@ public class UserManagementController extends HttpServlet {
             }
             userService.toggleUserActive(id);
             response.sendRedirect(request.getContextPath() + "/admin/users");
+            return;
         }
     }
 }
