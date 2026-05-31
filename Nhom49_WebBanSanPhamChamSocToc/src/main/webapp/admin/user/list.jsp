@@ -12,8 +12,6 @@
 
 <body>
 <div class="container">
-
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
             <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
