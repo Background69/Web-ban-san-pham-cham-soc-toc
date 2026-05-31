@@ -6,6 +6,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OtpVerification;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PendingRegistration;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.util.RedirectUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -197,14 +198,10 @@ public class OtpController extends HttpServlet {
         req.getSession().removeAttribute("otpPendingRegistrationId");
         clearOtpSession(req);
 
-        String targetUrl;
-        if (redirectUrl != null && !redirectUrl.isBlank()) {
-            String separator = redirectUrl.contains("?") ? "&" : "?";
-            targetUrl = req.getContextPath() + redirectUrl + separator + "registerSuccess=true";
-        } else {
-            targetUrl = req.getContextPath() + "/?registerSuccess=true";
-        }
-        resp.sendRedirect(targetUrl);
+        String targetUrl = RedirectUtil.buildRedirectUrl(req, redirectUrl, "/");
+
+        String separator = targetUrl.contains("?") ? "&" : "?";
+        resp.sendRedirect(targetUrl + separator + "registerSuccess=true");
     }
 
     private void clearOtpSession(HttpServletRequest req) {
