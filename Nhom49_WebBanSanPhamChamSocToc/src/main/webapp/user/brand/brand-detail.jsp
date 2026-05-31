@@ -15,6 +15,10 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,500&display=swap"
+          rel="stylesheet">
     <style>
         .brand-detail-main {
             max-width: 1400px;
@@ -77,68 +81,93 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <!-- Brand Banner -->
-<section class="brand-banner section-animate">
-    <div class="brand-banner-overlay"></div>
-    <div class="brand-banner-content">
-        <nav class="breadcrumb">
+<section class="brand-hero section-animate"
+         <c:choose>
+             <c:when test="${not empty brand.logoUrl}">
+                 style="background-image: url('${pageContext.request.contextPath}/static/assets/${brand.logoUrl}');"
+             </c:when>
+             <c:otherwise>
+                 style="background-image: none;"
+             </c:otherwise>
+         </c:choose>
+>
+    <div class="brand-hero-overlay"></div>
+
+    <div class="brand-hero-particles">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="brand-hero-content">
+        <%-- Breadcrumb --%>
+        <nav class="breadcrumb brand-hero-breadcrumb">
             <a href="${pageContext.request.contextPath}/">Trang chủ</a>
             <span class="separator">›</span>
             <a href="${pageContext.request.contextPath}/brands">Thương hiệu</a>
             <span class="separator">›</span>
             <span class="current">${brand.brandName}</span>
         </nav>
-        <div class="brand-banner-info">
-            <div class="brand-logo-wrapper">
-                <c:choose>
-                    <c:when test="${not empty brand.logoUrl}">
-                        <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                             alt="Logo ${brand.brandName}">
-                    </c:when>
-                    <c:otherwise>
-                        <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-            <div class="brand-text">
-                <h1>${brand.brandName}</h1>
-                <p class="brand-tagline">${brand.shortDescription}</p>
-                <div class="brand-meta">
-                    <c:if test="${not empty brand.origin}">
-                        <span class="meta-item"><i class="fas fa-globe"></i> ${brand.origin}</span>
-                    </c:if>
-                    <span class="meta-item"><i class="fas fa-box"></i> ${totalProducts} sản
-                                            phẩm</span>
-                </div>
-            </div>
+        <div class="brand-hero-logo">
+            <c:choose>
+                <c:when test="${not empty brand.logoUrl}">
+                    <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
+                         alt="Logo ${brand.brandName}">
+                </c:when>
+                <c:otherwise>
+                    <div class="brand-hero-logo-fallback">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <h1 class="brand-hero-title">${brand.brandName}</h1>
+
+        <c:if test="${not empty brand.shortDescription}">
+            <p class="brand-hero-philosophy">"${brand.shortDescription}"</p>
+        </c:if>
+
+        <div class="brand-hero-meta">
+            <c:if test="${not empty brand.origin}">
+                <span class="hero-meta-badge">
+                    <i class="fas fa-globe-asia"></i> ${brand.origin}
+                </span>
+            </c:if>
+            <span class="hero-meta-badge">
+                <i class="fas fa-box-open"></i> ${totalProducts} sản phẩm
+            </span>
         </div>
     </div>
 </section>
 
 <main class="brand-detail-main page-animate">
-    <!-- Brand Info Section -->
-    <div class="brand-info-section section-animate">
-        <c:if test="${not empty brand.fullDescription}">
-            <div class="brand-description-card">
-                <h2><i class="fas fa-info-circle"></i> Giới thiệu thương hiệu</h2>
-                <p>${brand.fullDescription}</p>
-            </div>
-        </c:if>
-
-        <!-- Category Stats -->
-        <c:if test="${not empty categoryStats}">
-            <div class="brand-stats">
-                <h3><i class="fas fa-chart-pie"></i> Danh mục sản phẩm</h3>
-                <div class="stats-grid stagger-fade">
-                    <c:forEach var="stat" items="${categoryStats}">
-                        <div class="stat-item">
-                            <span class="stat-number">${stat.value}</span>
-                            <span class="stat-label">${stat.key}</span>
-                        </div>
-                    </c:forEach>
+    <c:if test="${not empty brand.fullDescription}">
+        <div class="brand-story-section section-animate">
+            <div class="brand-story-card">
+                <div class="brand-story-accent"></div>
+                <div class="brand-story-body">
+                    <h2 class="brand-story-heading">
+                        <i class="fas fa-feather-pointed"></i>
+                        <span>Câu chuyện thương hiệu</span>
+                    </h2>
+                    <p class="brand-story-text">${brand.fullDescription}</p>
                 </div>
             </div>
-        </c:if>
-    </div>
+        </div>
+    </c:if>
+
+    <c:if test="${not empty categoryStats}">
+        <div class="brand-stats section-animate">
+            <h3><i class="fas fa-chart-pie"></i> Danh mục sản phẩm</h3>
+            <div class="stats-grid stagger-fade">
+                <c:forEach var="stat" items="${categoryStats}">
+                    <div class="stat-item">
+                        <span class="stat-number">${stat.value}</span>
+                        <span class="stat-label">${stat.key}</span>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </c:if>
 
     <!-- Products Section -->
     <section class="brand-products-section store-page">
