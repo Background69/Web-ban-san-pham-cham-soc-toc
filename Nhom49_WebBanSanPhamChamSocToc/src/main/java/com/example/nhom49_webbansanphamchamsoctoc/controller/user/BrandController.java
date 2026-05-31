@@ -120,6 +120,7 @@ public class BrandController extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("categories", new ArrayList<>(categoryMap.values()));
         request.setAttribute("categoryStats", categoryStats);
+        request.setAttribute("paginationBaseUrl", request.getContextPath() + "/brand/" + slug);
 
         request.getRequestDispatcher("/user/brand/brand-detail.jsp").forward(request, response);
     }

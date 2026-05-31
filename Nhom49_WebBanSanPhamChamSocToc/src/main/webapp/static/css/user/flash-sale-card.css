@@ -1,5 +1,5 @@
 .super-deal-section {
-    --deal-accent: #ff4d4f;
+    --deal-accent: #1B4D3E;
     --deal-accent-2: #ff8a00;
     --deal-text: #1f2a37;
     --deal-muted: #8a8f98;
@@ -309,7 +309,8 @@
 .super-deal-section .price-current {
     font-size: 18px;
     font-weight: 700;
-    color: #ff5252;
+    color: #1B4D3E;
+    transition: color 0.3s ease-in-out;
 }
 
 .super-deal-section .price-old {
