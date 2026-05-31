@@ -1,5 +1,6 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -58,14 +59,16 @@
                 <div class="brand-logo">
                     <c:choose>
                         <c:when test="${not empty brand.logoUrl}">
-
-                            <img
-                                    src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                                    alt="Logo ${brand.brandName}"
-                                    onerror="this.onerror=null;
-                                         this.remove();
-                                         this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';"
-                            />
+                            <c:choose>
+                                <c:when test="${fn:startsWith(brand.logoUrl, 'http')}">
+                                    <img src="${brand.logoUrl}" alt="Logo ${brand.brandName}"
+                                         onerror="this.onerror=null; this.remove(); this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';" />
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}" alt="Logo ${brand.brandName}"
+                                         onerror="this.onerror=null; this.remove(); this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';" />
+                                </c:otherwise>
+                            </c:choose>
                         </c:when>
                         <c:otherwise>
                             <div class="brand-logo-placeholder">

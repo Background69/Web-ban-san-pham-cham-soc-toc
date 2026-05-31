@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -123,10 +123,19 @@
 
                             <div class="product-img flash-sale-card-media">
                                 <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                    <img alt="${product.productName}" class="product-image"
-                                         loading="lazy"
-                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : (product.primaryImage != null && not empty product.primaryImage.imageUrl ? product.primaryImage.imageUrl : 'images/default-product.png')}"
-                                         onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/images/default-product.png';">
+                                    <c:choose>
+                                        <c:when test="${not empty product.primaryImageUrl}">
+                                            <img alt="${product.productName}" class="product-image"
+                                                 loading="lazy"
+                                                 src="${product.primaryImageUrl}"
+                                                 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/images/default-product.png';">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img alt="${product.productName}" class="product-image"
+                                                 loading="lazy"
+                                                 src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </a>
                             </div>
 
