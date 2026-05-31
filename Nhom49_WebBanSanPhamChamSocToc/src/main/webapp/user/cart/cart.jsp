@@ -68,9 +68,15 @@
                         <c:forEach var="item" items="${cartItems}">
                             <div class="cart-item" data-variant-id="${item.variant.variantId}">
                                 <div class="cart-item-image">
-                                    <img src="${pageContext.request.contextPath}/static/${not empty item.imageUrl ? item.imageUrl : 'images/default-product.png'}"
-                                         alt="${item.product.productName}"
-                                         onerror="this.src='${pageContext.request.contextPath}/static/images/default-product.png'">
+                                    <c:choose>
+                                        <c:when test="${not empty item.imageUrl}">
+                                            <img src="${item.imageUrl}" alt="${item.product.productName}">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${pageContext.request.contextPath}/static/images/default-product.png"
+                                                 alt="${item.product.productName}">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                                 <div class="cart-item-details">
                                     <h3 class="cart-item-name">

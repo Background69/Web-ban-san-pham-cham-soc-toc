@@ -84,7 +84,7 @@
             <div class="order-items">
                 <c:forEach var="item" items="${order.orderItems}">
                     <div class="order-item">
-                        <img src="${pageContext.request.contextPath}/static/${not empty item.productImage ? item.productImage : 'assets/icons/LOGO.png'}"
+                        <img src="${not empty item.productImage ? item.productImage : pageContext.request.contextPath.concat('/static/assets/icons/LOGO.png')}"
                              alt="${item.productName}"
                              onerror="this.src='${pageContext.request.contextPath}/static/assets/icons/LOGO.png'">
                         <div class="item-info">

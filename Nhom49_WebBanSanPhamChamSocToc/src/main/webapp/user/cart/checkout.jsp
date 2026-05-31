@@ -214,7 +214,7 @@
                             <c:forEach var="item" items="${cartItems}">
                                 <div class="checkout-item">
                                     <div class="checkout-item-image">
-                                        <img src="${pageContext.request.contextPath}/static/${not empty item.imageUrl ? item.imageUrl : 'images/default-product.png'}"
+                                        <img src="${not empty item.imageUrl ? item.imageUrl : pageContext.request.contextPath.concat('/static/images/default-product.png')}"
                                              alt="${item.product.productName}"
                                              onerror="this.src='${pageContext.request.contextPath}/static/images/default-product.png'">
                                     </div>

@@ -197,8 +197,15 @@
                         <a class="social-main-link"
                            href="${pageContext.request.contextPath}/product/${trendProduct.productSlug}">
                             <div class="social-main-media">
-                                <img alt="${trendProduct.productName}"
-                                     src="${pageContext.request.contextPath}/static/${trendProduct.primaryImage != null ? trendProduct.primaryImage.imageUrl : 'images/default-product.png'}">
+                                <c:choose>
+                                    <c:when test="${not empty trendProduct.primaryImageUrl}">
+                                        <img alt="${trendProduct.productName}" src="${trendProduct.primaryImageUrl}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img alt="${trendProduct.productName}"
+                                             src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="social-main-content">
                                 <p class="social-label">Review nổi bật</p>
@@ -325,8 +332,16 @@
                                             </div>
                                         </c:if>
                                         <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                            <img alt="${product.productName}" class="product-image"
-                                                 src="${pageContext.request.contextPath}/static/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
+                                            <c:choose>
+                                                <c:when test="${not empty product.primaryImageUrl}">
+                                                    <img alt="${product.productName}" class="product-image"
+                                                         src="${product.primaryImageUrl}">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img alt="${product.productName}" class="product-image"
+                                                         src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                                </c:otherwise>
+                                            </c:choose>
                                         </a>
                                     </div>
                                     <div class="product-body">
@@ -421,8 +436,16 @@
                         <article class="product-item">
                             <div class="product-img">
                                 <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                    <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/${product.primaryImage != null ? product.primaryImage.imageUrl : 'images/default-product.png'}">
+                                    <c:choose>
+                                        <c:when test="${not empty product.primaryImageUrl}">
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${product.primaryImageUrl}">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </a>
                             </div>
 

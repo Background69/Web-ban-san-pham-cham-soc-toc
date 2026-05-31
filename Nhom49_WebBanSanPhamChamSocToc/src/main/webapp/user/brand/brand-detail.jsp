@@ -91,8 +91,14 @@
             <div class="brand-logo-wrapper">
                 <c:choose>
                     <c:when test="${not empty brand.logoUrl}">
-                        <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                             alt="Logo ${brand.brandName}">
+                        <c:choose>
+                            <c:when test="${fn:startsWith(brand.logoUrl,'http')}">
+                                <img src="${brand.logoUrl}" alt="Logo ${brand.brandName}">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}" alt="Logo ${brand.brandName}">
+                            </c:otherwise>
+                        </c:choose>
                     </c:when>
                     <c:otherwise>
                         <div class="brand-logo-placeholder"><i class="fas fa-building"></i></div>
@@ -163,8 +169,16 @@
                             <div class="product-img">
                                 <a
                                         href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                    <img alt="${product.productName}" class="product-image"
-                                         src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
+                                    <c:choose>
+                                        <c:when test="${not empty product.primaryImageUrl}">
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${product.primaryImageUrl}">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img alt="${product.productName}" class="product-image"
+                                                 src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </a>
                             </div>
                             <div class="product-body">
