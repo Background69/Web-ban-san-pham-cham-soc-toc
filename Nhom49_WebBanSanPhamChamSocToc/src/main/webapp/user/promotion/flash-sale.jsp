@@ -124,16 +124,10 @@
                             <div class="product-img flash-sale-card-media">
                                 <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                     <c:choose>
-                                        <c:when test="${not empty product.primaryImageUrl and fn:startsWith(product.primaryImageUrl, 'http')}">
-                                            <img alt="${product.productName}" class="product-image"
-                                                 loading="lazy"
-                                                 src="${product.primaryImageUrl}"
-                                                 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/images/default-product.png';">
-                                        </c:when>
                                         <c:when test="${not empty product.primaryImageUrl}">
                                             <img alt="${product.productName}" class="product-image"
                                                  loading="lazy"
-                                                 src="${pageContext.request.contextPath}/${product.primaryImageUrl}"
+                                                 src="${product.primaryImageUrl}"
                                                  onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/images/default-product.png';">
                                         </c:when>
                                         <c:otherwise>

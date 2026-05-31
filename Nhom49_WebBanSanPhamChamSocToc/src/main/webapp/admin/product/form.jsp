@@ -342,17 +342,8 @@
                         <input type="file" name="image" accept="image/*">
                         <c:if test="${not empty product.primaryImageUrl}">
                             <div style="margin-top:10px">
-                                <c:choose>
-                                    <c:when test="${fn:startsWith(product.primaryImageUrl, 'http')}">
-                                        <img src="${product.primaryImageUrl}" alt="Current image"
-                                             style="max-width:120px;border-radius:8px;border:1px solid #eee">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img src="${pageContext.request.contextPath}/${product.primaryImageUrl}"
-                                             alt="Current image"
-                                             style="max-width:120px;border-radius:8px;border:1px solid #eee">
-                                    </c:otherwise>
-                                </c:choose>
+                                <img src="${product.primaryImageUrl}" alt="Current image"
+                                     style="max-width:120px;border-radius:8px;border:1px solid #eee">
                                 <span style="margin-left:10px;color:#666;font-size:13px">Anh hien tai</span>
                             </div>
                         </c:if>

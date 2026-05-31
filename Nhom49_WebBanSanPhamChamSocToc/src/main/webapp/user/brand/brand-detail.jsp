@@ -164,13 +164,9 @@
                                 <a
                                         href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                     <c:choose>
-                                        <c:when test="${not empty product.primaryImageUrl and fn:startsWith(product.primaryImageUrl, 'http')}">
-                                            <img alt="${product.productName}" class="product-image"
-                                                 src="${product.primaryImageUrl}">
-                                        </c:when>
                                         <c:when test="${not empty product.primaryImageUrl}">
                                             <img alt="${product.productName}" class="product-image"
-                                                 src="${pageContext.request.contextPath}/${product.primaryImageUrl}">
+                                                 src="${product.primaryImageUrl}">
                                         </c:when>
                                         <c:otherwise>
                                             <img alt="${product.productName}" class="product-image"

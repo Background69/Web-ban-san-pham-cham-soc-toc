@@ -284,14 +284,9 @@
                     <td>
                         <c:if test="${not empty p.primaryImageUrl}">
                             <c:choose>
-                                <c:when test="${fn:startsWith(p.primaryImageUrl, 'http')}">
+                                <c:when test="${not empty p.primaryImageUrl}">
                                     <img class="thumb" src="${p.primaryImageUrl}" alt="thumb">
                                 </c:when>
-                                <c:otherwise>
-                                    <img class="thumb"
-                                         src="${pageContext.request.contextPath}/${p.primaryImageUrl}"
-                                         alt="thumb">
-                                </c:otherwise>
                             </c:choose>
                         </c:if>
                     </td>

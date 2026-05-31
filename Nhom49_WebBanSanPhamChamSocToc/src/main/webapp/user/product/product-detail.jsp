@@ -245,7 +245,7 @@
                 <c:choose>
                     <c:when test="${not empty product.primaryImage}">
                         <img id="main-product-image" class="product-image"
-                             src="${pageContext.request.contextPath}/static/${product.primaryImage.imageUrl}"
+                             src="${product.primaryImageUrl}"
                              alt="${product.productName}">
                     </c:when>
                     <c:otherwise>
@@ -260,10 +260,10 @@
                 <div class="thumbnail-images">
                     <c:forEach var="image" items="${product.images}" varStatus="status">
                         <img class="thumbnail ${status.first ? 'active' : ''}"
-                             src="${pageContext.request.contextPath}/static/${image.imageUrl}"
-                             data-full="${pageContext.request.contextPath}/static/${image.imageUrl}"
+                             src="${image.imageUrl}"
+                             data-full="${image.imageUrl}"
                              alt="${product.productName}"
-                             onclick="changeMainImage('${pageContext.request.contextPath}/static/${image.imageUrl}', this)">
+                             onclick="changeMainImage('${image.imageUrl}', this)">
                     </c:forEach>
                 </div>
             </c:if>
