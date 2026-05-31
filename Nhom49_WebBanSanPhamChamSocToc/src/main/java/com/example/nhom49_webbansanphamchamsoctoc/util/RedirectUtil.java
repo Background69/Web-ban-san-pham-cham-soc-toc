@@ -9,16 +9,6 @@ import java.util.regex.Pattern;
 public class RedirectUtil {
     private static final Pattern SCHEME_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9+.-]:");
 
-    /**
-     * Validates and normalizes an internal redirect path.
-     *
-     * <p>Only application-relative paths starting with {@code /} are allowed.
-     * External URLs, protocol-relative URLs, URL schemes, and newline characters
-     * are rejected to prevent open redirect attacks.</p>
-     *
-     * @param redirect the redirect path to validate
-     * @return the sanitized redirect path if valid; otherwise {@code null}
-     */
     public static String sanitizePath(String redirect) {
         if (redirect == null) return null;
 
@@ -39,20 +29,6 @@ public class RedirectUtil {
         return decoded;
     }
 
-
-    /**
-     * Builds a safe redirect URL using the current application context path.
-     *
-     * <p>The provided redirect value is sanitized before use. Only internal paths
-     * are allowed. If the redirect value is invalid, the method falls back to the
-     * provided default target. If the default target is also invalid, it falls back
-     * to the application root.</p>
-     *
-     * @param req the current HTTP request, used to get the context path
-     * @param redirect the requested redirect path
-     * @param defaultTarget the fallback internal path when redirect is invalid
-     * @return a safe redirect URL within the current application context
-     */
     public static String buildRedirectUrl(HttpServletRequest req, String redirect, String defaultTarget) {
         String contextPath = req.getContextPath();
 
