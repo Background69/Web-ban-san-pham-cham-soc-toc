@@ -127,8 +127,8 @@
                     </td>
 
                     <td class="action-cell">
-                        <button class="action-btn edit" onclick="location.href='${pageContext.request.contextPath}/admin/products?action=edit&id=${p.productId}">Sửa</button>
-                        <button class="action-btn edit" onclick="if(confirm('Xoá sản phẩm?'))location.href='${pageContext.request.contextPath}/admin/products?action=detele&id=${p.productId}">Xoá</button>
+                        <button class="action-btn edit" onclick="location.href='${pageContext.request.contextPath}/admin/products?action=edit&id=${p.productId}'">Sửa</button>
+                        <button class="action-btn edit" onclick="if(confirm('Xoá sản phẩm?'))location.href='${pageContext.request.contextPath}/admin/products?action=detele&id=${p.productId}'">Xoá</button>
                     </td>
                 </tr>
             </c:forEach>
