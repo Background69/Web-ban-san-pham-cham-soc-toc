@@ -1,4 +1,4 @@
-/* Reset */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +6,6 @@
     font-family: 'Times New Roman', Times, serif;
 }
 
-/* Body */
 body {
     background: #f5f6fa;
 }
@@ -15,7 +14,6 @@ body {
     display: flex;
 }
 
-/* Sidebar */
 .sidebar {
     width: 260px;
     background: white;
@@ -312,7 +310,11 @@ body {
 .action-btn.delete:hover {
     background: #c0392b;
 }
+.action-cell{
+    white-space: nowrap;
+    min-width: 170px;
 
+}
 /* Reset nhẹ */
 * {
     box-sizing: border-box;

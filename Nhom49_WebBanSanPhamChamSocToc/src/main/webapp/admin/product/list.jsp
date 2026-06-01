@@ -12,240 +12,30 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/form.css">
-
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            inset: 0;
-            background: rgba(0, 0, 0, .45);
-            padding: 24px 0;
-            overflow: hidden;
-        }
-
-        .modal-content {
-            background: #fff;
-            width: min(720px, 92vw);
-            max-height: calc(100vh - 48px);
-            margin: 0 auto;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-content form {
-            margin: 0;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .modal-header {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 20px;
-            border-bottom: 1px solid #eee;
-            background: #fff;
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: 800;
-            margin: 0
-        }
-
-        .close {
-            background: transparent;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            line-height: 1;
-            padding: 6px 10px
-        }
-
-        .modal-body {
-            flex: 1;
-            min-height: 0;
-            overflow-y: auto;
-            padding: 18px 20px 20px;
-        }
-
-        .modal-footer {
-            flex-shrink: 0;
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            padding: 14px 20px;
-            border-top: 1px solid #eee;
-            background: #fff;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px 16px
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px
-        }
-
-        .form-group label {
-            font-weight: 700
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cfcfcf;
-            border-radius: 8px;
-            outline: none
-        }
-
-        .form-group textarea {
-            min-height: 90px;
-            resize: vertical
-        }
-
-        .span-2 {
-            grid-column: span 2
-        }
-
-        .btn {
-            border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700
-        }
-
-        .btn-primary {
-            background: #2e7d32;
-            color: #fff
-        }
-
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #111
-        }
-
-        .thumb {
-            width: 52px;
-            height: 52px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #eee
-        }
-
-        /* Variant Styles */
-        #variants-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .variant-row {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 0.8fr auto;
-            gap: 8px;
-            align-items: center;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-
-        .variant-row input {
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 13px;
-        }
-
-        .variant-row input:focus {
-            border-color: #4b6b3c;
-            outline: none;
-        }
-
-        .btn-variant-remove {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: #ffebee;
-            color: #c62828;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .btn-variant-remove:hover {
-            background: #ffcdd2;
-        }
-
-        .btn-add-variant {
-            padding: 10px 16px;
-            background: #e8f5e9;
-            color: #2e7d32;
-            border: 1px dashed #4caf50;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-
-        .btn-add-variant:hover {
-            background: #c8e6c9;
-        }
-
-        @media (max-width: 720px) {
-            .variant-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 6px;
-            }
-
-            .variant-row input:first-child {
-                grid-column: span 2;
-            }
-        }
-
-        @media (max-width: 720px) {
-            .modal-content {
-                margin: 30px auto
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr
-            }
-
-            .span-2 {
-                grid-column: span 1
-            }
-        }
-    </style>
+    <link rel="stylesheet" href ="${pageContext.request.contextPath}/static/css/admin/productmanagement.css">
 </head>
-
 <body>
 <div class="container">
-    <jsp:include page="/admin/layout/sidebar.jsp"/>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
+        </div>
+        <p>HairGlow Admin</p>
 
+        <ul class="menu">
+            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
+            <li class="active"><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm giá</a></li>
+        </ul>
+
+        <a class="view-site" href="${pageContext.request.contextPath}/">
+            Quay lại Website
+        </a>
+    </aside>
     <main class="content">
         <div class="header">
             <h1>Quản lý sản phẩm</h1>
@@ -328,20 +118,17 @@
                     <td>
                         <c:choose>
                             <c:when test="${p.remainingStock > 0}">
-                                <span style="color:green;font-weight:bold">Còn hàng</span>
+                                <span class="status-active">Còn hàng</span>
                             </c:when>
                             <c:otherwise>
-                                <span style="color:red;font-weight:bold">Hết hàng</span>
+                                <span class="status-lock">Hết hàng</span>
                             </c:otherwise>
                         </c:choose>
                     </td>
 
-                    <td>
-                        <a
-                                href="${pageContext.request.contextPath}/admin/products?action=edit&id=${p.productId}">Sửa</a>
-                        |
-                        <a href="${pageContext.request.contextPath}/admin/products?action=delete&id=${p.productId}"
-                           onclick="return confirm('Xóa sản phẩm?')">Xóa</a>
+                    <td class="action-cell">
+                        <button class="action-btn edit" onclick="location.href='${pageContext.request.contextPath}/admin/products?action=edit&id=${p.productId}'">Sửa</button>
+                        <button class="action-btn edit" onclick="if(confirm('Xoá sản phẩm?'))location.href='${pageContext.request.contextPath}/admin/products?action=delete&id=${p.productId}'">Xoá</button>
                     </td>
                 </tr>
             </c:forEach>

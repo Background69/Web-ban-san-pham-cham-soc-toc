@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-@WebServlet(name = "UserProfileController", urlPatterns = {"/profile", "/profile/*"})
+@WebServlet(name = "UserProfileController", urlPatterns = { "/profile", "/profile/*" })
 public class UserProfileController extends HttpServlet {
 
     private static final List<String> ORDER_STATUSES = List.of(
@@ -62,7 +62,6 @@ public class UserProfileController extends HttpServlet {
             // Profile Overview - trang tổng quan mới
             showProfileOverview(request, response, currentUser);
         } else if (pathInfo.equals("/edit")) {
-            moveFlashMessage(request);
             request.setAttribute("activeTab", "info");
             request.getRequestDispatcher("/user/profile-edit.jsp").forward(request, response);
         } else if (pathInfo.equals("/addresses")) {
@@ -243,27 +242,5 @@ public class UserProfileController extends HttpServlet {
 
         counts.put("all", total);
         return counts;
-    }
-
-    private void moveFlashMessage(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session == null) return;
-
-        Object flashSuccess = session.getAttribute("flashSuccess");
-        Object flashError = session.getAttribute("flashError");
-
-        if (flashSuccess != null) {
-            request.setAttribute("flashSuccess", flashSuccess);
-            session.removeAttribute("flashSuccess");
-        }
-
-        if (flashError != null) {
-            request.setAttribute("flashError", flashError);
-            session.removeAttribute("flashError");
-        }
-
-        // Dọn dữ liệu cũ nếu trước đó từng set nhầm success/error = true/false
-        session.removeAttribute("success");
-        session.removeAttribute("error");
     }
 }

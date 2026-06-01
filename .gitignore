@@ -130,7 +130,6 @@ src/main/resources/db.properties
 /archive/
 /Nhom49_WebBanSanPhamChamSocToc/compose.yml
 # Database config
-db.properties
 /Nhom49_WebBanSanPhamChamSocToc/gradlew
 /Nhom49_WebBanSanPhamChamSocToc/gradlew.bat
 /Nhom49_WebBanSanPhamChamSocToc/src/main/webapp/static/images/

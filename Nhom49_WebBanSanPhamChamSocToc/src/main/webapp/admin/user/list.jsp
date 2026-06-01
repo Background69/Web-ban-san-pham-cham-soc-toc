@@ -12,8 +12,6 @@
 
 <body>
 <div class="container">
-
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
             <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
@@ -48,7 +46,7 @@
                 placeholder="Tìm theo tên, email, số điện thoại..."
                 onkeyup="filterUsers()">
             <select id="sortselect" onchange="sortUsers()">
-                <option value="">Sắp xếp</option>
+                <option value="" selected disabled hidden>Sắp xếp</option>
                 <option value="asc">Từ A-Z</option>
                 <option value="desc">Từ Z-A</option>
             </select>
@@ -216,7 +214,7 @@
                 const toggleBtn = document.getElementById("toggleStatusBtn");
                 status.classList.remove("active","lock");
                 toggleBtn.classList.remove("btn-danger", "btn-success");
-                if(user.active){
+                if(user.isActive){
 
                     status.innerText = "● Hoạt động";
                     status.classList.add("active");
@@ -234,6 +232,28 @@
                     toggleBtn.classList.remove("btn-danger");
                     toggleBtn.classList.add("btn-success");
                 }
+                toggleBtn.onclick = function (){
+                    const message = user.isActive
+                    ? "Bạn có chắc muốn khoá tài khoản này?" : "Bạn có chắc muốn mở khoá tài khoản này?"
+                    if (confirm(message)) {
+                        let form = document.createElement("form");
+                        form.method = "post";
+                        form.action = "${pageContext.request.contextPath}/admin/users";
+
+                        let actionInput = document.createElement("input");
+                        actionInput.type ="hidden";
+                        actionInput.name = "action";
+                        actionInput.value = "toggle-status";
+                        let idInput = document.createElement("input");
+                        idInput.type = "hidden";
+                        idInput.name = "id";
+                        idInput.value = user.userId;
+                        form.appendChild(actionInput);
+                        form.appendChild(idInput);
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                };
                 document.getElementById("userModal").style.display = "flex";
 
             });

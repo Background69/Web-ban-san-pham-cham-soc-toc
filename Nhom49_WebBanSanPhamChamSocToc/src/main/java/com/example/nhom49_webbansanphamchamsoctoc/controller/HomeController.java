@@ -27,6 +27,11 @@ public class HomeController extends HttpServlet {
     private BrandService brandService;
     private ImageService imageService;
 
+    /**
+     * Khởi tạo tài nguyên hoặc cấu hình cần thiết.
+     *
+     * @throws ServletException nếu có lỗi xảy ra trong quá trình khởi tạo
+     */
     @Override
     public void init() throws ServletException {
         productService = new ProductService();
