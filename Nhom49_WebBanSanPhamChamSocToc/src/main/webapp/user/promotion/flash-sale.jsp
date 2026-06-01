@@ -191,14 +191,31 @@
                                     </div>
 
                                     <c:if test="${product.stockQuantity > 0}">
+                                        <c:set var="percent" value="${product.soldPercent}"/>
+                                        <c:set var="remaining" value="${product.stockQuantity - (product.soldQuantity != null ? product.soldQuantity : 0)}"/>
                                         <div class="stock-progress">
-                                            <div class="stock-progress-bar">
-                                                <div class="stock-progress-fill"
-                                                     style="width: ${product.soldPercent}%"></div>
+                                            <div class="stock-fomo-label">
+                                                <c:choose>
+                                                    <c:when test="${percent >= 90}">
+                                                        <span class="fomo-text fomo-critical">🔥 Chỉ còn ${remaining > 0 ? remaining : 1} sản phẩm cuối cùng!</span>
+                                                    </c:when>
+                                                    <c:when test="${percent >= 80}">
+                                                        <span class="fomo-text fomo-danger">🔥 Sắp cháy hàng!</span>
+                                                        <span class="fomo-sold">${percent}% đã bán</span>
+                                                    </c:when>
+                                                    <c:when test="${percent >= 50}">
+                                                        <span class="fomo-text fomo-hot">Đang bán rất chạy!</span>
+                                                        <span class="fomo-sold">${percent}% đã được mua</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="fomo-text">Đã bán ${product.soldQuantity != null ? product.soldQuantity : 0}</span>
+                                                        <span class="fomo-sold">còn ${remaining} sp</span>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </div>
-                                            <div class="stock-progress-text">
-                                                Đã
-                                                bán ${product.soldQuantity != null ? product.soldQuantity : 0}/${product.stockQuantity}
+                                            <div class="stock-progress-bar ${percent > 80 ? 'is-danger' : ''}">
+                                                <div class="stock-progress-fill"
+                                                     style="width: ${percent}%"></div>
                                             </div>
                                         </div>
                                     </c:if>
