@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flash Sale - HairGlow</title>
-    
+
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/static/css/user/style_for_flash-sale.css">
 </head>
@@ -21,50 +21,75 @@
 
 <main class="flash-sale-page">
     <section class="flash-sale-hero flash-sale-section">
-        <div class="flash-hero-content">
-            <p class="flash-hero-kicker">HairGlow Curated Flash Sale</p>
-            <h1>Flash Sale chăm tóc</h1>
-            <p class="flash-hero-subtext">
-                Deal được chọn lọc cho dầu gội, dầu xả, serum và phục hồi tóc mỗi ngày.
-            </p>
+        <div class="hero-bg-effects">
+            <div class="hero-particle hero-particle--1"></div>
+            <div class="hero-particle hero-particle--2"></div>
+            <div class="hero-particle hero-particle--3"></div>
+        </div>
+
+        <div class="flash-hero-luxury-shell">
+            <div class="flash-hero-copy">
+                <p class="flash-hero-kicker">
+                    <span class="kicker-line"></span>
+                    <span>HairGlow Luxury Flash Sale</span>
+                    <span class="kicker-line"></span>
+                </p>
+                <h1 class="flash-hero-title">
+                    <span>Giờ vàng</span>
+                    <span>giá sốc</span>
+                </h1>
+                <p class="flash-hero-subtext">
+                    Deal chọn lọc cho dầu gội, dầu xả, serum & phục hồi tóc —
+                    <strong>chỉ trong hôm nay</strong>.
+                </p>
+            </div>
+
+            <div class="flash-hero-timer" aria-label="Đồng hồ đếm ngược Flash Sale">
+                <div class="countdown-panel flash-sale-countdown">
+                    <p class="panel-label">
+                        <span class="label-pulse-dot"></span>
+                        Deal kết thúc sau
+                    </p>
+                    <div class="countdown-clock" aria-live="polite">
+                        <div class="time-box">
+                            <span id="hours">00</span>
+                            <small>Giờ</small>
+                        </div>
+                        <div class="time-separator">:</div>
+                        <div class="time-box">
+                            <span id="minutes">00</span>
+                            <small>Phút</small>
+                        </div>
+                        <div class="time-separator">:</div>
+                        <div class="time-box time-box--seconds">
+                            <span id="seconds">00</span>
+                            <small>Giây</small>
+                        </div>
+                    </div>
+                    <p class="countdown-urgency">Thời gian có hạn — Đừng bỏ lỡ!</p>
+                </div>
+            </div>
+
             <div class="flash-hero-actions">
-                <a class="hero-btn hero-btn-primary" href="#flash-sale-deals">Xem deal đang diễn ra</a>
+                <a class="hero-btn hero-btn-primary" href="#flash-sale-deals">
+                    Săn deal ngay
+                </a>
                 <a class="hero-btn hero-btn-ghost"
                    href="${pageContext.request.contextPath}/products">Khám phá sản phẩm</a>
             </div>
-        </div>
 
-        <div class="flash-hero-panels">
-            <div class="countdown-panel flash-sale-countdown">
-                <p class="panel-label">Deal kết thúc trong ngày</p>
-                <div class="countdown-clock" aria-live="polite">
-                    <div class="time-box">
-                        <span id="hours">00</span>
-                        <small>Giờ</small>
-                    </div>
-                    <div class="time-box">
-                        <span id="minutes">00</span>
-                        <small>Phút</small>
-                    </div>
-                    <div class="time-box">
-                        <span id="seconds">00</span>
-                        <small>Giây</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flash-stats-panel">
+            <div class="flash-stats-strip" aria-label="Tổng quan Flash Sale">
                 <div class="flash-stat">
-                    <span class="stat-label">Sản phẩm đang sale</span>
                     <strong>${saleProductCount}</strong>
+                    <span class="stat-label">Sản phẩm đang sale</span>
                 </div>
                 <div class="flash-stat">
-                    <span class="stat-label">Trang hiện tại</span>
                     <strong>${currentPage != null ? currentPage : 1}/${displayTotalPages}</strong>
+                    <span class="stat-label">Trang hiện tại</span>
                 </div>
                 <div class="flash-stat">
-                    <span class="stat-label">Nhóm chăm tóc trọng điểm</span>
                     <strong>Khô xơ, da đầu dầu, tóc nhuộm</strong>
+                    <span class="stat-label">Nhóm chăm tóc trọng điểm</span>
                 </div>
             </div>
         </div>
@@ -107,115 +132,91 @@
             </div>
 
             <div class="super-deal-categories flash-sale-tabs" role="tablist" aria-label="Lọc deal theo mức giảm">
-                <button type="button" class="super-deal-btn flash-sale-tab active" data-filter="all">Tất cả deal</button>
-                <button type="button" class="super-deal-btn flash-sale-tab" data-filter="flash-sale">Giảm từ 30%</button>
+                <button type="button" class="super-deal-btn flash-sale-tab active" data-filter="all">Tất cả deal
+                </button>
+                <button type="button" class="super-deal-btn flash-sale-tab" data-filter="flash-sale">Giảm từ 30%
+                </button>
                 <button type="button" class="super-deal-btn flash-sale-tab" data-filter="sale">Giảm dưới 30%</button>
             </div>
 
             <c:if test="${not empty saleProducts}">
                 <div class="deals-grid flash-sale-grid">
                     <c:forEach var="product" items="${saleProducts}">
-                        <article class="product-item flash-sale-card"
+                        <article class="product-item flash-sale-item"
                                  data-category="${product.defaultVariant != null && product.defaultVariant.discountPercent >= 30 ? 'flash-sale' : 'sale'}">
-                            <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
-                                <div class="flash-sale-badge">-${product.defaultVariant.discountPercent}%</div>
-                            </c:if>
-
-                            <div class="product-img flash-sale-card-media">
+                            <div class="product-img">
+                                <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
+                                    <div class="flash-sale-badge">
+                                        -${product.defaultVariant.discountPercent}%
+                                    </div>
+                                </c:if>
                                 <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                     <c:choose>
                                         <c:when test="${not empty product.primaryImageUrl}">
                                             <img alt="${product.productName}" class="product-image"
-                                                 loading="lazy"
-                                                 src="${product.primaryImageUrl}"
-                                                 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/static/images/default-product.png';">
+                                                 src="${product.primaryImageUrl}">
                                         </c:when>
                                         <c:otherwise>
                                             <img alt="${product.productName}" class="product-image"
-                                                 loading="lazy"
                                                  src="${pageContext.request.contextPath}/static/images/default-product.png">
                                         </c:otherwise>
                                     </c:choose>
                                 </a>
                             </div>
 
-                            <div class="product-body flash-sale-card-body">
+                            <div class="product-body">
                                 <h3 class="product-title">
                                     <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
                                             ${product.productName}
                                     </a>
                                 </h3>
 
-                                <div class="product-meta">
-                                    <span>${product.brand != null ? product.brand.brandName : 'HairGlow'}</span>
-                                    <span>${product.category != null ? product.category.categoryName : 'Chăm sóc tóc'}</span>
-                                    <span>${not empty product.origin ? product.origin : 'Việt Nam'}</span>
-                                </div>
-
-                                <div class="product-rating">
-                                    <span class="rating-value">
-                                        <c:choose>
-                                            <c:when test="${product.averageRating != null && product.averageRating > 0}">
-                                                ${product.averageRating}/5
-                                            </c:when>
-                                            <c:otherwise>Chưa có đánh giá</c:otherwise>
-                                        </c:choose>
-                                    </span>
-                                    <span class="review-count">(${product.reviewCount != null ? product.reviewCount : 0})</span>
-                                </div>
-
-                                <div class="product-price">
-                                    <c:if test="${product.defaultVariant != null}">
-                                        <p class="price-current">
-                                            <fmt:formatNumber
-                                                    value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
-                                                    type="number"/>₫
-                                        </p>
-                                        <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
-                                            <p class="price-old">
-                                                <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
-                                                                  type="number"/>₫
+                                <div class="product-footer">
+                                    <div class="product-price">
+                                        <c:if test="${product.defaultVariant != null}">
+                                            <p class="price-current">
+                                                <fmt:formatNumber
+                                                        value="${product.defaultVariant.salePrice != null ? product.defaultVariant.salePrice : product.defaultVariant.originalPrice}"
+                                                        type="number"/>&#8363;
                                             </p>
-                                            <p class="badge-discount">-${product.defaultVariant.discountPercent}%</p>
+                                            <c:if test="${product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                                <p class="price-old">
+                                                    <fmt:formatNumber value="${product.defaultVariant.originalPrice}"
+                                                                      type="number"/>&#8363;
+                                                </p>
+                                                <p class="badge-discount">
+                                                    -${product.defaultVariant.discountPercent}%</p>
+                                            </c:if>
                                         </c:if>
-                                    </c:if>
-                                </div>
+                                    </div>
 
-                                <c:choose>
-                                    <c:when test="${product.stockQuantity != null && product.stockQuantity > 0}">
+                                    <c:if test="${product.stockQuantity > 0}">
                                         <div class="stock-progress">
                                             <div class="stock-progress-bar">
                                                 <div class="stock-progress-fill"
-                                                     style="width: ${product.soldPercent != null ? product.soldPercent : 0}%"></div>
+                                                     style="width: ${product.soldPercent}%"></div>
                                             </div>
                                             <div class="stock-progress-text">
-                                                Đã bán ${product.soldQuantity != null ? product.soldQuantity : 0}/${product.stockQuantity}
+                                                Đã
+                                                bán ${product.soldQuantity != null ? product.soldQuantity : 0}/${product.stockQuantity}
                                             </div>
                                         </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="stock-progress stock-empty">Tạm hết hàng</div>
-                                    </c:otherwise>
-                                </c:choose>
+                                    </c:if>
 
-                                <div class="product-actions flash-sale-card-actions">
-                                    <a class="btn btn-outline"
-                                       href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                        Chi tiết
-                                    </a>
-                                    <c:choose>
-                                        <c:when test="${product.stockQuantity != null && product.stockQuantity > 0}">
-                                            <a class="btn btn-solid add-to-cart" href="#"
-                                               data-product-id="${product.productId}">
-                                                Thêm vào giỏ
-                                            </a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <button type="button" class="btn btn-solid btn-disabled" disabled>
-                                                Hết hàng
-                                            </button>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <form class="action-buttons"
+                                          action="${pageContext.request.contextPath}/cart/add"
+                                          method="post">
+                                        <input type="hidden" name="productId" value="${product.productId}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" name="action" value="buy_now"
+                                                class="btn btn-buy-now">
+                                            Mua ngay
+                                        </button>
+                                        <button type="submit" name="action" value="add_to_cart"
+                                                class="btn btn-icon-cart" aria-label="Thêm vào giỏ">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </article>
@@ -354,6 +355,7 @@
         const hoursEl = document.getElementById('hours');
         const minutesEl = document.getElementById('minutes');
         const secondsEl = document.getElementById('seconds');
+        const secondsBox = secondsEl ? secondsEl.closest('.time-box--seconds') : null;
         if (!hoursEl || !minutesEl || !secondsEl) {
             return;
         }
@@ -378,6 +380,11 @@
             hoursEl.textContent = hours.toString().padStart(2, '0');
             minutesEl.textContent = minutes.toString().padStart(2, '0');
             secondsEl.textContent = seconds.toString().padStart(2, '0');
+            if (secondsBox) {
+                secondsBox.classList.remove('tick');
+                void secondsBox.offsetWidth;
+                secondsBox.classList.add('tick');
+            }
         }
 
         updateCountdown();
@@ -407,7 +414,4 @@
     })();
 </script>
 </body>
-
 </html>
-
-
