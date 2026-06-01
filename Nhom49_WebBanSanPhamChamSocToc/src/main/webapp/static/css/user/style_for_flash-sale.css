@@ -54,28 +54,44 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    margin-bottom: 32px;
-    padding: clamp(44px, 5vw, 68px) clamp(18px, 4vw, 48px) clamp(34px, 4vw, 48px);
-    border-radius: 0 0 28px 28px;
+    width: 100%;
+    max-width: 1280px;
+    box-sizing: border-box;
+    margin: 0 auto 28px;
+    padding: clamp(34px, 3.8vw, 48px) clamp(20px, 2.8vw, 34px) clamp(22px, 2.8vw, 34px);
+    border-radius: 26px;
     background:
-        radial-gradient(ellipse at 18% 12%, rgba(243, 229, 171, 0.26) 0%, rgba(212, 175, 55, 0.12) 24%, transparent 48%),
-        radial-gradient(ellipse at 86% 8%, rgba(255, 255, 255, 0.16) 0%, rgba(133, 201, 171, 0.1) 28%, transparent 52%),
-        radial-gradient(ellipse at 50% 118%, rgba(77, 151, 118, 0.3) 0%, transparent 54%),
-        linear-gradient(135deg, #183A2E 0%, #102A20 58%, #071A13 100%);
-    border: 1px solid rgba(243, 229, 171, 0.22);
-    border-top: none;
-    box-shadow: 0 30px 70px rgba(16, 42, 32, 0.24);
+        radial-gradient(ellipse at 15% 0%, rgba(27, 100, 60, 0.35) 0%, rgba(13, 56, 38, 0.2) 26%, transparent 52%),
+        radial-gradient(ellipse at 90% 8%, rgba(34, 112, 75, 0.24) 0%, transparent 54%),
+        radial-gradient(ellipse at 12% 84%, rgba(18, 78, 52, 0.4) 0%, transparent 46%),
+        radial-gradient(ellipse at 86% 86%, rgba(17, 80, 55, 0.32) 0%, transparent 48%),
+        linear-gradient(138deg, #05130f 0%, #071b14 38%, #0a2018 72%, #05130f 100%);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 20px 58px rgba(4, 14, 11, 0.58), inset 0 1px 0 rgba(239, 214, 142, 0.08);
     text-align: center;
 }
 
 .flash-sale-page .flash-sale-hero::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(112deg, transparent 0%, rgba(255, 255, 255, 0.1) 38%, transparent 66%),
-        radial-gradient(ellipse at 50% -18%, rgba(255, 255, 255, 0.12) 0%, transparent 52%);
-    opacity: 0.82;
+    width: min(1560px, 170%);
+    aspect-ratio: 1 / 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: conic-gradient(from 206deg at 50% 50%,
+            transparent 0deg 14deg,
+            rgba(244, 211, 129, 0.86) 20deg 42deg,
+            rgba(255, 239, 181, 0.28) 58deg 86deg,
+            transparent 112deg 216deg,
+            rgba(255, 233, 155, 0.78) 236deg 282deg,
+            rgba(214, 175, 77, 0.2) 292deg 320deg,
+            transparent 344deg 360deg);
+    -webkit-mask: radial-gradient(circle at center, transparent 69.2%, #000 70.4%, #000 71.3%, transparent 72.8%);
+    mask: radial-gradient(circle at center, transparent 69.2%, #000 70.4%, #000 71.3%, transparent 72.8%);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 16px rgba(243, 209, 122, 0.55)) drop-shadow(0 0 42px rgba(232, 180, 58, 0.3));
     pointer-events: none;
     z-index: 0;
 }
@@ -83,69 +99,21 @@
 .flash-sale-page .flash-sale-hero::after {
     content: '';
     position: absolute;
-    inset: 12px;
-    border: 1px solid rgba(243, 229, 171, 0.14);
-    border-radius: 0 0 22px 22px;
+    width: 88%;
+    height: 52%;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background:
+        radial-gradient(ellipse at center,
+            rgba(255, 216, 130, 0.32) 0%,
+            rgba(255, 216, 130, 0.16) 34%,
+            rgba(255, 216, 130, 0.06) 56%,
+            rgba(255, 216, 130, 0) 76%);
+    filter: blur(22px);
     pointer-events: none;
     z-index: 0;
-}
-
-.hero-bg-effects {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-}
-
-.hero-particle {
-    position: absolute;
-    height: 1px;
-    border-radius: var(--fs-radius-pill);
-    opacity: 0.24;
-    background: linear-gradient(90deg, transparent, rgba(243, 229, 171, 0.72), transparent);
-    filter: blur(0.2px);
-    animation: luxuryLightDrift 9s ease-in-out infinite;
-}
-
-.hero-particle--1 {
-    --fs-drift-rotate: -8deg;
-    width: 42%;
-    top: 18%;
-    left: -8%;
-    transform: rotate(var(--fs-drift-rotate));
-}
-
-.hero-particle--2 {
-    --fs-drift-rotate: 7deg;
-    width: 38%;
-    right: -6%;
-    bottom: 24%;
-    animation-delay: 1.2s;
-    transform: rotate(var(--fs-drift-rotate));
-}
-
-.hero-particle--3 {
-    --fs-drift-rotate: -1deg;
-    width: 56%;
-    top: 52%;
-    left: 22%;
-    opacity: 0.16;
-    animation-delay: 2.4s;
-    transform: rotate(var(--fs-drift-rotate));
-}
-
-@keyframes luxuryLightDrift {
-    0%,
-    100% {
-        transform: translateX(0) rotate(var(--fs-drift-rotate));
-        opacity: 0.18;
-    }
-
-    50% {
-        transform: translateX(28px) rotate(var(--fs-drift-rotate));
-        opacity: 0.36;
-    }
 }
 
 .flash-sale-page .flash-hero-luxury-shell {
@@ -153,8 +121,8 @@
     z-index: 1;
     display: grid;
     justify-items: center;
-    gap: 24px;
-    max-width: 1040px;
+    gap: 26px;
+    max-width: 1180px;
     margin: 0 auto;
     color: var(--fs-hero-text);
 }
@@ -162,8 +130,8 @@
 .flash-sale-page .flash-hero-copy {
     display: grid;
     justify-items: center;
-    gap: 14px;
-    max-width: 790px;
+    gap: 16px;
+    max-width: 930px;
 }
 
 .flash-sale-page .flash-hero-kicker {
@@ -171,64 +139,68 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    font-size: 12px;
+    gap: 13px;
+    font-size: 14px;
     letter-spacing: 0;
     text-transform: uppercase;
     font-weight: 700;
-    color: #F3E5AB;
+    color: #E7CB80;
+}
+
+.flash-sale-page .kicker-text {
+    white-space: nowrap;
 }
 
 .flash-sale-page .kicker-line {
     display: inline-block;
-    width: 42px;
+    width: 68px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(243, 229, 171, 0.78), transparent);
+    background: linear-gradient(90deg, transparent, rgba(231, 203, 128, 0.9), transparent);
 }
 
 .flash-sale-page .flash-hero-title {
     margin: 0;
     font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-    font-size: 86px;
-    line-height: 0.95;
+    font-size: clamp(54px, 5.8vw, 64px);
+    line-height: 1;
+    white-space: nowrap;
     font-weight: 700;
     letter-spacing: 0;
-    color: #F3E5AB;
-    background: var(--fs-hero-highlight-gradient);
+    color: #E7CB80;
+    background: linear-gradient(to right, #D4AF37, #FFF5CC, #D4AF37);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 12px 28px rgba(4, 18, 13, 0.34));
-}
-
-.flash-sale-page .flash-hero-title span {
-    display: block;
+    filter: drop-shadow(0 4px 12px rgba(243, 201, 98, 0.18));
+    text-shadow: 0 0 12px rgba(247, 224, 157, 0.15);
 }
 
 .flash-sale-page .flash-hero-subtext {
     margin: 0;
-    max-width: 620px;
-    font-size: 17px;
-    line-height: 1.7;
-    color: rgba(236, 246, 238, 0.86);
+    max-width: 900px;
+    font-size: 15px;
+    line-height: 1.62;
+    color: rgba(211, 226, 219, 0.9);
 }
 
 .flash-sale-page .flash-hero-subtext strong {
-    color: #FFF6CC;
+    color: #F5E5BA;
     font-weight: 700;
 }
 
 .flash-sale-page .flash-hero-timer {
     position: relative;
     width: 100%;
-    max-width: 660px;
-    padding: 18px;
-    border: 1px solid rgba(243, 229, 171, 0.26);
-    border-radius: 30px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 24px 54px rgba(5, 18, 13, 0.24);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    max-width: 980px;
+    padding: 14px 16px 12px;
+    border: 1px solid rgba(222, 185, 95, 0.62);
+    border-radius: 34px;
+    background:
+        linear-gradient(130deg, rgba(8, 35, 26, 0.84), rgba(6, 28, 21, 0.78)),
+        linear-gradient(140deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+    box-shadow: inset 0 1px 0 rgba(255, 245, 204, 0.18), 0 22px 48px rgba(3, 10, 8, 0.36);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .flash-sale-page .countdown-panel {
@@ -243,99 +215,69 @@
 }
 
 .flash-sale-page .panel-label {
-    margin: 0 0 16px;
-    font-size: 13px;
+    margin: 0 0 10px;
+    font-size: 14px;
     font-weight: 700;
-    color: rgba(243, 229, 171, 0.9);
+    color: #E7CB80;
     text-transform: uppercase;
     letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 14px;
 }
 
-.label-pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--fs-gold);
+.flash-sale-page .panel-line {
+    width: 58px;
+    height: 1px;
     display: inline-block;
-    animation: pulseDot 1.5s ease-in-out infinite;
-}
-
-@keyframes pulseDot {
-
-    0%,
-    100% {
-        opacity: 1;
-        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.55);
-    }
-
-    50% {
-        opacity: 0.6;
-        box-shadow: 0 0 0 6px rgba(212, 175, 55, 0);
-    }
+    background: linear-gradient(90deg, transparent, rgba(231, 203, 128, 0.95), transparent);
 }
 
 .flash-sale-page .countdown-clock {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .flash-sale-page .time-separator {
-    font-size: 2.4rem;
-    font-weight: 600;
-    color: rgba(243, 229, 171, 0.84);
+    font-size: 42px;
+    font-weight: 500;
+    color: rgba(242, 208, 116, 0.93);
     line-height: 1;
-    padding-bottom: 18px;
-    animation: blinkSep 1s step-end infinite;
-}
-
-@keyframes blinkSep {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.3;
-    }
+    padding-bottom: 12px;
+    text-shadow: 0 0 14px rgba(242, 208, 116, 0.4);
 }
 
 .flash-sale-page .time-box {
-    min-width: 104px;
-    padding: 18px 14px 14px;
-    border: 1px solid rgba(243, 229, 171, 0.28);
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.12);
+    min-width: 120px;
+    padding: 10px 10px 8px;
+    border: 1px solid rgba(226, 192, 109, 0.2);
+    border-radius: 16px;
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(226, 192, 109, 0.08), transparent 56%),
+        linear-gradient(145deg, rgba(10, 42, 31, 0.96), rgba(6, 30, 22, 0.92));
     text-align: center;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        0 14px 30px rgba(5, 18, 13, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 rgba(246, 220, 143, 0.1), 0 14px 28px rgba(3, 14, 10, 0.3);
     transition: transform 0.15s ease;
 }
 
 .flash-sale-page .time-box span {
     display: block;
     margin-bottom: 4px;
-    font-size: 48px;
+    font-size: clamp(32px, 3.4vw, 38px);
     line-height: 1;
     font-weight: 700;
-    color: #FFF8DA;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.28);
+    color: #F4DB9A;
+    text-shadow: 0 0 16px rgba(233, 197, 107, 0.3);
     letter-spacing: 0;
 }
 
 .flash-sale-page .time-box small {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    color: rgba(236, 246, 238, 0.78);
+    color: rgba(219, 229, 223, 0.94);
     text-transform: uppercase;
     letter-spacing: 0;
 }
@@ -359,23 +301,15 @@
 }
 
 .countdown-urgency {
-    margin: 14px 0 0;
+    margin: 10px 0 0;
     font-size: 14px;
-    font-weight: 600;
-    color: #F3E5AB;
-    animation: pulseUrgency 2s ease-in-out infinite;
+    font-weight: 500;
+    color: rgba(217, 229, 222, 0.94);
 }
 
-@keyframes pulseUrgency {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.6;
-    }
+.countdown-urgency .urgency-spark {
+    color: #F3D58C;
+    text-shadow: 0 0 12px rgba(243, 213, 140, 0.74);
 }
 
 .flash-sale-page .flash-hero-actions {
@@ -391,66 +325,79 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 24px;
+    min-height: 44px;
+    padding: 0 22px;
     border-radius: var(--fs-radius-pill);
     border: 1px solid transparent;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    text-decoration: none;
+    letter-spacing: 0;
 }
 
 .flash-sale-page .hero-btn-primary {
-    background: var(--fs-accent-gradient);
+    background: linear-gradient(135deg, #EB5C41 0%, #F48A4F 100%);
     color: #FFFFFF;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 10px 28px rgba(143, 38, 56, 0.34);
+    box-shadow: 0 0 0 1px rgba(255, 216, 147, 0.22), 0 0 28px rgba(239, 96, 67, 0.52), 0 14px 36px rgba(170, 46, 29, 0.55);
+}
+
+.flash-sale-page .hero-btn-icon {
+    margin-right: 10px;
+    font-size: 0.86em;
 }
 
 .flash-sale-page .hero-btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 26px rgba(184, 92, 56, 0.34), 0 14px 36px rgba(143, 38, 56, 0.42);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 0 0 1px rgba(255, 224, 172, 0.36), 0 0 36px rgba(245, 110, 70, 0.7), 0 20px 42px rgba(170, 46, 29, 0.62);
 }
 
 .flash-sale-page .hero-btn-ghost {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(243, 229, 171, 0.24);
-    color: rgba(236, 246, 238, 0.86);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(5, 20, 15, 0.42);
+    border-color: rgba(224, 188, 98, 0.86);
+    color: #E8CC83;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .flash-sale-page .hero-btn-ghost:hover {
-    border-color: var(--fs-gold);
-    color: #F7E7A3;
-    background: rgba(255, 255, 255, 0.08);
+    border-color: #F2D188;
+    color: #F8DF9F;
+    box-shadow: 0 0 20px rgba(226, 188, 102, 0.28);
+}
+
+.flash-sale-page .hero-btn-arrow {
+    margin-left: 10px;
+    font-size: 0.92em;
 }
 
 .flash-sale-page .flash-stats-strip {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 920px;
+    max-width: 1240px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0;
-    padding: 8px 12px;
-    border: 1px solid rgba(243, 229, 171, 0.2);
+    padding: 7px 14px;
+    border: 1px solid rgba(220, 184, 97, 0.42);
     border-radius: var(--fs-radius-pill);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 20px 46px rgba(5, 18, 13, 0.18);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background:
+        linear-gradient(135deg, rgba(8, 35, 26, 0.76), rgba(5, 24, 18, 0.72)),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    box-shadow: inset 0 1px 0 rgba(255, 235, 185, 0.16), 0 12px 30px rgba(3, 11, 8, 0.4);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
 .flash-sale-page .flash-stat {
     position: relative;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    padding: 12px 24px;
-    text-align: center;
-    backdrop-filter: none;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
 }
 
 .flash-sale-page .flash-stat:not(:last-child)::after {
@@ -459,24 +406,42 @@
     top: 50%;
     right: 0;
     width: 1px;
-    height: 34px;
+    height: 30px;
     transform: translateY(-50%);
-    background: linear-gradient(to bottom, transparent, rgba(243, 229, 171, 0.36), transparent);
+    background: linear-gradient(to bottom, transparent, rgba(224, 188, 98, 0.46), transparent);
+}
+
+.flash-sale-page .stat-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(217, 182, 97, 0.58);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #E5C87F;
+    flex: 0 0 auto;
+    background: rgba(8, 34, 24, 0.6);
+}
+
+.flash-sale-page .stat-content {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
 }
 
 .flash-sale-page .flash-stat strong {
-    display: block;
-    color: #FFF6CC;
-    font-size: 16px;
+    color: #F4D894;
+    font-size: 20px;
     font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 2px;
+    line-height: 1.15;
+    margin: 0;
+    text-shadow: 0 0 14px rgba(226, 187, 97, 0.16);
 }
 
 .flash-sale-page .flash-stat .stat-label {
-    display: block;
-    font-size: 11px;
-    color: rgba(236, 246, 238, 0.72);
+    font-size: 12px;
+    color: rgba(213, 225, 219, 0.82);
     text-transform: uppercase;
     letter-spacing: 0;
 }
@@ -500,106 +465,9 @@
     color: var(--fs-text-muted);
 }
 
-.flash-sale-page .flash-sale-curated,
-.flash-sale-page .curated-needs {
-    margin: 0 0 24px;
-    border: 1px solid var(--fs-border);
-    border-radius: var(--fs-radius);
-    background: var(--fs-bg-raised);
-    padding: 24px;
-    box-shadow: var(--fs-shadow-soft);
-}
-
-.flash-sale-page .needs-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-}
-
-.flash-sale-page .need-card {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    border: 1px solid var(--fs-border-strong);
-    border-radius: 12px;
-    background: var(--fs-bg-card);
-    padding: 14px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.flash-sale-page .need-card:hover {
-    border-color: rgba(27, 77, 62, 0.28);
-    box-shadow: 0 12px 28px rgba(27, 77, 62, 0.08);
-}
-
-.flash-sale-page .need-card h3 {
-    margin: 0;
-    color: var(--fs-text-strong);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.35;
-}
-
-.flash-sale-page .need-card p {
-    margin: 0;
-    min-height: 64px;
-    color: var(--fs-text-muted);
-    font-size: 14px;
-    line-height: 1.55;
-}
-
-.flash-sale-page .need-note {
-    display: inline-flex;
-    align-self: flex-start;
-    border-radius: var(--fs-radius-pill);
-    border: 1px solid rgba(184, 92, 56, 0.25);
-    background: var(--fs-accent-soft);
-    color: var(--fs-accent-start);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 3px 10px;
-}
-
 .flash-sale-page .flash-sale-deals,
 .flash-sale-page .super-deal-section {
     margin-bottom: 24px;
-}
-
-.flash-sale-page .flash-sale-tabs,
-.flash-sale-page .super-deal-categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
-.flash-sale-page .flash-sale-tab,
-.flash-sale-page .super-deal-btn {
-    border: 1px solid var(--fs-border-strong);
-    border-radius: var(--fs-radius-pill);
-    background: var(--fs-bg-card);
-    color: var(--fs-text-muted);
-    min-height: 40px;
-    padding: 0 18px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.flash-sale-page .flash-sale-tab:hover,
-.flash-sale-page .super-deal-btn:hover {
-    background: var(--fs-surface);
-    border-color: var(--fs-accent-start);
-    color: var(--fs-accent-start);
-}
-
-.flash-sale-page .flash-sale-tab.active,
-.flash-sale-page .super-deal-btn.active {
-    background: var(--fs-accent-gradient);
-    border-color: transparent;
-    color: #FFFFFF;
-    box-shadow: 0 8px 20px rgba(143, 38, 56, 0.22);
 }
 
 .flash-sale-page .flash-sale-grid,
@@ -659,7 +527,7 @@
     padding: 12px;
 }
 
-.flash-sale-page .product-img > a {
+.flash-sale-page .product-img>a {
     display: block;
     width: 100%;
     height: 100%;
@@ -787,8 +655,15 @@
 }
 
 @keyframes fomoTextPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.55; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
 }
 
 .flash-sale-page .stock-progress-bar {
@@ -816,18 +691,21 @@
     left: -60%;
     width: 60%;
     height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.35),
-        transparent
-    );
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.35),
+            transparent);
     animation: progressShine 2.5s ease-in-out infinite;
 }
 
 @keyframes progressShine {
-    0%   { left: -60%; }
-    100% { left: 160%; }
+    0% {
+        left: -60%;
+    }
+
+    100% {
+        left: 160%;
+    }
 }
 
 .flash-sale-page .stock-progress-bar.is-danger {
@@ -835,9 +713,17 @@
 }
 
 @keyframes danger-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(221, 36, 118, 0.7); }
-    70%  { box-shadow: 0 0 0 8px rgba(221, 36, 118, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(221, 36, 118, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(221, 36, 118, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(221, 36, 118, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(221, 36, 118, 0);
+    }
 }
 
 .flash-sale-page .action-buttons {
@@ -1160,22 +1046,124 @@
 
 
 @media (max-width: 1199px) {
-    .flash-sale-page .needs-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .flash-sale-page .flash-sale-hero {
+        padding: 30px 18px 24px;
+    }
+
+    .flash-sale-page .flash-hero-title {
+        font-size: clamp(46px, 5.2vw, 58px);
+    }
+
+    .flash-sale-page .flash-hero-subtext {
+        font-size: 15px;
+    }
+
+    .flash-sale-page .flash-hero-timer {
+        max-width: 900px;
     }
 
     .flash-sale-page .flash-stats-strip {
         grid-template-columns: repeat(3, 1fr);
+        max-width: 100%;
     }
+
+    .flash-sale-page .flash-stat strong { font-size: 20px; }
 }
 
 @media (max-width: 991px) {
     .flash-sale-page .flash-sale-hero {
-        padding: 50px 24px 36px;
+        padding: 26px 14px 20px;
+        border-radius: 20px;
+    }
+
+    .flash-sale-page .flash-sale-hero::before {
+        width: 182%;
+        top: 44%;
+    }
+
+    .flash-sale-page .flash-sale-hero::after {
+        width: 88%;
+        height: 52%;
+    }
+
+    .flash-sale-page .flash-hero-kicker {
+        font-size: 12px;
+    }
+
+    .flash-sale-page .kicker-line {
+        width: 40px;
     }
 
     .flash-sale-page .flash-hero-title {
-        font-size: 72px;
+        font-size: clamp(40px, 7vw, 52px);
+        white-space: normal;
+    }
+
+    .flash-sale-page .flash-hero-subtext {
+        font-size: 14px;
+        line-height: 1.58;
+    }
+
+    .flash-sale-page .flash-hero-timer {
+        border-radius: 20px;
+        padding: 12px 12px 10px;
+    }
+
+    .flash-sale-page .time-box {
+        min-width: 100px;
+        border-radius: 14px;
+        padding: 9px 8px 7px;
+    }
+
+    .flash-sale-page .time-box span {
+        font-size: clamp(30px, 4.6vw, 34px);
+    }
+
+    .flash-sale-page .time-box small {
+        font-size: 11px;
+    }
+
+    .flash-sale-page .time-separator {
+        font-size: 30px;
+        padding-bottom: 8px;
+    }
+
+    .flash-sale-page .panel-label {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .flash-sale-page .countdown-urgency {
+        font-size: 13px;
+        margin-top: 8px;
+    }
+
+    .flash-sale-page .hero-btn {
+        min-height: 44px;
+        padding: 0 18px;
+        font-size: 15px;
+    }
+
+    .flash-sale-page .flash-stats-strip {
+        padding: 6px 10px;
+    }
+
+    .flash-sale-page .flash-stat {
+        padding: 7px 10px;
+        gap: 8px;
+    }
+
+    .flash-sale-page .stat-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .flash-sale-page .flash-stat strong {
+        font-size: 18px;
+    }
+
+    .flash-sale-page .flash-stat .stat-label {
+        font-size: 11px;
     }
 
     .flash-sale-page .flash-sale-grid,
@@ -1201,40 +1189,46 @@
     }
 
     .flash-sale-page .flash-sale-hero {
-        padding: 38px 16px 28px;
-        border-radius: 0 0 20px 20px;
+        padding: 22px 12px 16px;
+        border-radius: 16px;
+    }
+
+    .flash-sale-page .flash-sale-hero::before {
+        width: 208%;
+        top: 40%;
     }
 
     .flash-sale-page .flash-sale-hero::after {
-        inset: 8px;
-        border-radius: 0 0 16px 16px;
+        width: 95%;
+        height: 48%;
+        top: 42%;
     }
 
     .flash-sale-page .flash-hero-luxury-shell {
-        gap: 20px;
+        gap: 16px;
     }
 
     .flash-sale-page .flash-hero-kicker {
-        gap: 8px;
-        font-size: 11px;
+        gap: 6px;
+        font-size: 10px;
     }
 
     .flash-sale-page .kicker-line {
-        width: 26px;
+        width: 22px;
     }
 
     .flash-sale-page .flash-hero-title {
-        font-size: 56px;
+        font-size: clamp(32px, 11vw, 44px);
     }
 
     .flash-sale-page .flash-hero-subtext {
-        font-size: 15px;
-        line-height: 1.62;
+        font-size: 14px;
+        line-height: 1.5;
     }
 
     .flash-sale-page .flash-hero-timer {
-        padding: 14px;
-        border-radius: 24px;
+        padding: 10px 8px;
+        border-radius: 18px;
     }
 
     .flash-sale-page .flash-hero-actions {
@@ -1244,32 +1238,44 @@
 
     .flash-sale-page .hero-btn {
         width: 100%;
+        min-height: 44px;
+        font-size: 15px;
+        padding: 0 16px;
     }
 
     .flash-sale-page .time-box {
-        min-width: 74px;
-        padding: 12px 8px 10px;
-        border-radius: 16px;
+        min-width: 82px;
+        padding: 8px 6px 6px;
+        border-radius: 14px;
     }
 
     .flash-sale-page .time-box span {
-        font-size: 2rem;
+        font-size: clamp(28px, 8.5vw, 32px);
     }
 
     .flash-sale-page .time-separator {
-        font-size: 1.7rem;
-        padding-bottom: 14px;
+        font-size: 24px;
+        padding-bottom: 6px;
+    }
+
+    .flash-sale-page .panel-label {
+        font-size: 11px;
+    }
+
+    .flash-sale-page .countdown-urgency {
+        font-size: 12px;
+        margin-top: 6px;
     }
 
     .flash-sale-page .flash-stats-strip {
         grid-template-columns: 1fr;
-        max-width: 460px;
-        border-radius: 26px;
-        padding: 6px 16px;
+        max-width: 100%;
+        border-radius: 18px;
+        padding: 6px 10px;
     }
 
     .flash-sale-page .flash-stat {
-        padding: 12px 8px;
+        padding: 8px 2px;
     }
 
     .flash-sale-page .flash-stat:not(:last-child)::after {
@@ -1280,16 +1286,15 @@
         width: min(220px, 70%);
         height: 1px;
         transform: translateX(-50%);
-        background: linear-gradient(to right, transparent, rgba(243, 229, 171, 0.34), transparent);
+        background: linear-gradient(to right, transparent, rgba(224, 188, 98, 0.42), transparent);
     }
 
-    .flash-sale-page .flash-sale-curated,
-    .flash-sale-page .curated-needs {
-        padding: 16px;
+    .flash-sale-page .flash-stat strong {
+        font-size: 18px;
     }
 
-    .flash-sale-page .needs-grid {
-        grid-template-columns: 1fr;
+    .flash-sale-page .flash-stat .stat-label {
+        font-size: 11px;
     }
 
     .flash-sale-page .product-img {
@@ -1306,13 +1311,9 @@
         grid-template-columns: 1fr;
     }
 
-    .flash-sale-page .time-box span {
-        font-size: 1.75rem;
-    }
-
     .flash-sale-page .time-box {
-        min-width: 58px;
-        padding: 10px 6px 8px;
+        min-width: 74px;
+        padding: 7px 5px 6px;
     }
 
     .flash-sale-page .countdown-clock {
@@ -1320,15 +1321,571 @@
     }
 
     .flash-sale-page .time-separator {
-        font-size: 1.4rem;
+        font-size: 22px;
     }
 
     .flash-sale-page .flash-hero-title {
-        font-size: 44px;
+        font-size: clamp(30px, 10.8vw, 40px);
     }
 
     .flash-sale-page .panel-label,
     .flash-sale-page .countdown-urgency {
         font-size: 12px;
+    }
+}
+
+/* =========================
+   Product Filter Panel
+========================= */
+.flash-sale-page .flash-filter-panel {
+    margin: 18px 0 24px;
+    padding: 0 22px 18px;
+    border: 1px solid #e3e8e5;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(14, 39, 31, 0.06), 0 1px 2px rgba(14, 39, 31, 0.06);
+}
+
+.flash-sale-page .flash-filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 22px 6px 18px;
+    border-bottom: 1px solid #e8ece9;
+}
+
+.flash-sale-page .flash-filter-header-main {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+}
+
+.flash-sale-page .flash-filter-badge {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 12px;
+    padding: 0 14px;
+    background: linear-gradient(135deg, #f36e53 0%, #ea5a42 100%);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+    box-shadow: 0 8px 18px rgba(233, 90, 66, 0.24);
+}
+
+.flash-sale-page .flash-filter-header-divider {
+    width: 1px;
+    height: 34px;
+    background: #d9dfdb;
+}
+
+.flash-sale-page .flash-filter-header h3 {
+    margin: 0;
+    color: #22322c;
+    font-size: clamp(20px, 2.5vw, 26px);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.flash-sale-page .flash-filter-header-note {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #8a9490;
+    font-size: 15px;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.flash-sale-page .flash-filter-header-note svg {
+    color: #9ca7a2;
+}
+
+.flash-sale-page .flash-filter-card {
+    margin-top: 14px;
+    border: 1px solid #e5ebe7;
+    border-radius: 24px;
+    background: #ffffff;
+    padding: 16px;
+}
+
+.flash-sale-page .flash-filter-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.flash-sale-page .flash-filter-grid-top {
+    grid-template-columns: 1fr 1.35fr 1fr;
+}
+
+.flash-sale-page .flash-filter-grid-bottom {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: start;
+}
+
+.flash-sale-page .flash-filter-cell {
+    min-width: 0;
+}
+
+.flash-sale-page .flash-filter-grid-top .flash-filter-cell:nth-child(1),
+.flash-sale-page .flash-filter-grid-top .flash-filter-cell:nth-child(2),
+.flash-sale-page .flash-filter-grid-bottom .flash-filter-cell:nth-child(1),
+.flash-sale-page .flash-filter-grid-bottom .flash-filter-cell:nth-child(2) {
+    padding-right: 18px;
+    border-right: 1px solid #e8eeea;
+}
+
+.flash-sale-page .filter-cell-title {
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #245649;
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.flash-sale-page .filter-title-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #edf4f1;
+    color: #2f6f5d;
+    flex: 0 0 auto;
+}
+
+.flash-sale-page .filter-title-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.flash-sale-page .price-slider-wrapper {
+    display: grid;
+    gap: 12px;
+}
+
+.flash-sale-page .price-inputs {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 14px;
+}
+
+.flash-sale-page .price-input-group {
+    display: grid;
+    gap: 8px;
+}
+
+.flash-sale-page .price-input-group label {
+    margin: 0;
+    color: #707d76;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.flash-sale-page .price-input {
+    width: 100%;
+    height: 34px;
+    border-radius: 13px;
+    border: 1px solid #dde4e1;
+    background: #ffffff;
+    color: #293932;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flash-sale-page .price-input::placeholder {
+    color: #9aa59f;
+}
+
+.flash-sale-page .price-input:focus {
+    border-color: #1b4d3e;
+    box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.12);
+}
+
+.flash-sale-page .price-input::-webkit-outer-spin-button,
+.flash-sale-page .price-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.flash-sale-page .price-input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.flash-sale-page .price-separator-dash {
+    color: #84908a;
+    font-size: 24px;
+    line-height: 1;
+    transform: translateY(-6px);
+}
+
+.flash-sale-page .range-slider-container {
+    position: relative;
+    height: 26px;
+}
+
+.flash-sale-page .range-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 6px;
+    border-radius: 999px;
+    background: #dfe5e3;
+    transform: translateY(-50%);
+    overflow: hidden;
+}
+
+.flash-sale-page .range-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #1b4d3e 0%, #255f4e 100%);
+}
+
+.flash-sale-page .range-input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    width: 100%;
+    height: 26px;
+    pointer-events: none;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.flash-sale-page .range-input::-webkit-slider-runnable-track {
+    background: transparent;
+    border: 0;
+    height: 6px;
+}
+
+.flash-sale-page .range-input::-moz-range-track {
+    background: transparent;
+    border: 0;
+    height: 6px;
+}
+
+.flash-sale-page .range-input::-moz-range-progress {
+    background: transparent;
+}
+
+.flash-sale-page .range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    margin-top: -6px;
+    border-radius: 50%;
+    border: 2px solid #1b4d3e;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(27, 77, 62, 0.2);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.flash-sale-page .range-input::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #1b4d3e;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(27, 77, 62, 0.2);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.flash-sale-page .price-range-labels {
+    display: flex;
+    justify-content: space-between;
+    color: #79857f;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.flash-sale-page .flash-filter-row-divider {
+    height: 1px;
+    margin: 14px 0 16px;
+    background: #e7ece9;
+}
+
+.flash-sale-page .filter-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.flash-sale-page .filter-chip {
+    min-height: 32px;
+    border-radius: 99px;
+    border: 1px solid #d7ddda;
+    background: #ffffff;
+    color: #4c5b54;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flash-sale-page .filter-chip:hover {
+    border-color: #bfd0c8;
+    color: #2e4f43;
+}
+
+.flash-sale-page .filter-chip.active {
+    border-color: #1b4d3e;
+    background: #1b4d3e;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(27, 77, 62, 0.25);
+}
+
+.flash-sale-page .filter-chip.active::before {
+    content: '✓';
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    margin-right: 8px;
+}
+
+.flash-sale-page .filter-actions-cell {
+    min-width: 310px;
+    align-self: end;
+}
+
+.flash-sale-page .filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+.flash-sale-page .filter-reset-btn,
+.flash-sale-page .filter-apply-btn {
+    height: 38px;
+    min-width: 120px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    letter-spacing: 0;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+}
+
+.flash-sale-page .filter-reset-btn {
+    border: 1.5px solid #f39a88;
+    background: #fff8f6;
+    color: #ef5d3f;
+}
+
+.flash-sale-page .filter-reset-btn:hover {
+    background: #fff1ed;
+    border-color: #ef8168;
+}
+
+.flash-sale-page .filter-apply-btn {
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, #f36b50 0%, #ea5a42 100%);
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(234, 90, 66, 0.28);
+}
+
+.flash-sale-page .filter-apply-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba(234, 90, 66, 0.34);
+}
+
+.flash-sale-page .filter-result-count {
+    margin-top: 8px;
+    display: block;
+    text-align: right;
+    color: #7f8c85;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.flash-sale-page .flash-filter-trust {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #7c8782;
+    font-size: 14px;
+    line-height: 1.4;
+    flex-wrap: wrap;
+}
+
+.flash-sale-page .flash-filter-trust svg {
+    color: #6f988a;
+}
+
+.flash-sale-page .flash-filter-trust .trust-sep {
+    color: #a6b0ab;
+}
+
+@media (max-width: 1199px) {
+    .flash-sale-page .flash-filter-header-note {
+        font-size: 14px;
+    }
+
+    .flash-sale-page .flash-filter-grid-top {
+        grid-template-columns: 1fr 1.2fr;
+    }
+
+    .flash-sale-page .flash-filter-grid-top .flash-filter-cell:nth-child(2) {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    .flash-sale-page .flash-filter-grid-top .flash-filter-cell:nth-child(3) {
+        grid-column: 1 / -1;
+        border-top: 1px solid #e8eeea;
+        padding-top: 16px;
+    }
+}
+
+@media (max-width: 991px) {
+    .flash-sale-page .flash-filter-panel {
+        padding: 0 14px 14px;
+    }
+
+    .flash-sale-page .flash-filter-header {
+        padding: 16px 2px 14px;
+    }
+
+    .flash-sale-page .flash-filter-badge {
+        height: 30px;
+        font-size: 12px;
+        padding: 0 12px;
+    }
+
+    .flash-sale-page .flash-filter-header h3 {
+        font-size: 24px;
+    }
+
+    .flash-sale-page .flash-filter-card {
+        border-radius: 18px;
+        padding: 14px;
+    }
+
+    .flash-sale-page .flash-filter-grid-top,
+    .flash-sale-page .flash-filter-grid-bottom {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .flash-sale-page .flash-filter-grid-top .flash-filter-cell,
+    .flash-sale-page .flash-filter-grid-bottom .flash-filter-cell {
+        border-right: none !important;
+        padding-right: 0 !important;
+    }
+
+    .flash-sale-page .flash-filter-row-divider {
+        margin: 10px 0 14px;
+    }
+
+    .flash-sale-page .filter-actions-cell {
+        min-width: 0;
+    }
+
+    .flash-sale-page .filter-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 767px) {
+    .flash-sale-page .flash-filter-header-main {
+        gap: 12px;
+    }
+
+    .flash-sale-page .flash-filter-header h3 {
+        font-size: 22px;
+    }
+
+    .flash-sale-page .flash-filter-header-note {
+        font-size: 13px;
+        white-space: normal;
+    }
+
+    .flash-sale-page .filter-cell-title {
+        font-size: 15px;
+    }
+
+    .flash-sale-page .filter-chip {
+        font-size: 13px;
+        min-height: 32px;
+        padding: 0 14px;
+    }
+
+    .flash-sale-page .filter-reset-btn,
+    .flash-sale-page .filter-apply-btn {
+        font-size: 14px;
+        min-width: 120px;
+        height: 38px;
+        padding: 0 16px;
+    }
+
+    .flash-sale-page .brand-chips-container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #cad4cf transparent;
+    }
+
+    .flash-sale-page .brand-chips-container::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .flash-sale-page .brand-chips-container::-webkit-scrollbar-thumb {
+        background: #cad4cf;
+        border-radius: 999px;
+    }
+
+    .flash-sale-page .brand-chips-container .filter-chip {
+        flex: 0 0 auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flash-sale-page .flash-filter-panel *,
+    .flash-sale-page .flash-filter-panel *::before,
+    .flash-sale-page .flash-filter-panel *::after {
+        transition: none !important;
+        animation: none !important;
     }
 }
