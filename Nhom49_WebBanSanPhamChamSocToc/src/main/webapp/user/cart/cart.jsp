@@ -33,20 +33,109 @@
 
         <c:choose>
             <c:when test="${empty cartItems || cartCount == 0}">
-                <!-- Empty Cart State -->
-                <div class="cart-empty">
-                    <div class="cart-empty-icon">
-                        <i class="fas fa-shopping-cart"></i>
+                <div class="cart-empty-wrapper">
+                    <div class="cart-empty">
+                        <div class="cart-empty-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="cart-empty-svg">
+                                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                        </div>
+                        <h2 class="cart-empty-title">Giỏ hàng của bạn đang trống</h2>
+                        <p class="cart-empty-text">
+                            Hãy lấp đầy bằng những sản phẩm tốt nhất từ <strong>HairGlow</strong>!
+                            Khám phá bộ sưu tập chăm sóc tóc cao cấp được yêu thích nhất.
+                        </p>
+                        <a href="${pageContext.request.contextPath}/store" class="cart-empty-btn">
+                            <i class="fas fa-shopping-bag"></i> Khám phá cửa hàng
+                        </a>
                     </div>
-                    <h2 class="cart-empty-title">Giỏ hàng trống</h2>
-                    <p class="cart-empty-text">
-                        Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản phẩm chăm sóc tóc
-                        tuyệt vời của
-                        chúng tôi!
-                    </p>
-                    <a href="${pageContext.request.contextPath}/store" class="cart-empty-btn">
-                        <i class="fas fa-shopping-bag"></i> Khám phá sản phẩm
-                    </a>
+
+                    <c:if test="${not empty topProducts}">
+                        <section class="cart-recommendations">
+                            <div class="cart-reco-header">
+                                <div class="cart-reco-divider"></div>
+                                <h3 class="cart-reco-title">
+                                    <i class="fas fa-fire"></i>
+                                    Sản phẩm Bán chạy nhất
+                                </h3>
+                                <p class="cart-reco-subtitle">Được hàng nghìn khách hàng tin tưởng lựa chọn</p>
+                            </div>
+
+                            <div class="cart-reco-grid">
+                                <c:forEach var="product" items="${topProducts}" end="3">
+                                    <div class="cart-reco-card">
+                                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}" class="cart-reco-card-image">
+                                            <c:choose>
+                                                <c:when test="${not empty product.primaryImageUrl}">
+                                                    <img src="${product.primaryImageUrl}" alt="${product.productName}" loading="lazy"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${pageContext.request.contextPath}/static/images/default-product.png" alt="${product.productName}" loading="lazy"/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <c:if test="${product.soldQuantity > 50}">
+                                                <span class="cart-reco-badge">
+                                                    <i class="fas fa-bolt"></i> Hot
+                                                </span>
+                                            </c:if>
+                                        </a>
+
+                                        <div class="cart-reco-card-body">
+                                            <c:if test="${not empty product.brandName}">
+                                                <span class="cart-reco-brand">${product.brandName}</span>
+                                            </c:if>
+                                            <h4 class="cart-reco-name">
+                                                <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                                    ${product.productName}
+                                                </a>
+                                            </h4>
+
+                                            <c:if test="${product.averageRating != null && product.averageRating > 0}">
+                                                <div class="cart-reco-rating">
+                                                    <div class="cart-reco-stars">
+                                                        <c:forEach begin="1" end="5" var="star">
+                                                            <i class="fa${star <= product.averageRating ? 's' : (star - 0.5 <= product.averageRating ? 's' : 'r')} fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                    <span class="cart-reco-review-count">(${product.reviewCount})</span>
+                                                </div>
+                                            </c:if>
+
+                                            <div class="cart-reco-price">
+                                                <c:choose>
+                                                    <c:when test="${product.defaultVariant != null && product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                                        <span class="cart-reco-sale-price">
+                                                            <fmt:formatNumber value="${product.defaultVariant.salePrice}" type="number"/>đ
+                                                        </span>
+                                                        <span class="cart-reco-original-price">
+                                                            <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>đ
+                                                        </span>
+                                                    </c:when>
+                                                    <c:when test="${product.defaultVariant != null}">
+                                                        <span class="cart-reco-current-price">
+                                                            <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>đ
+                                                        </span>
+                                                    </c:when>
+                                                </c:choose>
+                                            </div>
+                                        </div>
+
+                                        <div class="cart-reco-card-footer">
+                                            <form action="${pageContext.request.contextPath}/cart/add" method="post" class="cart-reco-form">
+                                                <input type="hidden" name="productId" value="${product.productId}"/>
+                                                <input type="hidden" name="quantity" value="1"/>
+                                                <button type="submit" class="cart-reco-add-btn">
+                                                    <i class="fas fa-cart-plus"></i>
+                                                    Thêm nhanh vào giỏ
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </section>
+                    </c:if>
                 </div>
             </c:when>
             <c:otherwise>
