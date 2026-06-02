@@ -2,6 +2,8 @@ package com.example.nhom49_webbansanphamchamsoctoc.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Model Review - Bảng reviews trong database
@@ -16,10 +18,10 @@ public class Review implements Serializable {
     private int rating; // 1-5 sao
     private String content;
     private Timestamp createdAt;
-    // --- Product info for My Reviews display (populated via JOIN) ---
     private String productName;
     private String productSlug;
     private String productImageUrl;
+    private List<Image> images = new ArrayList<>();
 
     // Constructors
     public Review() {
@@ -112,6 +114,14 @@ public class Review implements Serializable {
 
     public void setProductImageUrl(String productImageUrl) {
         this.productImageUrl = productImageUrl;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
 }
