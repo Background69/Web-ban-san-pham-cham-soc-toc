@@ -328,7 +328,8 @@
                             <div class="product-img">
                                 <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
                                     <div class="flash-sale-badge">
-                                        -${product.defaultVariant.discountPercent}%
+                                        <span class="badge-percent">-${product.defaultVariant.discountPercent}%</span>
+                                        <span class="badge-label">GIẢM</span>
                                     </div>
                                 </c:if>
                                 <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
@@ -370,6 +371,14 @@
                                             </c:if>
                                         </c:if>
                                     </div>
+
+                                    <c:if test="${product.defaultVariant != null && product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                        <c:set var="savedAmount" value="${product.defaultVariant.originalPrice - product.defaultVariant.salePrice}"/>
+                                        <div class="price-savings">
+                                            <span class="savings-icon">🔥</span>
+                                            <span class="savings-text">Tiết kiệm ngay <strong><fmt:formatNumber value="${savedAmount}" type="number"/>₫</strong></span>
+                                        </div>
+                                    </c:if>
 
                                     <c:if test="${product.stockQuantity > 0}">
                                         <c:set var="percent" value="${product.soldPercent}"/>
