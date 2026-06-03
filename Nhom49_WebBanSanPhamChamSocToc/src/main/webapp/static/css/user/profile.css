@@ -55,6 +55,49 @@
     padding: 30px 20px;
 }
 
+.account-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.account-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.account-sidebar {
+    position: sticky;
+    top: 110px;
+    align-self: start;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 18px;
+}
+
+.account-sidebar-header {
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.account-sidebar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+}
+
+.account-sidebar-subtitle {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.5;
+}
+
 .profile-page {
     background: var(--gray-50);
     min-height: 100vh;
@@ -368,13 +411,10 @@
 
 .tab-navigation {
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    background: white;
-    padding: 12px 15px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 25px;
-    overflow-x: auto;
+    margin-bottom: 0;
+    overflow: hidden;
     scrollbar-width: none;
 }
 
@@ -386,7 +426,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 20px;
+    width: 100%;
+    padding: 13px 16px;
     border-radius: var(--radius-md);
     font-size: 14px;
     font-weight: 500;
@@ -419,6 +460,18 @@
     border-radius: var(--radius-full);
     font-size: 12px;
     margin-left: 5px;
+}
+
+.tab-link.active .tab-count {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.account-sidebar .tab-link {
+    justify-content: flex-start;
+}
+
+.account-sidebar .tab-link .tab-count {
+    margin-left: auto;
 }
 
 .tab-link:not(.active) .tab-count {
@@ -951,7 +1004,7 @@
 
 .form-control {
     width: 100%;
-    padding: 12px 15px;
+    padding: 14px 18px;
     border: 1px solid var(--gray-300);
     border-radius: var(--radius-md);
     font-size: 15px;
@@ -1598,6 +1651,10 @@
     .quick-actions-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .account-layout {
+        grid-template-columns: 240px minmax(0, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -1651,17 +1708,32 @@
         font-size: 24px;
     }
 
+    .account-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .account-sidebar {
+        position: static;
+        padding: 14px;
+    }
+
     .tab-navigation {
-        padding: 10px;
+        flex-direction: row;
+        gap: 6px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 2px;
     }
 
     .tab-link {
-        padding: 10px 15px;
+        width: auto;
+        flex: 0 0 auto;
+        padding: 10px 14px;
         font-size: 13px;
     }
 
     .tab-link span {
-        display: none;
+        display: inline;
     }
 
     .tab-content {

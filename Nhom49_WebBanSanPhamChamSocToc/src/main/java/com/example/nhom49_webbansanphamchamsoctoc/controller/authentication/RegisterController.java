@@ -5,6 +5,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.services.AuthenticationService
 import com.example.nhom49_webbansanphamchamsoctoc.services.EmailService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.OtpUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
+import com.example.nhom49_webbansanphamchamsoctoc.util.RedirectUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -37,6 +38,12 @@ public class RegisterController extends HttpServlet {
         if (SessionUtil.isLoggedIn(request.getSession(false))) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
+        }
+
+        // Sanitize the redirect parameter to prevent open redirect vulnerabilities
+        String redirect = RedirectUtil.sanitizePath(request.getParameter("redirect"));
+        if (redirect != null) {
+            request.setAttribute("redirect", redirect);
         }
 
         request.getRequestDispatcher("/authentication/register.jsp").forward(request, response);
@@ -104,6 +111,15 @@ public class RegisterController extends HttpServlet {
         request.getSession().setAttribute("otpExpiryAt", otpExpiryAt);
 
         request.getSession().setAttribute("otpLastSentAt", System.currentTimeMillis());
+
+        // Sanitize the redirect parameter and store it in session for use after OTP verification
+        String redirect = RedirectUtil.sanitizePath(request.getParameter("redirect"));
+        if (redirect != null) {
+            request.getSession().setAttribute("registerRedirectUrl", redirect);
+        } else {
+            request.getSession().removeAttribute("registerRedirectUrl");
+        }
+
         response.sendRedirect(request.getContextPath() + "/auth/verify-otp");
     }
 
