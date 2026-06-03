@@ -19,10 +19,10 @@ public class Order implements Serializable {
     private String shippingAddress;
     private String shippingMethod; // 'standard', 'express'
     private BigDecimal shippingFee;
-    private String paymentMethod; // 'cod', 'bank', 'momo'
+    private String paymentMethod; // 'cod', 'bank_transfer', 'VNPAY'
     private BigDecimal subtotal;
     private BigDecimal totalAmount;
-    private String orderStatus; // 'pending', 'confirmed', 'shipping', 'completed', 'cancelled'
+    private String orderStatus; // 'pending', 'pending_payment', 'confirmed', 'shipping', 'completed', 'cancelled'
     private String note;
     private Timestamp createdAt;
     private Timestamp updatedAt;
@@ -194,6 +194,8 @@ public class Order implements Serializable {
         switch (orderStatus) {
             case "pending":
                 return "Chờ xác nhận";
+            case "pending_payment":
+                return "Chờ thanh toán";
             case "confirmed":
                 return "Đã xác nhận";
             case "shipping":
@@ -214,8 +216,8 @@ public class Order implements Serializable {
             case "bank":
             case "bank_transfer":
                 return "Chuyển khoản ngân hàng";
-            case "momo":
-                return "Ví MoMo";
+            case "VNPAY":
+                return "Cổng VNPAY-QR";
             default:
                 return paymentMethod;
         }

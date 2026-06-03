@@ -127,7 +127,8 @@ public class CheckoutController extends HttpServlet {
                 cartMap,
                 address,
                 shippingMethod != null ? shippingMethod : "standard",
-                paymentMethod != null ? paymentMethod : "cod"
+                paymentMethod != null ? paymentMethod : "cod",
+                "VNPAY".equalsIgnoreCase(paymentMethod) ? "pending_payment" : "pending"
         );
 
         if (order != null) {
@@ -150,6 +151,15 @@ public class CheckoutController extends HttpServlet {
                 }
                 response.sendRedirect(request.getContextPath() + "/payment/bank-transfer?transactionId="
                         + transaction.getTransactionId());
+                return;
+            }
+
+            if ("VNPAY".equalsIgnoreCase(order.getPaymentMethod())) {
+                String vnpayRedirect = request.getContextPath() + "/vnpay/create-payment"
+                        + "?orderId=" + order.getOrderId()
+                        + "&amount=" + order.getTotalAmount().longValue()
+                        + "&orderCode=" + order.getOrderCode();
+                response.sendRedirect(vnpayRedirect);
                 return;
             }
 
