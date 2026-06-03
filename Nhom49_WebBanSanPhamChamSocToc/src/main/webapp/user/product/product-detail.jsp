@@ -71,6 +71,16 @@
             font-weight: 700;
             color: #1f3f2f;
             letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .desc-title-icon {
+            font-size: 15px;
+            color: #2c5940;
+            opacity: 0.85;
+            flex-shrink: 0;
         }
 
         .description-section-body {
@@ -729,15 +739,16 @@
                                         <c:choose>
                                             <c:when test="${hasReviewerAvatar}">
                                                 <img src="${reviewerAvatarSrc}"
-                                                     alt="Avatar người đánh giá"
+                                                     alt="Avatar"
+                                                     class="reviewer-avatar-image"
+                                                     onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${not empty review.reviewerName ? review.reviewerName : 'U'}&background=e7f1eb&color=2c5940&size=88&font-size=0.4&bold=true';">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="https://ui-avatars.com/api/?name=${not empty review.reviewerName ? review.reviewerName : 'U'}&background=e7f1eb&color=2c5940&size=88&font-size=0.4&bold=true"
+                                                     alt="Avatar"
                                                      class="reviewer-avatar-image"
                                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                                 <div class="reviewer-avatar-fallback" style="display: none;">
-                                                    <i class="fas fa-user"></i>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="reviewer-avatar-fallback">
                                                     <i class="fas fa-user"></i>
                                                 </div>
                                             </c:otherwise>
@@ -1064,18 +1075,18 @@
     function getSectionMeta(title) {
         const normalized = (title || '').toLocaleLowerCase('vi-VN');
         if (normalized.includes('công dụng')) {
-            return {key: 'usage'};
+            return {key: 'usage', icon: 'fa-wand-magic-sparkles'};
         }
         if (normalized.includes('lưu ý')) {
-            return {key: 'note'};
+            return {key: 'note', icon: 'fa-circle-exclamation'};
         }
         if (normalized.includes('thành phần')) {
-            return {key: 'ingredient'};
+            return {key: 'ingredient', icon: 'fa-leaf'};
         }
         if (normalized.includes('hướng dẫn')) {
-            return {key: 'guide'};
+            return {key: 'guide', icon: 'fa-book-open'};
         }
-        return {key: 'overview'};
+        return {key: 'overview', icon: 'fa-seedling'};
     }
 
     function renderDescriptionContent() {
@@ -1133,7 +1144,14 @@
 
             const title = document.createElement('h3');
             title.className = 'description-section-title';
-            title.textContent = section.title || 'Mô tả sản phẩm';
+            if (sectionMeta.icon) {
+                const iconEl = document.createElement('i');
+                iconEl.className = 'fa-solid ' + sectionMeta.icon + ' desc-title-icon';
+                title.appendChild(iconEl);
+                title.appendChild(document.createTextNode(' ' + (section.title || 'Mô tả sản phẩm')));
+            } else {
+                title.textContent = section.title || 'Mô tả sản phẩm';
+            }
             sectionEl.appendChild(title);
 
             const sectionBody = document.createElement('div');

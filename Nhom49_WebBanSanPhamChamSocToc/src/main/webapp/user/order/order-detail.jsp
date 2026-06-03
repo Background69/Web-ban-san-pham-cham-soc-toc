@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -31,6 +31,72 @@
         <c:if test="${not empty error}">
             <div class="alert alert-danger">${error}</div>
         </c:if>
+
+        <c:set var="currentStatus" value="${order.orderStatus != null ? order.orderStatus : 'pending'}"/>
+
+        <c:choose>
+            <c:when test="${currentStatus == 'cancelled'}">
+                <div class="order-stepper-cancelled">
+                    <div class="cancelled-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="cancelled-info">
+                        <span class="cancelled-title">Đơn hàng đã bị hủy</span>
+                        <span class="cancelled-sub">Đơn hàng #${order.orderId} đã được hủy bỏ</span>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <c:set var="stepIndex" value="0"/>
+                <c:if test="${currentStatus == 'confirmed'}"><c:set var="stepIndex" value="1"/></c:if>
+                <c:if test="${currentStatus == 'shipping'}"><c:set var="stepIndex" value="2"/></c:if>
+                <c:if test="${currentStatus == 'completed'}"><c:set var="stepIndex" value="3"/></c:if>
+
+                <div class="order-stepper">
+                    <div class="stepper-step ${stepIndex > 0 ? 'is-completed' : ''} ${stepIndex == 0 ? 'is-current' : ''}">
+                        <div class="stepper-connector"></div>
+                        <div class="stepper-circle">
+                            <c:choose>
+                                <c:when test="${stepIndex > 0}"><i class="fas fa-check"></i></c:when>
+                                <c:otherwise><i class="fas fa-clock"></i></c:otherwise>
+                            </c:choose>
+                        </div>
+                        <span class="stepper-label">Chờ xác nhận</span>
+                    </div>
+
+                    <div class="stepper-step ${stepIndex > 1 ? 'is-completed' : ''} ${stepIndex == 1 ? 'is-current' : ''}">
+                        <div class="stepper-connector"></div>
+                        <div class="stepper-circle">
+                            <c:choose>
+                                <c:when test="${stepIndex > 1}"><i class="fas fa-check"></i></c:when>
+                                <c:otherwise><i class="fas fa-gear"></i></c:otherwise>
+                            </c:choose>
+                        </div>
+                        <span class="stepper-label">Đang xử lý</span>
+                    </div>
+
+                    <div class="stepper-step ${stepIndex > 2 ? 'is-completed' : ''} ${stepIndex == 2 ? 'is-current' : ''}">
+                        <div class="stepper-connector"></div>
+                        <div class="stepper-circle">
+                            <c:choose>
+                                <c:when test="${stepIndex > 2}"><i class="fas fa-check"></i></c:when>
+                                <c:otherwise><i class="fas fa-truck"></i></c:otherwise>
+                            </c:choose>
+                        </div>
+                        <span class="stepper-label">Đang giao hàng</span>
+                    </div>
+
+                    <div class="stepper-step ${stepIndex == 3 ? 'is-completed' : ''}">
+                        <div class="stepper-connector"></div>
+                        <div class="stepper-circle">
+                            <c:choose>
+                                <c:when test="${stepIndex == 3}"><i class="fas fa-check"></i></c:when>
+                                <c:otherwise><i class="fas fa-circle-check"></i></c:otherwise>
+                            </c:choose>
+                        </div>
+                        <span class="stepper-label">Đã giao thành công</span>
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
 
         <div class="order-card">
             <div class="order-header">
