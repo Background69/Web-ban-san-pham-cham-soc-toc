@@ -173,11 +173,10 @@
 
                     <div class="form-group">
                         <label>Danh mục</label>
-                        <select name="categoryId" required>
+                        <select id="editCategoryId" name="categoryId" required>
                             <option value="">-- Chọn danh mục --</option>
                             <c:forEach var="c" items="${categories}">
-                                <option value="${c.categoryId}">
-                                    <c:out value="${c.categoryName}"/>
+                                <option value="${c.categoryId}"> ${c.categoryName}
                                 </option>
                             </c:forEach>
                         </select>
@@ -228,7 +227,15 @@
                         <label>Mô tả chi tiết</label>
                         <textarea name="fullDescription"></textarea>
                     </div>
+                    <div class="form-group span-2">
+                        <label>Thành phần</label>
+                        <textarea name="ingredients"></textarea>
+                    </div>
 
+                    <div class="form-group span-2">
+                        <label>Hướng dẫn sử dụng</label>
+                        <textarea name="usageInstructions"></textarea>
+                    </div>
                     <div class="form-group span-2">
                         <label>Ảnh sản phẩm</label>
                         <input type="file" name="image" accept="image/*">
@@ -280,7 +287,27 @@
                     <label>Xuất xứ</label>
                     <input type="text" id="editOrigin" name="origin">
                 </div>
-
+                <div class="form-group">
+                    <label>Danh mục</label>
+                    <select id="editCategoryId" name="categoryId">
+                        <option value="">Chọn danh mục</option>
+                        <c:forEach var="c" items="${categories}">
+                            <option value="${c.categoryId}">
+                                    ${c.categoryName}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Thương hiệu</label>
+                    <select id="editBrandId" name="brandId">
+                        <option value="">-- Chọn thương hiệu --</option>
+                        <c:forEach var="b" items="${brands}">
+                            <option value="${b.brandId}">
+                                    ${b.brandName}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>Mô tả ngắn</label>
                     <textarea id="editShortDescription"
@@ -292,7 +319,17 @@
                     <textarea id="editFullDescription"
                               name="fullDescription"></textarea>
                 </div>
+                <div class="form-group">
+                    <label>Thành phần</label>
+                    <textarea id="editIngredients"
+                              name="ingredients"></textarea>
+                </div>
 
+                <div class="form-group">
+                    <label>Hướng dẫn sử dụng</label>
+                    <textarea id="editUsageInstructions"
+                              name="usageInstructions"></textarea>
+                </div>
                 <div class="form-group">
                     <label>Ảnh sản phẩm</label>
                     <input type="file" name="image">
@@ -336,9 +373,24 @@
         if (e.key === 'Escape') closeModal();
     });
     function openEditModal(productId){
-        document.getElementById("editProductModal").style.display = "block";
-        document.body.style.overflow = "hidden";
-        console.log("Edit product:", productId);
+        fetch(
+            '${pageContext.request.contextPath}/admin/products?action=get&id=' + productId
+        )
+            .then(res => res.json())
+            .then(product => {
+                document.getElementById("editId").value = productId;
+                document.getElementById("editName").value = product.name;
+                document.getElementById("editSlug").value = product.slug;
+                document.getElementById("editOrigin").value = product.origin;
+                document.getElementById("editCategoryId").value = product.categoryId;
+                document.getElementById("editBrandId").value = product.brandId;
+                document.getElementById("editShortDescription").value = product.shortDescription || "";
+                document.getElementById("editFullDescription").value = product.fullDescription || "";
+                document.getElementById("editIngredients").value = product.ingredients || "";
+                document.getElementById("editUsageInstructions").value = product.usageInstructions || "";
+                document.getElementById("editProductModal").style.display = "block";
+                document.body.style.overflow = "hidden";
+            });
     }
     function closeEditModal() {
         document.getElementById("editProductModal").style.display = "none";
