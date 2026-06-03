@@ -1,6 +1,8 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.user;
 
+import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.services.OrderService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 import com.example.nhom49_webbansanphamchamsoctoc.util.VNPAYConfig;
 
@@ -17,6 +19,13 @@ import java.util.*;
 @WebServlet(name = "VNPAYCreatePaymentController", value = "/vnpay/create-payment")
 public class VNPAYCreatePaymentController extends HttpServlet {
 
+    private OrderService orderService;
+
+    @Override
+    public void init() throws ServletException {
+        orderService = new OrderService();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -28,44 +37,48 @@ public class VNPAYCreatePaymentController extends HttpServlet {
             return;
         }
 
-        String orderId   = request.getParameter("orderId");
-        String amountStr = request.getParameter("amount");
-        String orderCode = request.getParameter("orderCode");
+        String orderIdStr = request.getParameter("orderId");
 
-        if (orderId == null || amountStr == null || orderCode == null) {
+        if (orderIdStr == null) {
             SessionUtil.setErrorMessage(session, "Thiếu thông tin đơn hàng để thanh toán VNPAY.");
             response.sendRedirect(request.getContextPath() + "/profile/orders");
             return;
         }
 
-        long amount;
+        int orderId;
         try {
-            amount = Long.parseLong(amountStr);
+            orderId = Integer.parseInt(orderIdStr);
         } catch (NumberFormatException e) {
-            SessionUtil.setErrorMessage(session, "Số tiền thanh toán không hợp lệ.");
+            SessionUtil.setErrorMessage(session, "Mã đơn hàng không hợp lệ.");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
+            return;
+        }
+
+        // Lấy order từ DB để đảm bảo amount chính xác (chống tamper qua URL)
+        Order order = orderService.getOrderById(orderId);
+        if (order == null || !order.getUserId().equals(user.getUserId())) {
+            SessionUtil.setErrorMessage(session, "Đơn hàng không tồn tại hoặc không thuộc về bạn.");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
+            return;
+        }
+
+        if (!"pending_payment".equalsIgnoreCase(order.getOrderStatus())) {
+            SessionUtil.setErrorMessage(session, "Đơn hàng không ở trạng thái chờ thanh toán.");
             response.sendRedirect(request.getContextPath() + "/orders/" + orderId);
             return;
         }
 
-        String scheme = request.getScheme();
-        String serverName = request.getServerName();
-        int serverPort = request.getServerPort();
-        String contextPath = request.getContextPath();
+        long amount = order.getTotalAmount().longValue();
+        String orderCode = order.getOrderCode();
 
-        String baseUrl = scheme + "://" + serverName;
-        if (("http".equals(scheme) && serverPort != 80) ||
-                ("https".equals(scheme) && serverPort != 443)) {
-            baseUrl += ":" + serverPort;
-        }
-        baseUrl += contextPath;
-
-        String vnp_ReturnUrl = VNPAYConfig.getReturnUrl(baseUrl);
+        String requestBaseUrl = buildBaseUrl(request);
+        String vnp_ReturnUrl = VNPAYConfig.getReturnUrl(requestBaseUrl);
 
         Map<String, String> vnp_Params = new TreeMap<>();
 
         vnp_Params.put("vnp_Version",    VNPAYConfig.vnp_Version);
         vnp_Params.put("vnp_Command",    VNPAYConfig.vnp_Command);
-        vnp_Params.put("vnp_TmnCode",    VNPAYConfig.vnp_TmnCode);
+        vnp_Params.put("vnp_TmnCode",    VNPAYConfig.getTmnCode());
         vnp_Params.put("vnp_Amount",     String.valueOf(amount * 100)); // VNPAY yêu cầu nhân 100
         vnp_Params.put("vnp_CurrCode",   "VND");
         vnp_Params.put("vnp_TxnRef",     orderCode); // Mã tham chiếu giao dịch (unique)
@@ -73,9 +86,9 @@ public class VNPAYCreatePaymentController extends HttpServlet {
         vnp_Params.put("vnp_OrderType",  VNPAYConfig.vnp_OrderType);
         vnp_Params.put("vnp_Locale",     "vn");
         vnp_Params.put("vnp_ReturnUrl",  vnp_ReturnUrl);
-        vnp_Params.put("vnp_IpAddr",     getIpAddress(request));
+        vnp_Params.put("vnp_IpAddr",     getClientIpAddress(request));
 
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cal.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
@@ -85,9 +98,9 @@ public class VNPAYCreatePaymentController extends HttpServlet {
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
         String hashData = VNPAYConfig.hashAllFields(vnp_Params);
-        String vnp_SecureHash = VNPAYConfig.hmacSHA512(VNPAYConfig.secretKey, hashData);
+        String vnp_SecureHash = VNPAYConfig.hmacSHA512(VNPAYConfig.getSecretKey(), hashData);
 
-        StringBuilder paymentUrl = new StringBuilder(VNPAYConfig.vnp_PayUrl);
+        StringBuilder paymentUrl = new StringBuilder(VNPAYConfig.getPayUrl());
         paymentUrl.append('?');
         paymentUrl.append(hashData);
         paymentUrl.append("&vnp_SecureHash=").append(vnp_SecureHash);
@@ -96,23 +109,61 @@ public class VNPAYCreatePaymentController extends HttpServlet {
     }
 
     /**
-     * Lấy IP address của client, hỗ trợ proxy.
+     * Build base URL từ request
+     * Khi chạy qua Docker + Nginx, request trực tiếp sẽ có scheme=http, host=container_name.
+     * Headers X-Forwarded-* chứa thông tin đúng từ client
      */
-    private String getIpAddress(HttpServletRequest request) {
+    private String buildBaseUrl(HttpServletRequest request) {
+        String scheme = request.getHeader("X-Forwarded-Proto");
+        if (scheme == null || scheme.isBlank()) {
+            scheme = request.getScheme();
+        }
+
+        String host = request.getHeader("X-Forwarded-Host");
+        if (host == null || host.isBlank()) {
+            host = request.getHeader("Host");
+        }
+        if (host == null || host.isBlank()) {
+            host = request.getServerName();
+            int port = request.getServerPort();
+            if (("http".equals(scheme) && port != 80) ||
+                    ("https".equals(scheme) && port != 443)) {
+                host += ":" + port;
+            }
+        }
+
+        return scheme + "://" + host + request.getContextPath();
+    }
+
+    /**
+     * Lấy IP thực của client, chuẩn cho Docker + Nginx reverse proxy.
+     */
+    private String getClientIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+
+        if (isBlankOrUnknown(ip)) {
+            ip = request.getHeader("X-Real-IP");
+        }
+        if (isBlankOrUnknown(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+        if (isBlankOrUnknown(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+        if (isBlankOrUnknown(ip)) {
             ip = request.getRemoteAddr();
         }
-        // Nếu có nhiều IP (qua proxy), lấy IP đầu tiên
+        // Lấy IP đầu tiên = IP thực của client
         if (ip != null && ip.contains(",")) {
             ip = ip.split(",")[0].trim();
         }
-        return ip != null ? ip : "127.0.0.1";
+        if ("0:0:0:0:0:0:0:1".equals(ip) || "::1".equals(ip)) {
+            ip = "127.0.0.1";
+        }
+        return (ip != null && !ip.isBlank()) ? ip : "127.0.0.1";
+    }
+
+    private boolean isBlankOrUnknown(String value) {
+        return value == null || value.isBlank() || "unknown".equalsIgnoreCase(value);
     }
 }

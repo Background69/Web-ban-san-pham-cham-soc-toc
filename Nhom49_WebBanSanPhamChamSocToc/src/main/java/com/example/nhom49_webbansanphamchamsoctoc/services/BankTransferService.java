@@ -217,7 +217,9 @@ public class BankTransferService {
         }
 
         Order order = orderDAO.findById(orderId);
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return;
         }
 
@@ -230,7 +232,9 @@ public class BankTransferService {
         }
 
         Order order = orderDAO.findById(orderId);
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return;
         }
 

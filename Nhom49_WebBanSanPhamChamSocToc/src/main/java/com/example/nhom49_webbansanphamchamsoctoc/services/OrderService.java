@@ -318,7 +318,8 @@ public class OrderService {
         // Chỉ có thể hủy đơn hàng ở trạng thái pending hoặc confirmed
         String currentStatus = order.getOrderStatus();
         if (currentStatus != null &&
-                (currentStatus.equals("shipping") || currentStatus.equals("completed"))) {
+                (currentStatus.equals("shipping") || currentStatus.equals("completed")
+                 || currentStatus.equals("confirmed"))) {
             lastError = "Không thể hủy đơn hàng đang giao hoặc đã hoàn thành";
             return false;
         }

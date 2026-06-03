@@ -1,24 +1,81 @@
 package com.example.nhom49_webbansanphamchamsoctoc.util;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class VNPAYConfig {
-    public static final String vnp_TmnCode   = "MÃ_TMNCODE_CỦA_BẠN";
-    public static final String secretKey      = "MÃ_HASHSECRET_CỦA_BẠN";
-    public static final String vnp_PayUrl     = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static final String vnp_ApiUrl     = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-    public static final String vnp_Version    = "2.1.0";
-    public static final String vnp_Command    = "pay";
-    public static final String vnp_OrderType  = "other";
+
+    private static final Properties props = new Properties();
+
+    static {
+        try (InputStream is = VNPAYConfig.class.getClassLoader()
+                .getResourceAsStream("db.properties")) {
+            if (is != null) props.load(is);
+        } catch (IOException ignored) {
+        }
+    }
 
     /**
-     * Tạo Return URL động dựa trên contextPath của request
-     * http://localhost:8080/Nhom49_WebBanSanPhamChamSocToc/vnpay/return
+     * Ưu tiên: ENV → db.properties → defaultValue
      */
-    public static String getReturnUrl(String baseUrl) {
-        return baseUrl + "/vnpay/return";
+    private static String resolve(String envKey, String propKey, String defaultValue) {
+        String env = System.getenv(envKey);
+        if (env != null && !env.isBlank()) return env;
+        return props.getProperty(propKey, defaultValue);
+    }
+
+    // --- Các giá trị config linh hoạt theo môi trường ---
+
+    public static String getTmnCode() {
+        return resolve("VNPAY_TMN_CODE", "vnpay.tmnCode", "MÃ_TMNCODE_CỦA_BẠN");
+    }
+
+    public static String getSecretKey() {
+        return resolve("VNPAY_SECRET_KEY", "vnpay.secretKey", "MÃ_HASHSECRET_CỦA_BẠN");
+    }
+
+    public static String getPayUrl() {
+        return resolve("VNPAY_PAY_URL", "vnpay.payUrl",
+                "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html");
+    }
+
+    public static String getApiUrl() {
+        return resolve("VNPAY_API_URL", "vnpay.apiUrl",
+                "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction");
+    }
+
+    /**
+     * Base URL cho VNPAY return. Ví dụ: "https://yourdomain.com"
+     * Nếu rỗng → tự detect từ request (legacy / dev behavior).
+     */
+    public static String getReturnBaseUrl() {
+        return resolve("VNPAY_RETURN_BASE_URL", "vnpay.returnBaseUrl", "");
+    }
+
+    // --- Các hằng số cố định ---
+    public static final String vnp_Version = "2.1.0";
+    public static final String vnp_Command = "pay";
+    public static final String vnp_OrderType = "other";
+
+    /**
+     * Tạo Return URL.
+     * Nếu có VNPAY_RETURN_BASE_URL cấu hình → dùng luôn (production).
+     * Nếu không → dùng baseUrl detect từ request (dev/legacy).
+     */
+    public static String getReturnUrl(String requestBaseUrl) {
+        String configuredBase = getReturnBaseUrl();
+        String base = (configuredBase != null && !configuredBase.isBlank())
+                ? configuredBase
+                : requestBaseUrl;
+        // Bỏ trailing slash nếu có
+        if (base != null && base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return base + "/vnpay/return";
     }
 
     /**
@@ -42,28 +99,30 @@ public class VNPAYConfig {
     }
 
     /**
-     * Tạo chuỗi hash data từ Map params (đã sort theo key)
-     * Quy chuẩn VNPAY: các cặp key=value nối bằng "&", key sort A-Z
+     * Tạo chuỗi hash data từ Map params (đã sort theo key).
+     * Quy chuẩn VNPAY: các cặp key=value nối bằng "&", key sort A-Z.
+     * Dùng flag 'first' thay vì itr.hasNext() để tránh trailing
+     * khi field cuối cùng có value null/empty.
      */
     public static String hashAllFields(Map<String, String> fields) {
         List<String> fieldNames = new ArrayList<>(fields.keySet());
         Collections.sort(fieldNames);
 
         StringBuilder sb = new StringBuilder();
-        Iterator<String> itr = fieldNames.iterator();
-        while (itr.hasNext()) {
-            String fieldName = itr.next();
+        boolean first = true;
+        for (String fieldName : fieldNames) {
             String fieldValue = fields.get(fieldName);
             if (fieldValue != null && !fieldValue.isEmpty()) {
+                if (!first) {
+                    sb.append('&');
+                }
                 sb.append(fieldName).append('=');
                 try {
                     sb.append(java.net.URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
                 } catch (Exception e) {
                     sb.append(fieldValue);
                 }
-                if (itr.hasNext()) {
-                    sb.append('&');
-                }
+                first = false;
             }
         }
         return sb.toString();

@@ -43,7 +43,7 @@ public class VNPAYReturnController extends HttpServlet {
         vnp_Params.remove("vnp_SecureHashType");
 
         String hashData = VNPAYConfig.hashAllFields(vnp_Params);
-        String calculatedHash = VNPAYConfig.hmacSHA512(VNPAYConfig.secretKey, hashData);
+        String calculatedHash = VNPAYConfig.hmacSHA512(VNPAYConfig.getSecretKey(), hashData);
 
         String vnp_TxnRef = vnp_Params.get("vnp_TxnRef");        // orderCode
         String vnp_ResponseCode = vnp_Params.get("vnp_ResponseCode");
@@ -65,17 +65,25 @@ public class VNPAYReturnController extends HttpServlet {
         if (calculatedHash != null && calculatedHash.equalsIgnoreCase(vnp_SecureHash)) {
             if ("00".equals(vnp_ResponseCode) && "00".equals(vnp_TransactionStatus)) {
                 if ("pending_payment".equals(order.getOrderStatus())) {
-                    orderService.updateOrderStatus(orderId, "pending");
+                    orderService.updateOrderStatus(orderId, "confirmed");
                 }
                 SessionUtil.setSuccessMessage(session,
                         "Thanh toán VNPAY thành công! Đơn hàng " + vnp_TxnRef + " đang được xử lý.");
             } else {
                 String errorMsg = mapVnpayErrorCode(vnp_ResponseCode);
+                // Hủy đơn hàng khi thanh toán thất bại, hoàn trả stock
+                if ("pending_payment".equals(order.getOrderStatus())) {
+                    orderService.cancelOrder(orderId);
+                }
                 SessionUtil.setErrorMessage(session,
                         "Thanh toán VNPAY không thành công: " + errorMsg +
-                                ". Bạn có thể thử thanh toán lại hoặc hủy đơn hàng.");
+                                ". Đơn hàng đã được hủy và hoàn trả kho.");
             }
         } else {
+            // Checksum không hợp lệ — nghi ngờ giả mạo, hủy đơn hàng
+            if ("pending_payment".equals(order.getOrderStatus())) {
+                orderService.cancelOrder(orderId);
+            }
             SessionUtil.setErrorMessage(session,
                     "Dữ liệu thanh toán không hợp lệ (chữ ký không khớp). Vui lòng liên hệ hỗ trợ.");
         }
