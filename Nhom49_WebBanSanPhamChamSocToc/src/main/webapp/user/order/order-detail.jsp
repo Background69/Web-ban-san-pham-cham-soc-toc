@@ -95,7 +95,12 @@
                             <c:otherwise><i class="fas fa-clock"></i></c:otherwise>
                         </c:choose>
                     </div>
-                    <span class="od-stepper__label">Chờ xác nhận</span>
+                    <span class="od-stepper__label">
+                        <c:choose>
+                            <c:when test="${currentStatus == 'pending_payment'}">Chờ thanh toán</c:when>
+                            <c:otherwise>Chờ xác nhận</c:otherwise>
+                        </c:choose>
+                    </span>
                 </div>
 
                 <div class="od-stepper__step ${stepIndex > 1 ? 'is-done' : ''} ${stepIndex == 1 ? 'is-active' : ''}">
