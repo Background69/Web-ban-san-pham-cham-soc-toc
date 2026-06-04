@@ -1,7 +1,9 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.cart;
 
 import com.example.nhom49_webbansanphamchamsoctoc.model.CartItem;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.services.CartService;
+import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SessionUtil;
 
 import jakarta.servlet.ServletException;
@@ -18,10 +20,12 @@ import java.util.List;
 public class CartController extends HttpServlet {
 
     private CartService cartService;
+    private ProductService productService;
 
     @Override
     public void init() throws ServletException {
         cartService = new CartService();
+        productService = new ProductService();
     }
 
     @Override
@@ -38,6 +42,14 @@ public class CartController extends HttpServlet {
         request.setAttribute("cartCount", cartCount);
         request.setAttribute("successMessage", SessionUtil.getAndClearSuccessMessage(session));
         request.setAttribute("errorMessage", SessionUtil.getAndClearErrorMessage(session));
+
+        if (cartItems == null || cartItems.isEmpty() || cartCount == 0) {
+            List<Product> topProducts = productService.getFeaturedProducts();
+            if (topProducts != null && topProducts.size() > 4) {
+                topProducts = topProducts.subList(0, 4);
+            }
+            request.setAttribute("topProducts", topProducts);
+        }
 
         request.getRequestDispatcher("/user/cart/cart.jsp").forward(request, response);
     }

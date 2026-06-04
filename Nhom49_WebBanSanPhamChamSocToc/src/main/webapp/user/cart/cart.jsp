@@ -3,7 +3,6 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,10 +13,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cart.css">
 </head>
-
 <body>
 <jsp:include page="/layout/header.jsp"/>
-
 <main class="cart-page">
     <div class="cart-container">
         <!-- Cart Header -->
@@ -33,20 +30,108 @@
 
         <c:choose>
             <c:when test="${empty cartItems || cartCount == 0}">
-                <!-- Empty Cart State -->
-                <div class="cart-empty">
-                    <div class="cart-empty-icon">
-                        <i class="fas fa-shopping-cart"></i>
+                <div class="cart-empty-wrapper">
+                    <div class="cart-empty">
+                        <div class="cart-empty-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="cart-empty-svg">
+                                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                        </div>
+                        <h2 class="cart-empty-title">Giỏ hàng của bạn đang trống</h2>
+                        <p class="cart-empty-text">
+                            Hãy lấp đầy bằng những sản phẩm tốt nhất từ <strong>HairGlow</strong>!
+                            Khám phá bộ sưu tập chăm sóc tóc cao cấp được yêu thích nhất.
+                        </p>
+                        <a href="${pageContext.request.contextPath}/store" class="cart-empty-btn">
+                            <i class="fas fa-shopping-bag"></i> Khám phá cửa hàng
+                        </a>
                     </div>
-                    <h2 class="cart-empty-title">Giỏ hàng trống</h2>
-                    <p class="cart-empty-text">
-                        Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy khám phá các sản phẩm chăm sóc tóc
-                        tuyệt vời của
-                        chúng tôi!
-                    </p>
-                    <a href="${pageContext.request.contextPath}/store" class="cart-empty-btn">
-                        <i class="fas fa-shopping-bag"></i> Khám phá sản phẩm
-                    </a>
+
+                    <c:if test="${not empty topProducts}">
+                        <section class="cart-recommendations">
+                            <div class="cart-reco-header">
+                                <div class="cart-reco-divider"></div>
+                                <h3 class="cart-reco-title">
+                                    <i class="fas fa-fire"></i>
+                                    Sản phẩm Bán chạy nhất
+                                </h3>
+                                <p class="cart-reco-subtitle">Được hàng nghìn khách hàng tin tưởng lựa chọn</p>
+                            </div>
+                            <div class="cart-reco-grid">
+                                <c:forEach var="product" items="${topProducts}" end="3">
+                                    <div class="cart-reco-card">
+                                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}" class="cart-reco-card-image">
+                                            <c:choose>
+                                                <c:when test="${not empty product.primaryImageUrl}">
+                                                    <img src="${product.primaryImageUrl}" alt="${product.productName}" loading="lazy"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${pageContext.request.contextPath}/static/images/default-product.png" alt="${product.productName}" loading="lazy"/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <c:if test="${product.soldQuantity > 50}">
+                                                <span class="cart-reco-badge">
+                                                    <i class="fas fa-bolt"></i> Hot
+                                                </span>
+                                            </c:if>
+                                        </a>
+
+                                        <div class="cart-reco-card-body">
+                                            <c:if test="${not empty product.brandName}">
+                                                <span class="cart-reco-brand">${product.brandName}</span>
+                                            </c:if>
+                                            <h4 class="cart-reco-name">
+                                                <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                                    ${product.productName}
+                                                </a>
+                                            </h4>
+
+                                            <c:if test="${product.averageRating != null && product.averageRating > 0}">
+                                                <div class="cart-reco-rating">
+                                                    <div class="cart-reco-stars">
+                                                        <c:forEach begin="1" end="5" var="star">
+                                                            <i class="fa${star <= product.averageRating ? 's' : (star - 0.5 <= product.averageRating ? 's' : 'r')} fa-star"></i>
+                                                        </c:forEach>
+                                                    </div>
+                                                    <span class="cart-reco-review-count">(${product.reviewCount})</span>
+                                                </div>
+                                            </c:if>
+
+                                            <div class="cart-reco-price">
+                                                <c:choose>
+                                                    <c:when test="${product.defaultVariant != null && product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
+                                                        <span class="cart-reco-sale-price">
+                                                            <fmt:formatNumber value="${product.defaultVariant.salePrice}" type="number"/>đ
+                                                        </span>
+                                                        <span class="cart-reco-original-price">
+                                                            <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>đ
+                                                        </span>
+                                                    </c:when>
+                                                    <c:when test="${product.defaultVariant != null}">
+                                                        <span class="cart-reco-current-price">
+                                                            <fmt:formatNumber value="${product.defaultVariant.originalPrice}" type="number"/>đ
+                                                        </span>
+                                                    </c:when>
+                                                </c:choose>
+                                            </div>
+                                        </div>
+
+                                        <div class="cart-reco-card-footer">
+                                            <form action="${pageContext.request.contextPath}/cart/add" method="post" class="cart-reco-form">
+                                                <input type="hidden" name="productId" value="${product.productId}"/>
+                                                <input type="hidden" name="quantity" value="1"/>
+                                                <button type="submit" class="cart-reco-add-btn">
+                                                    <i class="fas fa-cart-plus"></i>
+                                                    Thêm nhanh vào giỏ
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </section>
+                    </c:if>
                 </div>
             </c:when>
             <c:otherwise>
@@ -57,9 +142,8 @@
                         <div class="cart-items-header">
                             <span class="cart-items-title">Sản phẩm trong giỏ</span>
                             <form action="${pageContext.request.contextPath}/cart/clear" method="post"
-                                  style="display: inline;">
-                                <button type="submit" class="cart-clear-btn"
-                                        onclick="return confirm('Bạn có chắc muốn xóa tất cả sản phẩm?')">
+                                  style="display: inline;" id="clearCartForm">
+                                <button type="submit" class="cart-clear-btn">
                                     <i class="fas fa-trash-alt"></i> Xóa tất cả
                                 </button>
                             </form>
@@ -145,10 +229,10 @@
                                                 type="number"/>đ
                                     </div>
                                     <form action="${pageContext.request.contextPath}/cart/remove"
-                                          method="post" style="display: inline;">
+                                          method="post" style="display: inline;" class="js-remove-form">
                                         <input type="hidden" name="variantId"
                                                value="${item.variant.variantId}">
-                                        <button type="submit" class="cart-item-remove"
+                                        <button type="button" class="cart-item-remove js-remove-btn"
                                                 title="Xóa sản phẩm">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -225,6 +309,20 @@
     <div class="loading-spinner"></div>
 </div>
 
+<div class="hg-modal-overlay" id="hgConfirmModal">
+    <div class="hg-modal-dialog">
+        <div class="hg-modal-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="hg-modal-title" id="hgModalTitle">Xóa sản phẩm?</h3>
+        <p class="hg-modal-text" id="hgModalText">Bạn có chắc chắn muốn bỏ sản phẩm này khỏi giỏ hàng không?</p>
+        <div class="hg-modal-actions">
+            <button type="button" class="hg-modal-btn hg-modal-btn--cancel" id="hgModalCancel">Hủy</button>
+            <button type="button" class="hg-modal-btn hg-modal-btn--confirm" id="hgModalConfirm">Xóa ngay</button>
+        </div>
+    </div>
+</div>
+
 <jsp:include page="/layout/footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -234,11 +332,11 @@
     // Show toast notification
     function showToast(message, type) {
         type = type || 'success';
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
+        var container = document.getElementById('toastContainer');
+        var toast = document.createElement('div');
         toast.className = 'toast toast-' + type;
 
-        let iconClass = 'check';
+        var iconClass = 'check';
         if (type === 'error') iconClass = 'times';
         else if (type === 'warning') iconClass = 'exclamation';
 
@@ -260,27 +358,114 @@
         document.getElementById('loadingOverlay').classList.remove('show');
     }
 
-    // Update quantity
+    var hgModal = (function () {
+        var overlay = document.getElementById('hgConfirmModal');
+        var titleEl = document.getElementById('hgModalTitle');
+        var textEl = document.getElementById('hgModalText');
+        var cancelBtn = document.getElementById('hgModalCancel');
+        var confirmBtn = document.getElementById('hgModalConfirm');
+        var pendingAction = null;
+
+        function open(options) {
+            titleEl.textContent = options.title || 'Xóa sản phẩm?';
+            textEl.textContent = options.text || 'Bạn có chắc chắn muốn bỏ sản phẩm này khỏi giỏ hàng không?';
+            confirmBtn.textContent = options.confirmLabel || 'Xóa ngay';
+            pendingAction = options.onConfirm || null;
+            overlay.classList.add('is-active');
+        }
+
+        function close() {
+            overlay.classList.remove('is-active');
+            pendingAction = null;
+        }
+
+        cancelBtn.addEventListener('click', function () {
+            close();
+        });
+
+        confirmBtn.addEventListener('click', function () {
+            if (typeof pendingAction === 'function') {
+                pendingAction();
+            }
+            close();
+        });
+
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) {
+                close();
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && overlay.classList.contains('is-active')) {
+                close();
+            }
+        });
+
+        return { open: open, close: close };
+    })();
+
+    document.querySelectorAll('.js-remove-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var form = btn.closest('.js-remove-form');
+            hgModal.open({
+                title: 'Xóa sản phẩm?',
+                text: 'Bạn có chắc chắn muốn bỏ sản phẩm này khỏi giỏ hàng không?',
+                confirmLabel: 'Xóa ngay',
+                onConfirm: function () {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    var clearForm = document.getElementById('clearCartForm');
+    if (clearForm) {
+        clearForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            hgModal.open({
+                title: 'Xóa tất cả sản phẩm?',
+                text: 'Toàn bộ sản phẩm trong giỏ hàng sẽ bị xóa. Bạn có chắc chắn?',
+                confirmLabel: 'Xóa tất cả',
+                onConfirm: function () {
+                    clearForm.submit();
+                }
+            });
+        });
+    }
+
     function updateQuantity(variantId, quantity) {
         if (quantity < 1) {
-            if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-                document.querySelector('form[action*="remove"] input[value="' + variantId + '"]').closest('form').submit();
+            var removeForm = document.querySelector('.js-remove-form input[value="' + variantId + '"]');
+            if (removeForm) {
+                removeForm = removeForm.closest('form');
             }
+            hgModal.open({
+                title: 'Xóa sản phẩm?',
+                text: 'Số lượng sẽ về 0. Bạn có muốn xóa sản phẩm này khỏi giỏ hàng?',
+                confirmLabel: 'Xóa ngay',
+                onConfirm: function () {
+                    if (removeForm) {
+                        removeForm.submit();
+                    }
+                }
+            });
             return;
         }
 
         showLoading();
 
-        const form = document.createElement('form');
+        var form = document.createElement('form');
         form.method = 'POST';
         form.action = contextPath + '/cart/update';
 
-        const variantInput = document.createElement('input');
+        var variantInput = document.createElement('input');
         variantInput.type = 'hidden';
         variantInput.name = 'variantId';
         variantInput.value = variantId;
 
-        const quantityInput = document.createElement('input');
+        var quantityInput = document.createElement('input');
         quantityInput.type = 'hidden';
         quantityInput.name = 'quantity';
         quantityInput.value = quantity;
@@ -291,8 +476,6 @@
         form.submit();
     }
 
-
-    // Check for messages from server
     <c:if test="${not empty successMessage}">
     showToast('${successMessage}', 'success');
     </c:if>
@@ -302,5 +485,4 @@
     </c:if>
 </script>
 </body>
-
 </html>

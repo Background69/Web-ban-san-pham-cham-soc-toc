@@ -126,7 +126,9 @@ public class OrderDetailController extends HttpServlet {
     }
 
     private boolean canCancelOrder(Order order, PaymentTransaction paymentTransaction) {
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return false;
         }
 

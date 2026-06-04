@@ -57,7 +57,8 @@ public class OrderService {
      * Tạo đơn hàng từ giỏ hàng và thông tin giao hàng.
      */
     public Order createOrder(int userId, Map<Integer, Integer> cartItems,
-                             ShippingAddress address, String shippingMethod, String paymentMethod) {
+                             ShippingAddress address, String shippingMethod, String paymentMethod,
+                             String initialStatus) {
         lastError = null;
 
         if (cartItems == null || cartItems.isEmpty()) {
@@ -102,7 +103,7 @@ public class OrderService {
         order.setPaymentMethod(paymentMethod);
         order.setSubtotal(subtotal);
         order.setTotalAmount(total);
-        order.setOrderStatus("pending");
+        order.setOrderStatus(initialStatus != null ? initialStatus : "pending");
 
         try {
             Order createdOrder = JDBIConnector.getInstance().inTransaction(handle -> {
@@ -254,6 +255,15 @@ public class OrderService {
         return order;
     }
 
+    public Order getOrderByCode(String orderCode) {
+        if (orderCode == null || orderCode.isBlank()) return null;
+        Order order = orderDao.findByOrderCode(orderCode);
+        if (order != null) {
+            enrichOrderWithItems(order);
+        }
+        return order;
+    }
+
 
     public List<Order> getOrdersByUserAndStatus(int userId, String status) {
         List<Order> orders = orderDao.findByUserIdAndStatus(userId, status);
@@ -308,7 +318,8 @@ public class OrderService {
         // Chỉ có thể hủy đơn hàng ở trạng thái pending hoặc confirmed
         String currentStatus = order.getOrderStatus();
         if (currentStatus != null &&
-                (currentStatus.equals("shipping") || currentStatus.equals("completed"))) {
+                (currentStatus.equals("shipping") || currentStatus.equals("completed")
+                 || currentStatus.equals("confirmed"))) {
             lastError = "Không thể hủy đơn hàng đang giao hoặc đã hoàn thành";
             return false;
         }
@@ -375,7 +386,8 @@ public class OrderService {
 
     private boolean isValidOrderStatus(String status) {
         return status != null &&
-                (status.equals("pending") || status.equals("confirmed") ||
+                (status.equals("pending") || status.equals("pending_payment") ||
+                        status.equals("confirmed") ||
                         status.equals("shipping") || status.equals("completed") ||
                         status.equals("cancelled"));
     }

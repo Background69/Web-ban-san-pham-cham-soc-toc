@@ -104,6 +104,12 @@ public class CheckoutController extends HttpServlet {
         String shippingMethod = request.getParameter("shippingMethod");
         String paymentMethod = request.getParameter("paymentMethod");
 
+        if (!isValidPaymentMethod(paymentMethod)) {
+            request.setAttribute("error", "Phương thức thanh toán không hợp lệ.");
+            doGet(request, response);
+            return;
+        }
+
         ShippingAddress address = null;
 
         Integer addressId = ValidationUtil.parseIntSafe(addressIdParam);
@@ -122,12 +128,20 @@ public class CheckoutController extends HttpServlet {
 
         Map<Integer, Integer> cartMap = cart.toVariantQuantityMap();
 
+        String initialStatus;
+        if ("cod".equalsIgnoreCase(paymentMethod)) {
+            initialStatus = "pending";           // COD: chờ xác nhận
+        } else {
+            initialStatus = "pending_payment";   // bank_transfer & VNPAY: chờ thanh toán
+        }
+
         Order order = orderService.createOrder(
                 user.getUserId(),
                 cartMap,
                 address,
                 shippingMethod != null ? shippingMethod : "standard",
-                paymentMethod != null ? paymentMethod : "cod"
+                paymentMethod,
+                initialStatus
         );
 
         if (order != null) {
@@ -153,6 +167,17 @@ public class CheckoutController extends HttpServlet {
                 return;
             }
 
+            if ("VNPAY".equalsIgnoreCase(order.getPaymentMethod())) {
+                String vnpayRedirect = request.getContextPath() + "/vnpay/create-payment"
+                        + "?orderId=" + order.getOrderId();
+                response.sendRedirect(vnpayRedirect);
+                return;
+            }
+
+            // COD: set success message rồi redirect đến order detail
+            SessionUtil.setSuccessMessage(session,
+                    "Đặt hàng thành công! Mã đơn hàng: " + order.getOrderCode()
+                    + ". Bạn sẽ thanh toán khi nhận hàng.");
             response.sendRedirect(request.getContextPath() + "/orders/" + order.getOrderId());
         } else {
             request.setAttribute("error", orderService.getLastError() != null ?
@@ -175,5 +200,12 @@ public class CheckoutController extends HttpServlet {
                 request.getParameter("specificAddress"),
                 request.getParameter("note")
         );
+    }
+
+    private boolean isValidPaymentMethod(String method) {
+        return method != null
+                && ("cod".equalsIgnoreCase(method)
+                || "bank_transfer".equalsIgnoreCase(method)
+                || "VNPAY".equalsIgnoreCase(method));
     }
 }

@@ -217,7 +217,9 @@ public class BankTransferService {
         }
 
         Order order = orderDAO.findById(orderId);
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return;
         }
 
@@ -230,7 +232,9 @@ public class BankTransferService {
         }
 
         Order order = orderDAO.findById(orderId);
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return;
         }
 
@@ -267,7 +271,7 @@ public class BankTransferService {
             code = String.valueOf(System.currentTimeMillis());
         }
 
-        String transferContent = "HG" + code;
+        String transferContent = "TT DH " + code;
         if (transferContent.length() > 25) {
             transferContent = transferContent.substring(0, 25);
         }

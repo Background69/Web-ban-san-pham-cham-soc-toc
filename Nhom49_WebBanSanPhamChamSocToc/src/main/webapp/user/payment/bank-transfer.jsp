@@ -138,15 +138,15 @@
                 <div class="col-lg-7">
                     <div class="transfer-info">
                         <p><span class="transfer-label">Ngân hàng:</span>
-                            <strong>${paymentTransaction.bankName}</strong></p>
+                            <strong><c:out value="${paymentTransaction.bankName}"/></strong></p>
                         <p><span class="transfer-label">Số tài khoản:</span>
-                            <strong>${paymentTransaction.bankAccount}</strong></p>
+                            <strong><c:out value="${paymentTransaction.bankAccount}"/></strong></p>
                         <p><span class="transfer-label">Chủ tài khoản:</span>
-                            <strong>${paymentTransaction.accountHolder}</strong></p>
+                            <strong><c:out value="${paymentTransaction.accountHolder}"/></strong></p>
                         <p><span class="transfer-label">Số tiền:</span>
                             <strong><fmt:formatNumber value="${paymentTransaction.amount}" type="number"/>đ</strong></p>
                         <p><span class="transfer-label">Nội dung CK:</span>
-                            <span class="transfer-content">${paymentTransaction.transferContent}</span></p>
+                            <span class="transfer-content"><c:out value="${paymentTransaction.transferContent}"/></span></p>
                         <p><span class="transfer-label">Hạn thanh toán:</span>
                             <c:choose>
                                 <c:when test="${not empty paymentTransaction.expiresAt}">
@@ -170,6 +170,19 @@
                                 Tôi đã chuyển khoản (Demo)
                             </button>
                         </form>
+                    </c:if>
+
+                    <c:if test="${paymentTransaction.status == 'PENDING'}">
+                        <div class="demo-note" style="margin-top: 16px; border-color: #3b82f6; background: #eff6ff; color: #1e40af;">
+                            <strong><i class="fas fa-info-circle" style="margin-right: 4px;"></i> Hướng dẫn thanh toán:</strong>
+                            <ul style="margin: 8px 0 0 16px; padding: 0; line-height: 1.7;">
+                                <li>Quét mã QR hoặc chuyển khoản thủ công theo thông tin bên trên.</li>
+                                <li><strong>Nội dung chuyển khoản phải chính xác</strong> để hệ thống đối soát.</li>
+                                <li>Sau khi chuyển khoản, đơn hàng sẽ được nhân viên xác nhận
+                                    trong vòng <strong>24 giờ</strong> (ngày làm việc).</li>
+                                <li>Nếu cần hỗ trợ, vui lòng liên hệ hotline: <strong>1900-xxxx</strong>.</li>
+                            </ul>
+                        </div>
                     </c:if>
 
                     <div class="mt-3 d-flex gap-2 flex-wrap">

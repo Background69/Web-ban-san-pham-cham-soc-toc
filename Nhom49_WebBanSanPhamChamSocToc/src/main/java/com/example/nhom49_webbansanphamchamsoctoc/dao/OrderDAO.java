@@ -252,6 +252,15 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(0) > 0);
     }
 
+    public Order findByOrderCode(String orderCode) {
+        String sql = "SELECT * FROM orders WHERE order_code = :orderCode";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("orderCode", orderCode)
+                .map((rs, ctx) -> mapOrder(rs))
+                .findFirst()
+                .orElse(null));
+    }
+
     public java.util.Map<String, Object> getDailyStats(java.util.Date startDate, java.util.Date endDate) {
         // Validate input
         if (startDate == null || endDate == null) {
