@@ -47,6 +47,28 @@ public class ProductManagementController extends HttpServlet {
 
         String action = request.getParameter("action");
 
+        if ("get".equals(action)) {
+            int id = parseIntSafe(request.getParameter("id"));
+            Product product = productService.getProductById(id);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(
+                    "{"
+                            + "\"id\":" + product.getProductId() + ","
+                            + "\"name\":\"" + product.getProductName() + "\","
+                            + "\"slug\":\"" + product.getProductSlug() + "\","
+                            + "\"origin\":\"" + product.getOrigin() + "\","
+                            + "\"categoryId\":" + product.getCategoryId() + ","
+                            + "\"brandId\":" + product.getBrandId() + ","
+                            + "\"shortDescription\":\"" + product.getShortDescription() + "\","
+                            + "\"fullDescription\":\"" + product.getFullDescription() + "\","
+                            + "\"ingredients\":\"" + product.getIngredients() + "\","
+                            + "\"usageInstructions\":\"" + product.getUsageInstructions() + "\""
+                            + "}"
+            );
+            return;
+        }
+
         if ("delete".equals(action)) {
             int id = parseIntSafe(request.getParameter("id"));
             if (id > 0) {
