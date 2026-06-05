@@ -114,7 +114,13 @@ public class CheckoutController extends HttpServlet {
 
         Integer addressId = ValidationUtil.parseIntSafe(addressIdParam);
         if (addressId != null) {
-            address = shippingService.getAddressById(addressId);
+            address = shippingService.getAddressByIdAndUserId(addressId, user.getUserId());
+            if (address == null) {
+                // addressId được gửi lên nhưng không thuộc user hiện tại → từ chối
+                request.setAttribute("error", "Địa chỉ không hợp lệ hoặc không thuộc tài khoản của bạn.");
+                doGet(request, response);
+                return;
+            }
         }
 
         if (address == null) {
