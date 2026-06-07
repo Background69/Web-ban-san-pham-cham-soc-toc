@@ -33,6 +33,7 @@ public class BrandManagementController extends HttpServlet {
     public void init() {
         brandDAO = new BrandDAO();
     }
+
     // ================== GET ==================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -114,14 +115,14 @@ public class BrandManagementController extends HttpServlet {
         brand.setShortDescription(request.getParameter("shortDescription"));
         brand.setFullDescription(request.getParameter("fullDescription"));
 
-        if (brand.getBrandName()==null|| brand.getBrandName().trim().isEmpty()) {
-            request.setAttribute("branderror","Tên thương hiệu không được để trống");
-            request.setAttribute("brand",brand);
-            request.getRequestDispatcher("/admin/brand/form.jsp").forward(request,response);
+        if (brand.getBrandName() == null || brand.getBrandName().trim().isEmpty()) {
+            request.setAttribute("branderror", "Tên thương hiệu không được để trống");
+            request.setAttribute("brand", brand);
+            request.getRequestDispatcher("/admin/brand/form.jsp").forward(request, response);
             return;
         }
 
-        try{
+        try {
             boolean isAdd = (idStr == null || idStr.isEmpty());
             int brandId = -1;
 
@@ -136,7 +137,12 @@ public class BrandManagementController extends HttpServlet {
             } else {
                 brandId = Integer.parseInt(idStr);
                 brand.setBrandId(brandId);
-                // update textual fields first
+
+                Brand oldBrand = brandDAO.findById(brandId);
+                if (oldBrand != null) {
+                    brand.setLogoUrl(oldBrand.getLogoUrl());
+                }
+
                 brandDAO.update(brand);
             }
 
@@ -157,7 +163,7 @@ public class BrandManagementController extends HttpServlet {
                 byte[] fileBytes = logoPart.getInputStream().readAllBytes();
                 String publicId = "brand-" + (brand.getBrandSlug() != null && !brand.getBrandSlug().isBlank() ? brand.getBrandSlug() : brandId) + "-" + java.util.UUID.randomUUID();
 
-                Map<?, ?> result = com.example.nhom49_webbansanphamchamsoctoc.util.CloudinaryConfig.getInstance()
+                Map<?, ?> result = CloudinaryConfig.getInstance()
                         .uploader()
                         .upload(
                                 fileBytes,
@@ -179,7 +185,7 @@ public class BrandManagementController extends HttpServlet {
                 brandDAO.update(brand);
             }
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("branderror", "Không thể lưu thương hiệu");
             request.setAttribute("brand", brand);
