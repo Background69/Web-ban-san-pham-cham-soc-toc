@@ -1,63 +1,41 @@
-/**
- * Order History Tabs — SPA Experience
- * ====================================
- * 1. Sliding Tab Indicator (thanh trượt xanh lục bảo)
- * 2. Client-side Filtering (không reload trang)
- * 3. Fade Animation (mượt mà, stagger effect)
- */
-
 (function () {
     'use strict';
 
-    // ── DOM References ──────────────────────────────────
     const tabContainer = document.getElementById('orderFilterTabs');
-    const ordersList   = document.getElementById('ordersListContainer');
-    const emptyState   = document.getElementById('emptyStateFiltered');
+    const ordersList = document.getElementById('ordersListContainer');
+    const emptyState = document.getElementById('emptyStateFiltered');
 
     if (!tabContainer || !ordersList) return;
 
-    const tabs      = tabContainer.querySelectorAll('.order-filter-btn');
+    const tabs = tabContainer.querySelectorAll('.order-filter-btn');
     const indicator = tabContainer.querySelector('.tab-indicator');
-    const allCards  = ordersList.querySelectorAll('.order-card[data-order-status]');
+    const allCards = ordersList.querySelectorAll('.order-card[data-order-status]');
 
     if (!indicator || tabs.length === 0) return;
 
-    let isAnimating = false; // Lock để tránh click liên tục khi đang animate
-
-    // ── 1. SLIDING INDICATOR ────────────────────────────
-
-    /**
-     * Di chuyển indicator đến đúng vị trí và độ rộng của tab
-     * @param {HTMLElement} tab - Tab đích
-     * @param {boolean} instant - Nếu true, không có transition (dùng cho lần load đầu)
-     */
+    let isAnimating = false;
     function moveIndicator(tab, instant) {
         if (!tab || !indicator) return;
 
-        var tabRect      = tab.getBoundingClientRect();
+        var tabRect = tab.getBoundingClientRect();
         var containerRect = tabContainer.getBoundingClientRect();
-        var scrollLeft    = tabContainer.scrollLeft;
+        var scrollLeft = tabContainer.scrollLeft;
 
-        var left  = tabRect.left - containerRect.left + scrollLeft;
+        var left = tabRect.left - containerRect.left + scrollLeft;
         var width = tabRect.width;
 
         if (instant) {
             indicator.style.transition = 'none';
         }
 
-        indicator.style.left  = left + 'px';
+        indicator.style.left = left + 'px';
         indicator.style.width = width + 'px';
 
         if (instant) {
-            // Force reflow để áp dụng style không transition
-            indicator.offsetHeight; // eslint-disable-line no-unused-expressions
+            indicator.offsetHeight;
             indicator.style.transition = '';
         }
     }
-
-    /**
-     * Set active class cho tab + cập nhật indicator
-     */
     function setActiveTab(targetTab) {
         tabs.forEach(function (t) {
             t.classList.remove('active');
@@ -66,14 +44,9 @@
         moveIndicator(targetTab, false);
     }
 
-    // ── 2. CLIENT-SIDE FILTERING ────────────────────────
 
-    /**
-     * Lọc order cards theo trạng thái — không reload trang
-     * @param {string} status - Tên status hoặc 'all'
-     */
     function filterOrders(status) {
-        var matchedCards   = [];
+        var matchedCards = [];
         var unmatchedCards = [];
 
         allCards.forEach(function (card) {
@@ -107,41 +80,27 @@
         // Stagger effect: từng card xuất hiện lần lượt
         matchedCards.forEach(function (card, index) {
             card.classList.remove('card-appear');
-            // Force reflow
-            card.offsetHeight; // eslint-disable-line no-unused-expressions
+            card.offsetHeight;
             card.style.animationDelay = (index * 60) + 'ms';
             card.classList.add('card-appear');
         });
     }
 
-    // ── 3. FADE ANIMATION ORCHESTRATOR ──────────────────
-
-    /**
-     * Hiệu ứng chuyển đổi mượt mà:
-     * B1: Fade out danh sách cũ (trượt xuống + mờ dần)
-     * B2: setTimeout → đổi display none/block cho cards
-     * B3: Fade in danh sách mới (trượt lên + rõ dần)
-     */
     function animateTransition(status) {
         if (isAnimating) return;
         isAnimating = true;
 
-        // B1: Fade out
         ordersList.classList.remove('fade-in');
         ordersList.classList.add('fade-out');
 
-        // B2: Sau khi fade out xong (250ms) → lọc + fade in
         setTimeout(function () {
             filterOrders(status);
 
-            // B3: Fade in
             ordersList.classList.remove('fade-out');
             ordersList.classList.add('fade-in');
 
-            // Dọn dẹp class sau animation
             setTimeout(function () {
                 ordersList.classList.remove('fade-in');
-                // Xóa stagger delay
                 allCards.forEach(function (card) {
                     card.style.animationDelay = '';
                     card.classList.remove('card-appear');
@@ -151,7 +110,6 @@
         }, 250);
     }
 
-    // ── EVENT LISTENERS ─────────────────────────────────
 
     tabs.forEach(function (tab) {
         tab.addEventListener('click', function (e) {
@@ -181,7 +139,6 @@
         });
     });
 
-    // ── INITIALIZATION ──────────────────────────────────
 
     // Tìm tab active ban đầu (từ server) và đặt indicator
     var initialActive = tabContainer.querySelector('.order-filter-btn.active');
