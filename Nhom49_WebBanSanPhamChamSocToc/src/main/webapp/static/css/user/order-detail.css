@@ -834,3 +834,191 @@
         border-radius: 12px;
     }
 }
+
+.order-contextual-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: stretch;
+    margin-bottom: 24px;
+    padding: 24px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    animation: fadeInUp 0.6s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.order-contextual-actions--duo {
+    justify-content: center;
+}
+
+.od-ctx-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.od-ctx-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 100%
+    );
+    transition: left 0.5s ease;
+}
+
+.od-ctx-btn:hover::before {
+    left: 100%;
+}
+
+.od-ctx-btn__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.od-ctx-btn:hover .od-ctx-btn__icon {
+    transform: scale(1.15);
+}
+
+.od-ctx-btn__label {
+    position: relative;
+    z-index: 1;
+}
+
+.od-ctx-btn__arrow {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    opacity: 0.7;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.od-ctx-btn:hover .od-ctx-btn__arrow {
+    transform: translateX(3px);
+    opacity: 1;
+}
+
+.od-ctx-btn--primary {
+    background: linear-gradient(135deg, #0d9488, #10b981);
+    color: #fff;
+    box-shadow:
+        0 4px 14px rgba(13, 148, 136, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.od-ctx-btn--primary:hover {
+    background: linear-gradient(135deg, #0f766e, #059669);
+    box-shadow:
+        0 8px 28px rgba(13, 148, 136, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+.od-ctx-btn--primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+}
+
+.od-ctx-btn--ghost {
+    background: transparent;
+    color: #0d9488;
+    border: 2px solid #0d9488;
+}
+
+.od-ctx-btn--ghost:hover {
+    background: rgba(13, 148, 136, 0.06);
+    border-color: #0f766e;
+    color: #0f766e;
+    box-shadow:
+        0 6px 20px rgba(13, 148, 136, 0.15),
+        0 0 0 3px rgba(13, 148, 136, 0.06);
+    transform: translateY(-2px);
+}
+
+.od-ctx-btn--ghost:active {
+    transform: translateY(0);
+    background: rgba(13, 148, 136, 0.1);
+}
+
+.od-ctx-btn--ghost .od-ctx-btn__icon {
+    color: #14b8a6;
+}
+
+.order-contextual-actions--duo .od-ctx-btn {
+    min-width: 200px;
+    flex: 0 1 auto;
+}
+
+@media (max-width: 768px) {
+    .order-contextual-actions {
+        padding: 18px;
+        gap: 12px;
+        border-radius: 16px;
+    }
+
+    .order-contextual-actions--duo {
+        flex-direction: row;
+    }
+
+    .order-contextual-actions--duo .od-ctx-btn {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .od-ctx-btn {
+        padding: 13px 20px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-contextual-actions {
+        padding: 14px;
+        gap: 10px;
+        border-radius: 14px;
+    }
+
+    .order-contextual-actions--duo {
+        flex-direction: column;
+    }
+
+    .order-contextual-actions--duo .od-ctx-btn {
+        flex: 1;
+        width: 100%;
+    }
+
+    .od-ctx-btn {
+        padding: 12px 16px;
+        font-size: 13px;
+        border-radius: 12px;
+    }
+
+    .od-ctx-btn__arrow {
+        display: none;
+    }
+}

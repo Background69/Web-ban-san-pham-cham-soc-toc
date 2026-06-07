@@ -307,6 +307,43 @@
             </div>
         </div>
 
+        <c:choose>
+            <%-- Đang giao hàng --%>
+            <c:when test="${order.orderStatus == 'shipping'}">
+                <div class="order-contextual-actions">
+                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}/tracking"
+                       class="od-ctx-btn od-ctx-btn--primary" id="btn-track-order">
+                        <span class="od-ctx-btn__icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                        <span class="od-ctx-btn__label">Xem vị trí đơn hàng</span>
+                        <span class="od-ctx-btn__arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </c:when>
+
+            <%-- Hoàn thành --%>
+            <c:when test="${order.orderStatus == 'completed'}">
+                <div class="order-contextual-actions order-contextual-actions--duo">
+                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}/reorder"
+                       class="od-ctx-btn od-ctx-btn--primary" id="btn-reorder">
+                        <span class="od-ctx-btn__icon">
+                            <i class="fas fa-cart-plus"></i>
+                        </span>
+                        <span class="od-ctx-btn__label">Mua lại trọn bộ</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}/review"
+                       class="od-ctx-btn od-ctx-btn--ghost" id="btn-write-review">
+                        <span class="od-ctx-btn__icon">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="od-ctx-btn__label">Viết đánh giá</span>
+                    </a>
+                </div>
+            </c:when>
+        </c:choose>
         <div class="od-summary">
             <div class="od-summary__breakdown">
                 <div class="od-summary__row">
