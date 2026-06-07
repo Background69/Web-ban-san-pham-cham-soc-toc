@@ -34,53 +34,52 @@
                     </h3>
                 </div>
 
-        <!-- Order Filter Tabs (SPA Sliding Tabs) -->
-        <div class="order-filter-tabs" id="orderFilterTabs">
-            <button type="button" class="order-filter-btn ${empty status || status == 'all' ? 'active' : ''}"
+        <nav class="order-tabs-nav" id="orderFilterTabs">
+            <button type="button" class="order-tab ${empty status || status == 'all' ? 'active' : ''}"
                     data-target="all">
-                Tất cả
+                <span class="order-tab__label">Tất cả</span>
                 <c:if test="${orderCounts != null}">
-                    <span class="count">${orderCounts.all}</span>
+                    <span class="order-tab__count">${orderCounts.all}</span>
                 </c:if>
             </button>
-            <button type="button" class="order-filter-btn ${status == 'pending' ? 'active' : ''}"
+            <button type="button" class="order-tab ${status == 'pending' ? 'active' : ''}"
                     data-target="pending">
-                <i class="fas fa-clock"></i> Chờ xác nhận
+                <span class="order-tab__label">Chờ xác nhận</span>
                 <c:if test="${orderCounts != null && orderCounts.pending > 0}">
-                    <span class="count">${orderCounts.pending}</span>
+                    <span class="order-tab__count">${orderCounts.pending}</span>
                 </c:if>
             </button>
-            <button type="button" class="order-filter-btn ${status == 'confirmed' ? 'active' : ''}"
+            <button type="button" class="order-tab ${status == 'confirmed' ? 'active' : ''}"
                     data-target="confirmed">
-                <i class="fas fa-check"></i> Đã xác nhận
+                <span class="order-tab__label">Đã xác nhận</span>
                 <c:if test="${orderCounts != null && orderCounts.confirmed > 0}">
-                    <span class="count">${orderCounts.confirmed}</span>
+                    <span class="order-tab__count">${orderCounts.confirmed}</span>
                 </c:if>
             </button>
-            <button type="button" class="order-filter-btn ${status == 'shipping' ? 'active' : ''}"
+            <button type="button" class="order-tab ${status == 'shipping' ? 'active' : ''}"
                     data-target="shipping">
-                <i class="fas fa-truck"></i> Đang giao
+                <span class="order-tab__label">Đang giao</span>
                 <c:if test="${orderCounts != null && orderCounts.shipping > 0}">
-                    <span class="count">${orderCounts.shipping}</span>
+                    <span class="order-tab__count">${orderCounts.shipping}</span>
                 </c:if>
             </button>
-            <button type="button" class="order-filter-btn ${status == 'completed' ? 'active' : ''}"
+            <button type="button" class="order-tab ${status == 'completed' ? 'active' : ''}"
                     data-target="completed">
-                <i class="fas fa-check-circle"></i> Hoàn thành
+                <span class="order-tab__label">Hoàn thành</span>
                 <c:if test="${orderCounts != null && orderCounts.completed > 0}">
-                    <span class="count">${orderCounts.completed}</span>
+                    <span class="order-tab__count">${orderCounts.completed}</span>
                 </c:if>
             </button>
-            <button type="button" class="order-filter-btn ${status == 'cancelled' ? 'active' : ''}"
+            <button type="button" class="order-tab ${status == 'cancelled' ? 'active' : ''}"
                     data-target="cancelled">
-                <i class="fas fa-times-circle"></i> Đã hủy
+                <span class="order-tab__label">Đã hủy</span>
                 <c:if test="${orderCounts != null && orderCounts.cancelled > 0}">
-                    <span class="count">${orderCounts.cancelled}</span>
+                    <span class="order-tab__count">${orderCounts.cancelled}</span>
                 </c:if>
             </button>
             <!-- Sliding Indicator -->
             <div class="tab-indicator"></div>
-        </div>
+        </nav>
 
         <!-- Orders List -->
         <div class="orders-list" id="ordersListContainer">

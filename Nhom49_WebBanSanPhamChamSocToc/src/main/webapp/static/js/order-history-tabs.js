@@ -7,7 +7,7 @@
 
     if (!tabContainer || !ordersList) return;
 
-    const tabs = tabContainer.querySelectorAll('.order-filter-btn');
+    const tabs = tabContainer.querySelectorAll('.order-tab');
     const indicator = tabContainer.querySelector('.tab-indicator');
     const allCards = ordersList.querySelectorAll('.order-card[data-order-status]');
 
@@ -141,7 +141,7 @@
 
 
     // Tìm tab active ban đầu (từ server) và đặt indicator
-    var initialActive = tabContainer.querySelector('.order-filter-btn.active');
+    var initialActive = tabContainer.querySelector('.order-tab.active');
     if (!initialActive) {
         initialActive = tabs[0];
         if (initialActive) initialActive.classList.add('active');
@@ -163,7 +163,7 @@
     window.addEventListener('resize', function () {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
-            var active = tabContainer.querySelector('.order-filter-btn.active');
+            var active = tabContainer.querySelector('.order-tab.active');
             if (active) {
                 moveIndicator(active, true);
             }
