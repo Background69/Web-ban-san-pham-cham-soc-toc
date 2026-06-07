@@ -26,9 +26,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
-import java.util.Locale;
 import java.util.List;
 import java.util.UUID;
+
+import com.google.gson.Gson;
+
+import java.util.LinkedHashMap;
 
 @MultipartConfig
 @WebServlet(name = "ProductManagementController", urlPatterns = "/admin/products")
@@ -40,6 +43,7 @@ public class ProductManagementController extends HttpServlet {
     private final BrandDAO brandDAO = new BrandDAO();
     private final ProductImgDAO productImgDAO = new ProductImgDAO();
     private final ProductService productService = new ProductService();
+    private final Gson gson = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -49,23 +53,38 @@ public class ProductManagementController extends HttpServlet {
 
         if ("get".equals(action)) {
             int id = parseIntSafe(request.getParameter("id"));
-            Product product = productService.getProductById(id);
+
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(
-                    "{"
-                            + "\"id\":" + product.getProductId() + ","
-                            + "\"name\":\"" + product.getProductName() + "\","
-                            + "\"slug\":\"" + product.getProductSlug() + "\","
-                            + "\"origin\":\"" + product.getOrigin() + "\","
-                            + "\"categoryId\":" + product.getCategoryId() + ","
-                            + "\"brandId\":" + product.getBrandId() + ","
-                            + "\"shortDescription\":\"" + product.getShortDescription() + "\","
-                            + "\"fullDescription\":\"" + product.getFullDescription() + "\","
-                            + "\"ingredients\":\"" + product.getIngredients() + "\","
-                            + "\"usageInstructions\":\"" + product.getUsageInstructions() + "\""
-                            + "}"
-            );
+
+            if (id <= 0) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\":\"Invalid product id\"}");
+                return;
+            }
+
+            Product product = productService.getProductById(id);
+
+            if (product == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"error\":\"Product not found\"}");
+                return;
+            }
+
+            Map<String, Object> data = new LinkedHashMap<>();
+            data.put("id", product.getProductId());
+            data.put("productId", product.getProductId());
+            data.put("name", product.getProductName());
+            data.put("slug", product.getProductSlug());
+            data.put("origin", product.getOrigin());
+            data.put("categoryId", product.getCategoryId());
+            data.put("brandId", product.getBrandId());
+            data.put("shortDescription", product.getShortDescription());
+            data.put("fullDescription", product.getFullDescription());
+            data.put("ingredients", product.getIngredients());
+            data.put("usageInstructions", product.getUsageInstructions());
+
+            response.getWriter().write(gson.toJson(data));
             return;
         }
 

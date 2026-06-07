@@ -8,28 +8,7 @@
     <meta charset="UTF-8">
     <title>Quản lý thương hiệu</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
-    <style>
-        .thumb {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-            border-radius: 8px;
-            border: 1px solid #eee;
-            background: #f9f9f9;
-        }
-
-        .thumb-placeholder {
-            width: 52px;
-            height: 52px;
-            border-radius: 8px;
-            background: #f3f4f6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: #9ca3af;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/branchmanagement.css">
 </head>
 
 <body>
@@ -100,13 +79,13 @@
                     </td>
                     <td>${b.brandName}</td>
                     <td>${b.shortDescription}</td>
-                    <td>
-                        <a class="edit"
+                    <td class="action-cell">
+                        <a class="action-btn edit"
                            href="${pageContext.request.contextPath}/admin/brands/edit?id=${b.brandId}">
                             Sửa
                         </a>
 
-                        <a class="delete"
+                        <a class="action-btn delete"
                            href="${pageContext.request.contextPath}/admin/brands/delete?id=${b.brandId}"
                            onclick="return confirm('Xóa thương hiệu này?')">
                             Xóa
