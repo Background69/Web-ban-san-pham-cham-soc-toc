@@ -34,58 +34,60 @@
                     </h3>
                 </div>
 
-        <!-- Order Filter Tabs -->
-        <div class="order-filter-tabs">
-            <a href="${pageContext.request.contextPath}/profile/orders"
-               class="order-filter-btn ${empty status || status == 'all' ? 'active' : ''}">
+        <!-- Order Filter Tabs (SPA Sliding Tabs) -->
+        <div class="order-filter-tabs" id="orderFilterTabs">
+            <button type="button" class="order-filter-btn ${empty status || status == 'all' ? 'active' : ''}"
+                    data-target="all">
                 Tất cả
                 <c:if test="${orderCounts != null}">
                     <span class="count">${orderCounts.all}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=pending"
-               class="order-filter-btn ${status == 'pending' ? 'active' : ''}">
+            </button>
+            <button type="button" class="order-filter-btn ${status == 'pending' ? 'active' : ''}"
+                    data-target="pending">
                 <i class="fas fa-clock"></i> Chờ xác nhận
                 <c:if test="${orderCounts != null && orderCounts.pending > 0}">
                     <span class="count">${orderCounts.pending}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=confirmed"
-               class="order-filter-btn ${status == 'confirmed' ? 'active' : ''}">
+            </button>
+            <button type="button" class="order-filter-btn ${status == 'confirmed' ? 'active' : ''}"
+                    data-target="confirmed">
                 <i class="fas fa-check"></i> Đã xác nhận
                 <c:if test="${orderCounts != null && orderCounts.confirmed > 0}">
                     <span class="count">${orderCounts.confirmed}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=shipping"
-               class="order-filter-btn ${status == 'shipping' ? 'active' : ''}">
+            </button>
+            <button type="button" class="order-filter-btn ${status == 'shipping' ? 'active' : ''}"
+                    data-target="shipping">
                 <i class="fas fa-truck"></i> Đang giao
                 <c:if test="${orderCounts != null && orderCounts.shipping > 0}">
                     <span class="count">${orderCounts.shipping}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=completed"
-               class="order-filter-btn ${status == 'completed' ? 'active' : ''}">
+            </button>
+            <button type="button" class="order-filter-btn ${status == 'completed' ? 'active' : ''}"
+                    data-target="completed">
                 <i class="fas fa-check-circle"></i> Hoàn thành
                 <c:if test="${orderCounts != null && orderCounts.completed > 0}">
                     <span class="count">${orderCounts.completed}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=cancelled"
-               class="order-filter-btn ${status == 'cancelled' ? 'active' : ''}">
+            </button>
+            <button type="button" class="order-filter-btn ${status == 'cancelled' ? 'active' : ''}"
+                    data-target="cancelled">
                 <i class="fas fa-times-circle"></i> Đã hủy
                 <c:if test="${orderCounts != null && orderCounts.cancelled > 0}">
                     <span class="count">${orderCounts.cancelled}</span>
                 </c:if>
-            </a>
+            </button>
+            <!-- Sliding Indicator -->
+            <div class="tab-indicator"></div>
         </div>
 
         <!-- Orders List -->
-        <div class="orders-list">
+        <div class="orders-list" id="ordersListContainer">
             <c:choose>
                 <c:when test="${not empty orders}">
                     <c:forEach var="order" items="${orders}">
-                        <div class="order-card">
+                        <div class="order-card" data-order-status="${order.orderStatus != null ? order.orderStatus.toLowerCase() : 'pending'}">
                             <div class="order-card-header">
                                 <div class="order-info">
                                     <span class="order-id">Đơn hàng #${order.orderCode}</span>
@@ -205,14 +207,7 @@
                         </div>
                         <h4 class="empty-state-title">Chưa có đơn hàng nào</h4>
                         <p class="empty-state-text">
-                            <c:choose>
-                                <c:when test="${not empty status && status != 'all'}">
-                                    Không có đơn hàng nào ở trạng thái này
-                                </c:when>
-                                <c:otherwise>
-                                    Hãy mua sắm để có đơn hàng đầu tiên!
-                                </c:otherwise>
-                            </c:choose>
+                            Hãy mua sắm để có đơn hàng đầu tiên!
                         </p>
                         <a href="${pageContext.request.contextPath}/store"
                            class="btn-profile btn-profile-primary">
@@ -221,6 +216,17 @@
                     </div>
                 </c:otherwise>
             </c:choose>
+
+            <!-- Empty state khi filter không có kết quả (ẩn mặc định) -->
+            <div class="empty-state empty-state-filtered" id="emptyStateFiltered" style="display: none;">
+                <div class="empty-state-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h4 class="empty-state-title">Không tìm thấy đơn hàng</h4>
+                <p class="empty-state-text">
+                    Không có đơn hàng nào ở trạng thái này
+                </p>
+            </div>
             </div>
         </div>
     </div>
@@ -229,7 +235,9 @@
 <jsp:include page="/layout/footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/order-history-tabs.js"></script>
 
 </body>
 
 </html>
+
