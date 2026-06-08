@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/order-detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cancel-order-modal.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -392,7 +393,100 @@
     </div>
 </main>
 
+<c:if test="${canCancelOrder}">
+<div class="cancel-order-modal" id="cancelOrderModal" role="dialog" aria-modal="true"
+     aria-labelledby="cancelModalTitle">
+    <div class="cancel-order-modal__backdrop"></div>
+    <div class="cancel-order-modal__dialog">
+
+        <button type="button" class="cancel-order-modal__close" id="cancelModalBtnClose"
+                aria-label="Đóng">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="cancel-order-modal__header">
+            <div class="cancel-order-modal__icon-wrap">
+                <i class="fas fa-heart-crack"></i>
+            </div>
+            <h2 class="cancel-order-modal__title" id="cancelModalTitle">
+                Bạn muốn hủy đơn hàng này?
+            </h2>
+            <p class="cancel-order-modal__subtitle">
+                <strong>HairGlow</strong> rất tiếc khi bạn muốn hủy đơn.
+                Bạn có thể chia sẻ lý do để chúng tôi nâng cấp dịch vụ tốt hơn không?
+            </p>
+        </div>
+
+        <div class="cancel-order-modal__body">
+            <div class="cancel-order-modal__reasons-label">
+                <i class="fas fa-list-check"></i> Lý do hủy đơn
+            </div>
+            <div class="cancel-order-modal__reasons">
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi muốn đổi mùi hương khác">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-spray-can-sparkles"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi muốn đổi mùi hương khác</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi nhập sai địa chỉ nhận hàng">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-map-location-dot"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi nhập sai địa chỉ nhận hàng</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi muốn mua thêm sản phẩm khác">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-cart-plus"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi muốn mua thêm sản phẩm khác</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="other">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-pen-fancy"></i></span>
+                        <span class="cancel-reason-chip__text">Lý do khác</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="cancel-order-modal__other-input-wrap" id="cancelReasonOtherWrap">
+                <textarea class="cancel-order-modal__other-input" id="cancelReasonOtherText"
+                          placeholder="Chia sẻ lý do cụ thể của bạn..." rows="3" maxlength="500"></textarea>
+            </div>
+        </div>
+
+        <div class="cancel-order-modal__error" id="cancelModalError">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Vui lòng chọn một lý do hủy đơn.</span>
+        </div>
+
+        <div class="cancel-order-modal__footer">
+            <button type="button" class="cancel-order-modal__btn-confirm" id="cancelModalBtnConfirm">
+                <i class="fas fa-times-circle"></i>
+                Xác nhận hủy đơn
+            </button>
+            <button type="button" class="cancel-order-modal__btn-keep" id="cancelModalBtnKeep">
+                <i class="fas fa-heart"></i>
+                Giữ lại đơn hàng
+            </button>
+        </div>
+    </div>
+</div>
+<form id="cancelOrderHiddenForm"
+      action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel"
+      method="post" style="display:none;">
+    <input type="hidden" name="cancelReason" id="cancelOrderHiddenReason" value="">
+</form>
+</c:if>
 <jsp:include page="/layout/footer.jsp"/>
+<script src="${pageContext.request.contextPath}/static/js/cancel-order-modal.js"></script>
 </body>
 
 </html>
