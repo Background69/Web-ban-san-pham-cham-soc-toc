@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/order-detail.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cancel-order-modal.css">
+    <meta name="ctx" content="${pageContext.request.contextPath}">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -298,6 +299,18 @@
                                 </span>
                                 <span class="od-product-item__qty">× ${item.quantity}</span>
                             </div>
+                            <c:if test="${order.orderStatus == 'completed'}">
+                                <button type="button"
+                                        class="btn-review-product"
+                                        data-product-id="${item.productId}"
+                                        data-order-id="${order.orderId}"
+                                        data-item-id="${item.orderItemId}"
+                                        data-product-name="${item.productName}"
+                                        data-product-img="<c:choose><c:when test='${fn:startsWith(item.productImage, "http")}'>${item.productImage}</c:when><c:when test='${not empty item.productImage}'>${pageContext.request.contextPath}${fn:startsWith(item.productImage, "/") ? item.productImage : "/".concat(item.productImage)}</c:when><c:otherwise>${pageContext.request.contextPath}/static/assets/icons/LOGO.png</c:otherwise></c:choose>">
+                                    <i class="fas fa-star rv-sparkle-star"></i>
+                                    <span>Đánh giá</span>
+                                </button>
+                            </c:if>
                         </div>
 
                         <span class="od-product-item__total">
@@ -328,20 +341,16 @@
             <%-- Hoàn thành --%>
             <c:when test="${order.orderStatus == 'completed'}">
                 <div class="order-contextual-actions order-contextual-actions--duo">
-                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}/reorder"
-                       class="od-ctx-btn od-ctx-btn--primary" id="btn-reorder">
+                    <button type="button"
+                            class="od-ctx-btn od-ctx-btn--primary btn-reorder-fly"
+                            id="btn-reorder"
+                            data-order-id="${order.orderId}"
+                            data-reorder-url="${pageContext.request.contextPath}/orders/${order.orderId}/reorder">
                         <span class="od-ctx-btn__icon">
                             <i class="fas fa-cart-plus"></i>
                         </span>
-                        <span class="od-ctx-btn__label">Mua lại trọn bộ</span>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}/review"
-                       class="od-ctx-btn od-ctx-btn--ghost" id="btn-write-review">
-                        <span class="od-ctx-btn__icon">
-                            <i class="fas fa-star"></i>
-                        </span>
-                        <span class="od-ctx-btn__label">Viết đánh giá</span>
-                    </a>
+                        <span class="od-ctx-btn__label">Mua lại đơn hàng</span>
+                    </button>
                 </div>
             </c:when>
         </c:choose>
@@ -486,7 +495,68 @@
 </form>
 </c:if>
 <jsp:include page="/layout/footer.jsp"/>
+<c:if test="${order.orderStatus == 'completed'}">
+<div class="rv-modal-overlay" id="reviewModal" role="dialog" aria-modal="true">
+    <div class="rv-modal-dialog">
+
+        <button type="button" class="rv-modal__close" aria-label="Đóng">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="rv-modal__header">
+            <img src="" alt="" class="rv-modal__product-img">
+            <span class="rv-modal__product-name">Sản phẩm</span>
+            <span class="rv-modal__header-sub">Chia sẻ trải nghiệm của bạn</span>
+        </div>
+
+        <div class="rv-modal__body">
+            <div>
+                <div class="rv-modal__section-label">
+                    <i class="fas fa-star"></i> Chất lượng sản phẩm
+                </div>
+                <div class="rv-modal__stars">
+                    <span class="rv-star" data-value="1"></span>
+                    <span class="rv-star" data-value="2"></span>
+                    <span class="rv-star" data-value="3"></span>
+                    <span class="rv-star" data-value="4"></span>
+                    <span class="rv-star" data-value="5"></span>
+                </div>
+                <div class="rv-modal__rating-text">Chưa chấm điểm</div>
+            </div>
+            <div>
+                <div class="rv-modal__section-label">
+                    <i class="fas fa-camera"></i> Hình ảnh / Video
+                </div>
+                <label class="rv-modal__upload-label" for="reviewFileInput">
+                    <i class="fas fa-camera-retro rv-upload-icon"></i>
+                    <span class="rv-upload-text">Thêm hình ảnh mái tóc suôn mượt</span>
+                    <span class="rv-upload-hint">Chấp nhận JPG, PNG, MP4 (tối đa 5MB)</span>
+                </label>
+                <input type="file" class="rv-modal__file-input" id="reviewFileInput"
+                       accept="image/*,video/*" multiple>
+                <div class="rv-modal__img-preview"></div>
+            </div>
+            <div>
+                <div class="rv-modal__section-label">
+                    <i class="fas fa-pen-fancy"></i> Cảm nhận của bạn
+                </div>
+                <textarea class="rv-modal__textarea"
+                          placeholder="Hãy chia sẻ cảm nhận chân thực của bạn về sản phẩm nhé..."
+                          rows="4" maxlength="1000"></textarea>
+            </div>
+        </div>
+        <div class="rv-modal__footer">
+            <button type="button" class="rv-modal__cancel">Hủy bỏ</button>
+            <button type="button" class="rv-modal__submit">
+                <i class="fas fa-paper-plane"></i> Gửi đánh giá
+            </button>
+        </div>
+
+    </div>
+</div>
+</c:if>
 <script src="${pageContext.request.contextPath}/static/js/cancel-order-modal.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/review-reorder.js"></script>
 </body>
 
 </html>
