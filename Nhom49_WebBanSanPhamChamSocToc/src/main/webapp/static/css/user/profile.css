@@ -1,7 +1,3 @@
-/* ============================================
-   PROFILE SYSTEM - MODERN CSS ARCHITECTURE
-   ============================================ */
-
 :root {
     /* Primary Colors */
     --primary-green: #326e51;
@@ -43,11 +39,6 @@
     --radius-xl: 24px;
     --radius-full: 9999px;
 }
-
-
-/* ============================================
-   PROFILE CONTAINER
-   ============================================ */
 
 .profile-container {
     max-width: 1200px;
@@ -102,10 +93,6 @@
     background: var(--gray-50);
     min-height: 100vh;
 }
-
-/* ============================================
-   PROFILE HEADER CARD
-   ============================================ */
 
 .profile-header-card {
     background: white;
@@ -317,10 +304,6 @@
     border-color: var(--gray-400);
 }
 
-/* ============================================
-   STATISTICS CARDS
-   ============================================ */
-
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -405,10 +388,6 @@
     letter-spacing: 0.5px;
 }
 
-/* ============================================
-   TAB NAVIGATION
-   ============================================ */
-
 .tab-navigation {
     display: flex;
     flex-direction: column;
@@ -479,10 +458,6 @@
     color: var(--gray-600);
 }
 
-/* ============================================
-   TAB CONTENT
-   ============================================ */
-
 .tab-content {
     background: white;
     border-radius: var(--radius-lg);
@@ -512,10 +487,6 @@
 .tab-content-title i {
     color: var(--primary-green);
 }
-
-/* ============================================
-   QUICK ACTIONS
-   ============================================ */
 
 .quick-actions {
     background: white;
@@ -572,52 +543,166 @@
     color: white;
 }
 
-/* ============================================
-   ORDER CARDS (Enhanced)
-   ============================================ */
-
-.order-filter-tabs {
+.order-tabs-nav {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--gray-200);
+    width: 100%;
+    position: relative;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #E0E0E0;
 }
 
-.order-filter-btn {
-    padding: 8px 16px;
-    border-radius: var(--radius-full);
-    background: var(--gray-100);
-    color: var(--gray-600);
-    text-decoration: none;
+.order-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 8px;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    font-family: inherit;
     font-size: 14px;
     font-weight: 500;
-    transition: var(--transition);
+    color: #757575;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.order-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 20%;
+    width: 60%;
+    height: 2.5px;
+    background: #1B4D3E;
+    border-radius: 2px 2px 0 0;
+    opacity: 0;
+    transform: scaleX(0.4);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.order-tab:hover {
+    color: #1B4D3E;
+}
+
+.order-tab:hover::after {
+    opacity: 0.25;
+    transform: scaleX(1);
+}
+
+.order-tab.active {
+    color: #1B4D3E;
+    font-weight: 700;
+}
+
+.order-tab.active::after {
+    opacity: 0;
+}
+
+.order-tab__count {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    background: #EEEEEE;
+    color: #757575;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
-.order-filter-btn:hover {
-    background: var(--gray-200);
-    color: var(--gray-800);
+.order-tab.active .order-tab__count {
+    background: #1B4D3E;
+    color: #ffffff;
 }
 
-.order-filter-btn.active {
-    background: var(--primary-green);
-    color: white;
+.tab-indicator {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1B4D3E, #2a7a5f);
+    border-radius: 3px 3px 0 0;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 -1px 8px rgba(27, 77, 62, 0.25);
 }
 
-.order-filter-btn .count {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    font-size: 12px;
+.orders-list {
+    position: relative;
 }
 
-.order-filter-btn:not(.active) .count {
-    background: var(--gray-200);
+.orders-list.fade-out {
+    animation: ordersFadeOut 0.25s ease forwards;
+}
+
+.orders-list.fade-in {
+    animation: ordersFadeIn 0.35s ease forwards;
+}
+
+@keyframes ordersFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+}
+
+@keyframes ordersFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.order-card.card-appear {
+    animation: cardSlideIn 0.4s ease forwards;
+    opacity: 0;
+}
+
+@keyframes cardSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Empty state filtered */
+.empty-state-filtered {
+    padding: 50px 20px;
+}
+
+.empty-state-filtered .empty-state-icon {
+    background: rgba(27, 77, 62, 0.08);
+}
+
+.empty-state-filtered .empty-state-icon i {
+    color: #1B4D3E;
+    opacity: 0.5;
 }
 
 .order-card {
@@ -1545,10 +1630,6 @@
     }
 }
 
-/* ============================================
-   AVATAR UPLOAD SECTION
-   ============================================ */
-
 .avatar-section {
     padding-bottom: 24px;
     margin-bottom: 28px;
@@ -1816,12 +1897,8 @@
         font-size: 12px;
     }
 
-    .order-filter-tabs {
-        gap: 8px;
-    }
-
     .order-filter-btn {
-        padding: 6px 12px;
+        padding: 10px 14px;
         font-size: 13px;
     }
 }

@@ -47,7 +47,7 @@ public class LoginController extends HttpServlet {
             return;
         }
 
-        User user = authService.login(email, password);
+        User user = authService.login(email, password, request.getRemoteAddr());
 
         if (user == null) {
             request.setAttribute("error", authService.getLastError());

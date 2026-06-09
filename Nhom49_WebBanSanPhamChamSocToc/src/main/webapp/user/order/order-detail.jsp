@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/order-detail.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cancel-order-modal.css">
+    <meta name="ctx" content="${pageContext.request.contextPath}">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -297,6 +299,18 @@
                                 </span>
                                 <span class="od-product-item__qty">× ${item.quantity}</span>
                             </div>
+                            <c:if test="${order.orderStatus == 'completed'}">
+                                <button type="button"
+                                        class="btn-review-product"
+                                        data-product-id="${item.productId}"
+                                        data-order-id="${order.orderId}"
+                                        data-item-id="${item.orderItemId}"
+                                        data-product-name="${item.productName}"
+                                        data-product-img="<c:choose><c:when test='${fn:startsWith(item.productImage, "http")}'>${item.productImage}</c:when><c:when test='${not empty item.productImage}'>${pageContext.request.contextPath}${fn:startsWith(item.productImage, "/") ? item.productImage : "/".concat(item.productImage)}</c:when><c:otherwise>${pageContext.request.contextPath}/static/assets/icons/LOGO.png</c:otherwise></c:choose>">
+                                    <i class="fas fa-star rv-sparkle-star"></i>
+                                    <span>Đánh giá</span>
+                                </button>
+                            </c:if>
                         </div>
 
                         <span class="od-product-item__total">
@@ -307,6 +321,39 @@
             </div>
         </div>
 
+        <c:choose>
+            <%-- Đang giao hàng --%>
+            <c:when test="${order.orderStatus == 'shipping'}">
+                <div class="order-contextual-actions">
+                    <a href="${pageContext.request.contextPath}/orders/${order.orderId}/tracking"
+                       class="od-ctx-btn od-ctx-btn--primary" id="btn-track-order">
+                        <span class="od-ctx-btn__icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                        <span class="od-ctx-btn__label">Xem vị trí đơn hàng</span>
+                        <span class="od-ctx-btn__arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </c:when>
+
+            <%-- Hoàn thành --%>
+            <c:when test="${order.orderStatus == 'completed'}">
+                <div class="order-contextual-actions order-contextual-actions--duo">
+                    <button type="button"
+                            class="od-ctx-btn od-ctx-btn--primary btn-reorder-fly"
+                            id="btn-reorder"
+                            data-order-id="${order.orderId}"
+                            data-reorder-url="${pageContext.request.contextPath}/orders/${order.orderId}/reorder">
+                        <span class="od-ctx-btn__icon">
+                            <i class="fas fa-cart-plus"></i>
+                        </span>
+                        <span class="od-ctx-btn__label">Mua lại đơn hàng</span>
+                    </button>
+                </div>
+            </c:when>
+        </c:choose>
         <div class="od-summary">
             <div class="od-summary__breakdown">
                 <div class="od-summary__row">
@@ -355,7 +402,161 @@
     </div>
 </main>
 
+<c:if test="${canCancelOrder}">
+<div class="cancel-order-modal" id="cancelOrderModal" role="dialog" aria-modal="true"
+     aria-labelledby="cancelModalTitle">
+    <div class="cancel-order-modal__backdrop"></div>
+    <div class="cancel-order-modal__dialog">
+
+        <button type="button" class="cancel-order-modal__close" id="cancelModalBtnClose"
+                aria-label="Đóng">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="cancel-order-modal__header">
+            <div class="cancel-order-modal__icon-wrap">
+                <i class="fas fa-heart-crack"></i>
+            </div>
+            <h2 class="cancel-order-modal__title" id="cancelModalTitle">
+                Bạn muốn hủy đơn hàng này?
+            </h2>
+            <p class="cancel-order-modal__subtitle">
+                <strong>HairGlow</strong> rất tiếc khi bạn muốn hủy đơn.
+                Bạn có thể chia sẻ lý do để chúng tôi nâng cấp dịch vụ tốt hơn không?
+            </p>
+        </div>
+
+        <div class="cancel-order-modal__body">
+            <div class="cancel-order-modal__reasons-label">
+                <i class="fas fa-list-check"></i> Lý do hủy đơn
+            </div>
+            <div class="cancel-order-modal__reasons">
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi muốn đổi mùi hương khác">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-spray-can-sparkles"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi muốn đổi mùi hương khác</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi nhập sai địa chỉ nhận hàng">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-map-location-dot"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi nhập sai địa chỉ nhận hàng</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi muốn mua thêm sản phẩm khác">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-cart-plus"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi muốn mua thêm sản phẩm khác</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="other">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-pen-fancy"></i></span>
+                        <span class="cancel-reason-chip__text">Lý do khác</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="cancel-order-modal__other-input-wrap" id="cancelReasonOtherWrap">
+                <textarea class="cancel-order-modal__other-input" id="cancelReasonOtherText"
+                          placeholder="Chia sẻ lý do cụ thể của bạn..." rows="3" maxlength="500"></textarea>
+            </div>
+        </div>
+
+        <div class="cancel-order-modal__error" id="cancelModalError">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Vui lòng chọn một lý do hủy đơn.</span>
+        </div>
+
+        <div class="cancel-order-modal__footer">
+            <button type="button" class="cancel-order-modal__btn-confirm" id="cancelModalBtnConfirm">
+                <i class="fas fa-times-circle"></i>
+                Xác nhận hủy đơn
+            </button>
+            <button type="button" class="cancel-order-modal__btn-keep" id="cancelModalBtnKeep">
+                <i class="fas fa-heart"></i>
+                Giữ lại đơn hàng
+            </button>
+        </div>
+    </div>
+</div>
+<form id="cancelOrderHiddenForm"
+      action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel"
+      method="post" style="display:none;">
+    <input type="hidden" name="cancelReason" id="cancelOrderHiddenReason" value="">
+</form>
+</c:if>
 <jsp:include page="/layout/footer.jsp"/>
+<c:if test="${order.orderStatus == 'completed'}">
+<div class="rv-modal-overlay" id="reviewModal" role="dialog" aria-modal="true">
+    <div class="rv-modal-dialog">
+
+        <button type="button" class="rv-modal__close" aria-label="Đóng">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="rv-modal__header">
+            <img src="" alt="" class="rv-modal__product-img">
+            <span class="rv-modal__product-name">Sản phẩm</span>
+            <span class="rv-modal__header-sub">Chia sẻ trải nghiệm của bạn</span>
+        </div>
+
+        <div class="rv-modal__body">
+            <div>
+                <div class="rv-modal__section-label">
+                    <i class="fas fa-star"></i> Chất lượng sản phẩm
+                </div>
+                <div class="rv-modal__stars">
+                    <span class="rv-star" data-value="1"></span>
+                    <span class="rv-star" data-value="2"></span>
+                    <span class="rv-star" data-value="3"></span>
+                    <span class="rv-star" data-value="4"></span>
+                    <span class="rv-star" data-value="5"></span>
+                </div>
+                <div class="rv-modal__rating-text">Chưa chấm điểm</div>
+            </div>
+            <div>
+                <div class="rv-modal__section-label">
+                    <i class="fas fa-camera"></i> Hình ảnh / Video
+                </div>
+                <label class="rv-modal__upload-label" for="reviewFileInput">
+                    <i class="fas fa-camera-retro rv-upload-icon"></i>
+                    <span class="rv-upload-text">Thêm hình ảnh mái tóc suôn mượt</span>
+                    <span class="rv-upload-hint">Chấp nhận JPG, PNG, MP4 (tối đa 5MB)</span>
+                </label>
+                <input type="file" class="rv-modal__file-input" id="reviewFileInput"
+                       accept="image/*,video/*" multiple>
+                <div class="rv-modal__img-preview"></div>
+            </div>
+            <div>
+                <div class="rv-modal__section-label">
+                    <i class="fas fa-pen-fancy"></i> Cảm nhận của bạn
+                </div>
+                <textarea class="rv-modal__textarea"
+                          placeholder="Hãy chia sẻ cảm nhận chân thực của bạn về sản phẩm nhé..."
+                          rows="4" maxlength="1000"></textarea>
+            </div>
+        </div>
+        <div class="rv-modal__footer">
+            <button type="button" class="rv-modal__cancel">Hủy bỏ</button>
+            <button type="button" class="rv-modal__submit">
+                <i class="fas fa-paper-plane"></i> Gửi đánh giá
+            </button>
+        </div>
+
+    </div>
+</div>
+</c:if>
+<script src="${pageContext.request.contextPath}/static/js/cancel-order-modal.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/review-reorder.js"></script>
 </body>
 
 </html>

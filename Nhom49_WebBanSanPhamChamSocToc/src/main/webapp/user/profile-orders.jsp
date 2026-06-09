@@ -14,6 +14,7 @@
           rel="stylesheet"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/layout.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/profile.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/user/cancel-order-modal.css">
 </head>
 
 <body class="profile-page">
@@ -34,58 +35,59 @@
                     </h3>
                 </div>
 
-        <!-- Order Filter Tabs -->
-        <div class="order-filter-tabs">
-            <a href="${pageContext.request.contextPath}/profile/orders"
-               class="order-filter-btn ${empty status || status == 'all' ? 'active' : ''}">
-                Tất cả
+        <nav class="order-tabs-nav" id="orderFilterTabs">
+            <button type="button" class="order-tab ${empty status || status == 'all' ? 'active' : ''}"
+                    data-target="all">
+                <span class="order-tab__label">Tất cả</span>
                 <c:if test="${orderCounts != null}">
-                    <span class="count">${orderCounts.all}</span>
+                    <span class="order-tab__count">${orderCounts.all}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=pending"
-               class="order-filter-btn ${status == 'pending' ? 'active' : ''}">
-                <i class="fas fa-clock"></i> Chờ xác nhận
+            </button>
+            <button type="button" class="order-tab ${status == 'pending' ? 'active' : ''}"
+                    data-target="pending">
+                <span class="order-tab__label">Chờ xác nhận</span>
                 <c:if test="${orderCounts != null && orderCounts.pending > 0}">
-                    <span class="count">${orderCounts.pending}</span>
+                    <span class="order-tab__count">${orderCounts.pending}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=confirmed"
-               class="order-filter-btn ${status == 'confirmed' ? 'active' : ''}">
-                <i class="fas fa-check"></i> Đã xác nhận
+            </button>
+            <button type="button" class="order-tab ${status == 'confirmed' ? 'active' : ''}"
+                    data-target="confirmed">
+                <span class="order-tab__label">Đã xác nhận</span>
                 <c:if test="${orderCounts != null && orderCounts.confirmed > 0}">
-                    <span class="count">${orderCounts.confirmed}</span>
+                    <span class="order-tab__count">${orderCounts.confirmed}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=shipping"
-               class="order-filter-btn ${status == 'shipping' ? 'active' : ''}">
-                <i class="fas fa-truck"></i> Đang giao
+            </button>
+            <button type="button" class="order-tab ${status == 'shipping' ? 'active' : ''}"
+                    data-target="shipping">
+                <span class="order-tab__label">Đang giao</span>
                 <c:if test="${orderCounts != null && orderCounts.shipping > 0}">
-                    <span class="count">${orderCounts.shipping}</span>
+                    <span class="order-tab__count">${orderCounts.shipping}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=completed"
-               class="order-filter-btn ${status == 'completed' ? 'active' : ''}">
-                <i class="fas fa-check-circle"></i> Hoàn thành
+            </button>
+            <button type="button" class="order-tab ${status == 'completed' ? 'active' : ''}"
+                    data-target="completed">
+                <span class="order-tab__label">Hoàn thành</span>
                 <c:if test="${orderCounts != null && orderCounts.completed > 0}">
-                    <span class="count">${orderCounts.completed}</span>
+                    <span class="order-tab__count">${orderCounts.completed}</span>
                 </c:if>
-            </a>
-            <a href="${pageContext.request.contextPath}/profile/orders?status=cancelled"
-               class="order-filter-btn ${status == 'cancelled' ? 'active' : ''}">
-                <i class="fas fa-times-circle"></i> Đã hủy
+            </button>
+            <button type="button" class="order-tab ${status == 'cancelled' ? 'active' : ''}"
+                    data-target="cancelled">
+                <span class="order-tab__label">Đã hủy</span>
                 <c:if test="${orderCounts != null && orderCounts.cancelled > 0}">
-                    <span class="count">${orderCounts.cancelled}</span>
+                    <span class="order-tab__count">${orderCounts.cancelled}</span>
                 </c:if>
-            </a>
-        </div>
+            </button>
+            <!-- Sliding Indicator -->
+            <div class="tab-indicator"></div>
+        </nav>
 
         <!-- Orders List -->
-        <div class="orders-list">
+        <div class="orders-list" id="ordersListContainer">
             <c:choose>
                 <c:when test="${not empty orders}">
                     <c:forEach var="order" items="${orders}">
-                        <div class="order-card">
+                        <div class="order-card" data-order-status="${order.orderStatus != null ? order.orderStatus.toLowerCase() : 'pending'}">
                             <div class="order-card-header">
                                 <div class="order-info">
                                     <span class="order-id">Đơn hàng #${order.orderCode}</span>
@@ -205,14 +207,7 @@
                         </div>
                         <h4 class="empty-state-title">Chưa có đơn hàng nào</h4>
                         <p class="empty-state-text">
-                            <c:choose>
-                                <c:when test="${not empty status && status != 'all'}">
-                                    Không có đơn hàng nào ở trạng thái này
-                                </c:when>
-                                <c:otherwise>
-                                    Hãy mua sắm để có đơn hàng đầu tiên!
-                                </c:otherwise>
-                            </c:choose>
+                            Hãy mua sắm để có đơn hàng đầu tiên!
                         </p>
                         <a href="${pageContext.request.contextPath}/store"
                            class="btn-profile btn-profile-primary">
@@ -221,15 +216,117 @@
                     </div>
                 </c:otherwise>
             </c:choose>
+
+            <!-- Empty state khi filter không có kết quả (ẩn mặc định) -->
+            <div class="empty-state empty-state-filtered" id="emptyStateFiltered" style="display: none;">
+                <div class="empty-state-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h4 class="empty-state-title">Không tìm thấy đơn hàng</h4>
+                <p class="empty-state-text">
+                    Không có đơn hàng nào ở trạng thái này
+                </p>
+            </div>
             </div>
         </div>
     </div>
 </main>
 
+<div class="cancel-order-modal" id="cancelOrderModal" role="dialog" aria-modal="true"
+     aria-labelledby="cancelModalTitle">
+    <div class="cancel-order-modal__backdrop"></div>
+    <div class="cancel-order-modal__dialog">
+
+        <button type="button" class="cancel-order-modal__close" id="cancelModalBtnClose"
+                aria-label="Đóng">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="cancel-order-modal__header">
+            <div class="cancel-order-modal__icon-wrap">
+                <i class="fas fa-heart-crack"></i>
+            </div>
+            <h2 class="cancel-order-modal__title" id="cancelModalTitle">
+                Bạn muốn hủy đơn hàng này?
+            </h2>
+            <p class="cancel-order-modal__subtitle">
+                <strong>HairGlow</strong> rất tiếc khi bạn muốn hủy đơn.
+                Bạn có thể chia sẻ lý do để chúng tôi nâng cấp dịch vụ tốt hơn không?
+            </p>
+        </div>
+
+        <div class="cancel-order-modal__body">
+            <div class="cancel-order-modal__reasons-label">
+                <i class="fas fa-list-check"></i> Lý do hủy đơn
+            </div>
+            <div class="cancel-order-modal__reasons">
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi muốn đổi mùi hương khác">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-spray-can-sparkles"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi muốn đổi mùi hương khác</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi nhập sai địa chỉ nhận hàng">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-map-location-dot"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi nhập sai địa chỉ nhận hàng</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="Tôi muốn mua thêm sản phẩm khác">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-cart-plus"></i></span>
+                        <span class="cancel-reason-chip__text">Tôi muốn mua thêm sản phẩm khác</span>
+                    </div>
+                </label>
+                <label class="cancel-reason-chip">
+                    <input type="radio" name="cancelReason" value="other">
+                    <div class="cancel-reason-chip__content">
+                        <span class="cancel-reason-chip__radio-dot"></span>
+                        <span class="cancel-reason-chip__icon"><i class="fas fa-pen-fancy"></i></span>
+                        <span class="cancel-reason-chip__text">Lý do khác</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="cancel-order-modal__other-input-wrap" id="cancelReasonOtherWrap">
+                <textarea class="cancel-order-modal__other-input" id="cancelReasonOtherText"
+                          placeholder="Chia sẻ lý do cụ thể của bạn..." rows="3" maxlength="500"></textarea>
+            </div>
+        </div>
+
+        <div class="cancel-order-modal__error" id="cancelModalError">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Vui lòng chọn một lý do hủy đơn.</span>
+        </div>
+
+        <div class="cancel-order-modal__footer">
+            <button type="button" class="cancel-order-modal__btn-confirm" id="cancelModalBtnConfirm">
+                <i class="fas fa-times-circle"></i>
+                Xác nhận hủy đơn
+            </button>
+            <button type="button" class="cancel-order-modal__btn-keep" id="cancelModalBtnKeep">
+                <i class="fas fa-heart"></i>
+                Giữ lại đơn hàng
+            </button>
+        </div>
+    </div>
+</div>
+<form id="cancelOrderHiddenForm" action="" method="post" style="display:none;">
+    <input type="hidden" name="cancelReason" id="cancelOrderHiddenReason" value="">
+</form>
 <jsp:include page="/layout/footer.jsp"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/order-history-tabs.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/cancel-order-modal.js"></script>
 
 </body>
 
 </html>
+

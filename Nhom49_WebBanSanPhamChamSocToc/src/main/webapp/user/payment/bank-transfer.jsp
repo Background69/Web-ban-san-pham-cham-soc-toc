@@ -83,6 +83,13 @@
             background: #fff;
         }
 
+        .qr-box canvas {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #e8edf2;
+            background: #fff;
+        }
+
         .demo-note {
             border: 1px dashed #f0ad4e;
             background: #fff9ed;
@@ -204,9 +211,15 @@
                             </c:when>
                             <c:when test="${not empty paymentTransaction.qrCodeUrl}">
                                 <div class="text-start">
-                                    <p class="mb-1"><strong>QR raw data:</strong></p>
-                                    <textarea class="form-control" rows="6"
-                                              readonly>${paymentTransaction.qrCodeUrl}</textarea>
+                                    <div class="text-center">
+                                        <canvas id="rawQrCanvas" width="300" height="300"></canvas>
+                                        <div class="mt-2 text-muted">Quét mã QR để chuyển khoản</div>
+                                    </div>
+                                    <div id="rawQrFallback" class="mt-3">
+                                        <p class="mb-1"><strong>Dữ liệu QR:</strong></p>
+                                        <textarea id="rawQrData" class="form-control" rows="6"
+                                                  readonly><c:out value="${paymentTransaction.qrCodeUrl}"/></textarea>
+                                    </div>
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -221,5 +234,27 @@
 </main>
 
 <jsp:include page="/layout/footer.jsp"/>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var qrData = document.getElementById('rawQrData');
+        var qrCanvas = document.getElementById('rawQrCanvas');
+        var qrFallback = document.getElementById('rawQrFallback');
+
+        if (!qrData || !qrCanvas || !window.QRCode) {
+            return;
+        }
+
+        QRCode.toCanvas(qrCanvas, qrData.value, {width: 300, margin: 1}, function (error) {
+            if (error) {
+                qrCanvas.style.display = 'none';
+                return;
+            }
+            if (qrFallback) {
+                qrFallback.style.display = 'none';
+            }
+        });
+    });
+</script>
 </body>
 </html>

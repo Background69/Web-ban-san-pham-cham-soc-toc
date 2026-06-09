@@ -15,8 +15,8 @@ public class UserService {
         this.authService = new AuthenticationService();
     }
 
-    public User login(String emailOrUsername, String password) {
-        return authService.login(emailOrUsername, password);
+    public User login(String emailOrUsername, String password, String ipAddress) {
+        return authService.login(emailOrUsername, password, ipAddress);
     }
 
     public List<User> getAllUsers() {

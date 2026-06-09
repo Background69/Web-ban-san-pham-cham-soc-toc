@@ -138,21 +138,6 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         return rowsAffected > 0;
     }
 
-    public boolean decrementStock(int variantId, int quantity) {
-        if (quantity <= 0) {
-            return true;
-        }
-        String sql = "UPDATE product_variants SET stock_quantity = stock_quantity - :quantity " +
-                "WHERE variant_id = :variantId AND stock_quantity >= :quantity";
-        int rowsAffected = jdbi.withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind("quantity", quantity)
-                        .bind("variantId", variantId)
-                        .execute()
-        );
-        return rowsAffected > 0;
-    }
-
     /**
      * Hoàn trả stock khi hủy đơn hàng
      */

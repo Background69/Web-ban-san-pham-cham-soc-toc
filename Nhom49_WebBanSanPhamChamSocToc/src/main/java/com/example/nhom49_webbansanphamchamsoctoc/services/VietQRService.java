@@ -1,6 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.DBProperties;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,8 +14,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Map;
 
 public class VietQRService {
     private static final String VIETQR_API_URL = "https://api.vietqr.io/v2/generate";
@@ -140,18 +145,60 @@ public class VietQRService {
         return sanitized.isEmpty() ? "HAIRGLOW" : sanitized;
     }
 
-    private String extractJsonString(String json, String key) {
+    static String extractJsonString(String json, String key) {
         if (isBlank(json) || isBlank(key)) {
             return null;
         }
 
-        Pattern keyPattern = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
-        Matcher matcher = keyPattern.matcher(json);
-        if (!matcher.find()) {
+        try {
+            JsonElement root = JsonParser.parseString(json);
+            return findJsonString(root, key);
+        } catch (JsonSyntaxException | IllegalStateException e) {
+            return null;
+        }
+    }
+
+    private static String findJsonString(JsonElement root, String key) {
+        Deque<JsonElement> elements = new ArrayDeque<>();
+        elements.add(root);
+
+        while (!elements.isEmpty()) {
+            JsonElement current = elements.removeFirst();
+            if (current == null || current.isJsonNull()) {
+                continue;
+            }
+
+            if (current.isJsonObject()) {
+                JsonObject object = current.getAsJsonObject();
+                String value = getPrimitiveValue(object.get(key));
+                if (value != null) {
+                    return value;
+                }
+
+                for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                    JsonElement child = entry.getValue();
+                    if (child != null && (child.isJsonObject() || child.isJsonArray())) {
+                        elements.addLast(child);
+                    }
+                }
+            } else if (current.isJsonArray()) {
+                for (JsonElement child : current.getAsJsonArray()) {
+                    if (child != null && (child.isJsonObject() || child.isJsonArray())) {
+                        elements.addLast(child);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static String getPrimitiveValue(JsonElement value) {
+        if (value == null || value.isJsonNull() || !value.isJsonPrimitive()) {
             return null;
         }
 
-        return unescapeJson(matcher.group(1));
+        return value.getAsString();
     }
 
     private String escapeJson(String value) {
@@ -162,15 +209,7 @@ public class VietQRService {
                 .replace("\r", "\\r");
     }
 
-    private String unescapeJson(String value) {
-        return value
-                .replace("\\\"", "\"")
-                .replace("\\\\", "\\")
-                .replace("\\n", "\n")
-                .replace("\\r", "\r");
-    }
-
-    private boolean isBlank(String value) {
+    private static boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
     }
 
