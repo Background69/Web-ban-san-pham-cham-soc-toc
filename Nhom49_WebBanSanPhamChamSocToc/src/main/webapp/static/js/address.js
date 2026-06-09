@@ -333,7 +333,8 @@
     window.addressModule = {
         init: init,
         loadProvinces: loadProvinces,
-        getState: () => ({ ...state })
+        getState: () => ({ ...state }),
+        _CustomSelect: CustomSelect
     };
 
     if (document.readyState === 'loading') {
