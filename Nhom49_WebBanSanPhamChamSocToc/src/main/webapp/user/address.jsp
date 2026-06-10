@@ -358,12 +358,14 @@
         editModalInitialized = true;
     }
 
-    async function fetchJSON(url) {
-        const res = await fetch(url);
+    async function fetchJSON(url, signal) {
+        const res = await fetch(url, signal ? { signal } : undefined);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
     }
 
+    let editDistrictAbort = null;
+    let editWardAbort = null;
     async function loadEditProvinces(preselectedCode) {
         const ctxPath = document.body.dataset.contextPath || '';
         editProvinceCS.setLoading(true);
@@ -380,32 +382,44 @@
     }
 
     async function loadEditDistricts(provinceCode, preselectedCode) {
+        // Hủy request cũ nếu đang chạy
+        if (editDistrictAbort) editDistrictAbort.abort();
+        editDistrictAbort = new AbortController();
+        const signal = editDistrictAbort.signal;
+
         const ctxPath = document.body.dataset.contextPath || '';
         editDistrictCS.setLoading(true);
         editWardCS.reset('-- Chọn Phường/Xã --');
         try {
-            const data = await fetchJSON(ctxPath + '/api/districts?provinceCode=' + provinceCode);
+            const data = await fetchJSON(ctxPath + '/api/districts?provinceCode=' + provinceCode, signal);
             editDistrictCS.setItems(data);
             if (preselectedCode) {
                 const found = data.find(function(d) { return String(d.code) === String(preselectedCode); });
                 if (found) editDistrictCS.selectItem(found);
             }
         } catch (e) {
+            if (e.name === 'AbortError') return;
             console.error('Lỗi tải quận/huyện (edit):', e);
         }
     }
 
     async function loadEditWards(districtCode, preselectedCode) {
+        // Hủy request cũ nếu đang chạy
+        if (editWardAbort) editWardAbort.abort();
+        editWardAbort = new AbortController();
+        const signal = editWardAbort.signal;
+
         const ctxPath = document.body.dataset.contextPath || '';
         editWardCS.setLoading(true);
         try {
-            const data = await fetchJSON(ctxPath + '/api/wards?districtCode=' + districtCode);
+            const data = await fetchJSON(ctxPath + '/api/wards?districtCode=' + districtCode, signal);
             editWardCS.setItems(data);
             if (preselectedCode) {
                 const found = data.find(function(w) { return String(w.code) === String(preselectedCode); });
                 if (found) editWardCS.selectItem(found);
             }
         } catch (e) {
+            if (e.name === 'AbortError') return;
             console.error('Lỗi tải phường/xã (edit):', e);
         }
     }
