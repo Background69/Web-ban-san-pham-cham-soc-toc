@@ -49,7 +49,6 @@
 
         <!-- Existing Addresses -->
         <div class="mb-4">
-            <h5 class="fw-semibold mb-3">Địa chỉ đã lưu</h5>
             <c:choose>
                 <c:when test="${empty addresses}">
                     <div class="empty-state" style="padding: 40px 20px;">
@@ -59,15 +58,20 @@
                         <h5 class="empty-state-title">Chưa có địa chỉ nào</h5>
                         <p class="empty-state-text">Thêm địa chỉ giao hàng để đặt hàng nhanh hơn</p>
                     </div>
+                    <div style="margin-top: 16px;">
+                        <button type="button" class="profile-add-address-btn" onclick="openAddAddressModal()">
+                            <i class="fas fa-plus"></i> Thêm địa chỉ mới
+                        </button>
+                    </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="address-list">
+                    <div class="address-list checkout-style">
                         <c:forEach var="address" items="${addresses}">
                             <div class="address-card ${address.defaultAddress ? 'is-default' : ''}">
                                 <div class="address-card-header">
-                                                <span class="address-type">
-                                                    <i class="fas fa-home"></i> Địa chỉ giao hàng
-                                                </span>
+                                    <span class="address-type">
+                                        <i class="fas fa-home"></i> Địa chỉ giao hàng
+                                    </span>
                                     <c:if test="${address.defaultAddress}">
                                         <span class="address-default-badge">Mặc định</span>
                                     </c:if>
@@ -126,20 +130,31 @@
                                 </div>
                             </div>
                         </c:forEach>
+                        <button type="button" class="profile-add-address-btn" onclick="openAddAddressModal()">
+                            <i class="fas fa-plus"></i> Thêm địa chỉ mới
+                        </button>
                     </div>
                 </c:otherwise>
             </c:choose>
         </div>
 
-        <div class="address-form-section">
-            <div class="section-title">
-                <i class="fas fa-plus-circle" style="color: var(--addr-accent); margin-right: 6px;"></i>Thêm địa chỉ mới
-            </div>
-            <p class="section-subtitle">Vui lòng điền đầy đủ thông tin để giao hàng chính xác.</p>
+        </div>
+    </div>
+</main>
 
-            <form action="${pageContext.request.contextPath}/profile/addresses/add" method="post"
-                  id="addressForm">
-
+<div class="profile-address-modal-overlay" id="addAddressModal">
+    <div class="profile-address-modal">
+        <div class="profile-address-modal-header">
+            <h4 class="profile-address-modal-title">
+                <i class="fas fa-plus-circle"></i> Thêm địa chỉ mới
+            </h4>
+            <button type="button" class="profile-address-modal-close" onclick="closeAddAddressModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form action="${pageContext.request.contextPath}/profile/addresses/add" method="post"
+              id="addressForm">
+            <div class="profile-address-modal-body">
                 <div class="address-form-grid">
 
                     <!-- Họ và tên -->
@@ -194,21 +209,18 @@
                                   placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..."></textarea>
                     </div>
                 </div>
-
-                <div style="margin-top: 24px; display: flex; gap: 12px; align-items: center;">
-                    <button type="submit" class="addr-submit-btn" id="addrSubmitBtn">
-                        <i class="fas fa-plus"></i> Thêm địa chỉ
-                    </button>
-                    <a href="${pageContext.request.contextPath}/profile"
-                       style="font-size: 0.88rem; color: var(--addr-text-muted); text-decoration: none;">
-                        Quay lại
-                    </a>
-                </div>
-            </form>
             </div>
-        </div>
+            <div class="profile-address-modal-footer">
+                <button type="button" class="btn-modal-cancel" onclick="closeAddAddressModal()">
+                    Hủy
+                </button>
+                <button type="submit" class="btn-modal-submit" id="addrSubmitBtn">
+                    <i class="fas fa-plus"></i> Thêm địa chỉ
+                </button>
+            </div>
+        </form>
     </div>
-</main>
+</div>
 
 <div class="hg-modal-overlay" id="editAddressModal">
     <div class="hg-modal">
@@ -496,7 +508,20 @@
         document.getElementById('hiddenDeleteForm').submit();
     });
 
-    document.querySelectorAll('.hg-modal-overlay').forEach(function(overlay) {
+    function openAddAddressModal() {
+        var modal = document.getElementById('addAddressModal');
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAddAddressModal() {
+        var modal = document.getElementById('addAddressModal');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    window.openAddAddressModal = openAddAddressModal;
+    window.closeAddAddressModal = closeAddAddressModal;
+    document.querySelectorAll('.hg-modal-overlay, .profile-address-modal-overlay').forEach(function(overlay) {
         overlay.addEventListener('click', function(e) {
             if (e.target === overlay) {
                 overlay.classList.remove('show');
@@ -509,6 +534,7 @@
         if (e.key === 'Escape') {
             closeEditModal();
             closeDeleteModal();
+            closeAddAddressModal();
         }
     });
 </script>

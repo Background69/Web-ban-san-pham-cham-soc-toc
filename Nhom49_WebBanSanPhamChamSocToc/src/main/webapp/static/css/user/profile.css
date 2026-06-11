@@ -2222,3 +2222,295 @@
         font-size: 13px;
     }
 }
+
+.address-list.checkout-style {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.address-list.checkout-style .address-card {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px;
+    background: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    position: relative;
+}
+
+.address-list.checkout-style .address-card:hover {
+    border-color: rgba(50, 110, 81, 0.35);
+    box-shadow: 0 6px 18px rgba(50, 110, 81, 0.10);
+    background: #fbfdf9;
+}
+
+.address-list.checkout-style .address-card.is-default {
+    border-color: var(--primary-green);
+    background: rgba(50, 110, 81, 0.03);
+    box-shadow: 0 4px 12px rgba(50, 110, 81, 0.08);
+}
+
+.address-list.checkout-style .address-card-header {
+    margin-bottom: 10px;
+}
+
+.address-list.checkout-style .address-default-badge {
+    background: rgba(50, 110, 81, 0.12);
+    color: var(--primary-dark);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.address-list.checkout-style .address-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+}
+
+.address-list.checkout-style .address-phone {
+    font-size: 13.5px;
+    color: var(--gray-600);
+    margin-bottom: 6px;
+}
+
+.address-list.checkout-style .address-detail {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.55;
+}
+
+.address-list.checkout-style .address-actions-bar {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray-100);
+}
+
+.profile-add-address-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 120px;
+    padding: 24px 20px;
+    background: #fff;
+    border: 2px dashed var(--primary-green);
+    border-radius: 12px;
+    color: var(--primary-green);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.01em;
+}
+
+.profile-add-address-btn:hover {
+    background: rgba(50, 110, 81, 0.04);
+    border-color: var(--primary-dark);
+    color: var(--primary-dark);
+    box-shadow: 0 4px 14px rgba(50, 110, 81, 0.10);
+    transform: translateY(-2px);
+}
+
+.profile-add-address-btn:active {
+    transform: translateY(0);
+}
+
+.profile-add-address-btn i {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.profile-add-address-btn:hover i {
+    transform: rotate(90deg);
+}
+
+.profile-address-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.profile-address-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.profile-address-modal {
+    background: #ffffff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow:
+        0 24px 48px -12px rgba(17, 24, 39, 0.25),
+        0 0 0 1px rgba(17, 24, 39, 0.05);
+    transform: translateY(30px) scale(0.96);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease;
+    opacity: 0;
+}
+
+.profile-address-modal-overlay.show .profile-address-modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.profile-address-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.profile-address-modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-900);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.profile-address-modal-title i {
+    color: var(--primary-green);
+    font-size: 18px;
+}
+
+.profile-address-modal-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gray-100);
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: var(--gray-500);
+    font-size: 16px;
+}
+
+.profile-address-modal-close:hover {
+    background: var(--gray-200);
+    color: var(--gray-900);
+    transform: rotate(90deg);
+}
+
+.profile-address-modal-body {
+    padding: 24px 28px 28px;
+}
+
+.profile-address-modal-footer {
+    padding: 18px 28px;
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.profile-address-modal-footer .btn-modal-cancel {
+    padding: 11px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--gray-300);
+    background: white;
+    color: var(--gray-600);
+    font-family: inherit;
+    transition: all 0.25s ease;
+}
+
+.profile-address-modal-footer .btn-modal-cancel:hover {
+    background: var(--gray-100);
+    color: var(--gray-800);
+}
+
+.profile-address-modal-footer .btn-modal-submit {
+    padding: 11px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: linear-gradient(135deg, var(--primary-green), var(--primary-dark));
+    color: #fff;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(50, 110, 81, 0.3);
+}
+
+.profile-address-modal-footer .btn-modal-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(50, 110, 81, 0.4);
+}
+
+.profile-address-modal-footer .btn-modal-submit:active {
+    transform: translateY(0);
+}
+
+.profile-address-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-address-modal::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.profile-address-modal::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .address-list.checkout-style {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-add-address-btn {
+        min-height: 80px;
+        padding: 18px 16px;
+        font-size: 14px;
+    }
+
+    .profile-address-modal {
+        max-width: 100%;
+        border-radius: 16px;
+    }
+
+    .profile-address-modal-header {
+        padding: 18px 20px;
+    }
+
+    .profile-address-modal-body {
+        padding: 20px;
+    }
+
+    .profile-address-modal-footer {
+        padding: 16px 20px;
+    }
+}
