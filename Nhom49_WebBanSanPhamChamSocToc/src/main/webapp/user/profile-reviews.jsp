@@ -214,6 +214,132 @@
             justify-content: flex-end;
             margin-top: 20px;
         }
+
+        .admin-reply-block {
+            margin-top: 16px;
+            margin-left: 24px;
+            padding: 18px 20px;
+            background: #F9FAFB;
+            border-radius: 10px;
+            border-left: 3.5px solid var(--primary-green);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .admin-reply-block:hover {
+            background: #F3F5F3;
+            box-shadow: 0 2px 8px rgba(50, 110, 81, 0.06);
+        }
+
+        .admin-reply-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-reply-logo {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--primary-green), #3f805f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .admin-reply-logo i {
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .admin-reply-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-green);
+            letter-spacing: -0.01em;
+        }
+
+        .badge-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 4px;
+            background: #1F2937;
+            color: #FBBF24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .badge-admin i {
+            font-size: 9px;
+        }
+
+        .admin-reply-date {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-left: auto;
+        }
+
+        .admin-reply-content {
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--gray-700);
+            white-space: pre-line;
+        }
+
+        /* --- Badge "Có phản hồi mới" --- */
+        .reply-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #D32F2F;
+            background: rgba(211, 47, 47, 0.08);
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+            animation: replyBadgePulse 2s ease-in-out infinite;
+        }
+
+        .reply-badge .reply-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #D32F2F;
+            animation: replyDotBlink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes replyDotBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes replyBadgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+            50% { box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.08); }
+        }
+
+        @media (max-width: 576px) {
+            .admin-reply-block {
+                margin-left: 12px;
+                padding: 14px 16px;
+            }
+
+            .admin-reply-date {
+                margin-left: 0;
+                width: 100%;
+                margin-top: 4px;
+            }
+        }
     </style>
 </head>
 
@@ -298,6 +424,11 @@
                                     <i class="far fa-clock me-1"></i>
                                     <fmt:formatDate value="${review.createdAt}"
                                                     pattern="dd/MM/yyyy HH:mm"/>
+                                    <c:if test="${not empty review.adminReply}">
+                                        <span class="reply-badge">
+                                            <span class="reply-dot"></span> Có phản hồi mới
+                                        </span>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
@@ -312,7 +443,27 @@
                                 ${review.content}
                         </div>
 
-
+                        <c:if test="${not empty review.adminReply}">
+                            <div class="admin-reply-block">
+                                <div class="admin-reply-header">
+                                    <div class="admin-reply-logo">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                    <span class="admin-reply-name">Phản hồi từ HairGlow</span>
+                                    <span class="badge-admin">
+                                        <i class="fas fa-shield-alt"></i> Quản trị viên
+                                    </span>
+                                    <c:if test="${not empty review.adminReplyDate}">
+                                        <span class="admin-reply-date">
+                                            <i class="far fa-clock me-1"></i>
+                                            <fmt:formatDate value="${review.adminReplyDate}"
+                                                            pattern="dd/MM/yyyy HH:mm"/>
+                                        </span>
+                                    </c:if>
+                                </div>
+                                <div class="admin-reply-content">${review.adminReply}</div>
+                            </div>
+                        </c:if>
                     </div>
                 </c:forEach>
             </c:when>
@@ -336,13 +487,7 @@
         </div>
     </div>
 </main>
-
-
 <jsp:include page="/layout/footer.jsp"/>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
-
 </html>
