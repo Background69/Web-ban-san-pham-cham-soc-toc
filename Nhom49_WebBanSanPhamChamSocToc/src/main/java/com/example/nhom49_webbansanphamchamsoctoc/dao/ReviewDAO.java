@@ -149,6 +149,11 @@ public class ReviewDAO implements IDAO<Review> {
         review.setRating(rs.getInt("rating"));
         review.setContent(rs.getString("content"));
         review.setCreatedAt(rs.getTimestamp("created_at"));
+        try {
+            review.setAdminReply(rs.getString("admin_reply_content"));
+            review.setAdminReplyDate(rs.getTimestamp("admin_reply_at"));
+        } catch (java.sql.SQLException ignored) {
+        }
         return review;
     }
 
