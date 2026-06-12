@@ -8,6 +8,8 @@
     <meta charset="UTF-8">
     <title>Quản lý người dùng</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/user-list.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
@@ -52,7 +54,7 @@
             </select>
         </div>
         </div>
-        <table class="product-table">
+        <table class="product-table user-table-upgraded" id="userTable">
             <thead>
             <tr>
                 <th>ID</th>
@@ -67,30 +69,72 @@
 
             <tbody id="userTableBody">
             <c:forEach var="user" items="${users}">
-                <tr>
-                    <td>#U${user.userId}</td>
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
-                    <td>${user.phone}</td>
+                <tr data-user-id="${user.userId}" data-user-active="${user.active}">
+                    <td class="cell-id">#U${user.userId}</td>
+                    <td class="cell-name">${user.username}</td>
+                    <td class="cell-email">${user.email}</td>
+                    <td class="cell-phone">${user.phone}</td>
                     <td>
                         <span class="role-badge ${user.role == 'Admin' ? 'role-admin' : 'role-customer'}">
                             ${user.role}
                         </span>
                     </td>
                     <td>
-                        <span class="${user.active ? 'status-active': 'status-lock'}">
+                        <span class="status-pill-inline ${user.active ? 'status-active': 'status-lock'}">
+                            <span class="status-dot"></span>
                             ${user.active ? 'Hoạt động' : 'Đã khoá'}
                         </span>
                     </td>
                     <td>
-                        <button type="button" class="action-btn edit" onclick="openUserDetail(${user.userId})">Sửa</button>
+                        <div class="quick-actions">
+                            <button type="button"
+                                    class="icon-btn icon-btn--view"
+                                    title="Xem nhanh"
+                                    onclick="openUserDetail(${user.userId})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <c:choose>
+                                <c:when test="${user.active}">
+                                    <button type="button"
+                                            class="icon-btn icon-btn--unlock"
+                                            title="Khoá tài khoản"
+                                            data-action="lock"
+                                            data-user-id="${user.userId}"
+                                            data-username="${user.username}"
+                                            onclick="showToggleModal(this)">
+                                        <i class="fas fa-lock-open"></i>
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="button"
+                                            class="icon-btn icon-btn--lock"
+                                            title="Mở khoá tài khoản"
+                                            data-action="unlock"
+                                            data-user-id="${user.userId}"
+                                            data-username="${user.username}"
+                                            onclick="showToggleModal(this)">
+                                        <i class="fas fa-lock"></i>
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <button type="button"
+                                    class="icon-btn icon-btn--edit"
+                                    title="Chỉnh sửa chi tiết"
+                                    onclick="openUserDetail(${user.userId})">
+                                <i class="fas fa-pen-to-square"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </c:forEach>
 
             <c:if test="${empty users}">
                 <tr>
-                    <td colspan="7" style="text-align:center">Không có dữ liệu</td>
+                    <td colspan="7" style="text-align:center; padding: 40px 16px; color: #999;">
+                        <i class="fas fa-users-slash" style="font-size: 28px; margin-bottom: 10px; display:block; opacity:.4;"></i>
+                        Không có dữ liệu
+                    </td>
                 </tr>
             </c:if>
             </tbody>
@@ -194,7 +238,90 @@
         </form>
     </div>
 </div>
+<div id="toggleConfirmModal" class="confirm-overlay">
+    <div class="confirm-box">
+        <div class="confirm-icon-wrapper" id="confirmIconWrapper">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+        <h3 class="confirm-title" id="confirmTitle">Xác nhận hành động</h3>
+        <p class="confirm-message" id="confirmMessage">Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này?</p>
+        <div class="confirm-actions">
+            <button type="button" class="confirm-btn confirm-btn--cancel" id="confirmCancelBtn" onclick="closeToggleModal()">
+                <i class="fas fa-xmark"></i> Huỷ bỏ
+            </button>
+            <button type="button" class="confirm-btn confirm-btn--ok" id="confirmOkBtn" onclick="executeToggle()">
+                <i class="fas fa-check"></i> Đồng ý
+            </button>
+        </div>
+    </div>
+</div>
+<form id="toggleStatusForm" method="post" action="${pageContext.request.contextPath}/admin/users" style="display:none;">
+    <input type="hidden" name="action" value="toggle-status">
+    <input type="hidden" name="id" id="toggleUserId">
+</form>
 <script>
+    let pendingToggleUserId = null;
+    function showToggleModal(btn) {
+        const action = btn.getAttribute('data-action');
+        const userId = btn.getAttribute('data-user-id');
+        const username = btn.getAttribute('data-username') || '';
+        pendingToggleUserId = userId;
+
+        const overlay = document.getElementById('toggleConfirmModal');
+        const iconWrapper = document.getElementById('confirmIconWrapper');
+        const title = document.getElementById('confirmTitle');
+        const message = document.getElementById('confirmMessage');
+        const okBtn = document.getElementById('confirmOkBtn');
+
+        if (action === 'lock') {
+            iconWrapper.className = 'confirm-icon-wrapper confirm-icon--lock';
+            iconWrapper.innerHTML = '<i class="fas fa-lock"></i>';
+            title.textContent = 'Khoá tài khoản';
+            message.innerHTML = 'Bạn có chắc chắn muốn <strong>khoá</strong> tài khoản <strong>"' + username + '"</strong> không?';
+            okBtn.className = 'confirm-btn confirm-btn--danger';
+            okBtn.innerHTML = '<i class="fas fa-lock"></i> Khoá ngay';
+        } else {
+            iconWrapper.className = 'confirm-icon-wrapper confirm-icon--unlock';
+            iconWrapper.innerHTML = '<i class="fas fa-lock-open"></i>';
+            title.textContent = 'Mở khoá tài khoản';
+            message.innerHTML = 'Bạn có chắc chắn muốn <strong>mở khoá</strong> tài khoản <strong>"' + username + '"</strong> không?';
+            okBtn.className = 'confirm-btn confirm-btn--success';
+            okBtn.innerHTML = '<i class="fas fa-lock-open"></i> Mở khoá';
+        }
+
+        overlay.classList.add('active');
+
+        setTimeout(function() {
+            overlay.querySelector('.confirm-box').classList.add('show');
+        }, 10);
+    }
+
+    function closeToggleModal() {
+        const overlay = document.getElementById('toggleConfirmModal');
+        const box = overlay.querySelector('.confirm-box');
+        box.classList.remove('show');
+        setTimeout(function() {
+            overlay.classList.remove('active');
+        }, 200);
+        pendingToggleUserId = null;
+    }
+
+    function executeToggle() {
+        if (!pendingToggleUserId) return;
+        document.getElementById('toggleUserId').value = pendingToggleUserId;
+        document.getElementById('toggleStatusForm').submit();
+    }
+
+    document.getElementById('toggleConfirmModal').addEventListener('click', function(e) {
+        if (e.target === this) closeToggleModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeToggleModal();
+            closeModal();
+        }
+    });
     function openUserDetail(id){
         fetch(
             "${pageContext.request.contextPath}/admin/users?action=detail&id=" +id
@@ -301,5 +428,4 @@
     }
 </script>
 </body>
-
 </html>
