@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<c:set var="activeMenu" value="orders"/>
-
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -16,29 +14,9 @@
 <body>
 <div class="container">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
-        </div>
-        <p>HairGlow Admin</p>
-
-        <ul class="menu">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn
-                hàng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm
-                giá</a></li>
-        </ul>
-
-        <a class="view-site" href="${pageContext.request.contextPath}/">
-            Quay lại Website
-        </a>
-    </aside>
+    <jsp:include page="/admin/common/sidebar.jsp">
+        <jsp:param name="activeMenu" value="orders"/>
+    </jsp:include>
     <!-- CONTENT -->
     <main class="content">
         <div class="header">

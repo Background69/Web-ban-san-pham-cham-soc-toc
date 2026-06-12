@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<c:set var="activeMenu" value="orders"/>
-
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -400,7 +398,9 @@
 
 <body>
 <div class="container">
-    <jsp:include page="/admin/layout/sidebar.jsp"/>
+    <jsp:include page="/admin/common/sidebar.jsp">
+        <jsp:param name="activeMenu" value="orders"/>
+    </jsp:include>
 
     <main class="content">
         <!-- Page Header -->

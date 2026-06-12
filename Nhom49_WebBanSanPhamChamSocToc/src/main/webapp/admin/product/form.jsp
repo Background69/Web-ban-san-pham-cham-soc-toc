@@ -3,8 +3,6 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
-<c:set var="activeMenu" value="products"/>
-
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -188,7 +186,9 @@
 
 <body>
 <div class="container">
-    <jsp:include page="/admin/layout/sidebar.jsp"/>
+    <jsp:include page="/admin/common/sidebar.jsp">
+        <jsp:param name="activeMenu" value="products"/>
+    </jsp:include>
 
     <main class="content">
         <div class="header">
