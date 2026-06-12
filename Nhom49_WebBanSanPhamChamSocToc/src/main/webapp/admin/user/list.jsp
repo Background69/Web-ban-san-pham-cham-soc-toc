@@ -1,256 +1,482 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý người dùng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý người dùng - HairGlow Admin</title>
+    <meta name="description" content="Quản lý tài khoản khách hàng và quản trị viên hệ thống HairGlow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/user-list.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
+<body class="admin-users-page">
+<div class="container admin-shell">
+    <jsp:include page="/admin/common/sidebar.jsp">
+        <jsp:param name="activeMenu" value="users"/>
+    </jsp:include>
 
-<body>
-<div class="container">
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
-        </div>
-        <p>HairGlow Admin</p>
+    <main class="content users-content">
+        <section class="stats-grid" id="statsGrid" aria-label="Thống kê người dùng">
+            <article class="stat-card stat-card--total">
+                <div class="stat-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+                <div class="stat-body">
+                    <span class="stat-label">Tổng người dùng</span>
+                    <strong class="stat-number" id="statTotalUsers">${totalUsers}</strong>
+                    <span class="stat-note">${newUsersThisMonth} mới trong tháng</span>
+                </div>
+            </article>
 
-        <ul class="menu">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/users">Quản lý người
-                dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương hiệu</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm giá</a></li>
-        </ul>
+            <article class="stat-card stat-card--customer">
+                <div class="stat-icon"><i class="fa-solid fa-user" aria-hidden="true"></i></div>
+                <div class="stat-body">
+                    <span class="stat-label">Khách hàng</span>
+                    <strong class="stat-number" id="statCustomerUsers">${customerUsers}</strong>
+                    <span class="stat-note">Tài khoản mua sắm</span>
+                </div>
+            </article>
 
-        <a class="view-site" href="${pageContext.request.contextPath}/">
-            Quay lại Website
-        </a>
-    </aside>
+            <article class="stat-card stat-card--staff">
+                <div class="stat-icon"><i class="fa-solid fa-user-shield" aria-hidden="true"></i></div>
+                <div class="stat-body">
+                    <span class="stat-label">Nhân viên/Admin</span>
+                    <strong class="stat-number" id="statStaffUsers">${staffUsers}</strong>
+                    <span class="stat-note">Quyền quản trị</span>
+                </div>
+            </article>
 
-    <!-- Main -->
-    <main class="content">
-        <div class="header">
-            <h1>Quản lý người dùng</h1>
+            <article class="stat-card stat-card--locked">
+                <div class="stat-icon"><i class="fa-solid fa-user-lock" aria-hidden="true"></i></div>
+                <div class="stat-body">
+                    <span class="stat-label">Bị khóa</span>
+                    <strong class="stat-number" id="statLockedUsers">${lockedUsers}</strong>
+                    <span class="stat-note">Cần kiểm tra</span>
+                </div>
+            </article>
+        </section>
 
-        <div class="toolbar">
-            <input
-                type="text"
-                id="search-input"
-                placeholder="Tìm theo tên, email, số điện thoại..."
-                onkeyup="filterUsers()">
-            <select id="sortselect" onchange="sortUsers()">
-                <option value="" selected disabled hidden>Sắp xếp</option>
-                <option value="asc">Từ A-Z</option>
-                <option value="desc">Từ Z-A</option>
-            </select>
-        </div>
-        </div>
-        <table class="product-table user-table-upgraded" id="userTable">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên</th>
-                <th>Email</th>
-                <th>SĐT</th>
-                <th>Vai trò</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-            </thead>
+        <section class="filter-panel" aria-label="Bộ lọc người dùng">
+            <div class="filter-panel__header">
+                <div>
+                    <h2>Danh sách tài khoản</h2>
+                    <p>Tìm nhanh theo tên, email, số điện thoại và lọc theo vai trò hoặc trạng thái.</p>
+                </div>
+                <button type="button" class="filter-reset-btn" onclick="resetFilters()">
+                    <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                    Làm mới
+                </button>
+            </div>
 
-            <tbody id="userTableBody">
-            <c:forEach var="user" items="${users}">
-                <tr data-user-id="${user.userId}" data-user-active="${user.active}">
-                    <td class="cell-id">#U${user.userId}</td>
-                    <td class="cell-name">${user.username}</td>
-                    <td class="cell-email">${user.email}</td>
-                    <td class="cell-phone">${user.phone}</td>
-                    <td>
-                        <span class="role-badge ${user.role == 'Admin' ? 'role-admin' : 'role-customer'}">
-                            ${user.role}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="status-pill-inline ${user.active ? 'status-active': 'status-lock'}">
-                            <span class="status-dot"></span>
-                            ${user.active ? 'Hoạt động' : 'Đã khoá'}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="quick-actions">
-                            <button type="button"
-                                    class="icon-btn icon-btn--view"
-                                    title="Xem nhanh"
-                                    onclick="openUserDetail(${user.userId})">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <c:choose>
-                                <c:when test="${user.active}">
+            <div class="filter-grid">
+                <label class="field field--search" for="search-input">
+                    <span>Tìm kiếm</span>
+                    <input type="text"
+                           class="search-input"
+                           id="search-input"
+                           placeholder="Tên, email, số điện thoại..."
+                           oninput="filterUsers()">
+                </label>
+
+                <label class="field" for="role-filter">
+                    <span>Vai trò</span>
+                    <select class="filter-select" id="role-filter" onchange="filterUsers()">
+                        <option value="">Tất cả vai trò</option>
+                        <option value="customer">Khách hàng</option>
+                        <option value="staff">Nhân viên/Admin</option>
+                    </select>
+                </label>
+                <label class="field" for="status-filter">
+                    <span>Trạng thái</span>
+                    <select class="filter-select" id="status-filter" onchange="filterUsers()">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="active">Hoạt động</option>
+                        <option value="locked">Đã khóa</option>
+                    </select>
+                </label>
+
+                <label class="field" for="sortselect">
+                    <span>Sắp xếp</span>
+                    <select class="sort-select" id="sortselect" onchange="sortUsers()">
+                        <option value="">Mặc định</option>
+                        <option value="asc">Tên A - Z</option>
+                        <option value="desc">Tên Z - A</option>
+                    </select>
+                </label>
+            </div>
+        </section>
+        <section class="users-table-card" aria-label="Bảng người dùng">
+            <div class="table-scroll">
+                <table class="data-grid" id="userTable">
+                    <thead>
+                    <tr>
+                        <th>Tài khoản</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Cập nhật</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="userTableBody">
+                    <c:forEach var="user" items="${users}" varStatus="loop">
+                        <c:set var="displayName" value="${empty user.fullName ? user.username : user.fullName}" />
+                        <c:set var="roleValue" value="${empty user.role ? 'Khách hàng' : user.role}" />
+                        <c:set var="roleLower" value="${fn:toLowerCase(roleValue)}" />
+                        <c:set var="roleFilter" value="${roleValue == 'Admin' || roleLower == 'staff' || roleValue == 'Nhân viên' ? 'staff' : 'customer'}" />
+                        <c:set var="statusFilter" value="${user.active ? 'active' : 'locked'}" />
+                        <c:set var="avatarValue" value="${fn:trim(user.avatar)}" />
+                        <c:set var="avatarIsProjectDefault" value="${avatarValue == 'avatar/avatar.jpg'}" />
+                        <c:set var="hasAvatar" value="${not empty avatarValue && not avatarIsProjectDefault}" />
+                        <c:set var="avatarIsAbsolute" value="${fn:startsWith(avatarValue, 'http://') || fn:startsWith(avatarValue, 'https://')}" />
+                        <c:set var="avatarStartsSlash" value="${fn:startsWith(avatarValue, '/')}" />
+                        <c:set var="avatarStartsAppAsset" value="${fn:startsWith(avatarValue, 'static/') || fn:startsWith(avatarValue, 'uploads/') || fn:startsWith(avatarValue, 'media/')}" />
+
+                        <tr class="user-row"
+                            data-user-id="${user.userId}"
+                            data-user-active="${user.active}"
+                            data-user-role="${roleFilter}"
+                            data-user-status="${statusFilter}"
+                            data-user-sort="${fn:escapeXml(displayName)}"
+                            data-original-index="${loop.index}">
+                            <td class="cell-account">
+                                <div class="account-cell">
+                                    <span class="user-avatar ${hasAvatar ? 'user-avatar--image' : 'user-avatar--fallback'}">
+                                        <c:choose>
+                                            <c:when test="${hasAvatar}">
+                                                <c:choose>
+                                                    <c:when test="${avatarIsAbsolute}">
+                                                        <img src="${fn:escapeXml(avatarValue)}"
+                                                             alt="Ảnh đại diện của ${fn:escapeXml(displayName)}"
+                                                             class="user-avatar__img"
+                                                             loading="lazy"
+                                                             onerror="this.style.display='none'; this.parentElement.classList.remove('user-avatar--image'); this.parentElement.classList.add('user-avatar--fallback');">
+                                                    </c:when>
+                                                    <c:when test="${avatarStartsSlash}">
+                                                        <img src="${pageContext.request.contextPath}${fn:escapeXml(avatarValue)}"
+                                                             alt="Ảnh đại diện của ${fn:escapeXml(displayName)}"
+                                                             class="user-avatar__img"
+                                                             loading="lazy"
+                                                             onerror="this.style.display='none'; this.parentElement.classList.remove('user-avatar--image'); this.parentElement.classList.add('user-avatar--fallback');">
+                                                    </c:when>
+                                                    <c:when test="${avatarStartsAppAsset}">
+                                                        <img src="${pageContext.request.contextPath}/${fn:escapeXml(avatarValue)}"
+                                                             alt="Ảnh đại diện của ${fn:escapeXml(displayName)}"
+                                                             class="user-avatar__img"
+                                                             loading="lazy"
+                                                             onerror="this.style.display='none'; this.parentElement.classList.remove('user-avatar--image'); this.parentElement.classList.add('user-avatar--fallback');">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${pageContext.request.contextPath}/static/${fn:escapeXml(avatarValue)}"
+                                                             alt="Ảnh đại diện của ${fn:escapeXml(displayName)}"
+                                                             class="user-avatar__img"
+                                                             loading="lazy"
+                                                             onerror="this.style.display='none'; this.parentElement.classList.remove('user-avatar--image'); this.parentElement.classList.add('user-avatar--fallback');">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <span class="user-avatar__initial">
+                                                    <c:choose>
+                                                        <c:when test="${not empty displayName}">
+                                                            ${fn:toUpperCase(fn:substring(displayName, 0, 1))}
+                                                        </c:when>
+                                                        <c:otherwise>U</c:otherwise>
+                                                    </c:choose>
+                                                </span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="user-avatar__initial">
+                                                    <c:choose>
+                                                        <c:when test="${not empty displayName}">
+                                                            ${fn:toUpperCase(fn:substring(displayName, 0, 1))}
+                                                        </c:when>
+                                                        <c:otherwise>U</c:otherwise>
+                                                    </c:choose>
+                                                </span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                    <span class="account-meta">
+                                        <strong><c:out value="${displayName}" /></strong>
+                                        <small>
+                                            #U${user.userId}
+                                            <c:if test="${not empty user.fullName && not empty user.username}">
+                                                · <c:out value="${user.username}" />
+                                            </c:if>
+                                        </small>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="cell-email"><c:out value="${user.email}" /></td>
+                            <td class="cell-phone">
+                                <c:choose>
+                                    <c:when test="${not empty user.phone}">
+                                        <c:out value="${user.phone}" />
+                                    </c:when>
+                                    <c:otherwise>Chưa có</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${roleValue == 'Admin'}">
+                                        <span class="role-badge role-admin">
+                                            <i class="fa-solid fa-crown" aria-hidden="true"></i>
+                                            <c:out value="${roleValue}" />
+                                        </span>
+                                    </c:when>
+                                    <c:when test="${roleFilter == 'staff'}">
+                                        <span class="role-badge role-staff">
+                                            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                                            <c:out value="${roleValue}" />
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="role-badge role-customer">
+                                            <i class="fa-solid fa-user" aria-hidden="true"></i>
+                                            <c:out value="${roleValue}" />
+                                        </span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <span class="status-badge ${user.active ? 'status-active' : 'status-locked'}">
+                                    <span class="status-dot"></span>
+                                    ${user.active ? 'Hoạt động' : 'Đã khóa'}
+                                </span>
+                            </td>
+                            <td class="cell-date">
+                                <c:choose>
+                                    <c:when test="${not empty user.createdAt}">
+                                        <fmt:formatDate value="${user.createdAt}" pattern="dd/MM/yyyy" />
+                                    </c:when>
+                                    <c:otherwise>Chưa có</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td class="cell-date">
+                                <c:choose>
+                                    <c:when test="${not empty user.updatedAt}">
+                                        <fmt:formatDate value="${user.updatedAt}" pattern="dd/MM/yyyy" />
+                                    </c:when>
+                                    <c:otherwise>Chưa có</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <div class="quick-actions">
                                     <button type="button"
-                                            class="icon-btn icon-btn--unlock"
-                                            title="Khoá tài khoản"
-                                            data-action="lock"
-                                            data-user-id="${user.userId}"
-                                            data-username="${user.username}"
-                                            onclick="showToggleModal(this)">
-                                        <i class="fas fa-lock-open"></i>
+                                            class="icon-btn icon-btn--view"
+                                            data-tooltip="Xem chi tiết"
+                                            title="Xem chi tiết"
+                                            aria-label="Xem chi tiết người dùng"
+                                            onclick="openUserDetail(${user.userId})">
+                                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
                                     </button>
-                                </c:when>
-                                <c:otherwise>
                                     <button type="button"
-                                            class="icon-btn icon-btn--lock"
-                                            title="Mở khoá tài khoản"
-                                            data-action="unlock"
-                                            data-user-id="${user.userId}"
-                                            data-username="${user.username}"
-                                            onclick="showToggleModal(this)">
-                                        <i class="fas fa-lock"></i>
+                                            class="icon-btn icon-btn--edit"
+                                            data-tooltip="Sửa"
+                                            title="Sửa"
+                                            aria-label="Sửa người dùng"
+                                            onclick="openUserDetailEdit(${user.userId})">
+                                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                                     </button>
-                                </c:otherwise>
-                            </c:choose>
+                                    <c:choose>
+                                        <c:when test="${user.active}">
+                                            <button type="button"
+                                                    class="icon-btn icon-btn--lock"
+                                                    data-tooltip="Khóa"
+                                                    data-action="lock"
+                                                    data-user-id="${user.userId}"
+                                                    data-username="${fn:escapeXml(displayName)}"
+                                                    title="Khóa"
+                                                    aria-label="Khóa tài khoản người dùng"
+                                                    onclick="showToggleModal(this)">
+                                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                                            </button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button type="button"
+                                                    class="icon-btn icon-btn--unlock"
+                                                    data-tooltip="Mở khóa"
+                                                    data-action="unlock"
+                                                    data-user-id="${user.userId}"
+                                                    data-username="${fn:escapeXml(displayName)}"
+                                                    title="Mở khóa"
+                                                    aria-label="Mở khóa tài khoản người dùng"
+                                                    onclick="showToggleModal(this)">
+                                                <i class="fa-solid fa-lock-open" aria-hidden="true"></i>
+                                            </button>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    <c:if test="${empty users}">
+                        <tr>
+                            <td colspan="8" class="empty-state">
+                                <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
+                                <strong>Chưa có người dùng nào trong hệ thống.</strong>
+                                <span>Dữ liệu sẽ hiển thị tại đây sau khi có tài khoản mới.</span>
+                            </td>
+                        </tr>
+                    </c:if>
 
-                            <button type="button"
-                                    class="icon-btn icon-btn--edit"
-                                    title="Chỉnh sửa chi tiết"
-                                    onclick="openUserDetail(${user.userId})">
-                                <i class="fas fa-pen-to-square"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </c:forEach>
-
-            <c:if test="${empty users}">
-                <tr>
-                    <td colspan="7" style="text-align:center; padding: 40px 16px; color: #999;">
-                        <i class="fas fa-users-slash" style="font-size: 28px; margin-bottom: 10px; display:block; opacity:.4;"></i>
-                        Không có dữ liệu
-                    </td>
-                </tr>
-            </c:if>
-            </tbody>
-        </table>
+                    <tr id="filterEmptyRow" class="filter-empty-row" style="display: none;">
+                        <td colspan="8" class="empty-state">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <strong>Chưa có người dùng nào phù hợp với bộ lọc.</strong>
+                            <span>Thử thay đổi từ khóa, vai trò hoặc trạng thái tài khoản.</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 </div>
 <div id="userModal" class="modal">
-    <div class="modal-content user-modal">
+    <div class="modal-content user-modal user-modal--redesigned" role="dialog" aria-modal="true" aria-labelledby="userModalTitle">
+        <button type="button" class="btn-close" onclick="closeModal()" aria-label="Đóng">&times;</button>
 
-        <span class="btn-close" onclick="closeModal()">&times;</span>
-
-        <h2>Chi tiết người dùng</h2>
-
-        <form action="${pageContext.request.contextPath}/admin/users" method="post">
-
+        <div class="modal-heading">
+            <span class="eyebrow">Hồ sơ tài khoản</span>
+            <h2 id="userModalTitle">Chi tiết người dùng</h2>
+        </div>
+        <div class="metrics-grid" id="metricsGrid">
+            <div class="metric-card metric-card--spending">
+                <div class="metric-icon"><i class="fa-solid fa-coins" aria-hidden="true"></i></div>
+                <div class="metric-body">
+                    <span class="metric-label">Tổng chi tiêu</span>
+                    <span class="metric-value" id="metricSpending">0 ₫</span>
+                    <span class="metric-sub">Giá trị vòng đời khách hàng</span>
+                </div>
+            </div>
+            <div class="metric-card metric-card--orders">
+                <div class="metric-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></div>
+                <div class="metric-body">
+                    <span class="metric-label">Đơn hàng</span>
+                    <span class="metric-value" id="metricOrders">0 / 0</span>
+                    <span class="metric-sub">Tổng đơn / đơn hủy</span>
+                </div>
+            </div>
+            <div class="metric-card metric-card--activity">
+                <div class="metric-icon"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></div>
+                <div class="metric-body">
+                    <span class="metric-label">Hoạt động</span>
+                    <span class="metric-value metric-value--sm" id="metricJoinDate">Chưa có</span>
+                    <span class="metric-sub" id="metricLastUpdate">Cập nhật gần nhất: Chưa có</span>
+                </div>
+            </div>
+        </div>
+        <form action="${pageContext.request.contextPath}/admin/users" method="post" id="userEditForm">
             <input type="hidden" name="action" value="update-profile">
             <input type="hidden" name="id" id="detailUserId">
-
             <div class="modal-body">
-                <div class="user-preview">
-
-                    <div class="avatar-circle">
-                        👤
-                    </div>
-
+                <aside class="user-preview">
+                    <div class="avatar-circle" id="previewAvatarInitial">U</div>
                     <h3 id="previewName">Tên người dùng</h3>
-
                     <span id="previewStatus" class="status-pill active">
-                        ● Hoạt động
+                        <span class="status-dot"></span>
+                        <span id="previewStatusText">Hoạt động</span>
                     </span>
-
                     <div class="preview-info">
-                        <p>
-                            <strong>ID:</strong>
-                            <span id="detailId"></span>
-                        </p>
-
-                        <p>
-                            <strong>Email:</strong>
-                            <span id="previewEmail"></span>
-                        </p>
-
-                        <p>
-                            <strong>SĐT:</strong>
-                            <span id="previewPhone"></span>
-                        </p>
+                        <p><strong>ID:</strong> <span id="detailId"></span></p>
+                        <p><strong>Email:</strong> <span id="previewEmail"></span></p>
+                        <p><strong>Số điện thoại:</strong> <span id="previewPhone"></span></p>
                     </div>
-
-                </div>
-                <div class="user-form">
-
-                    <div class="form-row">
-                        <label>Tên người dùng</label>
-                        <input type="text"
-                               name="username"
-                               id="detailName"
-                               required>
+                </aside>
+                <section class="user-form" id="userInfoPanel">
+                    <div class="info-panel-header">
+                        <h4 class="info-panel-title">
+                            <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+                            Thông tin cá nhân
+                        </h4>
+                        <button type="button" class="btn-edit-toggle" id="btnEditToggle" onclick="toggleEditMode()">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                            Chỉnh sửa
+                        </button>
                     </div>
-
-                    <div class="form-row">
-                        <label>Email</label>
-                        <input type="email"
-                               name="email"
-                               id="detailEmail"
-                               required>
+                    <div class="info-view-mode" id="viewMode">
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-user" aria-hidden="true"></i> Tên người dùng</span>
+                            <span class="info-value" id="viewName">Chưa có</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Email</span>
+                            <span class="info-value" id="viewEmail">Chưa có</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-phone" aria-hidden="true"></i> Số điện thoại</span>
+                            <span class="info-value" id="viewPhone">Chưa có</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Vai trò</span>
+                            <span class="info-value" id="viewRole">Chưa có</span>
+                        </div>
                     </div>
-
-                    <div class="form-row">
-                        <label>Số điện thoại</label>
-                        <input type="text"
-                               name="phone"
-                               id="detailPhone"
-                               required>
+                    <div class="info-edit-mode" id="editMode" style="display: none;">
+                        <div class="form-row">
+                            <label class="form-label-hg" for="detailName">Tên người dùng</label>
+                            <input type="text" name="username" id="detailName" class="form-input-hg" required>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label-hg" for="detailEmail">Email</label>
+                            <input type="email" name="email" id="detailEmail" class="form-input-hg" required>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label-hg" for="detailPhone">Số điện thoại</label>
+                            <input type="text" name="phone" id="detailPhone" class="form-input-hg" required>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label-hg" for="detailRole">Vai trò</label>
+                            <select name="role" id="detailRole" class="form-input-hg">
+                                <option value="Khách hàng">Khách hàng</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="edit-actions">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+                                Lưu thay đổi
+                            </button>
+                            <button type="button" class="btn btn-cancel-edit" onclick="cancelEditMode()">
+                                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                                Hủy bỏ
+                            </button>
+                        </div>
                     </div>
-
-                    <div class="form-row">
-                        <label>Vai trò</label>
-
-                        <select name="role" id="detailRole">
-                            <option value="Khách hàng">Khách hàng</option>
-                            <option value="Admin">Admin</option>
-                        </select>
-                    </div>
-
-                </div>
-
+                </section>
             </div>
             <div class="modal-actions">
-
-                <button class="btn btn-primary" type="submit">
-                    Lưu thay đổi
+                <button type="button" id="toggleStatusBtn" class="btn btn-danger">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    Khóa tài khoản
                 </button>
-
-                <button type="button"
-                        id="toggleStatusBtn"
-                        class="btn btn-danger">
-                    Khoá tài khoản
-                </button>
-
             </div>
         </form>
     </div>
 </div>
 <div id="toggleConfirmModal" class="confirm-overlay">
-    <div class="confirm-box">
+    <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
         <div class="confirm-icon-wrapper" id="confirmIconWrapper">
-            <i class="fas fa-shield-halved"></i>
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
         </div>
         <h3 class="confirm-title" id="confirmTitle">Xác nhận hành động</h3>
         <p class="confirm-message" id="confirmMessage">Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này?</p>
         <div class="confirm-actions">
             <button type="button" class="confirm-btn confirm-btn--cancel" id="confirmCancelBtn" onclick="closeToggleModal()">
-                <i class="fas fa-xmark"></i> Huỷ bỏ
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                Hủy bỏ
             </button>
             <button type="button" class="confirm-btn confirm-btn--ok" id="confirmOkBtn" onclick="executeToggle()">
-                <i class="fas fa-check"></i> Đồng ý
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                Đồng ý
             </button>
         </div>
     </div>
@@ -261,6 +487,22 @@
 </form>
 <script>
     let pendingToggleUserId = null;
+    let currentUserData = null;
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+        const statCards = document.querySelectorAll('.stats-grid .stat-card');
+        statCards.forEach(function(card, i) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(14px)';
+            setTimeout(function() {
+                card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 70 + i * 80);
+        });
+    });
     function showToggleModal(btn) {
         const action = btn.getAttribute('data-action');
         const userId = btn.getAttribute('data-user-id');
@@ -275,45 +517,309 @@
 
         if (action === 'lock') {
             iconWrapper.className = 'confirm-icon-wrapper confirm-icon--lock';
-            iconWrapper.innerHTML = '<i class="fas fa-lock"></i>';
-            title.textContent = 'Khoá tài khoản';
-            message.innerHTML = 'Bạn có chắc chắn muốn <strong>khoá</strong> tài khoản <strong>"' + username + '"</strong> không?';
+            iconWrapper.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i>';
+            title.textContent = 'Khóa tài khoản';
+            message.textContent = 'Bạn có chắc chắn muốn khóa tài khoản "' + username + '" không?';
             okBtn.className = 'confirm-btn confirm-btn--danger';
-            okBtn.innerHTML = '<i class="fas fa-lock"></i> Khoá ngay';
+            okBtn.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i> Khóa ngay';
         } else {
             iconWrapper.className = 'confirm-icon-wrapper confirm-icon--unlock';
-            iconWrapper.innerHTML = '<i class="fas fa-lock-open"></i>';
-            title.textContent = 'Mở khoá tài khoản';
-            message.innerHTML = 'Bạn có chắc chắn muốn <strong>mở khoá</strong> tài khoản <strong>"' + username + '"</strong> không?';
+            iconWrapper.innerHTML = '<i class="fa-solid fa-lock-open" aria-hidden="true"></i>';
+            title.textContent = 'Mở khóa tài khoản';
+            message.textContent = 'Bạn có chắc chắn muốn mở khóa tài khoản "' + username + '" không?';
             okBtn.className = 'confirm-btn confirm-btn--success';
-            okBtn.innerHTML = '<i class="fas fa-lock-open"></i> Mở khoá';
+            okBtn.innerHTML = '<i class="fa-solid fa-lock-open" aria-hidden="true"></i> Mở khóa';
         }
-
         overlay.classList.add('active');
-
         setTimeout(function() {
             overlay.querySelector('.confirm-box').classList.add('show');
         }, 10);
     }
-
     function closeToggleModal() {
         const overlay = document.getElementById('toggleConfirmModal');
         const box = overlay.querySelector('.confirm-box');
         box.classList.remove('show');
         setTimeout(function() {
             overlay.classList.remove('active');
-        }, 200);
+        }, 180);
         pendingToggleUserId = null;
     }
-
     function executeToggle() {
-        if (!pendingToggleUserId) return;
+        if (!pendingToggleUserId) {
+            return;
+        }
         document.getElementById('toggleUserId').value = pendingToggleUserId;
         document.getElementById('toggleStatusForm').submit();
     }
+    function formatCurrency(amount) {
+        if (amount == null || isNaN(amount)) {
+            return '0 ₫';
+        }
+        return new Intl.NumberFormat('vi-VN').format(amount) + ' ₫';
+    }
+    function formatDate(timestamp) {
+        if (!timestamp) {
+            return 'Chưa có';
+        }
+        const d = new Date(timestamp);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        return day + '/' + month + '/' + year;
+    }
+    function formatDateTime(timestamp) {
+        if (!timestamp) {
+            return 'Chưa có';
+        }
+        const d = new Date(timestamp);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const hours = String(d.getHours()).padStart(2, '0');
+        const mins = String(d.getMinutes()).padStart(2, '0');
+        return hours + ':' + mins + ' - ' + day + '/' + month + '/' + year;
+    }
+
+    function getInitial(value) {
+        const normalized = (value || 'U').trim();
+        return normalized ? normalized.charAt(0).toUpperCase() : 'U';
+    }
+
+    function clearElement(element) {
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    }
+    function resolveAvatarSrc(avatar) {
+        const value = (avatar || '').trim();
+        const contextPath = '${pageContext.request.contextPath}';
+        if (!value || value === 'avatar/avatar.jpg') {
+            return '';
+        }
+        if (value.startsWith('http://') || value.startsWith('https://')) {
+            return value;
+        }
+        if (value.startsWith('/')) {
+            return contextPath + value;
+        }
+        if (value.startsWith('static/') || value.startsWith('uploads/') || value.startsWith('media/')) {
+            return contextPath + '/' + value;
+        }
+        return contextPath + '/static/' + value;
+    }
+    function renderPreviewAvatar(user, displayName) {
+        const avatarBox = document.getElementById('previewAvatarInitial');
+        if (!avatarBox) {
+            return;
+        }
+
+        clearElement(avatarBox);
+        avatarBox.classList.remove('avatar-circle--image');
+
+        const src = resolveAvatarSrc(user.avatar || '');
+        if (!src) {
+            avatarBox.textContent = getInitial(displayName);
+            return;
+        }
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Ảnh đại diện';
+        img.className = 'preview-avatar-img';
+        img.loading = 'lazy';
+        img.onerror = function() {
+            clearElement(avatarBox);
+            avatarBox.classList.remove('avatar-circle--image');
+            avatarBox.textContent = getInitial(displayName);
+        };
+
+        avatarBox.appendChild(img);
+        avatarBox.classList.add('avatar-circle--image');
+    }
+    function openUserDetail(id) {
+        resetToViewMode();
+        fetchAndShowUser(id, false);
+    }
+
+    function openUserDetailEdit(id) {
+        fetchAndShowUser(id, true);
+    }
+    function fetchAndShowUser(id, autoEdit) {
+        fetch("${pageContext.request.contextPath}/admin/users?action=detail&id=" + id)
+            .then(function(res) {
+                return res.json();
+            })
+            .then(function(user) {
+                currentUserData = user;
+                const displayName = user.fullName || user.username || 'Người dùng';
+
+                document.getElementById('detailUserId').value = user.userId;
+                document.getElementById('detailId').innerText = '#U' + user.userId;
+                renderPreviewAvatar(user, displayName);
+                document.getElementById('previewName').innerText = displayName;
+                document.getElementById('previewEmail').innerText = user.email || 'Chưa có';
+                document.getElementById('previewPhone').innerText = user.phone || 'Chưa có';
+
+                const status = document.getElementById('previewStatus');
+                const statusText = document.getElementById('previewStatusText');
+                const toggleBtn = document.getElementById('toggleStatusBtn');
+                status.classList.remove('active', 'lock');
+                toggleBtn.classList.remove('btn-danger', 'btn-success');
+
+                if (user.isActive) {
+                    statusText.innerText = 'Hoạt động';
+                    status.classList.add('active');
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i> Khóa tài khoản';
+                    toggleBtn.classList.add('btn-danger');
+                } else {
+                    statusText.innerText = 'Đã khóa';
+                    status.classList.add('lock');
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-lock-open" aria-hidden="true"></i> Mở khóa tài khoản';
+                    toggleBtn.classList.add('btn-success');
+                }
+
+                toggleBtn.onclick = function() {
+                    const tempBtn = document.createElement('button');
+                    tempBtn.setAttribute('data-action', user.isActive ? 'lock' : 'unlock');
+                    tempBtn.setAttribute('data-user-id', user.userId);
+                    tempBtn.setAttribute('data-username', displayName);
+                    showToggleModal(tempBtn);
+                };
+
+                document.getElementById('viewName').innerText = displayName;
+                document.getElementById('viewEmail').innerText = user.email || 'Chưa có';
+                document.getElementById('viewPhone').innerText = user.phone || 'Chưa có';
+                document.getElementById('viewRole').innerText = user.role || 'Chưa có';
+
+                document.getElementById('detailName').value = user.username || '';
+                document.getElementById('detailEmail').value = user.email || '';
+                document.getElementById('detailPhone').value = user.phone || '';
+                document.getElementById('detailRole').value = user.role || '';
+
+                document.getElementById('metricSpending').innerText = formatCurrency(user.totalSpending);
+                document.getElementById('metricOrders').innerText = (user.totalOrders || 0) + ' / ' + (user.cancelledOrders || 0);
+                document.getElementById('metricJoinDate').innerText = 'Gia nhập: ' + formatDate(user.createdAt);
+                document.getElementById('metricLastUpdate').innerText = 'Cập nhật gần nhất: ' + formatDateTime(user.updatedAt);
+
+                document.getElementById('userModal').style.display = 'flex';
+                if (autoEdit) {
+                    setTimeout(function() {
+                        toggleEditMode();
+                    }, 180);
+                }
+            });
+    }
+
+    function toggleEditMode() {
+        const viewMode = document.getElementById('viewMode');
+        const editMode = document.getElementById('editMode');
+        const toggleBtn = document.getElementById('btnEditToggle');
+
+        viewMode.style.display = 'none';
+        editMode.style.display = 'block';
+        toggleBtn.style.display = 'none';
+    }
+
+    function cancelEditMode() {
+        if (currentUserData) {
+            document.getElementById('detailName').value = currentUserData.username || '';
+            document.getElementById('detailEmail').value = currentUserData.email || '';
+            document.getElementById('detailPhone').value = currentUserData.phone || '';
+            document.getElementById('detailRole').value = currentUserData.role || '';
+        }
+        resetToViewMode();
+    }
+
+    function resetToViewMode() {
+        document.getElementById('editMode').style.display = 'none';
+        document.getElementById('viewMode').style.display = 'block';
+        document.getElementById('btnEditToggle').style.display = 'inline-flex';
+    }
+
+    function closeModal() {
+        document.getElementById('userModal').style.display = 'none';
+        resetToViewMode();
+    }
+
+    function filterUsers() {
+        const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+        const role = document.getElementById('role-filter').value;
+        const status = document.getElementById('status-filter').value;
+        const rows = document.querySelectorAll('#userTableBody tr.user-row');
+        let visibleCount = 0;
+
+        rows.forEach(function(row) {
+            const textMatch = row.innerText.toLowerCase().includes(keyword);
+            const roleMatch = !role || row.dataset.userRole === role;
+            const statusMatch = !status || row.dataset.userStatus === status;
+            const visible = textMatch && roleMatch && statusMatch;
+
+            row.style.display = visible ? '' : 'none';
+            if (visible) {
+                visibleCount++;
+            }
+        });
+
+        const emptyRow = document.getElementById('filterEmptyRow');
+        if (emptyRow) {
+            emptyRow.style.display = rows.length > 0 && visibleCount === 0 ? '' : 'none';
+        }
+    }
+
+    function sortUsers() {
+        const tbody = document.getElementById('userTableBody');
+        const rows = Array.from(tbody.querySelectorAll('tr.user-row'));
+        const sortType = document.getElementById('sortselect').value;
+
+        if (!sortType) {
+            restoreDefaultOrder();
+            filterUsers();
+            return;
+        }
+
+        rows.sort(function(a, b) {
+            const nameA = (a.dataset.userSort || '').toLowerCase();
+            const nameB = (b.dataset.userSort || '').toLowerCase();
+            return sortType === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+        });
+
+        rows.forEach(function(row) {
+            tbody.insertBefore(row, document.getElementById('filterEmptyRow'));
+        });
+        filterUsers();
+    }
+
+    function restoreDefaultOrder() {
+        const tbody = document.getElementById('userTableBody');
+        const rows = Array.from(tbody.querySelectorAll('tr.user-row'));
+
+        rows.sort(function(a, b) {
+            return Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex);
+        });
+
+        rows.forEach(function(row) {
+            tbody.insertBefore(row, document.getElementById('filterEmptyRow'));
+        });
+    }
+
+    function resetFilters() {
+        document.getElementById('search-input').value = '';
+        document.getElementById('role-filter').value = '';
+        document.getElementById('status-filter').value = '';
+        document.getElementById('sortselect').value = '';
+        restoreDefaultOrder();
+        filterUsers();
+    }
 
     document.getElementById('toggleConfirmModal').addEventListener('click', function(e) {
-        if (e.target === this) closeToggleModal();
+        if (e.target === this) {
+            closeToggleModal();
+        }
+    });
+
+    document.getElementById('userModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
     });
 
     document.addEventListener('keydown', function(e) {
@@ -322,110 +828,6 @@
             closeModal();
         }
     });
-    function openUserDetail(id){
-        fetch(
-            "${pageContext.request.contextPath}/admin/users?action=detail&id=" +id
-        )
-            .then(res => res.json())
-            .then(user => {
-                document.getElementById("detailUserId").value = user.userId;
-                document.getElementById("detailId").innerText = "#U" + user.userId;
-                document.getElementById("detailName").value = user.username|| "";
-                document.getElementById("detailEmail").value = user.email|| "";
-                document.getElementById("detailPhone").value = user.phone || "";
-                document.getElementById("detailRole").value = user.role || "";
-                document.getElementById("previewName").innerText = user.username || "";
-                document.getElementById("previewEmail").innerText = user.email || "";
-                document.getElementById("previewPhone").innerText = user.phone || "";
-                const status = document.getElementById("previewStatus");
-                const toggleBtn = document.getElementById("toggleStatusBtn");
-                status.classList.remove("active","lock");
-                toggleBtn.classList.remove("btn-danger", "btn-success");
-                if(user.isActive){
-
-                    status.innerText = "● Hoạt động";
-                    status.classList.add("active");
-
-                    toggleBtn.innerText = "Khoá tài khoản";
-                    toggleBtn.classList.remove("btn-success");
-                    toggleBtn.classList.add("btn-danger");
-
-                } else {
-
-                    status.innerText = "● Đã khoá";
-                    status.classList.add("lock");
-
-                    toggleBtn.innerText = "Mở khoá tài khoản";
-                    toggleBtn.classList.remove("btn-danger");
-                    toggleBtn.classList.add("btn-success");
-                }
-                toggleBtn.onclick = function (){
-                    const message = user.isActive
-                    ? "Bạn có chắc muốn khoá tài khoản này?" : "Bạn có chắc muốn mở khoá tài khoản này?"
-                    if (confirm(message)) {
-                        let form = document.createElement("form");
-                        form.method = "post";
-                        form.action = "${pageContext.request.contextPath}/admin/users";
-
-                        let actionInput = document.createElement("input");
-                        actionInput.type ="hidden";
-                        actionInput.name = "action";
-                        actionInput.value = "toggle-status";
-                        let idInput = document.createElement("input");
-                        idInput.type = "hidden";
-                        idInput.name = "id";
-                        idInput.value = user.userId;
-                        form.appendChild(actionInput);
-                        form.appendChild(idInput);
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
-                };
-                document.getElementById("userModal").style.display = "flex";
-
-            });
-
-    }
-    function closeModal(){
-        document.getElementById("userModal").style.display = "none";
-    }
-    window.onclick =function (event){
-        let modal = document.getElementById("userModal");
-        if (event.target === modal){
-            closeModal();
-        }
-    }
-    function filterUsers(){
-        let keyword = document.getElementById("search-input")
-            .value
-            .toLowerCase();
-        let rows=document.querySelectorAll("#userTableBody tr");
-        rows.forEach(row => {
-            let text = row.innerText.toLowerCase();
-            if (text.includes(keyword)) {
-                row.style.display=""
-            } else {
-                row.style.display="none"
-            }
-        });
-    }
-    function sortUsers(){
-        let tbody = document.getElementById("userTableBody");
-        let rows = Array.from(tbody.querySelectorAll("tr"));
-        let sortType = document.getElementById("sortselect").value;
-        rows.sort((a, b) => {
-            let nameA = a.cells[1].innerText.toLowerCase();
-            let nameB = b.cells[1].innerText.toLowerCase();
-            if (sortType === "asc"){
-                return nameA.localeCompare(nameB)
-            }
-            if (sortType === "desc"){
-                return nameB.localeCompare(nameA)
-            }
-            return 0;
-        });
-        rows.forEach(row=> tbody.appendChild(row));
-    }
 </script>
 </body>
 </html>
