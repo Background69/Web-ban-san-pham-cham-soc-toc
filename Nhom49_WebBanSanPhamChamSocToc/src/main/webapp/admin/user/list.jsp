@@ -42,12 +42,12 @@
                 </div>
             </article>
 
-            <article class="stat-card stat-card--staff">
+            <article class="stat-card stat-card--admin">
                 <div class="stat-icon"><i class="fa-solid fa-user-shield" aria-hidden="true"></i></div>
                 <div class="stat-body">
-                    <span class="stat-label">Nhân viên/Admin</span>
-                    <strong class="stat-number" id="statStaffUsers">${staffUsers}</strong>
-                    <span class="stat-note">Quyền quản trị</span>
+                    <span class="stat-label">Admin</span>
+                    <strong class="stat-number" id="statAdminUsers">${adminUsers}</strong>
+                    <span class="stat-note">Tài khoản quản trị</span>
                 </div>
             </article>
 
@@ -88,7 +88,7 @@
                     <select class="filter-select" id="role-filter" onchange="filterUsers()">
                         <option value="">Tất cả vai trò</option>
                         <option value="customer">Khách hàng</option>
-                        <option value="staff">Nhân viên/Admin</option>
+                        <option value="admin">Admin</option>
                     </select>
                 </label>
                 <label class="field" for="status-filter">
@@ -129,9 +129,10 @@
                     <tbody id="userTableBody">
                     <c:forEach var="user" items="${users}" varStatus="loop">
                         <c:set var="displayName" value="${empty user.fullName ? user.username : user.fullName}" />
-                        <c:set var="roleValue" value="${empty user.role ? 'Khách hàng' : user.role}" />
-                        <c:set var="roleLower" value="${fn:toLowerCase(roleValue)}" />
-                        <c:set var="roleFilter" value="${roleValue == 'Admin' || roleLower == 'staff' || roleValue == 'Nhân viên' ? 'staff' : 'customer'}" />
+                        <c:set var="rawRoleValue" value="${empty user.role ? '' : user.role}" />
+                        <c:set var="rawRoleLower" value="${fn:toLowerCase(fn:trim(rawRoleValue))}" />
+                        <c:set var="roleValue" value="${rawRoleLower == 'admin' ? 'Admin' : 'Khách hàng'}" />
+                        <c:set var="roleFilter" value="${roleValue == 'Admin' ? 'admin' : 'customer'}" />
                         <c:set var="statusFilter" value="${user.active ? 'active' : 'locked'}" />
                         <c:set var="avatarValue" value="${fn:trim(user.avatar)}" />
                         <c:set var="avatarIsProjectDefault" value="${avatarValue == 'avatar/avatar.jpg'}" />
@@ -228,12 +229,6 @@
                                     <c:when test="${roleValue == 'Admin'}">
                                         <span class="role-badge role-admin">
                                             <i class="fa-solid fa-crown" aria-hidden="true"></i>
-                                            <c:out value="${roleValue}" />
-                                        </span>
-                                    </c:when>
-                                    <c:when test="${roleFilter == 'staff'}">
-                                        <span class="role-badge role-staff">
-                                            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
                                             <c:out value="${roleValue}" />
                                         </span>
                                     </c:when>
@@ -374,7 +369,7 @@
                 </div>
             </div>
         </div>
-        <form action="${pageContext.request.contextPath}/admin/users" method="post" id="userEditForm">
+        <form action="${pageContext.request.contextPath}/admin/users" method="post" id="userEditForm" novalidate>
             <input type="hidden" name="action" value="update-profile">
             <input type="hidden" name="id" id="detailUserId">
             <div class="modal-body">
@@ -421,27 +416,61 @@
                         </div>
                     </div>
                     <div class="info-edit-mode" id="editMode" style="display: none;">
-                        <div class="form-row">
-                            <label class="form-label-hg" for="detailName">Tên người dùng</label>
-                            <input type="text" name="username" id="detailName" class="form-input-hg" required>
+                        <div class="form-section form-section--personal">
+                            <h4 class="form-section-title">
+                                <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+                                Thông tin cá nhân
+                            </h4>
+
+                            <div class="form-row">
+                                <label class="form-label-hg" for="detailName">Tên người dùng</label>
+                                <input type="text" name="username" id="detailName" class="form-input-hg" required>
+                                <small class="field-error" id="detailNameError"></small>
+                            </div>
+
+                            <div class="form-row">
+                                <label class="form-label-hg" for="detailEmail">Email</label>
+                                <input type="email" name="email" id="detailEmail" class="form-input-hg" required>
+                                <small class="field-error" id="detailEmailError"></small>
+                            </div>
+
+                            <div class="form-row">
+                                <label class="form-label-hg" for="detailPhone">Số điện thoại</label>
+                                <input type="tel"
+                                       name="phone"
+                                       id="detailPhone"
+                                       class="form-input-hg"
+                                       inputmode="numeric"
+                                       pattern="[0-9]{9,11}"
+                                       maxlength="11"
+                                       required>
+                                <small class="field-error" id="detailPhoneError"></small>
+                            </div>
                         </div>
-                        <div class="form-row">
-                            <label class="form-label-hg" for="detailEmail">Email</label>
-                            <input type="email" name="email" id="detailEmail" class="form-input-hg" required>
+
+                        <div class="form-section form-section--role">
+                            <div class="role-section-header">
+                                <h4 class="form-section-title">
+                                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                                    Phân quyền tài khoản
+                                </h4>
+                                <p>Vai trò quyết định quyền truy cập của tài khoản trong hệ thống.</p>
+                            </div>
+
+                            <div class="form-row">
+                                <label class="form-label-hg" for="detailRole">Vai trò</label>
+                                <select name="role" id="detailRole" class="form-input-hg role-select">
+                                    <option value="Khách hàng">Khách hàng</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                                <small class="role-help-text" id="roleHelpText">
+                                    Khách hàng chỉ có quyền mua hàng, quản lý giỏ hàng, đơn hàng và hồ sơ cá nhân.
+                                </small>
+                            </div>
                         </div>
-                        <div class="form-row">
-                            <label class="form-label-hg" for="detailPhone">Số điện thoại</label>
-                            <input type="text" name="phone" id="detailPhone" class="form-input-hg" required>
-                        </div>
-                        <div class="form-row">
-                            <label class="form-label-hg" for="detailRole">Vai trò</label>
-                            <select name="role" id="detailRole" class="form-input-hg">
-                                <option value="Khách hàng">Khách hàng</option>
-                                <option value="Admin">Admin</option>
-                            </select>
-                        </div>
-                        <div class="edit-actions">
-                            <button class="btn btn-primary" type="submit">
+
+                        <div class="edit-actions edit-actions--inline">
+                            <button class="btn btn-primary" type="submit" id="saveUserChangesBtn">
                                 <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
                                 Lưu thay đổi
                             </button>
@@ -481,6 +510,31 @@
         </div>
     </div>
 </div>
+<div id="adminRoleConfirmModal" class="confirm-overlay">
+    <div class="confirm-box confirm-box--admin-role" role="dialog" aria-modal="true" aria-labelledby="adminRoleConfirmTitle">
+        <div class="confirm-icon-wrapper confirm-icon--admin">
+            <i class="fa-solid fa-crown" aria-hidden="true"></i>
+        </div>
+        <h3 class="confirm-title" id="adminRoleConfirmTitle">Xác nhận cấp quyền Admin</h3>
+        <p class="confirm-message">
+            Tài khoản này sẽ có quyền truy cập khu vực quản trị. Chỉ cấp quyền Admin cho tài khoản đáng tin cậy.
+        </p>
+        <ul class="confirm-list">
+            <li>Có thể xem và chỉnh sửa dữ liệu quản lý như người dùng, sản phẩm, đơn hàng.</li>
+            <li>Có quyền thao tác với dữ liệu hệ thống trong khu vực admin.</li>
+        </ul>
+        <div class="confirm-actions">
+            <button type="button" class="confirm-btn confirm-btn--cancel" id="cancelAdminRoleBtn">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                Hủy
+            </button>
+            <button type="button" class="confirm-btn confirm-btn--ok" id="confirmAdminRoleBtn">
+                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                Xác nhận cấp quyền
+            </button>
+        </div>
+    </div>
+</div>
 <form id="toggleStatusForm" method="post" action="${pageContext.request.contextPath}/admin/users" style="display:none;">
     <input type="hidden" name="action" value="toggle-status">
     <input type="hidden" name="id" id="toggleUserId">
@@ -488,6 +542,8 @@
 <script>
     let pendingToggleUserId = null;
     let currentUserData = null;
+    let originalUserRole = 'Khách hàng';
+    let adminRoleConfirmed = false;
     document.addEventListener('DOMContentLoaded', function() {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             return;
@@ -635,6 +691,255 @@
         avatarBox.appendChild(img);
         avatarBox.classList.add('avatar-circle--image');
     }
+
+    function normalizeRole(role) {
+        const value = (role || '').trim();
+        return value.toLowerCase() === 'admin' ? 'Admin' : 'Khách hàng';
+    }
+
+    function updateRoleHelpText() {
+        const roleSelect = document.getElementById('detailRole');
+        const role = normalizeRole(roleSelect ? roleSelect.value : '');
+        const help = document.getElementById('roleHelpText');
+        if (!help) {
+            return;
+        }
+
+        if (role === 'Admin') {
+            help.textContent = 'Admin có quyền truy cập khu vực quản trị, quản lý người dùng, sản phẩm, đơn hàng và dữ liệu hệ thống.';
+        } else {
+            help.textContent = 'Khách hàng chỉ có quyền mua hàng, quản lý giỏ hàng, đơn hàng và hồ sơ cá nhân.';
+        }
+    }
+
+    function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    function isValidPhone(value) {
+        return /^[0-9]{9,11}$/.test(value);
+    }
+
+    function setFieldError(inputId, errorId, message) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        if (!input || !error) {
+            return;
+        }
+
+        const row = input.closest('.form-row');
+        input.classList.add('is-invalid');
+        if (row) {
+            row.classList.add('has-error');
+        }
+        error.textContent = message;
+    }
+
+    function clearFieldError(inputId, errorId) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        if (!input || !error) {
+            return;
+        }
+
+        const row = input.closest('.form-row');
+        input.classList.remove('is-invalid');
+        if (row) {
+            row.classList.remove('has-error');
+        }
+        error.textContent = '';
+    }
+
+    function validateNameField() {
+        const name = document.getElementById('detailName');
+        if (!name) {
+            return true;
+        }
+
+        const value = name.value.trim();
+        if (!value) {
+            setFieldError('detailName', 'detailNameError', 'Tên người dùng không được để trống');
+            return false;
+        }
+
+        clearFieldError('detailName', 'detailNameError');
+        return true;
+    }
+
+    function validateEmailField() {
+        const email = document.getElementById('detailEmail');
+        if (!email) {
+            return true;
+        }
+
+        const value = email.value.trim();
+        if (!value || !isValidEmail(value)) {
+            setFieldError('detailEmail', 'detailEmailError', 'Định dạng email chưa chính xác');
+            return false;
+        }
+
+        clearFieldError('detailEmail', 'detailEmailError');
+        return true;
+    }
+
+    function validatePhoneField() {
+        const phone = document.getElementById('detailPhone');
+        if (!phone) {
+            return true;
+        }
+
+        const value = phone.value.trim();
+        if (!value || !isValidPhone(value)) {
+            setFieldError('detailPhone', 'detailPhoneError', 'Số điện thoại phải chứa từ 9-11 chữ số');
+            return false;
+        }
+
+        clearFieldError('detailPhone', 'detailPhoneError');
+        return true;
+    }
+
+    function validateUserEditForm() {
+        const validName = validateNameField();
+        const validEmail = validateEmailField();
+        const validPhone = validatePhoneField();
+
+        if (!validName) {
+            const name = document.getElementById('detailName');
+            if (name) {
+                name.focus();
+            }
+            return false;
+        }
+
+        if (!validEmail) {
+            const email = document.getElementById('detailEmail');
+            if (email) {
+                email.focus();
+            }
+            return false;
+        }
+
+        if (!validPhone) {
+            const phone = document.getElementById('detailPhone');
+            if (phone) {
+                phone.focus();
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    function clearUserEditValidation() {
+        clearFieldError('detailName', 'detailNameError');
+        clearFieldError('detailEmail', 'detailEmailError');
+        clearFieldError('detailPhone', 'detailPhoneError');
+    }
+
+    function openAdminRoleConfirmModal() {
+        const modal = document.getElementById('adminRoleConfirmModal');
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.add('active');
+        setTimeout(function() {
+            const box = modal.querySelector('.confirm-box');
+            if (box) {
+                box.classList.add('show');
+            }
+        }, 10);
+    }
+
+    function closeAdminRoleConfirmModal() {
+        const modal = document.getElementById('adminRoleConfirmModal');
+        if (!modal) {
+            return;
+        }
+
+        const box = modal.querySelector('.confirm-box');
+        if (box) {
+            box.classList.remove('show');
+        }
+        setTimeout(function() {
+            modal.classList.remove('active');
+        }, 180);
+    }
+
+    function submitUserEditFormAfterAdminConfirm() {
+        const form = document.getElementById('userEditForm');
+        if (!form) {
+            return;
+        }
+
+        adminRoleConfirmed = true;
+        closeAdminRoleConfirmModal();
+        if (typeof form.requestSubmit === 'function') {
+            form.requestSubmit();
+        } else {
+            form.submit();
+        }
+    }
+
+    function bindUserEditInteractions() {
+        const form = document.getElementById('userEditForm');
+        const name = document.getElementById('detailName');
+        const email = document.getElementById('detailEmail');
+        const phone = document.getElementById('detailPhone');
+        const role = document.getElementById('detailRole');
+        const confirmAdminBtn = document.getElementById('confirmAdminRoleBtn');
+        const cancelAdminBtn = document.getElementById('cancelAdminRoleBtn');
+
+        if (name) {
+            name.addEventListener('input', validateNameField);
+            name.addEventListener('blur', validateNameField);
+        }
+        if (email) {
+            email.addEventListener('input', validateEmailField);
+            email.addEventListener('blur', validateEmailField);
+        }
+        if (phone) {
+            phone.addEventListener('input', validatePhoneField);
+            phone.addEventListener('blur', validatePhoneField);
+        }
+        if (role) {
+            role.addEventListener('change', function() {
+                adminRoleConfirmed = false;
+                updateRoleHelpText();
+            });
+        }
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (!validateUserEditForm()) {
+                    e.preventDefault();
+                    return;
+                }
+
+                const newRole = normalizeRole(role ? role.value : '');
+                const upgradingToAdmin = originalUserRole !== 'Admin' && newRole === 'Admin';
+                if (upgradingToAdmin && !adminRoleConfirmed) {
+                    e.preventDefault();
+                    openAdminRoleConfirmModal();
+                }
+            });
+        }
+
+        if (confirmAdminBtn) {
+            confirmAdminBtn.addEventListener('click', submitUserEditFormAfterAdminConfirm);
+        }
+        if (cancelAdminBtn) {
+            cancelAdminBtn.addEventListener('click', function() {
+                adminRoleConfirmed = false;
+                closeAdminRoleConfirmModal();
+            });
+        }
+
+        updateRoleHelpText();
+    }
+
+    document.addEventListener('DOMContentLoaded', bindUserEditInteractions);
+
     function openUserDetail(id) {
         resetToViewMode();
         fetchAndShowUser(id, false);
@@ -650,6 +955,7 @@
             })
             .then(function(user) {
                 currentUserData = user;
+                adminRoleConfirmed = false;
                 const displayName = user.fullName || user.username || 'Người dùng';
 
                 document.getElementById('detailUserId').value = user.userId;
@@ -688,12 +994,15 @@
                 document.getElementById('viewName').innerText = displayName;
                 document.getElementById('viewEmail').innerText = user.email || 'Chưa có';
                 document.getElementById('viewPhone').innerText = user.phone || 'Chưa có';
-                document.getElementById('viewRole').innerText = user.role || 'Chưa có';
+                document.getElementById('viewRole').innerText = normalizeRole(user.role);
 
                 document.getElementById('detailName').value = user.username || '';
                 document.getElementById('detailEmail').value = user.email || '';
                 document.getElementById('detailPhone').value = user.phone || '';
-                document.getElementById('detailRole').value = user.role || '';
+                originalUserRole = normalizeRole(user.role);
+                document.getElementById('detailRole').value = originalUserRole;
+                clearUserEditValidation();
+                updateRoleHelpText();
 
                 document.getElementById('metricSpending').innerText = formatCurrency(user.totalSpending);
                 document.getElementById('metricOrders').innerText = (user.totalOrders || 0) + ' / ' + (user.cancelledOrders || 0);
@@ -724,7 +1033,10 @@
             document.getElementById('detailName').value = currentUserData.username || '';
             document.getElementById('detailEmail').value = currentUserData.email || '';
             document.getElementById('detailPhone').value = currentUserData.phone || '';
-            document.getElementById('detailRole').value = currentUserData.role || '';
+            document.getElementById('detailRole').value = normalizeRole(currentUserData.role);
+            adminRoleConfirmed = false;
+            clearUserEditValidation();
+            updateRoleHelpText();
         }
         resetToViewMode();
     }
@@ -737,6 +1049,8 @@
 
     function closeModal() {
         document.getElementById('userModal').style.display = 'none';
+        adminRoleConfirmed = false;
+        closeAdminRoleConfirmModal();
         resetToViewMode();
     }
 
@@ -822,9 +1136,29 @@
         }
     });
 
+    document.getElementById('adminRoleConfirmModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            adminRoleConfirmed = false;
+            closeAdminRoleConfirmModal();
+        }
+    });
+
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            closeToggleModal();
+            const adminRoleModal = document.getElementById('adminRoleConfirmModal');
+            const toggleModal = document.getElementById('toggleConfirmModal');
+
+            if (adminRoleModal && adminRoleModal.classList.contains('active')) {
+                adminRoleConfirmed = false;
+                closeAdminRoleConfirmModal();
+                return;
+            }
+
+            if (toggleModal && toggleModal.classList.contains('active')) {
+                closeToggleModal();
+                return;
+            }
+
             closeModal();
         }
     });

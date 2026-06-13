@@ -74,8 +74,8 @@ public class UserManagementController extends HttpServlet {
         List<User> users = userService.getAllUsers();
 
         int totalUsers = users.size();
-        int staffUsers = (int) users.stream().filter(this::isPrivilegedRole).count();
-        int customerUsers = totalUsers - staffUsers;
+        int adminUsers = (int) users.stream().filter(this::isAdminRole).count();
+        int customerUsers = totalUsers - adminUsers;
         int lockedUsers = (int) users.stream().filter(u -> !u.isActive()).count();
 
         java.util.Calendar cal = java.util.Calendar.getInstance();
@@ -93,7 +93,7 @@ public class UserManagementController extends HttpServlet {
         request.setAttribute("users", users);
         request.setAttribute("totalUsers", totalUsers);
         request.setAttribute("customerUsers", customerUsers);
-        request.setAttribute("staffUsers", staffUsers);
+        request.setAttribute("adminUsers", adminUsers);
         request.setAttribute("newUsersThisMonth", newUsersThisMonth);
         request.setAttribute("lockedUsers", lockedUsers);
         request.getRequestDispatcher("/admin/user/list.jsp")
@@ -150,13 +150,11 @@ public class UserManagementController extends HttpServlet {
             return;
         }
     }
-    private boolean isPrivilegedRole(User user) {
+    private boolean isAdminRole(User user) {
         if (user == null || user.getRole() == null) {
             return false;
         }
         String role = user.getRole().trim();
-        return "Admin".equalsIgnoreCase(role)
-                || "Staff".equalsIgnoreCase(role)
-                || "Nhân viên".equalsIgnoreCase(role);
+        return "Admin".equalsIgnoreCase(role);
     }
 }
