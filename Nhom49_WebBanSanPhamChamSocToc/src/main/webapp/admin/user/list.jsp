@@ -23,6 +23,22 @@
     </jsp:include>
 
     <main class="content users-content">
+        <c:if test="${not empty success || not empty error}">
+            <div class="flash-stack" aria-live="polite">
+                <c:if test="${not empty success}">
+                    <div class="flash-message flash-message--success">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        <span><c:out value="${success}" /></span>
+                    </div>
+                </c:if>
+                <c:if test="${not empty error}">
+                    <div class="flash-message flash-message--error">
+                        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span><c:out value="${error}" /></span>
+                    </div>
+                </c:if>
+            </div>
+        </c:if>
         <section class="stats-grid" id="statsGrid" aria-label="Thống kê người dùng">
             <article class="stat-card stat-card--total">
                 <div class="stat-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
@@ -290,7 +306,7 @@
                                                     data-username="${fn:escapeXml(displayName)}"
                                                     title="Khóa"
                                                     aria-label="Khóa tài khoản người dùng"
-                                                    onclick="showToggleModal(this)">
+                                                    onclick="openStatusConfirmModal(this)">
                                                 <i class="fa-solid fa-lock" aria-hidden="true"></i>
                                             </button>
                                         </c:when>
@@ -303,7 +319,7 @@
                                                     data-username="${fn:escapeXml(displayName)}"
                                                     title="Mở khóa"
                                                     aria-label="Mở khóa tài khoản người dùng"
-                                                    onclick="showToggleModal(this)">
+                                                    onclick="openStatusConfirmModal(this)">
                                                 <i class="fa-solid fa-lock-open" aria-hidden="true"></i>
                                             </button>
                                         </c:otherwise>
@@ -370,6 +386,7 @@
             </div>
         </div>
         <form action="${pageContext.request.contextPath}/admin/users" method="post" id="userEditForm" novalidate>
+            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
             <input type="hidden" name="action" value="update-profile">
             <input type="hidden" name="id" id="detailUserId">
             <div class="modal-body">
@@ -481,9 +498,28 @@
                         </div>
                     </div>
                 </section>
+                <section class="account-history-section">
+                    <div class="account-history-header">
+                        <h4>
+                            <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+                            Lịch sử tài khoản
+                        </h4>
+                        <p>Theo dõi các lần tạm khóa, mở khóa và lý do xử lý tài khoản.</p>
+                    </div>
+
+                    <div id="accountHistoryList" class="account-history-list">
+                        <div class="history-empty">Chưa có lịch sử xử lý tài khoản.</div>
+                    </div>
+                </section>
             </div>
             <div class="modal-actions">
-                <button type="button" id="toggleStatusBtn" class="btn btn-danger">
+                <button type="button"
+                        id="toggleStatusBtn"
+                        class="btn btn-danger"
+                        data-action="lock"
+                        data-user-id=""
+                        data-username=""
+                        onclick="openStatusConfirmModal(this)">
                     <i class="fa-solid fa-lock" aria-hidden="true"></i>
                     Khóa tài khoản
                 </button>
@@ -491,21 +527,37 @@
         </form>
     </div>
 </div>
-<div id="toggleConfirmModal" class="confirm-overlay">
-    <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
-        <div class="confirm-icon-wrapper" id="confirmIconWrapper">
-            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+<div id="statusConfirmModal" class="confirm-overlay">
+    <div class="confirm-box status-confirm-box" role="dialog" aria-modal="true" aria-labelledby="statusConfirmTitle">
+        <div class="confirm-icon-wrapper" id="statusConfirmIcon">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
         </div>
-        <h3 class="confirm-title" id="confirmTitle">Xác nhận hành động</h3>
-        <p class="confirm-message" id="confirmMessage">Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này?</p>
+        <h3 class="confirm-title" id="statusConfirmTitle">Tạm khóa tài khoản</h3>
+        <p class="confirm-message" id="statusConfirmMessage"></p>
+
+        <div class="status-reason-form">
+            <label for="statusReasonSelect">Lý do xử lý</label>
+            <select id="statusReasonSelect" class="status-reason-select">
+                <option value="">Chọn lý do</option>
+            </select>
+
+            <label for="statusReasonDetail">Ghi chú chi tiết</label>
+            <textarea id="statusReasonDetail"
+                      class="status-reason-textarea"
+                      rows="3"
+                      placeholder="Nhập thêm ghi chú nếu cần..."></textarea>
+
+            <small id="statusReasonError" class="field-error"></small>
+        </div>
+
         <div class="confirm-actions">
-            <button type="button" class="confirm-btn confirm-btn--cancel" id="confirmCancelBtn" onclick="closeToggleModal()">
+            <button type="button" class="confirm-btn confirm-btn--cancel" id="statusConfirmCancelBtn" onclick="closeStatusConfirmModal()">
                 <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-                Hủy bỏ
+                Hủy
             </button>
-            <button type="button" class="confirm-btn confirm-btn--ok" id="confirmOkBtn" onclick="executeToggle()">
+            <button type="button" class="confirm-btn confirm-btn--ok" id="statusConfirmSubmitBtn" onclick="submitStatusChange()">
                 <i class="fa-solid fa-check" aria-hidden="true"></i>
-                Đồng ý
+                Xác nhận
             </button>
         </div>
     </div>
@@ -536,14 +588,45 @@
     </div>
 </div>
 <form id="toggleStatusForm" method="post" action="${pageContext.request.contextPath}/admin/users" style="display:none;">
+    <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
     <input type="hidden" name="action" value="toggle-status">
     <input type="hidden" name="id" id="toggleUserId">
+    <input type="hidden" name="statusAction" id="toggleStatusAction">
+    <input type="hidden" name="reasonCode" id="toggleReasonCode">
+    <input type="hidden" name="reasonDetail" id="toggleReasonDetail">
 </form>
 <script>
     let pendingToggleUserId = null;
+    let pendingStatusAction = null;
+    let pendingStatusUsername = '';
     let currentUserData = null;
     let originalUserRole = 'Khách hàng';
     let adminRoleConfirmed = false;
+    const statusReasonOptions = {
+        lock: [
+            { value: 'POLICY_VIOLATION', label: 'Vi phạm chính sách sử dụng' },
+            { value: 'SUSPICIOUS_ACTIVITY', label: 'Hoạt động đáng ngờ' },
+            { value: 'ORDER_ABUSE', label: 'Bất thường trong đặt hàng' },
+            { value: 'CUSTOMER_REQUEST', label: 'Theo yêu cầu của khách hàng' },
+            { value: 'OTHER', label: 'Lý do khác' }
+        ],
+        unlock: [
+            { value: 'VERIFIED_SAFE', label: 'Đã xác minh an toàn' },
+            { value: 'ISSUE_RESOLVED', label: 'Vấn đề đã được xử lý' },
+            { value: 'CUSTOMER_REQUEST_RESOLVED', label: 'Đã xử lý theo yêu cầu khách hàng' },
+            { value: 'OTHER', label: 'Lý do khác' }
+        ]
+    };
+    const statusReasonLabels = {
+        POLICY_VIOLATION: 'Vi phạm chính sách sử dụng',
+        SUSPICIOUS_ACTIVITY: 'Hoạt động đáng ngờ',
+        ORDER_ABUSE: 'Bất thường trong đặt hàng',
+        CUSTOMER_REQUEST: 'Theo yêu cầu của khách hàng',
+        VERIFIED_SAFE: 'Đã xác minh an toàn',
+        ISSUE_RESOLVED: 'Vấn đề đã được xử lý',
+        CUSTOMER_REQUEST_RESOLVED: 'Đã xử lý theo yêu cầu khách hàng',
+        OTHER: 'Lý do khác'
+    };
     document.addEventListener('DOMContentLoaded', function() {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             return;
@@ -559,13 +642,164 @@
             }, 70 + i * 80);
         });
     });
-    function showToggleModal(btn) {
+    function openStatusConfirmModal(button) {
+        const action = button ? button.getAttribute('data-action') : '';
+        const userId = button ? button.getAttribute('data-user-id') : '';
+        const username = button ? button.getAttribute('data-username') : '';
+
+        if (!userId || (action !== 'lock' && action !== 'unlock')) {
+            return;
+        }
+
+        pendingToggleUserId = userId;
+        pendingStatusAction = action;
+        pendingStatusUsername = username || 'người dùng này';
+
+        const overlay = document.getElementById('statusConfirmModal');
+        const iconWrapper = document.getElementById('statusConfirmIcon');
+        const title = document.getElementById('statusConfirmTitle');
+        const message = document.getElementById('statusConfirmMessage');
+        const submitBtn = document.getElementById('statusConfirmSubmitBtn');
+        const detail = document.getElementById('statusReasonDetail');
+
+        if (!overlay || !iconWrapper || !title || !message || !submitBtn) {
+            return;
+        }
+
+        fillStatusReasons(action);
+        clearStatusReasonError();
+        if (detail) {
+            detail.value = '';
+        }
+
+        if (action === 'lock') {
+            iconWrapper.className = 'confirm-icon-wrapper confirm-icon--lock';
+            iconWrapper.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i>';
+            title.textContent = 'Tạm khóa tài khoản';
+            message.textContent = 'Bạn có chắc chắn muốn tạm khóa tài khoản của khách hàng ' + pendingStatusUsername + '? Khách hàng sẽ không thể đăng nhập mua sắm cho đến khi được mở lại.';
+            submitBtn.className = 'confirm-btn confirm-btn--danger';
+            submitBtn.innerHTML = '<i class="fa-solid fa-lock" aria-hidden="true"></i> Xác nhận khóa';
+        } else {
+            iconWrapper.className = 'confirm-icon-wrapper confirm-icon--unlock';
+            iconWrapper.innerHTML = '<i class="fa-solid fa-lock-open" aria-hidden="true"></i>';
+            title.textContent = 'Mở khóa tài khoản';
+            message.textContent = 'Bạn có chắc chắn muốn mở khóa tài khoản của khách hàng ' + pendingStatusUsername + '? Khách hàng sẽ có thể đăng nhập và tiếp tục mua sắm.';
+            submitBtn.className = 'confirm-btn confirm-btn--success';
+            submitBtn.innerHTML = '<i class="fa-solid fa-lock-open" aria-hidden="true"></i> Xác nhận mở khóa';
+        }
+
+        overlay.classList.add('active');
+        setTimeout(function() {
+            const box = overlay.querySelector('.confirm-box');
+            if (box) {
+                box.classList.add('show');
+            }
+        }, 10);
+    }
+
+    function closeStatusConfirmModal() {
+        const overlay = document.getElementById('statusConfirmModal');
+        if (!overlay) {
+            return;
+        }
+
+        const box = overlay.querySelector('.confirm-box');
+        if (box) {
+            box.classList.remove('show');
+        }
+        setTimeout(function() {
+            overlay.classList.remove('active');
+        }, 180);
+        pendingToggleUserId = null;
+        pendingStatusAction = null;
+        pendingStatusUsername = '';
+        clearStatusReasonError();
+    }
+
+    function fillStatusReasons(action) {
+        const select = document.getElementById('statusReasonSelect');
+        if (!select) {
+            return;
+        }
+
+        clearElement(select);
+        const emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.textContent = 'Chọn lý do';
+        select.appendChild(emptyOption);
+
+        (statusReasonOptions[action] || []).forEach(function(reason) {
+            const option = document.createElement('option');
+            option.value = reason.value;
+            option.textContent = reason.label;
+            select.appendChild(option);
+        });
+    }
+
+    function clearStatusReasonError() {
+        const error = document.getElementById('statusReasonError');
+        const form = document.querySelector('.status-reason-form');
+        if (error) {
+            error.textContent = '';
+        }
+        if (form) {
+            form.classList.remove('has-error');
+        }
+    }
+
+    function setStatusReasonError(message) {
+        const error = document.getElementById('statusReasonError');
+        const form = document.querySelector('.status-reason-form');
+        if (error) {
+            error.textContent = message;
+        }
+        if (form) {
+            form.classList.add('has-error');
+        }
+    }
+
+    function submitStatusChange() {
+        const reasonSelect = document.getElementById('statusReasonSelect');
+        const reasonDetail = document.getElementById('statusReasonDetail');
+        const reasonCode = reasonSelect ? reasonSelect.value.trim() : '';
+        const detail = reasonDetail ? reasonDetail.value.trim() : '';
+
+        if (!pendingToggleUserId || (pendingStatusAction !== 'lock' && pendingStatusAction !== 'unlock')) {
+            setStatusReasonError('Không xác định được tài khoản cần xử lý.');
+            return;
+        }
+
+        if (!reasonCode) {
+            setStatusReasonError('Vui lòng chọn lý do xử lý tài khoản.');
+            if (reasonSelect) {
+                reasonSelect.focus();
+            }
+            return;
+        }
+
+        if (reasonCode === 'OTHER' && detail.length < 5) {
+            setStatusReasonError('Vui lòng nhập ghi chú tối thiểu 5 ký tự khi chọn lý do khác.');
+            if (reasonDetail) {
+                reasonDetail.focus();
+            }
+            return;
+        }
+
+        clearStatusReasonError();
+        document.getElementById('toggleUserId').value = pendingToggleUserId;
+        document.getElementById('toggleStatusAction').value = pendingStatusAction;
+        document.getElementById('toggleReasonCode').value = reasonCode;
+        document.getElementById('toggleReasonDetail').value = detail;
+        document.getElementById('toggleStatusForm').submit();
+    }
+
+    function legacyStatusToggleModal(btn) {
         const action = btn.getAttribute('data-action');
         const userId = btn.getAttribute('data-user-id');
         const username = btn.getAttribute('data-username') || '';
         pendingToggleUserId = userId;
 
-        const overlay = document.getElementById('toggleConfirmModal');
+        const overlay = document.getElementById('legacyStatusToggleModal');
         const iconWrapper = document.getElementById('confirmIconWrapper');
         const title = document.getElementById('confirmTitle');
         const message = document.getElementById('confirmMessage');
@@ -591,8 +825,8 @@
             overlay.querySelector('.confirm-box').classList.add('show');
         }, 10);
     }
-    function closeToggleModal() {
-        const overlay = document.getElementById('toggleConfirmModal');
+    function legacyCloseStatusToggleModal() {
+        const overlay = document.getElementById('legacyStatusToggleModal');
         const box = overlay.querySelector('.confirm-box');
         box.classList.remove('show');
         setTimeout(function() {
@@ -600,7 +834,7 @@
         }, 180);
         pendingToggleUserId = null;
     }
-    function executeToggle() {
+    function legacyExecuteStatusToggle() {
         if (!pendingToggleUserId) {
             return;
         }
@@ -618,6 +852,9 @@
             return 'Chưa có';
         }
         const d = new Date(timestamp);
+        if (isNaN(d.getTime())) {
+            return 'Chưa có';
+        }
         const day = String(d.getDate()).padStart(2, '0');
         const month = String(d.getMonth() + 1).padStart(2, '0');
         const year = d.getFullYear();
@@ -628,6 +865,9 @@
             return 'Chưa có';
         }
         const d = new Date(timestamp);
+        if (isNaN(d.getTime())) {
+            return 'Chưa có';
+        }
         const day = String(d.getDate()).padStart(2, '0');
         const month = String(d.getMonth() + 1).padStart(2, '0');
         const year = d.getFullYear();
@@ -635,7 +875,59 @@
         const mins = String(d.getMinutes()).padStart(2, '0');
         return hours + ':' + mins + ' - ' + day + '/' + month + '/' + year;
     }
-
+    function getStatusActionLabel(action) {
+        if (action === 'LOCK') {
+            return 'Tạm khóa';
+        }
+        if (action === 'UNLOCK') {
+            return 'Mở khóa';
+        }
+        return action || 'Chưa xác định';
+    }
+    function getStatusReasonLabel(reasonCode) {
+        return statusReasonLabels[reasonCode] || reasonCode || 'Chưa có lý do';
+    }
+    function renderAccountHistory(historyItems) {
+        const list = document.getElementById('accountHistoryList');
+        if (!list) {
+            return;
+        }
+        clearElement(list);
+        if (!Array.isArray(historyItems) || historyItems.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'history-empty';
+            empty.textContent = 'Chưa có lịch sử xử lý tài khoản.';
+            list.appendChild(empty);
+            return;
+        }
+        historyItems.forEach(function(item) {
+            const action = item && item.action ? item.action : '';
+            const entry = document.createElement('article');
+            entry.className = 'history-item history-item--' + action.toLowerCase();
+            const top = document.createElement('div');
+            top.className = 'history-item__top';
+            const time = document.createElement('time');
+            time.className = 'history-time';
+            time.textContent = formatDateTime(item.createdAt);
+            const actionBadge = document.createElement('span');
+            actionBadge.className = 'history-action';
+            actionBadge.textContent = getStatusActionLabel(action);
+            top.appendChild(time);
+            top.appendChild(actionBadge);
+            const reason = document.createElement('div');
+            reason.className = 'history-reason';
+            reason.textContent = getStatusReasonLabel(item.reasonCode);
+            entry.appendChild(top);
+            entry.appendChild(reason);
+            if (item.reasonDetail) {
+                const note = document.createElement('p');
+                note.className = 'history-note';
+                note.textContent = item.reasonDetail;
+                entry.appendChild(note);
+            }
+            list.appendChild(entry);
+        });
+    }
     function getInitial(value) {
         const normalized = (value || 'U').trim();
         return normalized ? normalized.charAt(0).toUpperCase() : 'U';
@@ -982,13 +1274,13 @@
                     toggleBtn.innerHTML = '<i class="fa-solid fa-lock-open" aria-hidden="true"></i> Mở khóa tài khoản';
                     toggleBtn.classList.add('btn-success');
                 }
-
+                toggleBtn.setAttribute('data-action', user.isActive ? 'lock' : 'unlock');
+                toggleBtn.setAttribute('data-user-id', user.userId);
+                toggleBtn.setAttribute('data-username', displayName);
+                toggleBtn.setAttribute('title', user.isActive ? 'Khóa tài khoản' : 'Mở khóa tài khoản');
+                toggleBtn.setAttribute('aria-label', user.isActive ? 'Khóa tài khoản người dùng' : 'Mở khóa tài khoản người dùng');
                 toggleBtn.onclick = function() {
-                    const tempBtn = document.createElement('button');
-                    tempBtn.setAttribute('data-action', user.isActive ? 'lock' : 'unlock');
-                    tempBtn.setAttribute('data-user-id', user.userId);
-                    tempBtn.setAttribute('data-username', displayName);
-                    showToggleModal(tempBtn);
+                    openStatusConfirmModal(toggleBtn);
                 };
 
                 document.getElementById('viewName').innerText = displayName;
@@ -1008,7 +1300,7 @@
                 document.getElementById('metricOrders').innerText = (user.totalOrders || 0) + ' / ' + (user.cancelledOrders || 0);
                 document.getElementById('metricJoinDate').innerText = 'Gia nhập: ' + formatDate(user.createdAt);
                 document.getElementById('metricLastUpdate').innerText = 'Cập nhật gần nhất: ' + formatDateTime(user.updatedAt);
-
+                renderAccountHistory(user.statusHistory);
                 document.getElementById('userModal').style.display = 'flex';
                 if (autoEdit) {
                     setTimeout(function() {
@@ -1051,6 +1343,7 @@
         document.getElementById('userModal').style.display = 'none';
         adminRoleConfirmed = false;
         closeAdminRoleConfirmModal();
+        closeStatusConfirmModal();
         resetToViewMode();
     }
 
@@ -1124,9 +1417,9 @@
         filterUsers();
     }
 
-    document.getElementById('toggleConfirmModal').addEventListener('click', function(e) {
+    document.getElementById('statusConfirmModal').addEventListener('click', function(e) {
         if (e.target === this) {
-            closeToggleModal();
+            closeStatusConfirmModal();
         }
     });
 
@@ -1146,19 +1439,16 @@
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const adminRoleModal = document.getElementById('adminRoleConfirmModal');
-            const toggleModal = document.getElementById('toggleConfirmModal');
-
+            const statusModal = document.getElementById('statusConfirmModal');
             if (adminRoleModal && adminRoleModal.classList.contains('active')) {
                 adminRoleConfirmed = false;
                 closeAdminRoleConfirmModal();
                 return;
             }
-
-            if (toggleModal && toggleModal.classList.contains('active')) {
-                closeToggleModal();
+            if (statusModal && statusModal.classList.contains('active')) {
+                closeStatusConfirmModal();
                 return;
             }
-
             closeModal();
         }
     });

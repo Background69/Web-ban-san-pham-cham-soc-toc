@@ -1,18 +1,28 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
+import com.example.nhom49_webbansanphamchamsoctoc.dao.UserStatusHistoryDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
+import com.example.nhom49_webbansanphamchamsoctoc.model.UserStatusHistory;
 
 import java.util.List;
 
 public class UserService {
 
     private final UserDAO userDAO;
+    private final UserStatusHistoryDAO userStatusHistoryDAO;
     private final AuthenticationService authService;
+    private String lastError;
 
     public UserService() {
         this.userDAO = new UserDAO();
+        this.userStatusHistoryDAO = new UserStatusHistoryDAO();
         this.authService = new AuthenticationService();
+    }
+
+    public String getLastError() {
+        return lastError;
     }
 
     public User login(String emailOrUsername, String password, String ipAddress) {
@@ -86,11 +96,49 @@ public class UserService {
     }
 
     public boolean toggleUserActive(int userId) {
+        lastError = null;
         User user = userDAO.findById(userId);
         if (user == null) {
+            lastError = "Không tìm thấy tài khoản người dùng.";
             return false;
         }
-        return userDAO.updateActiveStatus(userId, !user.isActive());
+        String action = user.isActive() ? "LOCK" : "UNLOCK";
+        String detail = user.isActive()
+                ? "Tạm khóa tài khoản từ thao tác quản trị."
+                : "Mở khóa tài khoản từ thao tác quản trị.";
+        return setUserActiveStatusWithHistory(user, !user.isActive(), action, "OTHER", detail);
+    }
+
+    public boolean setUserActiveStatusWithHistory(User user, boolean isActive, String action,
+                                                  String reasonCode, String reasonDetail) {
+        lastError = null;
+        if (user == null) {
+            lastError = "Không tìm thấy tài khoản người dùng.";
+            return false;
+        }
+        try {
+            return JDBIConnector.getInstance().inTransaction(handle -> {
+                boolean statusUpdated = userDAO.updateActiveStatus(handle, user.getUserId(), isActive);
+                if (!statusUpdated) {
+                    throw new IllegalStateException("Không thể cập nhật trạng thái tài khoản.");
+                }
+                UserStatusHistory history = new UserStatusHistory();
+                history.setUserId(user.getUserId());
+                history.setAction(action);
+                history.setReasonCode(reasonCode);
+                history.setReasonDetail(reasonDetail);
+                long historyId = userStatusHistoryDAO.insertHistory(handle, history);
+                if (historyId <= 0) {
+                    throw new IllegalStateException("Không thể lưu lịch sử xử lý tài khoản.");
+                }
+                return true;
+            });
+        } catch (Exception ex) {
+            lastError = ex.getMessage() != null && !ex.getMessage().isBlank()
+                    ? ex.getMessage()
+                    : "Không thể xử lý trạng thái tài khoản.";
+            return false;
+        }
     }
 
     public boolean updateProfile(User user) {

@@ -280,6 +280,42 @@
     padding: 22px;
 }
 
+.flash-stack {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.flash-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--users-border);
+    border-radius: var(--users-radius);
+    background: #FFFFFF;
+    color: var(--users-text);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.flash-message i {
+    margin-top: 2px;
+}
+
+.flash-message--success {
+    border-color: rgba(47, 143, 91, 0.28);
+    background: var(--users-success-soft);
+    color: var(--users-success);
+}
+
+.flash-message--error {
+    border-color: rgba(184, 74, 98, 0.28);
+    background: var(--users-danger-soft);
+    color: var(--users-danger);
+}
+
 .filter-panel__header {
     display: flex;
     align-items: flex-start;
@@ -355,6 +391,8 @@
 .filter-select:focus-visible,
 .sort-select:focus-visible,
 .form-input-hg:focus-visible,
+.status-reason-select:focus-visible,
+.status-reason-textarea:focus-visible,
 .icon-btn:focus-visible,
 .btn:focus-visible,
 .confirm-btn:focus-visible,
@@ -896,6 +934,131 @@
     padding: 22px;
 }
 
+.account-history-section {
+    grid-column: 1 / -1;
+    padding: 20px;
+    border: 1px solid var(--users-border);
+    border-radius: var(--users-radius);
+    background: #FFFFFF;
+}
+
+.account-history-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--users-border);
+}
+
+.account-history-header h4 {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    color: var(--users-text);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.account-history-header h4 i {
+    color: var(--users-champagne);
+}
+
+.account-history-header p {
+    max-width: 460px;
+    margin: 0;
+    color: var(--users-muted);
+    font-size: 13px;
+    line-height: 1.55;
+    text-align: right;
+}
+
+.account-history-list {
+    display: grid;
+    gap: 10px;
+}
+
+.history-empty {
+    padding: 16px;
+    border: 1px dashed var(--users-border-strong);
+    border-radius: var(--users-radius);
+    background: #FBFAF8;
+    color: var(--users-muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.history-item {
+    display: grid;
+    gap: 8px;
+    padding: 14px;
+    border: 1px solid var(--users-border);
+    border-left: 4px solid var(--users-border-strong);
+    border-radius: var(--users-radius);
+    background: #FFFFFF;
+}
+
+.history-item--lock {
+    border-left-color: var(--users-danger);
+}
+
+.history-item--unlock {
+    border-left-color: var(--users-success);
+}
+
+.history-item__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.history-time {
+    color: var(--users-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.history-action {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--users-bg-warm);
+    color: var(--users-text);
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.history-item--lock .history-action {
+    background: var(--users-danger-soft);
+    color: var(--users-danger);
+}
+
+.history-item--unlock .history-action {
+    background: var(--users-success-soft);
+    color: var(--users-success);
+}
+
+.history-reason {
+    color: var(--users-text);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.history-note {
+    margin: 0;
+    color: var(--users-muted);
+    font-size: 13px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
 .info-panel-header {
     display: flex;
     align-items: center;
@@ -1206,6 +1369,19 @@
     width: min(520px, 94vw);
 }
 
+.status-confirm-box {
+    width: min(560px, 94vw);
+    text-align: left;
+}
+
+.status-confirm-box .confirm-icon-wrapper,
+.status-confirm-box .confirm-title,
+.status-confirm-box .confirm-message {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
 .confirm-icon--admin {
     background: var(--users-champagne-soft);
     color: #735C16;
@@ -1238,6 +1414,59 @@
     font-size: 14px;
     line-height: 1.55;
     text-align: left;
+}
+
+.status-reason-form {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 22px;
+}
+
+.status-reason-form label {
+    color: var(--users-muted);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.status-reason-select,
+.status-reason-textarea {
+    width: 100%;
+    border: 1px solid var(--users-border);
+    border-radius: var(--users-radius);
+    background: #FFFFFF;
+    color: var(--users-text);
+    font-size: 14px;
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.status-reason-select {
+    height: 44px;
+    padding: 0 13px;
+    cursor: pointer;
+}
+
+.status-reason-textarea {
+    min-height: 96px;
+    padding: 11px 13px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.status-reason-select:focus,
+.status-reason-textarea:focus {
+    border-color: var(--users-champagne);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12);
+}
+
+.status-reason-form.has-error .field-error {
+    display: block;
+}
+
+.status-reason-form.has-error .status-reason-select,
+.status-reason-form.has-error .status-reason-textarea {
+    border-color: var(--users-danger);
 }
 
 .confirm-actions {
@@ -1330,9 +1559,15 @@
     }
 
     .filter-panel__header,
-    .info-panel-header {
+    .info-panel-header,
+    .account-history-header {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .account-history-header p {
+        max-width: none;
+        text-align: left;
     }
 
     .filter-reset-btn,
