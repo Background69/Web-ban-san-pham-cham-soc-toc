@@ -412,16 +412,48 @@
             '<button type="button" class="btn-variant-remove" onclick="removeVariantRow(this)" title="Xóa biến thể">✕</button>';
         container.appendChild(newRow);
     }
-
     function removeVariantRow(btn) {
         var row = btn.parentElement;
         var container = document.getElementById('variants-container');
-        // Don't remove if it's the only row
         if (container.querySelectorAll('.variant-row').length > 1) {
             row.remove();
         } else {
             alert('Phải có ít nhất 1 biến thể!');
         }
+        document.getElementById("editForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const form = this;
+            const formData = new FormData(form);
+
+            fetch(
+                '${pageContext.request.contextPath}/admin/products',
+                {
+                    method: 'POST',
+                    body: formData
+                }
+            )
+                .then(res => res.json())
+                .then(data => {
+
+                    if(data.success){
+
+                        alert("Cập nhật thành công");
+
+                        closeEditModal();
+
+                        // reload lại danh sách
+                        location.reload();
+
+                    }else{
+                        alert(data.message || "Có lỗi xảy ra");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Lỗi server");
+                });
+        });
     }
 </script>
 

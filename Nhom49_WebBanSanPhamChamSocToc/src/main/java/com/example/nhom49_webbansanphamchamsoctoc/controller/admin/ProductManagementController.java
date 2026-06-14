@@ -133,14 +133,12 @@ public class ProductManagementController extends HttpServlet {
 
         if ("edit".equals(action)) {
             try {
+
                 int id = parseIntSafe(request.getParameter("id"));
-                if (id <= 0) {
-                    response.sendRedirect(request.getContextPath() + "/admin/products?err=1");
-                    return;
-                }
 
                 Product p = productFromRequest(request);
                 p.setProductId(id);
+
                 productDAO.update(p);
 
                 productVariantDAO.deleteByProductId(id);
@@ -148,11 +146,31 @@ public class ProductManagementController extends HttpServlet {
 
                 saveImageIfPresent(request, id);
 
-                response.sendRedirect(request.getContextPath() + "/admin/products");
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write("""
+            {
+                "success": true
+            }
+        """);
+
                 return;
+
             } catch (Exception ex) {
+
                 ex.printStackTrace();
-                response.sendRedirect(request.getContextPath() + "/admin/products?err=1");
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write("""
+            {
+                "success": false,
+                "message": "Lỗi cập nhật sản phẩm"
+            }
+        """);
+
                 return;
             }
         }
