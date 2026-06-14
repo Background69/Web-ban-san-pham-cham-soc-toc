@@ -22,6 +22,8 @@ public class Review implements Serializable {
     private String productSlug;
     private String productImageUrl;
     private List<Image> images = new ArrayList<>();
+    private String adminReply;
+    private Timestamp adminReplyDate;
 
     // Constructors
     public Review() {
@@ -122,6 +124,22 @@ public class Review implements Serializable {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public String getAdminReply() {
+        return adminReply;
+    }
+
+    public void setAdminReply(String adminReply) {
+        this.adminReply = adminReply;
+    }
+
+    public Timestamp getAdminReplyDate() {
+        return adminReplyDate;
+    }
+
+    public void setAdminReplyDate(Timestamp adminReplyDate) {
+        this.adminReplyDate = adminReplyDate;
     }
 
 }

@@ -100,12 +100,20 @@
             this.trigger.setAttribute('aria-expanded', 'true');
             this.searchInput.value = '';
             this.filterOptions('');
+            this.container.classList.remove('drop-up');
+            const triggerRect = this.trigger.getBoundingClientRect();
+            const dropdownHeight = 280; // max-height của dropdown
+            const spaceBelow = window.innerHeight - triggerRect.bottom;
+            if (spaceBelow < dropdownHeight) {
+                this.container.classList.add('drop-up');
+            }
             setTimeout(() => this.searchInput.focus(), 50);
         }
 
         close() {
             this.isOpen = false;
             this.container.classList.remove('open');
+            this.container.classList.remove('drop-up');
             this.trigger.classList.remove('focus');
             this.trigger.setAttribute('aria-expanded', 'false');
         }
@@ -113,7 +121,15 @@
         setItems(items) {
             this.items = items || [];
             this.selectedItem = null;
-            this.renderOptions(this.items);
+            this.optionsList.classList.add('addr-options-fade-out');
+            setTimeout(() => {
+                this.renderOptions(this.items);
+                this.optionsList.classList.remove('addr-options-fade-out');
+                this.optionsList.classList.add('addr-options-fade-in');
+                setTimeout(() => {
+                    this.optionsList.classList.remove('addr-options-fade-in');
+                }, 300);
+            }, 150);
             this.setDisabled(false);
             this.setLoading(false);
             this.resetText();
@@ -216,8 +232,10 @@
     }
 
 
-    async function fetchJSON(url) {
-        const res = await fetch(url);
+    let districtAbort = null;
+    let wardAbort = null;
+    async function fetchJSON(url, signal) {
+        const res = await fetch(url, signal ? { signal } : undefined);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
     }
@@ -240,27 +258,38 @@
     }
 
     async function loadDistricts(provinceCode) {
+        // Hủy request Huyện cũ nếu đang chạy → chống race condition
+        if (districtAbort) districtAbort.abort();
+        districtAbort = new AbortController();
+        const signal = districtAbort.signal;
         districtCS.setLoading(true);
         wardCS.reset('-- Chọn Phường/Xã --');
         clearHidden('district');
 
         try {
-            const data = await fetchJSON(`${ctxPath}/api/districts?provinceCode=${provinceCode}`);
+            const data = await fetchJSON(`${ctxPath}/api/districts?provinceCode=${provinceCode}`, signal);
             districtCS.setItems(data);
         } catch (e) {
+            if (e.name === 'AbortError') return; // Request bị hủy do user đổi Tỉnh, bỏ qua
             console.error('Lỗi tải danh sách quận/huyện:', e);
             districtCS.reset('Lỗi tải dữ liệu');
         }
     }
 
     async function loadWards(districtCode) {
+        // Hủy request Xã cũ nếu đang chạy → chống race condition
+        if (wardAbort) wardAbort.abort();
+        wardAbort = new AbortController();
+        const signal = wardAbort.signal;
+
         wardCS.setLoading(true);
         clearHidden('ward');
 
         try {
-            const data = await fetchJSON(`${ctxPath}/api/wards?districtCode=${districtCode}`);
+            const data = await fetchJSON(`${ctxPath}/api/wards?districtCode=${districtCode}`, signal);
             wardCS.setItems(data);
         } catch (e) {
+            if (e.name === 'AbortError') return; // Request bị hủy do user đổi Huyện, bỏ qua
             console.error('Lỗi tải danh sách phường/xã:', e);
             wardCS.reset('Lỗi tải dữ liệu');
         }
@@ -333,7 +362,8 @@
     window.addressModule = {
         init: init,
         loadProvinces: loadProvinces,
-        getState: () => ({ ...state })
+        getState: () => ({ ...state }),
+        _CustomSelect: CustomSelect
     };
 
     if (document.readyState === 'loading') {

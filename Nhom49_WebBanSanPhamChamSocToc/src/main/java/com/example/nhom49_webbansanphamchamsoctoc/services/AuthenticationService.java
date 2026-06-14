@@ -1,5 +1,6 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
+import com.example.nhom49_webbansanphamchamsoctoc.dao.LoginAttemptDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.UserDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.util.PasswordUtil;
@@ -15,11 +16,15 @@ public class AuthenticationService {
             "Tài khoản này đã liên kết với Google nhưng chưa có mật khẩu. " +
                     "Vui lòng đăng nhập bằng Google hoặc thiết lập mật khẩu.";
 
+    private static final int MAX_FAILED_ATTEMPTS = 5;
+    private static final int FAILED_ATTEMPT_WINDOW_MINUTES = 30;
     private final UserDAO userDAO;
+    private final LoginAttemptDAO loginAttemptDAO;
     private String lastError;
 
     public AuthenticationService() {
         this.userDAO = new UserDAO();
+        this.loginAttemptDAO = new LoginAttemptDAO();
     }
 
     public String getLastError() {
@@ -30,7 +35,10 @@ public class AuthenticationService {
         return GOOGLE_LINKED_NO_PASSWORD_MESSAGE.equals(lastError);
     }
 
-    public User login(String emailOrUsername, String password) {
+    /**
+     * Đăng nhập có tích hợp brute-force protection
+     */
+    public User login(String emailOrUsername, String password, String ipAddress) {
         lastError = null;
         if (ValidationUtil.isEmpty(emailOrUsername)) {
             lastError = "Email hoặc tên đăng nhập không được để trống";
@@ -50,8 +58,10 @@ public class AuthenticationService {
             lastError = "Tài khoản không tồn tại";
             return null;
         }
+        // Kiểm tra tài khoản đã bị khóa chưa
         if (!user.isActive()) {
-            lastError = "Tài khoản đã bị khóa";
+            lastError = "Tài khoản đã bị khóa do nhập sai mật khẩu quá nhiều lần. " +
+                    "Vui lòng liên hệ quản trị viên để mở khóa.";
             return null;
         }
         if (isGoogleLinkedAccount(user) && !hasLocalPassword(user)) {
@@ -59,10 +69,25 @@ public class AuthenticationService {
             return null;
         }
         if (!PasswordUtil.verifyPassword(password, user.getPassword())) {
-            lastError = "Mật khẩu không đúng";
+            // Mật khẩu sai → ghi nhận attempt thất bại
+            loginAttemptDAO.recordAttempt(user.getUserId(), ipAddress, false);
+            // Đếm số lần sai trong cửa sổ thời gian
+            int failedCount = loginAttemptDAO.countRecentFailedAttempts(
+                    user.getUserId(), FAILED_ATTEMPT_WINDOW_MINUTES);
+            if (failedCount >= MAX_FAILED_ATTEMPTS) {
+                // Khóa tài khoản
+                userDAO.updateActiveStatus(user.getUserId(), false);
+                lastError = "Tài khoản đã bị khóa do nhập sai mật khẩu " + MAX_FAILED_ATTEMPTS +
+                        " lần. Vui lòng liên hệ quản trị viên để mở khóa.";
+            } else {
+                int remaining = MAX_FAILED_ATTEMPTS - failedCount;
+                lastError = "Mật khẩu không đúng. Bạn còn " + remaining + " lần thử trước khi tài khoản bị khóa.";
+            }
             return null;
         }
 
+        // Đăng nhập thành công → ghi nhận
+        loginAttemptDAO.recordAttempt(user.getUserId(), ipAddress, true);
         return user;
     }
 

@@ -252,36 +252,13 @@ public class OrderDAO implements IDAO<Order> {
                 .orElse(0) > 0);
     }
 
-    public java.util.Map<String, Object> getDailyStats(java.util.Date startDate, java.util.Date endDate) {
-        // Validate input
-        if (startDate == null || endDate == null) {
-            java.util.Map<String, Object> defaultResult = new java.util.HashMap<>();
-            defaultResult.put("revenue", java.math.BigDecimal.ZERO);
-            defaultResult.put("orders", 0);
-            return defaultResult;
-        }
-
-        String sql = "SELECT COALESCE(SUM(total_amount), 0) as revenue, COUNT(*) as orders " +
-                "FROM orders WHERE created_at >= :startDate AND created_at < :endDate " +
-                "AND order_status NOT IN ('cancelled')";
-
+    public Order findByOrderCode(String orderCode) {
+        String sql = "SELECT * FROM orders WHERE order_code = :orderCode";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("startDate", startDate)
-                .bind("endDate", endDate)
-                .map((rs, ctx) -> {
-                    java.util.Map<String, Object> result = new java.util.HashMap<>();
-                    java.math.BigDecimal revenue = rs.getBigDecimal("revenue");
-                    result.put("revenue", revenue != null ? revenue : java.math.BigDecimal.ZERO);
-                    result.put("orders", rs.getInt("orders"));
-                    return result;
-                })
+                .bind("orderCode", orderCode)
+                .map((rs, ctx) -> mapOrder(rs))
                 .findFirst()
-                .orElseGet(() -> {
-                    java.util.Map<String, Object> defaultResult = new java.util.HashMap<>();
-                    defaultResult.put("revenue", java.math.BigDecimal.ZERO);
-                    defaultResult.put("orders", 0);
-                    return defaultResult;
-                }));
+                .orElse(null));
     }
 
     public int countOrders() {
@@ -340,7 +317,6 @@ public class OrderDAO implements IDAO<Order> {
                         .orElse(List.of(0, 0, 0))
         );
     }
-    // Helper method;
 
     // Helper method
     private Order mapOrder(java.sql.ResultSet rs) throws java.sql.SQLException {

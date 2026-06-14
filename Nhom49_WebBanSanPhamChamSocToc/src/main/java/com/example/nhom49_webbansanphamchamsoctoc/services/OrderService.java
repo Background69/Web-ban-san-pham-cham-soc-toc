@@ -57,7 +57,8 @@ public class OrderService {
      * Tạo đơn hàng từ giỏ hàng và thông tin giao hàng.
      */
     public Order createOrder(int userId, Map<Integer, Integer> cartItems,
-                             ShippingAddress address, String shippingMethod, String paymentMethod) {
+                             ShippingAddress address, String shippingMethod, String paymentMethod,
+                             String initialStatus) {
         lastError = null;
 
         if (cartItems == null || cartItems.isEmpty()) {
@@ -102,7 +103,7 @@ public class OrderService {
         order.setPaymentMethod(paymentMethod);
         order.setSubtotal(subtotal);
         order.setTotalAmount(total);
-        order.setOrderStatus("pending");
+        order.setOrderStatus(initialStatus != null ? initialStatus : "pending");
 
         try {
             Order createdOrder = JDBIConnector.getInstance().inTransaction(handle -> {
@@ -254,6 +255,15 @@ public class OrderService {
         return order;
     }
 
+    public Order getOrderByCode(String orderCode) {
+        if (orderCode == null || orderCode.isBlank()) return null;
+        Order order = orderDao.findByOrderCode(orderCode);
+        if (order != null) {
+            enrichOrderWithItems(order);
+        }
+        return order;
+    }
+
 
     public List<Order> getOrdersByUserAndStatus(int userId, String status) {
         List<Order> orders = orderDao.findByUserIdAndStatus(userId, status);
@@ -299,6 +309,10 @@ public class OrderService {
      * Hủy đơn hàng và hoàn trả stock.
      */
     public boolean cancelOrder(int orderId) {
+        return cancelOrder(orderId, null);
+    }
+
+    public boolean cancelOrder(int orderId, String cancelReason) {
         Order order = orderDao.findById(orderId);
         if (order == null) {
             lastError = "Không tìm thấy đơn hàng với ID: " + orderId;
@@ -308,22 +322,43 @@ public class OrderService {
         // Chỉ có thể hủy đơn hàng ở trạng thái pending hoặc confirmed
         String currentStatus = order.getOrderStatus();
         if (currentStatus != null &&
-                (currentStatus.equals("shipping") || currentStatus.equals("completed"))) {
+                (currentStatus.equals("shipping") || currentStatus.equals("completed")
+                 || currentStatus.equals("confirmed"))) {
             lastError = "Không thể hủy đơn hàng đang giao hoặc đã hoàn thành";
             return false;
         }
 
-        boolean cancelled = updateOrderStatus(orderId, "cancelled");
-        if (cancelled) {
-            // Hoàn trả stock cho từng item
-            List<OrderItem> items = orderItemDao.findByOrderId(orderId);
-            for (OrderItem item : items) {
-                if (item.getVariantId() != null) {
-                    variantDao.incrementStock(item.getVariantId(), item.getQuantity());
-                }
+        // Cập nhật trạng thái sang cancelled, ghi lý do hủy vào lịch sử
+        if (!isValidOrderStatus("cancelled")) {
+            lastError = "Trạng thái đơn hàng không hợp lệ";
+            return false;
+        }
+
+        boolean statusUpdated = orderDao.updateStatus(orderId, "cancelled");
+        if (!statusUpdated) {
+            lastError = "Không thể cập nhật trạng thái đơn hàng";
+            return false;
+        }
+
+        // Ghi lịch sử trạng thái với lý do hủy
+        OrderStatusHistory history = new OrderStatusHistory();
+        history.setOrderId(orderId);
+        history.setStatus("cancelled");
+        String historyNote = "Khách hàng hủy đơn";
+        if (cancelReason != null && !cancelReason.isBlank()) {
+            historyNote += " — Lý do: " + cancelReason;
+        }
+        history.setNote(historyNote);
+        orderStatusHistoryDAO.insert(history);
+
+        // Hoàn trả stock cho từng item
+        List<OrderItem> items = orderItemDao.findByOrderId(orderId);
+        for (OrderItem item : items) {
+            if (item.getVariantId() != null) {
+                variantDao.incrementStock(item.getVariantId(), item.getQuantity());
             }
         }
-        return cancelled;
+        return true;
     }
 
     private List<OrderItem> convertCartToOrderItems(Map<Integer, Integer> cartItems) {
@@ -375,7 +410,8 @@ public class OrderService {
 
     private boolean isValidOrderStatus(String status) {
         return status != null &&
-                (status.equals("pending") || status.equals("confirmed") ||
+                (status.equals("pending") || status.equals("pending_payment") ||
+                        status.equals("confirmed") ||
                         status.equals("shipping") || status.equals("completed") ||
                         status.equals("cancelled"));
     }

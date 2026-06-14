@@ -95,15 +95,18 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <!-- Brand Banner -->
-<section class="brand-hero section-animate" <c:choose>
-    <c:when test="${not empty brand.logoUrl}">
-        style="background-image:
-        url('${pageContext.request.contextPath}/static/assets/${brand.logoUrl}');"
-    </c:when>
-    <c:otherwise>
-        style="background-image: none;"
-    </c:otherwise>
-</c:choose>
+<section class="brand-hero section-animate"
+        <c:choose>
+            <c:when test="${not empty brand.logoUrl && fn:startsWith(brand.logoUrl, 'http')}">
+                style="background-image: url('${brand.logoUrl}');"
+            </c:when>
+            <c:when test="${not empty brand.logoUrl}">
+                style="background-image: url('${pageContext.request.contextPath}/static/assets/${brand.logoUrl}');"
+            </c:when>
+            <c:otherwise>
+                style="background-image: none;"
+            </c:otherwise>
+        </c:choose>
 >
     <div class="brand-hero-overlay"></div>
 
@@ -123,8 +126,25 @@
         <div class="brand-hero-logo">
             <c:choose>
                 <c:when test="${not empty brand.logoUrl}">
-                    <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                         alt="Logo ${brand.brandName}">
+                    <div class="brand-hero-logo">
+                        <c:choose>
+                            <c:when test="${not empty brand.logoUrl && fn:startsWith(brand.logoUrl, 'http')}">
+                                <img src="${brand.logoUrl}"
+                                     alt="Logo ${brand.brandName}">
+                            </c:when>
+
+                            <c:when test="${not empty brand.logoUrl}">
+                                <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
+                                     alt="Logo ${brand.brandName}">
+                            </c:when>
+
+                            <c:otherwise>
+                                <div class="brand-hero-logo-fallback">
+                                    <i class="fas fa-gem"></i>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </c:when>
                 <c:otherwise>
                     <div class="brand-hero-logo-fallback">
@@ -218,18 +238,33 @@
                             <div class="product-item"
                                  data-category="${product.category != null ? product.category.categorySlug : 'unknown'}">
                                 <div class="product-img">
-                                    <a
-                                            href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                        <img alt="${product.productName}" class="product-image"
-                                             src="${pageContext.request.contextPath}/static/${not empty product.primaryImageUrl ? product.primaryImageUrl : 'images/default-product.png'}">
+                                    <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                        <c:choose>
+                                            <c:when test="${not empty product.primaryImageUrl && fn:startsWith(product.primaryImageUrl, 'http')}">
+                                                <img alt="${product.productName}"
+                                                     class="product-image"
+                                                     src="${product.primaryImageUrl}">
+                                            </c:when>
+
+                                            <c:when test="${not empty product.primaryImageUrl}">
+                                                <img alt="${product.productName}"
+                                                     class="product-image"
+                                                     src="${pageContext.request.contextPath}/static/${product.primaryImageUrl}">
+                                            </c:when>
+
+                                            <c:otherwise>
+                                                <img alt="${product.productName}"
+                                                     class="product-image"
+                                                     src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                            </c:otherwise>
+                                        </c:choose>
                                     </a>
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-title">${product.productName}</h3>
                                     <div class="product-small-details">
                                         <p>
-                                                                <span>${product.brand != null ? product.brand.brandName
-                                                                        : ''}</span>
+                                            <span>${product.brand != null ? product.brand.brandName: ''}</span>
                                             • <span>${product.category != null ?
                                                 product.category.categoryName : ''}</span>
                                             • ${product.origin}

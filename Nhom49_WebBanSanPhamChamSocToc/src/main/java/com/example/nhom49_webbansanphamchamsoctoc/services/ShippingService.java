@@ -40,6 +40,9 @@ public class ShippingService {
         return addressDAO.findById(addressId);
     }
 
+    public ShippingAddress getAddressByIdAndUserId(int addressId, int userId) {
+        return addressDAO.findByIdAndUserId(addressId, userId);
+    }
     /**
      * Tạo địa chỉ mới
      */

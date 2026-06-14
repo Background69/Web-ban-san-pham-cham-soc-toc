@@ -102,13 +102,13 @@
                     </td>
                     <td>${b.brandName}</td>
                     <td>${b.shortDescription}</td>
-                    <td>
-                        <a class="edit"
+                    <td class="action-cell">
+                        <a class="action-btn edit"
                            href="${pageContext.request.contextPath}/admin/brands/edit?id=${b.brandId}">
                             Sửa
                         </a>
 
-                        <a class="delete"
+                        <a class="action-btn delete"
                            href="${pageContext.request.contextPath}/admin/brands/delete?id=${b.brandId}"
                            onclick="return confirm('Xóa thương hiệu này?')">
                             Xóa

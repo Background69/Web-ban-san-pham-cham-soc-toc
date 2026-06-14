@@ -193,10 +193,14 @@
                                         <div class="payment-method-desc">Xác nhận đơn hàng sau khi nhận được giao dịch.</div>
                                     </div>
                                 </div>
-                                <div class="payment-method" onclick="selectPayment(this, 'momo')">
+                                <div class="payment-method" onclick="selectPayment(this, 'VNPAY')">
                                     <div class="payment-method-info">
-                                        <div class="payment-method-name">Ví MoMo</div>
-                                        <div class="payment-method-desc">Thanh toán nhanh qua ví điện tử MoMo.</div>
+                                        <div class="payment-method-name">
+                                            <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png"
+                                                 alt="VNPAY" class="payment-method-logo">
+                                            Thanh toán qua Cổng VNPAY-QR
+                                        </div>
+                                        <div class="payment-method-desc">Quét mã QR hoặc thanh toán qua ứng dụng ngân hàng liên kết VNPAY.</div>
                                     </div>
                                 </div>
                             </div>
@@ -253,7 +257,12 @@
 
                         <p class="checkout-summary-note">HairGlow sẽ xác nhận đơn hàng trước khi giao.</p>
 
-                        <button type="submit" class="place-order-btn">Đặt hàng</button>
+                        <button type="submit" class="place-order-btn" id="placeOrderBtn">
+                            <span class="place-order-btn__text">Đặt hàng</span>
+                            <span class="place-order-btn__loading" style="display:none">
+                                <i class="fas fa-spinner fa-spin"></i> Đang chuyển hướng đến VNPAY...
+                            </span>
+                        </button>
 
                         <div class="checkout-back-link-wrap">
                             <a href="${pageContext.request.contextPath}/cart" class="checkout-back-link">
@@ -415,6 +424,23 @@
         <c:if test="${empty addresses}">
         loadProvinces();
         </c:if>
+
+        var checkoutForm = document.getElementById('checkoutForm');
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', function () {
+                var paymentMethod = document.getElementById('paymentMethod').value;
+                var btn = document.getElementById('placeOrderBtn');
+                if (btn) {
+                    btn.disabled = true;
+                    if (paymentMethod === 'VNPAY') {
+                        btn.querySelector('.place-order-btn__text').style.display = 'none';
+                        btn.querySelector('.place-order-btn__loading').style.display = 'inline';
+                    } else {
+                        btn.querySelector('.place-order-btn__text').textContent = 'Đang xử lý...';
+                    }
+                }
+            });
+        }
     });
 </script>
 </body>
