@@ -128,22 +128,53 @@
                     </select>
                 </label>
 
-                <label class="field" for="sortselect">
-                    <span>Sắp xếp</span>
-                    <select class="sort-select" id="sortselect" onchange="sortUsers()">
-                        <option value="">Mặc định</option>
-                        <option value="asc">Tên A - Z</option>
-                        <option value="desc">Tên Z - A</option>
-                    </select>
-                </label>
             </div>
         </section>
         <section class="users-table-card" aria-label="Bảng người dùng">
+            <div class="quick-filter-bar" aria-label="Lọc nhanh tài khoản">
+                <button type="button"
+                        class="quick-filter-btn is-active"
+                        data-filter="all"
+                        aria-pressed="true"
+                        onclick="setQuickFilter('all', this)">
+                    Tất cả
+                </button>
+                <button type="button"
+                        class="quick-filter-btn"
+                        data-filter="admin"
+                        aria-pressed="false"
+                        onclick="setQuickFilter('admin', this)">
+                    Chỉ Quản trị viên
+                </button>
+                <button type="button"
+                        class="quick-filter-btn"
+                        data-filter="customer"
+                        aria-pressed="false"
+                        onclick="setQuickFilter('customer', this)">
+                    Chỉ Khách hàng
+                </button>
+                <button type="button"
+                        class="quick-filter-btn"
+                        data-filter="locked"
+                        aria-pressed="false"
+                        onclick="setQuickFilter('locked', this)">
+                    Đang bị khóa
+                </button>
+            </div>
             <div class="table-scroll">
                 <table class="data-grid" id="userTable">
                     <thead>
                     <tr>
-                        <th>Tài khoản</th>
+                        <th class="sortable-th sortable-th--name"
+                            scope="col"
+                            role="button"
+                            tabindex="0"
+                            aria-sort="none"
+                            onclick="toggleNameSort()"
+                            onkeydown="handleNameSortKeydown(event)">
+                            <span>Tài khoản</span>
+                            <span class="sort-indicator" id="nameSortIndicator" aria-hidden="true">↕</span>
+                        </th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
                         <th>Vai trò</th>
@@ -157,10 +188,10 @@
                     <tbody id="userTableBody">
                     <c:forEach var="user" items="${users}" varStatus="loop">
                         <c:set var="displayName" value="${empty user.fullName ? user.username : user.fullName}" />
-                        <c:set var="rawRoleValue" value="${empty user.role ? '' : user.role}" />
-                        <c:set var="rawRoleLower" value="${fn:toLowerCase(fn:trim(rawRoleValue))}" />
-                        <c:set var="roleValue" value="${rawRoleLower == 'admin' ? 'Admin' : 'Khách hàng'}" />
-                        <c:set var="roleFilter" value="${roleValue == 'Admin' ? 'admin' : 'customer'}" />
+                        <c:set var="roleValue" value="${empty user.role ? 'Khách hàng' : user.role}" />
+                        <c:set var="roleLower" value="${fn:toLowerCase(fn:trim(roleValue))}" />
+                        <c:set var="roleFilter" value="${roleLower == 'admin' ? 'admin' : 'customer'}" />
+                        <c:set var="roleValue" value="${roleFilter == 'admin' ? 'Admin' : 'Khách hàng'}" />
                         <c:set var="statusFilter" value="${user.active ? 'active' : 'locked'}" />
                         <c:set var="avatarValue" value="${fn:trim(user.avatar)}" />
                         <c:set var="avatarIsProjectDefault" value="${avatarValue == 'avatar/avatar.jpg'}" />
@@ -614,6 +645,8 @@
     let currentUserData = null;
     let originalUserRole = 'Khách hàng';
     let adminRoleConfirmed = false;
+    let currentQuickFilter = 'all';
+    let currentNameSort = 'none';
     const statusReasonOptions = {
         lock: [
             { value: 'POLICY_VIOLATION', label: 'Vi phạm chính sách sử dụng' },
@@ -1359,19 +1392,154 @@
         resetToViewMode();
     }
 
-    function filterUsers() {
-        const keyword = document.getElementById('search-input').value.trim().toLowerCase();
-        const role = document.getElementById('role-filter').value;
-        const status = document.getElementById('status-filter').value;
+    function setQuickFilter(filter, button) {
+        currentQuickFilter = filter;
+        syncSelectFiltersFromQuickFilter(filter);
+        updateQuickFilterButtons();
+        applyUserTableState();
+    }
+
+    function syncSelectFiltersFromQuickFilter(filter) {
+        const roleSelect = document.getElementById('role-filter');
+        const statusSelect = document.getElementById('status-filter');
+        if (!roleSelect || !statusSelect) {
+            return;
+        }
+        if (filter === 'admin') {
+            roleSelect.value = 'admin';
+            statusSelect.value = '';
+        } else if (filter === 'customer') {
+            roleSelect.value = 'customer';
+            statusSelect.value = '';
+        } else if (filter === 'locked') {
+            roleSelect.value = '';
+            statusSelect.value = 'locked';
+        } else {
+            roleSelect.value = '';
+            statusSelect.value = '';
+        }
+    }
+
+    function syncQuickFilterFromSelects() {
+        const roleSelect = document.getElementById('role-filter');
+        const statusSelect = document.getElementById('status-filter');
+        const role = roleSelect ? roleSelect.value : '';
+        const status = statusSelect ? statusSelect.value : '';
+        if (!role && !status) {
+            currentQuickFilter = 'all';
+        } else if (role === 'admin' && !status) {
+            currentQuickFilter = 'admin';
+        } else if (role === 'customer' && !status) {
+            currentQuickFilter = 'customer';
+        } else if (!role && status === 'locked') {
+            currentQuickFilter = 'locked';
+        } else {
+            currentQuickFilter = '';
+        }
+        updateQuickFilterButtons();
+    }
+
+    function updateQuickFilterButtons() {
+        document.querySelectorAll('.quick-filter-btn').forEach(function(btn) {
+            const isActive = currentQuickFilter !== '' && btn.dataset.filter === currentQuickFilter;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+    }
+
+    function toggleNameSort() {
+        if (currentNameSort === 'none' || currentNameSort === 'desc') {
+            currentNameSort = 'asc';
+        } else {
+            currentNameSort = 'desc';
+        }
+        applyNameSort();
+        updateNameSortIndicator();
+        applyUserTableState();
+    }
+
+    function handleNameSortKeydown(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleNameSort();
+        }
+    }
+
+    function applyNameSort() {
+        const tbody = document.getElementById('userTableBody');
+        if (!tbody) {
+            return;
+        }
+
+        const emptyRow = document.getElementById('filterEmptyRow');
+        const rows = Array.from(tbody.querySelectorAll('tr.user-row'));
+        if (currentNameSort === 'none') {
+            rows.sort(function(a, b) {
+                return Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex);
+            });
+        } else {
+            rows.sort(function(a, b) {
+                const nameA = (a.dataset.userSort || '').toLocaleLowerCase('vi');
+                const nameB = (b.dataset.userSort || '').toLocaleLowerCase('vi');
+                return currentNameSort === 'asc'
+                    ? nameA.localeCompare(nameB, 'vi')
+                    : nameB.localeCompare(nameA, 'vi');
+            });
+        }
+
+        rows.forEach(function(row) {
+            if (emptyRow) {
+                tbody.insertBefore(row, emptyRow);
+            } else {
+                tbody.appendChild(row);
+            }
+        });
+    }
+
+    function updateNameSortIndicator() {
+        const indicator = document.getElementById('nameSortIndicator');
+        const th = document.querySelector('.sortable-th--name');
+
+        if (!indicator || !th) {
+            return;
+        }
+        if (currentNameSort === 'asc') {
+            indicator.textContent = '↑';
+            th.setAttribute('aria-sort', 'ascending');
+        } else if (currentNameSort === 'desc') {
+            indicator.textContent = '↓';
+            th.setAttribute('aria-sort', 'descending');
+        } else {
+            indicator.textContent = '↕';
+            th.setAttribute('aria-sort', 'none');
+        }
+    }
+
+    function applyUserTableState() {
+        const keywordInput = document.getElementById('search-input');
+        const roleSelect = document.getElementById('role-filter');
+        const statusSelect = document.getElementById('status-filter');
+        const keyword = keywordInput ? keywordInput.value.trim().toLocaleLowerCase('vi') : '';
+        const role = roleSelect ? roleSelect.value : '';
+        const status = statusSelect ? statusSelect.value : '';
         const rows = document.querySelectorAll('#userTableBody tr.user-row');
         let visibleCount = 0;
 
         rows.forEach(function(row) {
-            const textMatch = row.innerText.toLowerCase().includes(keyword);
+            const rowText = row.innerText.toLocaleLowerCase('vi');
+            const textMatch = !keyword || rowText.includes(keyword);
             const roleMatch = !role || row.dataset.userRole === role;
             const statusMatch = !status || row.dataset.userStatus === status;
-            const visible = textMatch && roleMatch && statusMatch;
 
+            let quickFilterMatch = true;
+            if (currentQuickFilter === 'admin') {
+                quickFilterMatch = row.dataset.userRole === 'admin';
+            } else if (currentQuickFilter === 'customer') {
+                quickFilterMatch = row.dataset.userRole === 'customer';
+            } else if (currentQuickFilter === 'locked') {
+                quickFilterMatch = row.dataset.userStatus === 'locked';
+            }
+            const visible = textMatch && roleMatch && statusMatch && quickFilterMatch;
             row.style.display = visible ? '' : 'none';
             if (visible) {
                 visibleCount++;
@@ -1382,6 +1550,11 @@
         if (emptyRow) {
             emptyRow.style.display = rows.length > 0 && visibleCount === 0 ? '' : 'none';
         }
+    }
+
+    function filterUsers() {
+        syncQuickFilterFromSelects();
+        applyUserTableState();
     }
 
     function updateSearchClearButton() {
@@ -1396,7 +1569,7 @@
     }
 
     function handleSearchInput() {
-        filterUsers();
+        applyUserTableState();
         updateSearchClearButton();
     }
 
@@ -1408,58 +1581,46 @@
         }
 
         input.value = '';
-        filterUsers();
+        applyUserTableState();
         updateSearchClearButton();
         input.focus();
     }
 
     function sortUsers() {
-        const tbody = document.getElementById('userTableBody');
-        const rows = Array.from(tbody.querySelectorAll('tr.user-row'));
-        const sortType = document.getElementById('sortselect').value;
-
-        if (!sortType) {
-            restoreDefaultOrder();
-            filterUsers();
-            return;
-        }
-
-        rows.sort(function(a, b) {
-            const nameA = (a.dataset.userSort || '').toLowerCase();
-            const nameB = (b.dataset.userSort || '').toLowerCase();
-            return sortType === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
-        });
-
-        rows.forEach(function(row) {
-            tbody.insertBefore(row, document.getElementById('filterEmptyRow'));
-        });
-        filterUsers();
-    }
-
-    function restoreDefaultOrder() {
-        const tbody = document.getElementById('userTableBody');
-        const rows = Array.from(tbody.querySelectorAll('tr.user-row'));
-
-        rows.sort(function(a, b) {
-            return Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex);
-        });
-
-        rows.forEach(function(row) {
-            tbody.insertBefore(row, document.getElementById('filterEmptyRow'));
-        });
+        applyNameSort();
+        updateNameSortIndicator();
+        applyUserTableState();
     }
 
     function resetFilters() {
-        document.getElementById('search-input').value = '';
-        document.getElementById('role-filter').value = '';
-        document.getElementById('status-filter').value = '';
-        document.getElementById('sortselect').value = '';
-        restoreDefaultOrder();
-        filterUsers();
+        const searchInput = document.getElementById('search-input');
+        const roleSelect = document.getElementById('role-filter');
+        const statusSelect = document.getElementById('status-filter');
+
+        if (searchInput) {
+            searchInput.value = '';
+        }
+        if (roleSelect) {
+            roleSelect.value = '';
+        }
+        if (statusSelect) {
+            statusSelect.value = '';
+        }
+        currentQuickFilter = 'all';
+        currentNameSort = 'none';
+        updateQuickFilterButtons();
+        applyNameSort();
+        updateNameSortIndicator();
+        applyUserTableState();
         updateSearchClearButton();
     }
 
-    document.addEventListener('DOMContentLoaded', updateSearchClearButton);
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSearchClearButton();
+        updateQuickFilterButtons();
+        updateNameSortIndicator();
+        applyUserTableState();
+    });
 
     document.getElementById('statusConfirmModal').addEventListener('click', function(e) {
         if (e.target === this) {
