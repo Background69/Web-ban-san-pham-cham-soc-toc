@@ -77,6 +77,7 @@
             </article>
         </section>
 
+        <div class="users-sticky-tools" id="usersStickyTools">
         <section class="filter-panel" aria-label="Bộ lọc người dùng">
             <div class="filter-panel__header">
                 <div>
@@ -130,7 +131,6 @@
 
             </div>
         </section>
-        <section class="users-table-card" aria-label="Bảng người dùng">
             <div class="quick-filter-bar" aria-label="Lọc nhanh tài khoản">
                 <button type="button"
                         class="quick-filter-btn is-active"
@@ -161,6 +161,8 @@
                     Đang bị khóa
                 </button>
             </div>
+        </div>
+        <section class="users-table-card" aria-label="Bảng người dùng">
             <div class="table-scroll">
                 <table class="data-grid" id="userTable">
                     <thead>
@@ -390,6 +392,38 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="table-footer">
+                <div class="table-summary" id="userTableSummary" aria-live="polite">
+                    Hiển thị 0 - 0 trong tổng số 0 tài khoản
+                </div>
+                <div class="table-footer__controls">
+                    <label class="page-size-control" for="userPageSize">
+                        <span>Hiển thị:</span>
+                        <select id="userPageSize" class="page-size-select" onchange="changeUserPageSize()">
+                            <option value="15" selected>15 dòng</option>
+                            <option value="30">30 dòng</option>
+                            <option value="50">50 dòng</option>
+                        </select>
+                    </label>
+                    <nav class="pagination-nav" aria-label="Phân trang danh sách người dùng">
+                        <button type="button"
+                                class="pagination-btn"
+                                id="prevPageBtn"
+                                onclick="goToPreviousUserPage()"
+                                aria-label="Trang trước">
+                            ‹
+                        </button>
+                        <div class="pagination-pages" id="paginationPages"></div>
+                        <button type="button"
+                                class="pagination-btn"
+                                id="nextPageBtn"
+                                onclick="goToNextUserPage()"
+                                aria-label="Trang sau">
+                            ›
+                        </button>
+                    </nav>
+                </div>
             </div>
         </section>
     </main>
@@ -647,6 +681,9 @@
     let adminRoleConfirmed = false;
     let currentQuickFilter = 'all';
     let currentNameSort = 'none';
+    let currentUserPage = 1;
+    let currentUserPageSize = 15;
+    let currentUserRows = [];
     const statusReasonOptions = {
         lock: [
             { value: 'POLICY_VIOLATION', label: 'Vi phạm chính sách sử dụng' },
@@ -672,6 +709,15 @@
         CUSTOMER_REQUEST_RESOLVED: 'Đã xử lý theo yêu cầu khách hàng',
         OTHER: 'Lý do khác'
     };
+    function updateStickyTableHeadOffset() {
+        const page = document.querySelector('.admin-users-page');
+        const stickyTools = document.getElementById('usersStickyTools');
+
+        if (!page || !stickyTools) {
+            return;
+        }
+        page.style.setProperty('--users-table-head-top', (stickyTools.offsetHeight + 8) + 'px');
+    }
     document.addEventListener('DOMContentLoaded', function() {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             return;
@@ -1394,6 +1440,7 @@
 
     function setQuickFilter(filter, button) {
         currentQuickFilter = filter;
+        currentUserPage = 1;
         syncSelectFiltersFromQuickFilter(filter);
         updateQuickFilterButtons();
         applyUserTableState();
@@ -1453,7 +1500,7 @@
         } else {
             currentNameSort = 'desc';
         }
-        applyNameSort();
+        currentUserPage = 1;
         updateNameSortIndicator();
         applyUserTableState();
     }
@@ -1515,17 +1562,16 @@
         }
     }
 
-    function applyUserTableState() {
+    function getFilteredUserRows() {
         const keywordInput = document.getElementById('search-input');
         const roleSelect = document.getElementById('role-filter');
         const statusSelect = document.getElementById('status-filter');
         const keyword = keywordInput ? keywordInput.value.trim().toLocaleLowerCase('vi') : '';
         const role = roleSelect ? roleSelect.value : '';
         const status = statusSelect ? statusSelect.value : '';
-        const rows = document.querySelectorAll('#userTableBody tr.user-row');
-        let visibleCount = 0;
+        const rows = Array.from(document.querySelectorAll('#userTableBody tr.user-row'));
 
-        rows.forEach(function(row) {
+        return rows.filter(function(row) {
             const rowText = row.innerText.toLocaleLowerCase('vi');
             const textMatch = !keyword || rowText.includes(keyword);
             const roleMatch = !role || row.dataset.userRole === role;
@@ -1539,20 +1585,179 @@
             } else if (currentQuickFilter === 'locked') {
                 quickFilterMatch = row.dataset.userStatus === 'locked';
             }
-            const visible = textMatch && roleMatch && statusMatch && quickFilterMatch;
-            row.style.display = visible ? '' : 'none';
-            if (visible) {
-                visibleCount++;
-            }
+
+            return textMatch && roleMatch && statusMatch && quickFilterMatch;
+        });
+    }
+    function isUserFilterActive() {
+        const keywordInput = document.getElementById('search-input');
+        const roleSelect = document.getElementById('role-filter');
+        const statusSelect = document.getElementById('status-filter');
+        const hasKeyword = keywordInput && keywordInput.value.trim().length > 0;
+        const hasRole = roleSelect && roleSelect.value;
+        const hasStatus = statusSelect && statusSelect.value;
+        const hasQuickFilter = currentQuickFilter && currentQuickFilter !== 'all';
+        return Boolean(hasKeyword || hasRole || hasStatus || hasQuickFilter);
+    }
+
+    function applyUserTableState() {
+        const allRows = Array.from(document.querySelectorAll('#userTableBody tr.user-row'));
+        allRows.forEach(function(row) {
+            row.style.display = 'none';
+        });
+        applyNameSort();
+        currentUserRows = getFilteredUserRows();
+        const total = currentUserRows.length;
+        const totalPages = Math.max(1, Math.ceil(total / currentUserPageSize));
+
+        if (currentUserPage > totalPages) {
+            currentUserPage = totalPages;
+        }
+        const startIndex = (currentUserPage - 1) * currentUserPageSize;
+        const endIndex = Math.min(startIndex + currentUserPageSize, total);
+        currentUserRows.slice(startIndex, endIndex).forEach(function(row) {
+            row.style.display = '';
         });
 
+        updateUserTableSummary(total, startIndex, endIndex);
+        renderUserPagination(totalPages, total);
+        updateFilterEmptyRow(total, allRows.length);
+        updateStickyTableHeadOffset();
+    }
+    function updateUserTableSummary(total, startIndex, endIndex) {
+        const summary = document.getElementById('userTableSummary');
+        if (!summary) {
+            return;
+        }
+        if (total === 0) {
+            summary.textContent = 'Hiển thị 0 - 0 trong tổng số 0 tài khoản';
+            return;
+        }
+
+        const suffix = isUserFilterActive() ? ' tài khoản phù hợp' : ' tài khoản';
+        summary.textContent = 'Hiển thị '
+            + (startIndex + 1)
+            + ' - '
+            + endIndex
+            + ' trong tổng số '
+            + total.toLocaleString('vi-VN')
+            + suffix;
+    }
+
+    function updateFilterEmptyRow(total, totalRows) {
         const emptyRow = document.getElementById('filterEmptyRow');
+
         if (emptyRow) {
-            emptyRow.style.display = rows.length > 0 && visibleCount === 0 ? '' : 'none';
+            emptyRow.style.display = totalRows > 0 && total === 0 ? '' : 'none';
         }
     }
 
+    function changeUserPageSize() {
+        const select = document.getElementById('userPageSize');
+        currentUserPageSize = Number(select ? select.value : 15) || 15;
+        currentUserPage = 1;
+        applyUserTableState();
+    }
+    function goToUserPage(page) {
+        const totalPages = Math.max(1, Math.ceil(currentUserRows.length / currentUserPageSize));
+
+        if (page < 1 || page > totalPages) {
+            return;
+        }
+
+        currentUserPage = page;
+        applyUserTableState();
+    }
+
+    function goToPreviousUserPage() {
+        goToUserPage(currentUserPage - 1);
+    }
+
+    function goToNextUserPage() {
+        goToUserPage(currentUserPage + 1);
+    }
+
+    function renderUserPagination(totalPages, totalRows) {
+        const pagesBox = document.getElementById('paginationPages');
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+
+        if (!pagesBox) {
+            return;
+        }
+
+        const paginationNav = pagesBox.closest('.pagination-nav');
+        pagesBox.innerHTML = '';
+
+        if (paginationNav) {
+            paginationNav.hidden = totalRows === 0;
+        }
+
+        if (prevBtn) {
+            prevBtn.disabled = totalRows === 0 || currentUserPage <= 1;
+        }
+
+        if (nextBtn) {
+            nextBtn.disabled = totalRows === 0 || currentUserPage >= totalPages;
+        }
+
+        if (totalRows === 0) {
+            return;
+        }
+
+        buildPageList(currentUserPage, totalPages).forEach(function(item) {
+            if (item === '...') {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'pagination-ellipsis';
+                ellipsis.textContent = '...';
+                pagesBox.appendChild(ellipsis);
+                return;
+            }
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pagination-btn';
+            btn.textContent = item;
+            btn.setAttribute('aria-label', 'Trang ' + item);
+            if (item === currentUserPage) {
+                btn.classList.add('is-active');
+                btn.setAttribute('aria-current', 'page');
+            }
+            btn.addEventListener('click', function() {
+                goToUserPage(item);
+            });
+            pagesBox.appendChild(btn);
+        });
+    }
+
+    function buildPageList(current, total) {
+        if (total <= 7) {
+            return Array.from({ length: total }, function(_, i) {
+                return i + 1;
+            });
+        }
+
+        const pages = [1];
+
+        if (current > 4) {
+            pages.push('...');
+        }
+
+        const start = Math.max(2, current - 1);
+        const end = Math.min(total - 1, current + 1);
+
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+        if (current < total - 3) {
+            pages.push('...');
+        }
+        pages.push(total);
+        return pages;
+    }
+
     function filterUsers() {
+        currentUserPage = 1;
         syncQuickFilterFromSelects();
         applyUserTableState();
     }
@@ -1569,6 +1774,7 @@
     }
 
     function handleSearchInput() {
+        currentUserPage = 1;
         applyUserTableState();
         updateSearchClearButton();
     }
@@ -1581,13 +1787,14 @@
         }
 
         input.value = '';
+        currentUserPage = 1;
         applyUserTableState();
         updateSearchClearButton();
         input.focus();
     }
 
     function sortUsers() {
-        applyNameSort();
+        currentUserPage = 1;
         updateNameSortIndicator();
         applyUserTableState();
     }
@@ -1608,18 +1815,30 @@
         }
         currentQuickFilter = 'all';
         currentNameSort = 'none';
+        currentUserPage = 1;
+        currentUserPageSize = 15;
+        const pageSizeSelect = document.getElementById('userPageSize');
+        if (pageSizeSelect) {
+            pageSizeSelect.value = '15';
+        }
         updateQuickFilterButtons();
-        applyNameSort();
         updateNameSortIndicator();
         applyUserTableState();
         updateSearchClearButton();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const pageSizeSelect = document.getElementById('userPageSize');
+        if (pageSizeSelect) {
+            currentUserPageSize = Number(pageSizeSelect.value) || 15;
+        }
         updateSearchClearButton();
         updateQuickFilterButtons();
         updateNameSortIndicator();
+        updateStickyTableHeadOffset();
         applyUserTableState();
+        window.addEventListener('resize', updateStickyTableHeadOffset);
+        setTimeout(updateStickyTableHeadOffset, 0);
     });
 
     document.getElementById('statusConfirmModal').addEventListener('click', function(e) {
