@@ -8,6 +8,8 @@
     <meta charset="UTF-8">
     <title>Quản lý thương hiệu</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/brandmanagement.css">
+
     <style>
         .thumb {
             width: 52px;

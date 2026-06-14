@@ -1,0 +1,126 @@
+/* Content */
+.content {
+    padding: 30px;
+    background: #f8fafc;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header h1 {
+    font-size: 28px;
+    color: #1e293b;
+    margin: 0;
+}
+
+.btn-add {
+    background: #4f46e5;
+    color: white;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn-add:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+}
+
+/* Table */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+
+.product-table thead {
+    background: #f1f5f9;
+}
+
+.product-table th {
+    padding: 16px;
+    text-align: center;
+    color: #475569;
+    font-size: 14px;
+}
+
+.product-table td {
+    padding: 16px;
+    text-align: center;
+    border-top: 1px solid #e2e8f0;
+    vertical-align: middle;
+}
+
+.product-table tr:hover {
+    background: #f8fafc;
+}
+
+/* Image */
+.thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: white;
+}
+
+.thumb-placeholder {
+    width: 60px;
+    height: 60px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    margin: auto;
+}
+
+/* Brand name */
+.product-table td:nth-child(3) {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Description */
+.product-table td:nth-child(4) {
+    color: #64748b;
+    max-width: 300px;
+}
+
+/* Action buttons */
+.edit,
+.delete {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 3px;
+    transition: .2s;
+}
+
+.edit {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.edit:hover {
+    background: #bfdbfe;
+}
+
+.delete {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.delete:hover {
+    background: #fecaca;
+}
