@@ -14,29 +14,9 @@
 <body>
 <div class="container">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="${pageContext.request.contextPath}/static/assets/icons/LOGO.png">
-        </div>
-        <p>HairGlow Admin</p>
-
-        <ul class="menu">
-            <li><a href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/users">Quản lý người dùng</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/products">Quản lý sản phẩm</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders">Quản lý đơn hàng</a></li>
-            <li class="active"><a href="${pageContext.request.contextPath}/admin/brands">Quản lý thương
-                hiệu</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/categories">Quản lý danh mục</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm
-                giá</a></li>
-        </ul>
-
-        <a class="view-site" href="${pageContext.request.contextPath}/">
-            Quay lại Website
-        </a>
-    </aside>
+    <jsp:include page="/admin/common/sidebar.jsp">
+        <jsp:param name="activeMenu" value="brands"/>
+    </jsp:include>
 
     <main class="content">
         <div class="header">
@@ -61,16 +41,26 @@
                 <tr>
                     <td>${b.brandId}</td>
                     <td>
+                        <c:set var="brandLogoUrl" value="${b.logoUrl}"/>
+                        <c:set var="brandLogoSrc" value=""/>
+                        <c:if test="${not empty brandLogoUrl}">
+                            <c:choose>
+                                <c:when test="${fn:startsWith(brandLogoUrl, 'http://') || fn:startsWith(brandLogoUrl, 'https://')}">
+                                    <c:set var="brandLogoSrc" value="${brandLogoUrl}"/>
+                                </c:when>
+                                <c:when test="${fn:startsWith(brandLogoUrl, '/')}">
+                                    <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}${brandLogoUrl}"/>
+                                </c:when>
+                                <c:when test="${fn:contains(brandLogoUrl, '/')}">
+                                    <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}/${brandLogoUrl}"/>
+                                </c:when>
+                            </c:choose>
+                        </c:if>
                         <c:choose>
-                            <c:when test="${not empty b.logoUrl}">
-                                <c:choose>
-                                    <c:when test="${fn:startsWith(b.logoUrl, 'http')}">
-                                        <img class="thumb" src="${b.logoUrl}" alt="${b.brandName}">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img class="thumb" src="${pageContext.request.contextPath}/static/${b.logoUrl}" alt="${b.brandName}">
-                                    </c:otherwise>
-                                </c:choose>
+                            <c:when test="${not empty brandLogoSrc}">
+                                <img class="thumb" src="${brandLogoSrc}" alt="${fn:escapeXml(b.brandName)}"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="thumb-placeholder" style="display:none"></div>
                             </c:when>
                             <c:otherwise>
                                 <div class="thumb-placeholder"></div>

@@ -10,6 +10,7 @@
             <c:otherwise>Cập nhật danh mục</c:otherwise>
         </c:choose>
     </title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,30 +77,38 @@
 </head>
 <body>
 
-<div class="wrap">
-    <h2>
-        <c:choose>
-            <c:when test="${empty category}">Thêm danh mục</c:when>
-            <c:otherwise>Cập nhật danh mục</c:otherwise>
-        </c:choose>
-    </h2>
+<div class="container">
+    <jsp:include page="/admin/common/sidebar.jsp">
+        <jsp:param name="activeMenu" value="categories"/>
+    </jsp:include>
 
-    <form action="${pageContext.request.contextPath}/admin/category/save" method="post">
-        <c:if test="${not empty category}">
-            <input type="hidden" name="id" value="${category.categoryId}">
-        </c:if>
+    <main class="content">
+        <div class="wrap">
+            <h2>
+                <c:choose>
+                    <c:when test="${empty category}">Thêm danh mục</c:when>
+                    <c:otherwise>Cập nhật danh mục</c:otherwise>
+                </c:choose>
+            </h2>
 
-        <label>Tên danh mục:</label>
-        <input type="text" name="categoryName" value="${category.categoryName}" required maxlength="100">
+            <form action="${pageContext.request.contextPath}/admin/category/save" method="post">
+                <c:if test="${not empty category}">
+                    <input type="hidden" name="id" value="${category.categoryId}">
+                </c:if>
 
-        <label>Slug:</label>
-        <input type="text" name="categorySlug" value="${category.categorySlug}" required maxlength="120">
+                <label>Tên danh mục:</label>
+                <input type="text" name="categoryName" value="${category.categoryName}" required maxlength="100">
 
-        <div class="actions">
-            <a class="btn" href="${pageContext.request.contextPath}/admin/categories">← Quay lại</a>
-            <button class="btn primary" type="submit">💾 Lưu</button>
+                <label>Slug:</label>
+                <input type="text" name="categorySlug" value="${category.categorySlug}" required maxlength="120">
+
+                <div class="actions">
+                    <a class="btn" href="${pageContext.request.contextPath}/admin/categories">← Quay lại</a>
+                    <button class="btn primary" type="submit">💾 Lưu</button>
+                </div>
+            </form>
         </div>
-    </form>
+    </main>
 </div>
 
 </body>
