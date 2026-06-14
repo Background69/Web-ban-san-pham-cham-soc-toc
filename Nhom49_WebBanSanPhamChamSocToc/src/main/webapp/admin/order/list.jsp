@@ -9,6 +9,8 @@
     <meta charset="UTF-8">
     <title>Quản lý đơn hàng</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/ordermanagement.css">
+
 </head>
 
 <body>
@@ -49,7 +51,7 @@
                         <form action="${pageContext.request.contextPath}/admin/orders" method="get">
                             <input type="hidden" name="action" value="updateStatus">
                             <input type="hidden" name="id" value="${o.orderId}">
-                            <select name="status" onchange="this.form.submit()">
+                            <select name="status" onchange="this.form.submit()" class="status-select status-${o.orderStatus}">
                                 <option value="pending" ${o.orderStatus=='pending' ? 'selected' : ''
                                         }>
                                     Chờ xác nhận
@@ -74,14 +76,14 @@
                         </form>
                     </td>
 
-                    <td>
-                        <a
-                                href="${pageContext.request.contextPath}/admin/orders?action=detail&id=${o.orderId}">
+                    <td class="action-cell">
+                        <a href="${pageContext.request.contextPath}/admin/orders?action=detail&id=${o.orderId}" class="btn-action btn-detail">
                             Chi tiết
                         </a>
-                        |
                         <a href="${pageContext.request.contextPath}/admin/orders?action=delete&id=${o.orderId}"
-                           onclick="return confirm('Xóa đơn này?')">
+                                class="btn-action btn-delete"
+                                onclick="return confirm('Xóa đơn này?')">
+
                             Xóa
                         </a>
                     </td>

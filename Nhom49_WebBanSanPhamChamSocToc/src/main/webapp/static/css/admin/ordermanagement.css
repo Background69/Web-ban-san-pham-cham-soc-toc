@@ -1,0 +1,95 @@
+.status-select {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Chờ xác nhận */
+.status-pending {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Đã xác nhận */
+.status-confirmed {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+/* Đang giao */
+.status-shipping {
+    background: #e0e7ff;
+    color: #4f46e5;
+}
+
+/* Hoàn thành */
+.status-completed {
+    background: #d1fae5;
+    color: #059669;
+}
+
+/* Đã hủy */
+.status-cancelled {
+    background: #fee2e2;
+    color: #dc2626;
+}
+.status-select {
+    min-width: 160px;
+    height: 44px;
+
+    border: none;
+    border-radius: 999px;
+
+    text-align: center;
+    text-align-last: center;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    padding: 0 35px 0 20px;
+    position: relative;
+}
+.action-cell{
+     display:flex;
+     justify-content:center;
+     gap:8px;
+ }
+
+.btn-action{
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+    transition:0.2s;
+}
+
+/* Chi tiết */
+.btn-detail{
+    background:#e0f2fe;
+    color:#0369a1;
+}
+
+.btn-detail:hover{
+    background:#bae6fd;
+}
+
+/* Xóa */
+.btn-delete{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.btn-delete:hover{
+    background:#fecaca;
+}

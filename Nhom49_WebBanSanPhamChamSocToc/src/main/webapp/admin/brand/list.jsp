@@ -8,7 +8,30 @@
     <meta charset="UTF-8">
     <title>Quản lý thương hiệu</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/branchmanagement.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/brandmanagement.css">
+
+    <style>
+        .thumb {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            background: #f9f9f9;
+        }
+
+        .thumb-placeholder {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #9ca3af;
+        }
+    </style>
 </head>
 
 <body>
