@@ -135,4 +135,102 @@ public class EmailService {
             return false;
         }
     }
+
+    public boolean sendFeedbackConfirmation(String toEmail, String ticketCode,
+                                            String category, String title, String contentSummary) {
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(EMAIL_USERNAME, EMAIL_FROM_NAME, StandardCharsets.UTF_8.name()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+            message.setSubject("Xác nhận tiếp nhận phản hồi #" + ticketCode + " - HairGlow",
+                    StandardCharsets.UTF_8.name());
+
+            String summary = contentSummary;
+            if (summary != null && summary.length() > 200) {
+                summary = summary.substring(0, 200) + "...";
+            }
+
+            String categoryLabel = switch (category) {
+                case "SYSTEM_ERROR" -> "Lỗi hệ thống";
+                case "SHIPPING" -> "Vận chuyển / Giao hàng";
+                case "PRODUCT_QUALITY" -> "Chất lượng sản phẩm";
+                case "SHOPPING_GUIDE" -> "Hướng dẫn mua hàng";
+                default -> "Khác";
+            };
+
+            String html = """
+                <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f6f7f3;">
+                  <div style="background:#fff;border-radius:12px;padding:28px;border:1px solid #dbe3d9;">
+                    <h2 style="color:#234737;margin-bottom:16px;">Đã tiếp nhận phản hồi của bạn</h2>
+                    <p style="color:#637068;">Cảm ơn bạn đã liên hệ HairGlow. Chúng tôi đã nhận được phản hồi và sẽ xử lý trong thời gian sớm nhất.</p>
+                    <div style="background:#f6f7f3;border-radius:8px;padding:16px;margin:16px 0;">
+                      <p style="margin:4px 0;"><strong>Mã ticket:</strong> <span style="color:#234737;font-weight:700;">%s</span></p>
+                      <p style="margin:4px 0;"><strong>Phân loại:</strong> %s</p>
+                      <p style="margin:4px 0;"><strong>Tiêu đề:</strong> %s</p>
+                      <p style="margin:4px 0;color:#637068;"><strong>Nội dung:</strong> %s</p>
+                    </div>
+                    <p style="color:#637068;font-size:13px;">Thời gian xử lý dự kiến: 1-2 ngày làm việc. Bạn có thể theo dõi trạng thái ticket tại trang hỗ trợ.</p>
+                    <p style="color:#64748b;font-size:12px;margin-top:20px;">Đây là email tự động, vui lòng không trả lời.</p>
+                  </div>
+                </div>
+            """.formatted(ticketCode, categoryLabel, title, summary);
+
+            message.setContent(html, "text/html; charset=UTF-8");
+            Transport.send(message);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Lỗi gửi email xác nhận feedback: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean sendFeedbackReplyNotification(String toEmail, String ticketCode,
+                                                  String adminMessage, String newStatus) {
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(EMAIL_USERNAME, EMAIL_FROM_NAME, StandardCharsets.UTF_8.name()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+            message.setSubject("HairGlow đã phản hồi yêu cầu hỗ trợ #" + ticketCode,
+                    StandardCharsets.UTF_8.name());
+
+            String statusLabel = switch (newStatus) {
+                case "RECEIVED" -> "Đã tiếp nhận";
+                case "PROCESSING" -> "Đang xử lý";
+                case "RESOLVED" -> "Đã giải quyết";
+                case "CLOSED" -> "Đã đóng";
+                default -> newStatus;
+            };
+
+            String replySummary = adminMessage;
+            if (replySummary != null && replySummary.length() > 500) {
+                replySummary = replySummary.substring(0, 500) + "...";
+            }
+
+            String html = """
+                <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f6f7f3;">
+                  <div style="background:#fff;border-radius:12px;padding:28px;border:1px solid #dbe3d9;">
+                    <h2 style="color:#234737;margin-bottom:16px;">Phản hồi từ HairGlow</h2>
+                    <p style="color:#637068;">Yêu cầu hỗ trợ của bạn đã được phản hồi bởi đội ngũ HairGlow.</p>
+                    <div style="background:#f6f7f3;border-radius:8px;padding:16px;margin:16px 0;">
+                      <p style="margin:4px 0;"><strong>Mã ticket:</strong> <span style="color:#234737;font-weight:700;">%s</span></p>
+                      <p style="margin:4px 0;"><strong>Trạng thái mới:</strong> <span style="color:#89AF63;font-weight:600;">%s</span></p>
+                    </div>
+                    <div style="background:#fff;border:1px solid #dbe3d9;border-radius:8px;padding:16px;margin:16px 0;">
+                      <p style="margin:0 0 8px 0;font-weight:600;color:#234737;">Nội dung phản hồi:</p>
+                      <p style="margin:0;color:#1E2A24;line-height:1.6;">%s</p>
+                    </div>
+                    <p style="color:#637068;font-size:13px;">Nếu bạn cần hỗ trợ thêm, vui lòng truy cập trang hỗ trợ hoặc liên hệ hotline.</p>
+                    <p style="color:#64748b;font-size:12px;margin-top:20px;">Đây là email tự động, vui lòng không trả lời.</p>
+                  </div>
+                </div>
+            """.formatted(ticketCode, statusLabel, replySummary);
+
+            message.setContent(html, "text/html; charset=UTF-8");
+            Transport.send(message);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Lỗi gửi email phản hồi feedback: " + e.getMessage());
+            return false;
+        }
+    }
 }
