@@ -92,11 +92,23 @@
             <div class="filter-grid">
                 <label class="field field--search" for="search-input">
                     <span>Tìm kiếm</span>
-                    <input type="text"
-                           class="search-input"
-                           id="search-input"
-                           placeholder="Tên, email, số điện thoại..."
-                           oninput="filterUsers()">
+                    <div class="search-control">
+                        <i class="fa-solid fa-magnifying-glass search-control__icon" aria-hidden="true"></i>
+                        <input type="text"
+                               class="search-input search-control__input"
+                               id="search-input"
+                               placeholder="Tên, email, số điện thoại..."
+                               autocomplete="off"
+                               oninput="handleSearchInput()">
+                        <button type="button"
+                                class="search-clear-btn"
+                                id="searchClearBtn"
+                                aria-label="Xóa từ khóa tìm kiếm"
+                                title="Xóa từ khóa"
+                                onclick="clearUserSearch()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                 </label>
 
                 <label class="field" for="role-filter">
@@ -1372,6 +1384,35 @@
         }
     }
 
+    function updateSearchClearButton() {
+        const input = document.getElementById('search-input');
+        const clearBtn = document.getElementById('searchClearBtn');
+
+        if (!input || !clearBtn) {
+            return;
+        }
+
+        clearBtn.classList.toggle('is-visible', input.value.trim().length > 0);
+    }
+
+    function handleSearchInput() {
+        filterUsers();
+        updateSearchClearButton();
+    }
+
+    function clearUserSearch() {
+        const input = document.getElementById('search-input');
+
+        if (!input) {
+            return;
+        }
+
+        input.value = '';
+        filterUsers();
+        updateSearchClearButton();
+        input.focus();
+    }
+
     function sortUsers() {
         const tbody = document.getElementById('userTableBody');
         const rows = Array.from(tbody.querySelectorAll('tr.user-row'));
@@ -1415,7 +1456,10 @@
         document.getElementById('sortselect').value = '';
         restoreDefaultOrder();
         filterUsers();
+        updateSearchClearButton();
     }
+
+    document.addEventListener('DOMContentLoaded', updateSearchClearButton);
 
     document.getElementById('statusConfirmModal').addEventListener('click', function(e) {
         if (e.target === this) {
