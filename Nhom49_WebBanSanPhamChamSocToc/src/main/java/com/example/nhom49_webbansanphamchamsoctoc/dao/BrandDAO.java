@@ -12,6 +12,8 @@ import java.util.List;
 public class BrandDAO implements IDAO<Brand> {
 
     private final Jdbi jdbi;
+    private static final String BRAND_COLUMNS = "brand_id, brand_name, brand_slug, logo_url, origin, " +
+            "short_description, full_description, created_at, updated_at";
 
     /**
      * Thực hiện brand dao.
@@ -74,7 +76,7 @@ public class BrandDAO implements IDAO<Brand> {
 
     @Override
     public List<Brand> findAll() {
-        String sql = "SELECT * FROM brands ORDER BY created_at DESC";
+        String sql = "SELECT " + BRAND_COLUMNS + " FROM brands ORDER BY created_at DESC";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
                         .map((rs, ctx) -> mapBrand(rs))
@@ -85,7 +87,7 @@ public class BrandDAO implements IDAO<Brand> {
 
     @Override
     public Brand findById(int id) {
-        String sql = "SELECT * FROM brands WHERE brand_id = :id";
+        String sql = "SELECT " + BRAND_COLUMNS + " FROM brands WHERE brand_id = :id";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
                         .bind("id", id)
@@ -97,7 +99,7 @@ public class BrandDAO implements IDAO<Brand> {
 
 
     public Brand findBySlug(String slug) {
-        String sql = "SELECT * FROM brands WHERE brand_slug = :slug";
+        String sql = "SELECT " + BRAND_COLUMNS + " FROM brands WHERE brand_slug = :slug";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
                         .bind("slug", slug)

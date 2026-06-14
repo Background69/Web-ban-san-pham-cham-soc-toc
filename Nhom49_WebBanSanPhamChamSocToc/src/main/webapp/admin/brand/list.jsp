@@ -41,16 +41,26 @@
                 <tr>
                     <td>${b.brandId}</td>
                     <td>
+                        <c:set var="brandLogoUrl" value="${b.logoUrl}"/>
+                        <c:set var="brandLogoSrc" value=""/>
+                        <c:if test="${not empty brandLogoUrl}">
+                            <c:choose>
+                                <c:when test="${fn:startsWith(brandLogoUrl, 'http://') || fn:startsWith(brandLogoUrl, 'https://')}">
+                                    <c:set var="brandLogoSrc" value="${brandLogoUrl}"/>
+                                </c:when>
+                                <c:when test="${fn:startsWith(brandLogoUrl, '/')}">
+                                    <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}${brandLogoUrl}"/>
+                                </c:when>
+                                <c:when test="${fn:contains(brandLogoUrl, '/')}">
+                                    <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}/${brandLogoUrl}"/>
+                                </c:when>
+                            </c:choose>
+                        </c:if>
                         <c:choose>
-                            <c:when test="${not empty b.logoUrl}">
-                                <c:choose>
-                                    <c:when test="${fn:startsWith(b.logoUrl, 'http')}">
-                                        <img class="thumb" src="${b.logoUrl}" alt="${b.brandName}">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img class="thumb" src="${pageContext.request.contextPath}/static/${b.logoUrl}" alt="${b.brandName}">
-                                    </c:otherwise>
-                                </c:choose>
+                            <c:when test="${not empty brandLogoSrc}">
+                                <img class="thumb" src="${brandLogoSrc}" alt="${fn:escapeXml(b.brandName)}"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="thumb-placeholder" style="display:none"></div>
                             </c:when>
                             <c:otherwise>
                                 <div class="thumb-placeholder"></div>

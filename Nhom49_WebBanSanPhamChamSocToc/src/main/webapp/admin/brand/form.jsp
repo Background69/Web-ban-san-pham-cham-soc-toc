@@ -173,15 +173,24 @@
                     <div class="form-group">
                         <label>Logo</label>
                         <input type="file" name="logo" accept="image/*">
-                        <c:if test="${not empty brand.logoUrl}">
+                        <c:set var="brandLogoUrl" value="${brand.logoUrl}"/>
+                        <c:set var="brandLogoSrc" value=""/>
+                        <c:if test="${not empty brandLogoUrl}">
                             <c:choose>
-                                <c:when test="${fn:startsWith(brand.logoUrl, 'http')}">
-                                    <img class="preview-img" src="${brand.logoUrl}" alt="Logo preview">
+                                <c:when test="${fn:startsWith(brandLogoUrl, 'http://') || fn:startsWith(brandLogoUrl, 'https://')}">
+                                    <c:set var="brandLogoSrc" value="${brandLogoUrl}"/>
                                 </c:when>
-                                <c:otherwise>
-                                    <img class="preview-img" src="${pageContext.request.contextPath}/static/${brand.logoUrl}" alt="Logo preview">
-                                </c:otherwise>
+                                <c:when test="${fn:startsWith(brandLogoUrl, '/')}">
+                                    <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}${brandLogoUrl}"/>
+                                </c:when>
+                                <c:when test="${fn:contains(brandLogoUrl, '/')}">
+                                    <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}/${brandLogoUrl}"/>
+                                </c:when>
                             </c:choose>
+                        </c:if>
+                        <c:if test="${not empty brandLogoSrc}">
+                            <img class="preview-img" src="${brandLogoSrc}" alt="Logo preview"
+                                 onerror="this.style.display='none';">
                         </c:if>
                     </div>
 

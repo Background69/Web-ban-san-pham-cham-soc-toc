@@ -57,18 +57,25 @@
             <div class="brand-item"
                  data-origin="${not empty brand.origin ? brand.origin.toLowerCase() : 'unknown'}">
                 <div class="brand-logo">
+                    <c:set var="brandLogoUrl" value="${brand.logoUrl}"/>
+                    <c:set var="brandLogoSrc" value=""/>
+                    <c:if test="${not empty brandLogoUrl}">
+                        <c:choose>
+                            <c:when test="${fn:startsWith(brandLogoUrl, 'http://') || fn:startsWith(brandLogoUrl, 'https://')}">
+                                <c:set var="brandLogoSrc" value="${brandLogoUrl}"/>
+                            </c:when>
+                            <c:when test="${fn:startsWith(brandLogoUrl, '/')}">
+                                <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}${brandLogoUrl}"/>
+                            </c:when>
+                            <c:when test="${fn:contains(brandLogoUrl, '/')}">
+                                <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}/${brandLogoUrl}"/>
+                            </c:when>
+                        </c:choose>
+                    </c:if>
                     <c:choose>
-                        <c:when test="${not empty brand.logoUrl}">
-                            <c:choose>
-                                <c:when test="${fn:startsWith(brand.logoUrl, 'http')}">
-                                    <img src="${brand.logoUrl}" alt="Logo ${brand.brandName}"
-                                         onerror="this.onerror=null; this.remove(); this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';" />
-                                </c:when>
-                                <c:otherwise>
-                                    <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}" alt="Logo ${brand.brandName}"
-                                         onerror="this.onerror=null; this.remove(); this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';" />
-                                </c:otherwise>
-                            </c:choose>
+                        <c:when test="${not empty brandLogoSrc}">
+                            <img src="${brandLogoSrc}" alt="Logo ${fn:escapeXml(brand.brandName)}"
+                                 onerror="this.onerror=null; this.remove(); this.parentElement.innerHTML='<div class=&quot;brand-logo-placeholder&quot;><i class=&quot;fas fa-building&quot;></i></div>';" />
                         </c:when>
                         <c:otherwise>
                             <div class="brand-logo-placeholder">
