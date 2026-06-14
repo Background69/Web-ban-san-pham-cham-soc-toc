@@ -59,3 +59,37 @@
     padding: 0 35px 0 20px;
     position: relative;
 }
+.action-cell{
+     display:flex;
+     justify-content:center;
+     gap:8px;
+ }
+
+.btn-action{
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+    transition:0.2s;
+}
+
+/* Chi tiết */
+.btn-detail{
+    background:#e0f2fe;
+    color:#0369a1;
+}
+
+.btn-detail:hover{
+    background:#bae6fd;
+}
+
+/* Xóa */
+.btn-delete{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.btn-delete:hover{
+    background:#fecaca;
+}
