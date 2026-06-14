@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/form.css">
-    <link rel="stylesheet" href ="${pageContext.request.contextPath}/static/css/admin/productmanagement.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/productmanagement.css">
 </head>
 <body>
 <div class="container">
@@ -95,8 +95,8 @@
                     </td>
                     <td>
                         <div class="product-category">
-                        <c:out value="${p.categoryName}"/>
-                            </div>
+                            <c:out value="${p.categoryName}"/>
+                        </div>
                     </td>
                     <td>
                         <c:out value="${p.origin}"/>
@@ -130,7 +130,10 @@
 
                     <td class="action-cell">
                         <button class="action-btn edit" onclick="openEditModal(${p.productId})">Sửa</button>
-                        <button class="action-btn delete" onclick="if(confirm('Xoá sản phẩm?'))location.href='${pageContext.request.contextPath}/admin/products?action=delete&id=${p.productId}">Xoá</button>
+                        <button class="action-btn delete"
+                                onclick="if(confirm('Xoá sản phẩm?'))location.href='${pageContext.request.contextPath}/admin/products?action=delete&id=${p.productId}">
+                            Xoá
+                        </button>
                     </td>
                 </tr>
             </c:forEach>
@@ -176,7 +179,7 @@
 
                     <div class="form-group">
                         <label>Danh mục</label>
-                        <select id="editCategoryId" name="categoryId" required>
+                        <select id="createCategoryId" name="categoryId" required>
                             <option value="">-- Chọn danh mục --</option>
                             <c:forEach var="c" items="${categories}">
                                 <option value="${c.categoryId}"> ${c.categoryName}
@@ -274,70 +277,68 @@
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" id="editId">
 
-            <div class="modal-body">
+            <div class="modal-body edit-modal-body">
+                <div class="edit-form-grid">
+                    <div class="form-group span-2">
+                        <label>Tên sản phẩm</label>
+                        <input type="text" id="editName" name="name">
+                    </div>
 
-                <div class="form-group">
-                    <label>Tên sản phẩm</label>
-                    <input type="text" id="editName" name="name">
-                </div>
+                    <div class="form-group">
+                        <label>Slug</label>
+                        <input type="text" id="editSlug" name="slug">
+                    </div>
 
-                <div class="form-group">
-                    <label>Slug</label>
-                    <input type="text" id="editSlug" name="slug">
-                </div>
+                    <div class="form-group">
+                        <label>Xuất xứ</label>
+                        <input type="text" id="editOrigin" name="origin">
+                    </div>
+                    <div class="form-group">
+                        <label>Danh mục</label>
+                        <select id="editCategoryId" name="categoryId">
+                            <option value="">Chọn danh mục</option>
+                            <c:forEach var="c" items="${categories}">
+                                <option value="${c.categoryId}">
+                                        ${c.categoryName}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Thương hiệu</label>
+                        <select id="editBrandId" name="brandId">
+                            <option value="">-- Chọn thương hiệu --</option>
+                            <c:forEach var="b" items="${brands}">
+                                <option value="${b.brandId}">
+                                        ${b.brandName}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group span-2">
+                        <label>Mô tả ngắn</label>
+                        <textarea id="editShortDescription" name="shortDescription"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>Xuất xứ</label>
-                    <input type="text" id="editOrigin" name="origin">
-                </div>
-                <div class="form-group">
-                    <label>Danh mục</label>
-                    <select id="editCategoryId" name="categoryId">
-                        <option value="">Chọn danh mục</option>
-                        <c:forEach var="c" items="${categories}">
-                            <option value="${c.categoryId}">
-                                    ${c.categoryName}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Thương hiệu</label>
-                    <select id="editBrandId" name="brandId">
-                        <option value="">-- Chọn thương hiệu --</option>
-                        <c:forEach var="b" items="${brands}">
-                            <option value="${b.brandId}">
-                                    ${b.brandName}
-                            </option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Mô tả ngắn</label>
-                    <textarea id="editShortDescription"
-                              name="shortDescription"></textarea>
-                </div>
+                    <div class="form-group span-2">
+                        <label>Mô tả chi tiết</label>
+                        <textarea id="editFullDescription" name="fullDescription"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>Mô tả chi tiết</label>
-                    <textarea id="editFullDescription"
-                              name="fullDescription"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Thành phần</label>
-                    <textarea id="editIngredients"
-                              name="ingredients"></textarea>
-                </div>
+                    <div class="form-group span-2">
+                        <label>Thành phần</label>
+                        <textarea id="editIngredients" name="ingredients"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>Hướng dẫn sử dụng</label>
-                    <textarea id="editUsageInstructions"
-                              name="usageInstructions"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Ảnh sản phẩm</label>
-                    <input type="file" name="image">
-                </div>
+                    <div class="form-group span-2">
+                        <label>Hướng dẫn sử dụng</label>
+                        <textarea id="editUsageInstructions" name="usageInstructions"></textarea>
+                    </div>
 
+                    <div class="form-group span-2">
+                        <label>Ảnh sản phẩm</label>
+                        <input type="file" name="image">
+                    </div>
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -352,9 +353,7 @@
                     Cập nhật
                 </button>
             </div>
-
         </form>
-
     </div>
 </div>
 <script>
@@ -375,30 +374,46 @@
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeModal();
     });
-    function openEditModal(productId){
-        fetch(
-            '${pageContext.request.contextPath}/admin/products?action=get&id=' + productId
-        )
-            .then(res => res.json())
-            .then(product => {
-                document.getElementById("editId").value = productId;
-                document.getElementById("editName").value = product.name;
-                document.getElementById("editSlug").value = product.slug;
-                document.getElementById("editOrigin").value = product.origin;
-                document.getElementById("editCategoryId").value = product.categoryId;
-                document.getElementById("editBrandId").value = product.brandId;
+
+    function openEditModal(productId) {
+        fetch('${pageContext.request.contextPath}/admin/products?action=get&id=' + productId)
+            .then(function (res) {
+                if (!res.ok) {
+                    throw new Error('HTTP ' + res.status);
+                }
+
+                return res.json();
+            })
+            .then(function (product) {
+                console.log('Product response:', product);
+
+                document.getElementById("editId").value = product.productId || productId;
+                document.getElementById("editName").value = product.name || product.productName || "";
+                document.getElementById("editSlug").value = product.slug || product.productSlug || "";
+                document.getElementById("editOrigin").value = product.origin || "";
+
+                document.getElementById("editCategoryId").value = product.categoryId || "";
+                document.getElementById("editBrandId").value = product.brandId || "";
+
                 document.getElementById("editShortDescription").value = product.shortDescription || "";
                 document.getElementById("editFullDescription").value = product.fullDescription || "";
                 document.getElementById("editIngredients").value = product.ingredients || "";
                 document.getElementById("editUsageInstructions").value = product.usageInstructions || "";
+
                 document.getElementById("editProductModal").style.display = "block";
                 document.body.style.overflow = "hidden";
+            })
+            .catch(function (error) {
+                console.error('Không thể tải thông tin sản phẩm:', error);
+                alert('Không thể tải thông tin sản phẩm. Vui lòng kiểm tra console hoặc server log.');
             });
     }
+
     function closeEditModal() {
         document.getElementById("editProductModal").style.display = "none";
         document.body.style.overflow = "";
     }
+
     // Variant management functions
     function addVariantRow() {
         var container = document.getElementById('variants-container');

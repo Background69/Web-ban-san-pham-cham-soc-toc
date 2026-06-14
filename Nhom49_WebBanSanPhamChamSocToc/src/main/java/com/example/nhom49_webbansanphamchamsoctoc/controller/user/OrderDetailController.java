@@ -94,6 +94,15 @@ public class OrderDetailController extends HttpServlet {
             String orderIdStr = pathInfo.replace("/cancel", "").substring(1);
             int orderId = Integer.parseInt(orderIdStr);
 
+            // Lấy lý do hủy đơn từ Modal
+            String cancelReason = request.getParameter("cancelReason");
+            if (cancelReason != null) {
+                cancelReason = cancelReason.trim();
+                if (cancelReason.isEmpty()) {
+                    cancelReason = null;
+                }
+            }
+
             Order order = orderService.getOrderById(orderId);
 
             if (order != null && order.getUserId().equals(user.getUserId())) {
@@ -108,7 +117,7 @@ public class OrderDetailController extends HttpServlet {
                     return;
                 }
 
-                if (orderService.cancelOrder(orderId)) {
+                if (orderService.cancelOrder(orderId, cancelReason)) {
                     if ("bank_transfer".equalsIgnoreCase(order.getPaymentMethod())) {
                         bankTransferService.expirePendingByOrderId(orderId);
                     }
@@ -126,7 +135,9 @@ public class OrderDetailController extends HttpServlet {
     }
 
     private boolean canCancelOrder(Order order, PaymentTransaction paymentTransaction) {
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return false;
         }
 

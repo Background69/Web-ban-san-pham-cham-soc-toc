@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 public class BankTransferService {
+    private static final int QR_CODE_URL_COLUMN_LIMIT = 1000;
+
     private final PaymentTransactionDAO paymentTransactionDAO;
     private final OrderDAO orderDAO;
     private final OrderStatusHistoryDAO orderStatusHistoryDAO;
@@ -102,14 +104,50 @@ public class BankTransferService {
             return false;
         }
 
-        String qrCodeUrl = !isBlank(qrResult.getQrDataUrl()) ? qrResult.getQrDataUrl() : qrResult.getQrCode();
+        String qrCodeUrl = selectPersistableQrCode(qrResult);
+        if (isBlank(qrCodeUrl)) {
+            lastError = "Mã QR VietQR vượt quá giới hạn lưu trữ hiện tại. Vui lòng chuyển khoản thủ công theo thông tin hiển thị.";
+            return false;
+        }
+
         transaction.setQrCodeUrl(qrCodeUrl);
-        if (!paymentTransactionDAO.update(transaction)) {
+        boolean updated;
+        try {
+            updated = paymentTransactionDAO.update(transaction);
+        } catch (RuntimeException e) {
+            transaction.setQrCodeUrl(null);
+            lastError = "Không thể lưu mã QR vào giao dịch: " + e.getMessage();
+            return false;
+        }
+
+        if (!updated) {
             lastError = "Không thể cập nhật mã QR vào giao dịch";
             return false;
         }
 
         return true;
+    }
+
+    private String selectPersistableQrCode(VietQRService.QrGenerationResult qrResult) {
+        if (qrResult == null) {
+            return null;
+        }
+
+        String qrDataUrl = qrResult.getQrDataUrl();
+        if (fitsQrColumn(qrDataUrl)) {
+            return qrDataUrl;
+        }
+
+        String qrCode = qrResult.getQrCode();
+        if (fitsQrColumn(qrCode)) {
+            return qrCode;
+        }
+
+        return null;
+    }
+
+    private boolean fitsQrColumn(String value) {
+        return !isBlank(value) && value.length() <= QR_CODE_URL_COLUMN_LIMIT;
     }
 
     public PaymentTransaction getTransactionForUser(int transactionId, int userId) {
@@ -217,7 +255,9 @@ public class BankTransferService {
         }
 
         Order order = orderDAO.findById(orderId);
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return;
         }
 
@@ -230,7 +270,9 @@ public class BankTransferService {
         }
 
         Order order = orderDAO.findById(orderId);
-        if (order == null || !"pending".equalsIgnoreCase(order.getOrderStatus())) {
+        if (order == null ||
+                (!"pending".equalsIgnoreCase(order.getOrderStatus())
+                 && !"pending_payment".equalsIgnoreCase(order.getOrderStatus()))) {
             return;
         }
 
@@ -267,7 +309,7 @@ public class BankTransferService {
             code = String.valueOf(System.currentTimeMillis());
         }
 
-        String transferContent = "HG" + code;
+        String transferContent = "TT DH " + code;
         if (transferContent.length() > 25) {
             transferContent = transferContent.substring(0, 25);
         }

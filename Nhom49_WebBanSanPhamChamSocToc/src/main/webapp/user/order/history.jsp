@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -66,6 +66,8 @@
                                                     <c:choose>
                                                         <c:when test="${order.orderStatus == 'pending'}">Chờ xác nhận
                                                         </c:when>
+                                                        <c:when test="${order.orderStatus == 'pending_payment'}">Chờ thanh toán
+                                                        </c:when>
                                                         <c:when test="${order.orderStatus == 'confirmed'}">Đã xác nhận
                                                         </c:when>
                                                         <c:when test="${order.orderStatus == 'shipping'}">Đang giao hàng
@@ -115,7 +117,7 @@
                                        class="btn-detail">
                                         Xem chi tiết
                                     </a>
-                                    <c:if test="${order.orderStatus == 'pending'}">
+                                    <c:if test="${order.orderStatus == 'pending' || order.orderStatus == 'pending_payment'}">
                                         <form
                                                 action="${pageContext.request.contextPath}/orders/${order.orderId}/cancel"
                                                 method="post" style="display: inline;">

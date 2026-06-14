@@ -115,12 +115,8 @@ public class UserProfileController extends HttpServlet {
         int userId = currentUser.getUserId();
         String normalizedStatus = normalizeOrderStatus(request.getParameter("status"));
 
-        List<Order> orders;
-        if (normalizedStatus != null) {
-            orders = orderService.getOrdersByUserAndStatus(userId, normalizedStatus);
-        } else {
-            orders = orderService.getOrdersByUser(userId);
-        }
+        // Luôn load TẤT CẢ đơn hàng để JS lọc client-side (SPA experience)
+        List<Order> orders = orderService.getOrdersByUser(userId);
 
         // Lấy số lượng đơn hàng theo từng status
         Map<String, Integer> orderCounts = buildOrderCounts(orderService.getOrderCountsByStatus(userId));

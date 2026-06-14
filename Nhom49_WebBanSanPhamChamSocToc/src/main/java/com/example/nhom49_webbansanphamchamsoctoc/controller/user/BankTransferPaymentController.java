@@ -135,7 +135,8 @@ public class BankTransferPaymentController extends HttpServlet {
         PaymentTransaction transaction = bankTransferService.getLatestTransactionByOrder(orderId);
         if (transaction == null &&
                 "bank_transfer".equalsIgnoreCase(order.getPaymentMethod()) &&
-                "pending".equalsIgnoreCase(order.getOrderStatus()) &&
+                ("pending".equalsIgnoreCase(order.getOrderStatus())
+                 || "pending_payment".equalsIgnoreCase(order.getOrderStatus())) &&
                 !bankTransferService.hasSuccessfulPayment(orderId)) {
             return bankTransferService.createTransactionForOrder(order, user.getUserId());
         }

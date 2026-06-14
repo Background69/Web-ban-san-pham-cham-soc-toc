@@ -57,6 +57,18 @@ public class ShippingAddressDAO implements IDAO<ShippingAddress> {
         );
     }
 
+    public ShippingAddress findByIdAndUserId(int addressId, int userId) {
+        String sql = "SELECT * FROM shipping_addresses WHERE address_id = :addressId AND user_id = :userId";
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("addressId", addressId)
+                        .bind("userId", userId)
+                        .map((rs, ctx) -> mapAddress(rs))
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
     @Override
     public int insert(ShippingAddress address) {
         String sql = "INSERT INTO shipping_addresses (user_id, full_name, phone, province_code, " +

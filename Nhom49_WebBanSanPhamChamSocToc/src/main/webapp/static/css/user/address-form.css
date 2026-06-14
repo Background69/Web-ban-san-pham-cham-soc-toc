@@ -164,9 +164,10 @@
 }
 
 .addr-select-trigger.disabled {
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: not-allowed;
     background: #f2ede7;
+    pointer-events: none;
 }
 
 /* Chevron arrow */
@@ -189,7 +190,7 @@
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 9999;
     background: #fff;
     border: 1.5px solid var(--addr-border);
     border-radius: var(--addr-radius);
@@ -207,6 +208,16 @@
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+}
+
+.addr-custom-select.drop-up .addr-select-dropdown {
+    top: auto;
+    bottom: calc(100% + 4px);
+    transform: translateY(4px);
+}
+
+.addr-custom-select.drop-up.open .addr-select-dropdown {
+    transform: translateY(0);
 }
 
 .addr-select-search-wrap {
@@ -289,6 +300,9 @@
 
 .addr-select-trigger.loading {
     pointer-events: none;
+    background: linear-gradient(90deg, #f2ede7 25%, #faf8f5 50%, #f2ede7 75%);
+    background-size: 200% 100%;
+    animation: addrShimmer 1.5s ease infinite;
 }
 
 .addr-select-trigger.loading .addr-select-text::after {
@@ -302,6 +316,11 @@
     border-radius: 50%;
     animation: addr-spin 0.7s linear infinite;
     vertical-align: middle;
+}
+
+@keyframes addrShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 @keyframes addr-spin {
@@ -469,4 +488,25 @@
 
 .addr-dropdown-overlay.active {
     display: block;
+}
+
+.addr-options-fade-out {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.addr-options-fade-in {
+    animation: addrOptionsFadeIn 0.3s ease forwards;
+}
+
+@keyframes addrOptionsFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
