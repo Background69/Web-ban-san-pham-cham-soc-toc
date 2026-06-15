@@ -896,11 +896,13 @@
     padding: 24px;
     background: rgba(24, 23, 22, 0.48);
     backdrop-filter: blur(5px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .hg-modal[hidden],
 .hg-confirm-modal[hidden] {
-    display: none;
+    display: none !important;
 }
 
 .hg-product-modal {
@@ -923,11 +925,16 @@
     gap: 16px;
     padding: 22px 24px;
     border-bottom: 1px solid var(--hg-border);
+    flex: 0 0 auto;
 }
 
 .hg-modal-footer {
     border-top: 1px solid var(--hg-border);
     border-bottom: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    background: #FFFFFF;
 }
 
 .hg-modal-kicker {
@@ -953,6 +960,7 @@
     gap: 8px;
     padding: 14px 24px 0;
     overflow-x: auto;
+    flex: 0 0 auto;
 }
 
 .hg-tab-btn {
@@ -976,10 +984,12 @@
 }
 
 .hg-modal-body {
-    flex: 1;
+    flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 24px;
+    padding-bottom: 32px;
 }
 
 .hg-tab-panel {
@@ -1469,18 +1479,27 @@
 
     .hg-modal,
     .hg-confirm-modal {
-        padding: 14px;
+        align-items: flex-start;
+        padding: 12px;
     }
 
     .hg-product-modal {
         width: 100%;
-        max-height: 94vh;
+        max-height: calc(100vh - 24px);
     }
 
     .hg-modal-header,
-    .hg-modal-body,
     .hg-modal-footer {
         padding: 18px;
+    }
+
+    .hg-modal-body {
+        padding: 18px;
+        padding-bottom: 28px;
+    }
+
+    .hg-modal-footer .hg-btn {
+        width: 100%;
     }
 }
 

@@ -274,10 +274,21 @@ body.home-page .slider {
     box-shadow: var(--hg-shadow-soft);
 }
 
+body.home-page #homeBannerSlider {
+    isolation: isolate;
+    touch-action: pan-y;
+}
+
+body.home-page #homeBannerSlider:focus-visible {
+    outline: 3px solid rgba(35, 71, 55, 0.28);
+    outline-offset: 4px;
+}
+
 body.home-page .banner-slides {
     height: 100%;
     display: flex;
     transition: transform 420ms ease-out;
+    will-change: transform;
 }
 
 body.home-page .banner-slides .item {
@@ -367,6 +378,12 @@ body.home-page .flash-sale-nav:hover {
     border-color: var(--hg-primary);
 }
 
+body.home-page .slider .nav:focus-visible,
+body.home-page .slider-dots .dot:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.78);
+    outline-offset: 3px;
+}
+
 body.home-page .slider .prev {
     left: 12px;
 }
@@ -398,6 +415,11 @@ body.home-page .slider-dots .dot {
 }
 
 body.home-page .slider-dots .dot.active {
+    width: 24px;
+    background: #FFFFFF;
+}
+
+body.home-page .slider-dots .dot[aria-current="true"] {
     width: 24px;
     background: #FFFFFF;
 }
@@ -1504,6 +1526,19 @@ body.home-page .empty-state a {
 
     body.home-page .slider {
         height: 240px;
+    }
+
+    body.home-page .slider .nav {
+        width: 34px;
+        height: 34px;
+    }
+
+    body.home-page .slider .prev {
+        left: 8px;
+    }
+
+    body.home-page .slider .next {
+        right: 8px;
     }
 
     body.home-page .hero-fallback-copy {

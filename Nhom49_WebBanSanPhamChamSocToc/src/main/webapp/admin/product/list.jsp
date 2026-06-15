@@ -996,6 +996,10 @@
             productModal.hidden = false;
             document.body.classList.add('hg-modal-open');
             setActiveProductTab('basic');
+            var modalBody = productModal.querySelector('.hg-modal-body');
+            if (modalBody) {
+                modalBody.scrollTo({ top: 0 });
+            }
             setTimeout(function () {
                 document.getElementById('productName').focus();
             }, 80);
@@ -1215,6 +1219,16 @@
             if (!valid) {
                 setFieldError('variants', 'Kiểm tra lại biến thể: tên, giá dương, giá sale nhỏ hơn giá gốc và tồn kho không âm.');
                 showToast('Vui lòng sửa các trường chưa hợp lệ trước khi lưu.', 'error');
+                var firstError = productForm.querySelector('.hg-field-error:not(:empty), .is-invalid');
+                if (firstError) {
+                    var parentPanel = firstError.closest('.hg-tab-panel');
+                    if (parentPanel && parentPanel.dataset.tabPanel) {
+                        setActiveProductTab(parentPanel.dataset.tabPanel);
+                    }
+                    setTimeout(function () {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 80);
+                }
             }
             return valid;
         }
