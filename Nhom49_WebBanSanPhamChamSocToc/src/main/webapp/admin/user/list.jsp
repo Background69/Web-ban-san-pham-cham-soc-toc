@@ -131,51 +131,20 @@
 
             </div>
         </section>
-            <div class="quick-filter-bar" aria-label="Lọc nhanh tài khoản">
-                <button type="button"
-                        class="quick-filter-btn is-active"
-                        data-filter="all"
-                        aria-pressed="true"
-                        onclick="setQuickFilter('all', this)">
-                    Tất cả
-                </button>
-                <button type="button"
-                        class="quick-filter-btn"
-                        data-filter="admin"
-                        aria-pressed="false"
-                        onclick="setQuickFilter('admin', this)">
-                    Chỉ Quản trị viên
-                </button>
-                <button type="button"
-                        class="quick-filter-btn"
-                        data-filter="customer"
-                        aria-pressed="false"
-                        onclick="setQuickFilter('customer', this)">
-                    Chỉ Khách hàng
-                </button>
-                <button type="button"
-                        class="quick-filter-btn"
-                        data-filter="locked"
-                        aria-pressed="false"
-                        onclick="setQuickFilter('locked', this)">
-                    Đang bị khóa
-                </button>
-            </div>
         </div>
         <section class="users-table-card" aria-label="Bảng người dùng">
             <div class="table-scroll">
                 <table class="data-grid" id="userTable">
                     <thead>
                     <tr>
-                        <th class="sortable-th sortable-th--name"
-                            scope="col"
-                            role="button"
-                            tabindex="0"
-                            aria-sort="none"
-                            onclick="toggleNameSort()"
-                            onkeydown="handleNameSortKeydown(event)">
-                            <span>Tài khoản</span>
-                            <span class="sort-indicator" id="nameSortIndicator" aria-hidden="true">↕</span>
+                        <th class="sortable-th sortable-th--name" scope="col" aria-sort="none">
+                            <button type="button"
+                                    class="name-sort-btn"
+                                    onclick="toggleNameSort()"
+                                    aria-label="Sắp xếp tài khoản theo tên">
+                                <span>Tài khoản</span>
+                                <span class="sort-indicator" id="nameSortIndicator" aria-hidden="true">↕</span>
+                            </button>
                         </th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
@@ -679,7 +648,6 @@
     let currentUserData = null;
     let originalUserRole = 'Khách hàng';
     let adminRoleConfirmed = false;
-    let currentQuickFilter = 'all';
     let currentNameSort = 'none';
     let currentUserPage = 1;
     let currentUserPageSize = 15;
@@ -709,15 +677,6 @@
         CUSTOMER_REQUEST_RESOLVED: 'Đã xử lý theo yêu cầu khách hàng',
         OTHER: 'Lý do khác'
     };
-    function updateStickyTableHeadOffset() {
-        const page = document.querySelector('.admin-users-page');
-        const stickyTools = document.getElementById('usersStickyTools');
-
-        if (!page || !stickyTools) {
-            return;
-        }
-        page.style.setProperty('--users-table-head-top', (stickyTools.offsetHeight + 8) + 'px');
-    }
     document.addEventListener('DOMContentLoaded', function() {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             return;
@@ -1438,62 +1397,6 @@
         resetToViewMode();
     }
 
-    function setQuickFilter(filter, button) {
-        currentQuickFilter = filter;
-        currentUserPage = 1;
-        syncSelectFiltersFromQuickFilter(filter);
-        updateQuickFilterButtons();
-        applyUserTableState();
-    }
-
-    function syncSelectFiltersFromQuickFilter(filter) {
-        const roleSelect = document.getElementById('role-filter');
-        const statusSelect = document.getElementById('status-filter');
-        if (!roleSelect || !statusSelect) {
-            return;
-        }
-        if (filter === 'admin') {
-            roleSelect.value = 'admin';
-            statusSelect.value = '';
-        } else if (filter === 'customer') {
-            roleSelect.value = 'customer';
-            statusSelect.value = '';
-        } else if (filter === 'locked') {
-            roleSelect.value = '';
-            statusSelect.value = 'locked';
-        } else {
-            roleSelect.value = '';
-            statusSelect.value = '';
-        }
-    }
-
-    function syncQuickFilterFromSelects() {
-        const roleSelect = document.getElementById('role-filter');
-        const statusSelect = document.getElementById('status-filter');
-        const role = roleSelect ? roleSelect.value : '';
-        const status = statusSelect ? statusSelect.value : '';
-        if (!role && !status) {
-            currentQuickFilter = 'all';
-        } else if (role === 'admin' && !status) {
-            currentQuickFilter = 'admin';
-        } else if (role === 'customer' && !status) {
-            currentQuickFilter = 'customer';
-        } else if (!role && status === 'locked') {
-            currentQuickFilter = 'locked';
-        } else {
-            currentQuickFilter = '';
-        }
-        updateQuickFilterButtons();
-    }
-
-    function updateQuickFilterButtons() {
-        document.querySelectorAll('.quick-filter-btn').forEach(function(btn) {
-            const isActive = currentQuickFilter !== '' && btn.dataset.filter === currentQuickFilter;
-            btn.classList.toggle('is-active', isActive);
-            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-        });
-    }
-
     function toggleNameSort() {
         if (currentNameSort === 'none' || currentNameSort === 'desc') {
             currentNameSort = 'asc';
@@ -1503,13 +1406,6 @@
         currentUserPage = 1;
         updateNameSortIndicator();
         applyUserTableState();
-    }
-
-    function handleNameSortKeydown(event) {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleNameSort();
-        }
     }
 
     function applyNameSort() {
@@ -1577,16 +1473,7 @@
             const roleMatch = !role || row.dataset.userRole === role;
             const statusMatch = !status || row.dataset.userStatus === status;
 
-            let quickFilterMatch = true;
-            if (currentQuickFilter === 'admin') {
-                quickFilterMatch = row.dataset.userRole === 'admin';
-            } else if (currentQuickFilter === 'customer') {
-                quickFilterMatch = row.dataset.userRole === 'customer';
-            } else if (currentQuickFilter === 'locked') {
-                quickFilterMatch = row.dataset.userStatus === 'locked';
-            }
-
-            return textMatch && roleMatch && statusMatch && quickFilterMatch;
+            return textMatch && roleMatch && statusMatch;
         });
     }
     function isUserFilterActive() {
@@ -1596,8 +1483,7 @@
         const hasKeyword = keywordInput && keywordInput.value.trim().length > 0;
         const hasRole = roleSelect && roleSelect.value;
         const hasStatus = statusSelect && statusSelect.value;
-        const hasQuickFilter = currentQuickFilter && currentQuickFilter !== 'all';
-        return Boolean(hasKeyword || hasRole || hasStatus || hasQuickFilter);
+        return Boolean(hasKeyword || hasRole || hasStatus);
     }
 
     function applyUserTableState() {
@@ -1622,7 +1508,6 @@
         updateUserTableSummary(total, startIndex, endIndex);
         renderUserPagination(totalPages, total);
         updateFilterEmptyRow(total, allRows.length);
-        updateStickyTableHeadOffset();
     }
     function updateUserTableSummary(total, startIndex, endIndex) {
         const summary = document.getElementById('userTableSummary');
@@ -1758,7 +1643,6 @@
 
     function filterUsers() {
         currentUserPage = 1;
-        syncQuickFilterFromSelects();
         applyUserTableState();
     }
 
@@ -1813,7 +1697,6 @@
         if (statusSelect) {
             statusSelect.value = '';
         }
-        currentQuickFilter = 'all';
         currentNameSort = 'none';
         currentUserPage = 1;
         currentUserPageSize = 15;
@@ -1821,10 +1704,9 @@
         if (pageSizeSelect) {
             pageSizeSelect.value = '15';
         }
-        updateQuickFilterButtons();
+        updateSearchClearButton();
         updateNameSortIndicator();
         applyUserTableState();
-        updateSearchClearButton();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -1833,12 +1715,8 @@
             currentUserPageSize = Number(pageSizeSelect.value) || 15;
         }
         updateSearchClearButton();
-        updateQuickFilterButtons();
         updateNameSortIndicator();
-        updateStickyTableHeadOffset();
         applyUserTableState();
-        window.addEventListener('resize', updateStickyTableHeadOffset);
-        setTimeout(updateStickyTableHeadOffset, 0);
     });
 
     document.getElementById('statusConfirmModal').addEventListener('click', function(e) {
