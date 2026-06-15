@@ -10,12 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết đơn hàng #${order.orderId} | HairGlow Admin</title>
     <link rel="stylesheet" href="<c:url value='/static/css/admin/dashboard.css'/>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
           rel="stylesheet">
 
     <style>
         * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
             box-sizing: border-box;
         }
 

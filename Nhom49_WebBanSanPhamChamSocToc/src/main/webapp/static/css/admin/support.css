@@ -15,7 +15,7 @@
     --support-shadow: 0 2px 12px rgba(35, 71, 55, 0.06);
     --support-shadow-hover: 0 8px 24px rgba(35, 71, 55, 0.1);
     --support-transition: 220ms ease;
-    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 .admin-support-page .fa,
@@ -61,7 +61,7 @@
 .as-badge i { font-size: 10px; }
 
 .as-page-header h1 {
-    font-family: 'Playfair Display', 'Times New Roman', serif;
+    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
     font-size: 32px;
     font-weight: 700;
     color: var(--support-primary-strong);
@@ -150,7 +150,7 @@
 }
 
 .as-stat-value {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
     font-size: 28px;
     font-weight: 700;
     color: var(--support-primary-strong);

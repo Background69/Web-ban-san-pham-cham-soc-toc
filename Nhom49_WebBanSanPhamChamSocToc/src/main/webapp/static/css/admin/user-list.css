@@ -20,8 +20,8 @@
     --users-shadow: 0 18px 50px rgba(26, 26, 26, 0.08);
     --users-shadow-soft: 0 8px 24px rgba(26, 26, 26, 0.06);
     --users-radius: 8px;
-    --font-body: 'DM Sans', 'Segoe UI', Arial, sans-serif;
-    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-body: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
+    --font-heading: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 .admin-users-page,
