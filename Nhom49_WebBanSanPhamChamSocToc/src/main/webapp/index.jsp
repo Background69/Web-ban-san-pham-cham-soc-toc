@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -22,32 +23,34 @@
 <section class="hero-section section-animate">
     <div class="hero-shell">
         <div class="hero-copy">
-            <p class="hero-eyebrow">HairGlow Social Care</p>
-            <h1>Routine chăm tóc chuẩn salon cho nhịp sống hiện đại</h1>
+            <p class="hero-eyebrow">HairGlow Care Routine</p>
+            <h1>Chăm tóc chuẩn salon, mua sắm tinh gọn tại HairGlow</h1>
             <p class="hero-description">
-                Chọn nhanh sản phẩm theo đúng nhu cầu: làm sạch, phục hồi, dưỡng ẩm, chống gãy rụng
-                và tạo kiểu. Trải nghiệm mua sắm tinh gọn, trực quan, dễ khám phá xu hướng.
+                Khám phá dầu gội, dầu xả, serum, mặt nạ tóc và sản phẩm tạo kiểu được chọn lọc theo từng nhu cầu chăm sóc tóc.
             </p>
             <div class="hero-cta">
                 <a class="hero-btn hero-btn-primary" href="${pageContext.request.contextPath}/store">
                     Khám phá sản phẩm
                 </a>
                 <a class="hero-btn hero-btn-outline" href="${pageContext.request.contextPath}/deals">
-                    Xem ưu đãi hôm nay
+                    Xem ưu đãi
+                </a>
+                <a class="hero-btn hero-btn-soft" href="${pageContext.request.contextPath}/support">
+                    Tư vấn routine
                 </a>
             </div>
-            <div class="hero-metrics">
+            <div class="hero-metrics" aria-label="Điểm nổi bật HairGlow">
                 <div class="hero-metric">
                     <strong>${not empty featuredProducts ? featuredProducts.size() : 0}+</strong>
-                    <span>Sản phẩm nổi bật</span>
-                </div>
-                <div class="hero-metric">
-                    <strong>${not empty topCategories ? topCategories.size() : 0}</strong>
-                    <span>Nhóm chăm tóc chính</span>
+                    <span>Sản phẩm chọn lọc</span>
                 </div>
                 <div class="hero-metric">
                     <strong>${not empty brands ? brands.size() : 0}+</strong>
                     <span>Thương hiệu uy tín</span>
+                </div>
+                <div class="hero-metric">
+                    <strong>24/7</strong>
+                    <span>Hỗ trợ tư vấn</span>
                 </div>
             </div>
         </div>
@@ -56,31 +59,54 @@
             <div class="banner-container">
                 <div class="slider" id="banner-slider">
                     <div class="banner-slides">
-                        <c:forEach var="banner" items="${requestScope.activeBanners}" varStatus="status">
-                            <div class="item ${status.first ? 'active' : ''}" id="slide-${status.index + 1}">
-                                <img
-                                        alt="${banner.title}"
-                                        class="banner-image"
-                                        src="${banner.imageUrl}">
-                            </div>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${not empty requestScope.activeBanners}">
+                                <c:forEach var="banner" items="${requestScope.activeBanners}" varStatus="status">
+                                    <div class="item ${status.first ? 'active' : ''}" id="slide-${status.index + 1}">
+                                        <img
+                                                alt="<c:out value='${banner.title}'/>"
+                                                class="banner-image"
+                                                src="<c:out value='${banner.imageUrl}'/>">
+                                    </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="item active hero-fallback-slide" id="slide-fallback">
+                                    <img
+                                            alt="HairGlow routine chăm sóc tóc"
+                                            class="banner-image"
+                                            src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
+                                    <div class="hero-fallback-copy">
+                                        <span>Routine Lab</span>
+                                        <strong>Chọn đúng sản phẩm cho từng tình trạng tóc</strong>
+                                        <p>Từ làm sạch dịu nhẹ, phục hồi hư tổn đến bảo vệ tóc khỏi nhiệt.</p>
+                                    </div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                    <button aria-label="Slide trước" class="nav prev" type="button">&#10094;</button>
-                    <button aria-label="Slide sau" class="nav next" type="button">&#10095;</button>
+                    <button aria-label="Slide trước" class="nav prev" type="button">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button aria-label="Slide sau" class="nav next" type="button">
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
                     <div aria-label="Chuyển slide" class="slider-dots" role="tablist"></div>
                 </div>
             </div>
 
             <div class="hero-promo-grid">
                 <a class="hero-promo-card" href="${pageContext.request.contextPath}/products?category=serum">
-                    <p class="promo-label">Khám phá nhanh</p>
-                    <h3>Tinh dầu và serum dưỡng tóc theo trend phục hồi</h3>
-                    <span>Xem gợi ý</span>
+                    <span class="promo-icon"><i class="fas fa-seedling" aria-hidden="true"></i></span>
+                    <p class="promo-label">Routine phục hồi</p>
+                    <h3>Chọn dầu gội, mask và serum cho tóc khô xơ, dễ gãy</h3>
+                    <span class="promo-link">Xem gợi ý</span>
                 </a>
                 <a class="hero-promo-card" href="${pageContext.request.contextPath}/deals">
-                    <p class="promo-label">Campaign nổi bật</p>
-                    <h3>Flash sale theo khung giờ cho routine chăm tóc</h3>
-                    <span>Vào trang ưu đãi</span>
+                    <span class="promo-icon"><i class="fas fa-tags" aria-hidden="true"></i></span>
+                    <p class="promo-label">Ưu đãi hôm nay</p>
+                    <h3>Flash sale theo khung giờ cho routine chăm tóc tiết kiệm</h3>
+                    <span class="promo-link">Vào trang ưu đãi</span>
                 </a>
             </div>
         </div>
@@ -90,20 +116,24 @@
 <section class="home-trust-strip section-animate">
     <div class="trust-shell">
         <article class="trust-item">
+            <span class="trust-icon"><i class="fas fa-certificate" aria-hidden="true"></i></span>
             <h3>Sản phẩm chính hãng</h3>
-            <p>Nguồn gốc rõ ràng, minh bạch thông tin thành phần và xuất xứ.</p>
+            <p>Nguồn gốc rõ ràng, minh bạch thành phần và xuất xứ.</p>
         </article>
         <article class="trust-item">
+            <span class="trust-icon"><i class="fas fa-spa" aria-hidden="true"></i></span>
+            <h3>Tư vấn routine</h3>
+            <p>Gợi ý sản phẩm theo tình trạng tóc và da đầu thực tế.</p>
+        </article>
+        <article class="trust-item">
+            <span class="trust-icon"><i class="fas fa-truck-fast" aria-hidden="true"></i></span>
             <h3>Giao hàng nhanh</h3>
-            <p>Đóng gói chỉn chu, theo dõi đơn hàng liên tục trên toàn quốc.</p>
+            <p>Đóng gói chỉn chu, theo dõi đơn hàng rõ ràng.</p>
         </article>
         <article class="trust-item">
-            <h3>Đổi trả linh hoạt</h3>
-            <p>Hỗ trợ xử lý nhanh khi sản phẩm chưa phù hợp với nhu cầu.</p>
-        </article>
-        <article class="trust-item">
-            <h3>Tư vấn cá nhân hóa</h3>
-            <p>Đội ngũ hỗ trợ giúp chọn routine theo tình trạng tóc và da đầu.</p>
+            <span class="trust-icon"><i class="fas fa-rotate-left" aria-hidden="true"></i></span>
+            <h3>Đổi trả minh bạch</h3>
+            <p>Quy trình hỗ trợ rõ ràng khi sản phẩm chưa phù hợp.</p>
         </article>
     </div>
 </section>
@@ -111,10 +141,10 @@
 <main class="home-main page-animate">
     <section class="categories-container section-animate" id="categories-container">
         <div class="section-head section-head-center">
-            <p class="section-kicker">Discovery</p>
-            <h2 class="section-title">Khám phá danh mục theo nhu cầu tóc</h2>
+            <p class="section-kicker">Danh mục chăm sóc</p>
+            <h2 class="section-title">Khám phá theo nhu cầu mái tóc</h2>
             <p class="section-subtitle">
-                Tập trung vào những nhóm sản phẩm quan trọng để bắt đầu routine một cách nhanh và rõ ràng.
+                Bắt đầu từ danh mục đúng nhu cầu để xây routine nhanh hơn, ít phân vân hơn.
             </p>
         </div>
 
@@ -122,42 +152,41 @@
             <c:when test="${not empty topCategories}">
                 <div class="categories-grid stagger-fade">
                     <c:forEach var="category" items="${topCategories}">
-                        <a class="category-item category-${category.categorySlug}"
-                           href="${pageContext.request.contextPath}/products?category=${category.categorySlug}">
-                            <span class="category-bg"></span>
+                        <a class="category-item"
+                           href="${pageContext.request.contextPath}/products?category=<c:out value='${category.categorySlug}'/>">
                             <span class="category-icon">
-                                    <c:choose>
-                                        <c:when test="${category.categorySlug == 'dau-goi'}">
-                                            <i class="fas fa-shower"></i>
-                                        </c:when>
-                                        <c:when test="${category.categorySlug == 'dau-xa'}">
-                                            <i class="fas fa-spray-can"></i>
-                                        </c:when>
-                                        <c:when test="${category.categorySlug == 'kem-u'}">
-                                            <i class="fas fa-spa"></i>
-                                        </c:when>
-                                        <c:when test="${category.categorySlug == 'serum'}">
-                                            <i class="fas fa-droplet"></i>
-                                        </c:when>
-                                        <c:when test="${category.categorySlug == 'tri-gau'}">
-                                            <i class="fas fa-shield-heart"></i>
-                                        </c:when>
-                                        <c:when test="${category.categorySlug == 'sap-gel'}">
-                                            <i class="fas fa-wand-magic-sparkles"></i>
-                                        </c:when>
-                                        <c:when test="${category.categorySlug == 'tinh-dau'}">
-                                            <i class="fas fa-bottle-droplet"></i>
-                                        </c:when>
-                                        <c:when test="${category.categorySlug == 'phu-kien'}">
-                                            <i class="fas fa-comb"></i>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <i class="fas fa-leaf"></i>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </span>
+                                <c:choose>
+                                    <c:when test="${category.categorySlug == 'dau-goi'}">
+                                        <i class="fas fa-shower" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:when test="${category.categorySlug == 'dau-xa'}">
+                                        <i class="fas fa-pump-soap" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:when test="${category.categorySlug == 'kem-u'}">
+                                        <i class="fas fa-spa" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:when test="${category.categorySlug == 'serum'}">
+                                        <i class="fas fa-droplet" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:when test="${category.categorySlug == 'tri-gau'}">
+                                        <i class="fas fa-shield-heart" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:when test="${category.categorySlug == 'sap-gel'}">
+                                        <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:when test="${category.categorySlug == 'tinh-dau'}">
+                                        <i class="fas fa-bottle-droplet" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:when test="${category.categorySlug == 'phu-kien'}">
+                                        <i class="fas fa-scissors" aria-hidden="true"></i>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fas fa-leaf" aria-hidden="true"></i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </span>
                             <span class="category-content">
-                                <span class="category-name">${category.categoryName}</span>
+                                <span class="category-name"><c:out value="${category.categoryName}"/></span>
                                 <span class="category-pill">Khám phá ngay</span>
                             </span>
                         </a>
@@ -165,11 +194,10 @@
                 </div>
             </c:when>
             <c:otherwise>
-                <div class="categories-fallback">
-                    <a href="${pageContext.request.contextPath}/products?category=shampoo">Dầu gội</a>
-                    <a href="${pageContext.request.contextPath}/products?category=conditioner">Dầu xả</a>
-                    <a href="${pageContext.request.contextPath}/products?category=serum">Serum dưỡng tóc</a>
-                    <a href="${pageContext.request.contextPath}/products?category=hair-loss">Chăm sóc da đầu</a>
+                <div class="empty-state">
+                    <i class="fas fa-layer-group" aria-hidden="true"></i>
+                    <p>Danh mục chăm sóc đang được cập nhật.</p>
+                    <a href="${pageContext.request.contextPath}/store">Xem toàn bộ sản phẩm</a>
                 </div>
             </c:otherwise>
         </c:choose>
@@ -178,14 +206,14 @@
     <section class="social-discovery-section section-animate">
         <div class="section-head">
             <div>
-                <p class="section-kicker">Social Commerce</p>
-                <h2 class="section-title">Góc xu hướng và gợi ý routine</h2>
+                <p class="section-kicker">Routine Lab</p>
+                <h2 class="section-title">Gợi ý routine và xu hướng chăm tóc</h2>
                 <p class="section-subtitle">
-                    Không chỉ mua sắm, homepage còn giúp bạn khám phá sản phẩm theo insight và nhu cầu thật.
+                    Các nhóm sản phẩm được sắp theo vấn đề thường gặp để khách hàng chọn nhanh và mua đúng hơn.
                 </p>
             </div>
             <a class="section-link" href="${pageContext.request.contextPath}/support">
-                Nhận tư vấn routine <i class="fas fa-arrow-right"></i>
+                Nhận tư vấn routine <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </a>
         </div>
 
@@ -195,22 +223,23 @@
                     <c:when test="${not empty featuredProducts}">
                         <c:set var="trendProduct" value="${featuredProducts[0]}"/>
                         <a class="social-main-link"
-                           href="${pageContext.request.contextPath}/product/${trendProduct.productSlug}">
+                           href="${pageContext.request.contextPath}/product/<c:out value='${trendProduct.productSlug}'/>">
                             <div class="social-main-media">
                                 <c:choose>
                                     <c:when test="${not empty trendProduct.primaryImageUrl}">
-                                        <img alt="${trendProduct.productName}" src="${trendProduct.primaryImageUrl}">
+                                        <img alt="<c:out value='${trendProduct.productName}'/>"
+                                             src="<c:out value='${trendProduct.primaryImageUrl}'/>">
                                     </c:when>
                                     <c:otherwise>
-                                        <img alt="${trendProduct.productName}"
-                                             src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                        <img alt="<c:out value='${trendProduct.productName}'/>"
+                                             src="${pageContext.request.contextPath}/static/assets/images/default-product.png">
                                     </c:otherwise>
                                 </c:choose>
                             </div>
                             <div class="social-main-content">
-                                <p class="social-label">Review nổi bật</p>
-                                <h3>${trendProduct.productName}</h3>
-                                <p>Sản phẩm đang được khách hàng quan tâm cho routine chăm tóc hằng ngày.</p>
+                                <p class="social-label">Sản phẩm được quan tâm</p>
+                                <h3><c:out value="${trendProduct.productName}"/></h3>
+                                <p>Phù hợp để bắt đầu routine chăm sóc tóc hằng ngày với trải nghiệm mua sắm gọn gàng.</p>
                                 <span class="social-link-inline">Xem chi tiết</span>
                             </div>
                         </a>
@@ -223,8 +252,8 @@
                             </div>
                             <div class="social-main-content">
                                 <p class="social-label">Xu hướng chăm tóc</p>
-                                <h3>Khám phá bộ sưu tập sản phẩm đang được quan tâm</h3>
-                                <p>HairGlow cập nhật liên tục các gợi ý phù hợp với nhu cầu tóc hiện tại.</p>
+                                <h3>Khám phá bộ sản phẩm đang được HairGlow tuyển chọn</h3>
+                                <p>Danh sách gợi ý sẽ được cập nhật khi có sản phẩm nổi bật.</p>
                                 <span class="social-link-inline">Vào cửa hàng</span>
                             </div>
                         </a>
@@ -233,40 +262,29 @@
             </article>
 
             <article class="social-card social-routine-card">
-                <p class="social-label">Routine theo vấn đề tóc</p>
-                <h3>Danh mục bạn có thể bắt đầu ngay</h3>
-                <ul class="social-routine-list">
-                    <c:choose>
-                        <c:when test="${not empty topCategories}">
-                            <c:forEach var="category" items="${topCategories}" varStatus="status">
-                                <c:if test="${status.index < 4}">
-                                    <li>
-                                        <a href="${pageContext.request.contextPath}/products?category=${category.categorySlug}">
-                                                ${category.categoryName}
-                                        </a>
-                                    </li>
-                                </c:if>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <li><a href="${pageContext.request.contextPath}/products?category=shampoo">Dầu gội làm sạch
-                                dịu nhẹ</a></li>
-                            <li><a href="${pageContext.request.contextPath}/products?category=conditioner">Dầu xả phục
-                                hồi độ ẩm</a></li>
-                            <li><a href="${pageContext.request.contextPath}/products?category=serum">Serum dưỡng và bảo
-                                vệ tóc</a></li>
-                            <li><a href="${pageContext.request.contextPath}/products?category=hair-tools">Dụng cụ tạo
-                                kiểu</a></li>
-                        </c:otherwise>
-                    </c:choose>
-                </ul>
+                <p class="social-label">Chọn theo vấn đề tóc</p>
+                <h3>Ba hướng routine phổ biến tại HairGlow</h3>
+                <div class="routine-chip-list">
+                    <a href="${pageContext.request.contextPath}/products?category=serum">
+                        <i class="fas fa-seedling" aria-hidden="true"></i>
+                        <span>Routine phục hồi</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/products?category=hair-loss">
+                        <i class="fas fa-droplet-slash" aria-hidden="true"></i>
+                        <span>Chăm sóc da đầu</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/store?sort=bestseller">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i>
+                        <span>Sản phẩm bán chạy</span>
+                    </a>
+                </div>
             </article>
 
             <article class="social-card social-community-card">
-                <p class="social-label">Mạch nội dung khám phá</p>
-                <h3>Gợi ý theo nhịp mua sắm trong tuần</h3>
+                <p class="social-label">Tổng quan cửa hàng</p>
+                <h3>Danh sách mua sắm được cập nhật liên tục</h3>
                 <p class="social-community-desc">
-                    Theo dõi các nhóm sản phẩm đang được quan tâm nhiều để chọn nhanh các combo chăm tóc phù hợp.
+                    Theo dõi ưu đãi, sản phẩm nổi bật và thương hiệu để chọn combo chăm tóc phù hợp hơn.
                 </p>
                 <div class="social-stat-grid">
                     <div class="social-stat">
@@ -279,11 +297,11 @@
                     </div>
                     <div class="social-stat">
                         <strong>${not empty brands ? brands.size() : 0}</strong>
-                        <span>Brand đang có</span>
+                        <span>Thương hiệu</span>
                     </div>
                 </div>
                 <a class="social-link-inline" href="${pageContext.request.contextPath}/deals">
-                    Xem campaign hiện tại
+                    Xem ưu đãi hiện tại
                 </a>
             </article>
         </div>
@@ -293,10 +311,10 @@
         <div class="flash-sale-container">
             <div class="section-head flash-sale-header">
                 <div>
-                    <p class="section-kicker">Deal Theo Khung Giờ</p>
-                    <h2 class="section-title">Ưu đãi flash sale hôm nay</h2>
+                    <p class="section-kicker">Ưu đãi hôm nay</p>
+                    <h2 class="section-title">Flash sale chăm tóc</h2>
                     <p class="section-subtitle">
-                        Danh sách sản phẩm giảm giá có thời hạn, cập nhật liên tục trong ngày.
+                        Sản phẩm giảm giá có thời hạn, trình bày gọn để dễ so sánh giá và thêm vào giỏ.
                     </p>
                 </div>
                 <div class="flash-sale-countdown" aria-label="Đếm ngược flash sale">
@@ -320,7 +338,7 @@
                     <div class="flash-sale-slider-wrap">
                         <button class="flash-sale-nav prev" id="flash-sale-prev" type="button"
                                 aria-label="Sản phẩm trước">
-                            <i class="fas fa-chevron-left"></i>
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
                         </button>
                         <div class="flash-sale-track stagger-fade" id="flash-sale-track">
                             <c:forEach var="product" items="${saleProducts}">
@@ -329,26 +347,26 @@
                                         <c:if test="${product.defaultVariant != null && product.defaultVariant.discountPercent > 0}">
                                             <div class="flash-sale-badge">
                                                 <span class="badge-percent">-${product.defaultVariant.discountPercent}%</span>
-                                                <span class="badge-label">GIẢM</span>
+                                                <span class="badge-label">Giảm</span>
                                             </div>
                                         </c:if>
-                                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                        <a href="${pageContext.request.contextPath}/product/<c:out value='${product.productSlug}'/>">
                                             <c:choose>
                                                 <c:when test="${not empty product.primaryImageUrl}">
-                                                    <img alt="${product.productName}" class="product-image"
-                                                         src="${product.primaryImageUrl}">
+                                                    <img alt="<c:out value='${product.productName}'/>" class="product-image"
+                                                         src="<c:out value='${product.primaryImageUrl}'/>">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <img alt="${product.productName}" class="product-image"
-                                                         src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                                    <img alt="<c:out value='${product.productName}'/>" class="product-image"
+                                                         src="${pageContext.request.contextPath}/static/assets/images/default-product.png">
                                                 </c:otherwise>
                                             </c:choose>
                                         </a>
                                     </div>
                                     <div class="product-body">
                                         <h3 class="product-title">
-                                            <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                                    ${product.productName}
+                                            <a href="${pageContext.request.contextPath}/product/<c:out value='${product.productSlug}'/>">
+                                                <c:out value="${product.productName}"/>
                                             </a>
                                         </h3>
                                         <div class="product-footer">
@@ -374,8 +392,8 @@
                                             <c:if test="${product.defaultVariant != null && product.defaultVariant.salePrice != null && product.defaultVariant.salePrice < product.defaultVariant.originalPrice}">
                                                 <c:set var="savedAmount" value="${product.defaultVariant.originalPrice - product.defaultVariant.salePrice}"/>
                                                 <div class="price-savings">
-                                                    <span class="savings-icon">🔥</span>
-                                                    <span class="savings-text">Tiết kiệm ngay <strong><fmt:formatNumber value="${savedAmount}" type="number"/>₫</strong></span>
+                                                    <i class="fas fa-bolt savings-icon" aria-hidden="true"></i>
+                                                    <span class="savings-text">Tiết kiệm <strong><fmt:formatNumber value="${savedAmount}" type="number"/>&#8363;</strong></span>
                                                 </div>
                                             </c:if>
                                             <c:if test="${product.stockQuantity > 0}">
@@ -389,20 +407,27 @@
                                                     </div>
                                                 </div>
                                             </c:if>
-                                            <form class="action-buttons"
-                                                  action="${pageContext.request.contextPath}/cart/add"
-                                                  method="post">
-                                                <input type="hidden" name="productId" value="${product.productId}">
-                                                <input type="hidden" name="quantity" value="1">
-                                                <button type="submit" name="action" value="buy_now"
-                                                        class="btn btn-buy-now">
-                                                    Mua ngay
-                                                </button>
-                                                <button type="submit" name="action" value="add_to_cart"
-                                                        class="btn btn-icon-cart" aria-label="Thêm vào giỏ">
-                                                    <i class="fas fa-cart-plus"></i>
-                                                </button>
-                                            </form>
+                                            <c:choose>
+                                                <c:when test="${product.stockQuantity > 0}">
+                                                    <form class="action-buttons"
+                                                          action="${pageContext.request.contextPath}/cart/add"
+                                                          method="post">
+                                                        <input type="hidden" name="productId" value="${product.productId}">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                        <button type="submit" name="action" value="buy_now"
+                                                                class="btn btn-buy-now">
+                                                            Mua ngay
+                                                        </button>
+                                                        <button type="submit" name="action" value="add_to_cart"
+                                                                class="btn btn-icon-cart" aria-label="Thêm vào giỏ">
+                                                            <i class="fas fa-cart-plus" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="btn btn-disabled product-unavailable">Tạm hết hàng</span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
                                 </article>
@@ -410,14 +435,14 @@
                         </div>
                         <button class="flash-sale-nav next" id="flash-sale-next" type="button"
                                 aria-label="Sản phẩm tiếp theo">
-                            <i class="fas fa-chevron-right"></i>
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
                         </button>
                     </div>
                 </c:when>
                 <c:otherwise>
                     <div class="empty-state">
-                        <i class="fas fa-box-open"></i>
-                        <p>Hiện chưa có sản phẩm trong khung flash sale.</p>
+                        <i class="fas fa-box-open" aria-hidden="true"></i>
+                        <p>Hiện chưa có sản phẩm flash sale.</p>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -427,14 +452,14 @@
     <section class="featured-container section-animate" id="featured-container">
         <div class="section-head">
             <div>
-                <p class="section-kicker">Best Sellers</p>
-                <h2 class="section-title">Sản phẩm nổi bật cho routine chăm tóc</h2>
+                <p class="section-kicker">Sản phẩm nổi bật</p>
+                <h2 class="section-title">Lựa chọn đáng chú ý cho routine hằng ngày</h2>
                 <p class="section-subtitle">
-                    Chọn lọc từ những sản phẩm đang có tần suất mua cao và phản hồi tốt.
+                    Sản phẩm được tuyển chọn để khách hàng dễ xem ảnh, thương hiệu, đánh giá, giá và thao tác mua.
                 </p>
             </div>
             <a class="section-link" href="${pageContext.request.contextPath}/store">
-                Xem toàn bộ sản phẩm <i class="fas fa-arrow-right"></i>
+                Xem tất cả <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </a>
         </div>
 
@@ -444,15 +469,15 @@
                     <c:forEach var="product" items="${featuredProducts}">
                         <article class="product-item">
                             <div class="product-img">
-                                <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                <a href="${pageContext.request.contextPath}/product/<c:out value='${product.productSlug}'/>">
                                     <c:choose>
                                         <c:when test="${not empty product.primaryImageUrl}">
-                                            <img alt="${product.productName}" class="product-image"
-                                                 src="${product.primaryImageUrl}">
+                                            <img alt="<c:out value='${product.productName}'/>" class="product-image"
+                                                 src="<c:out value='${product.primaryImageUrl}'/>">
                                         </c:when>
                                         <c:otherwise>
-                                            <img alt="${product.productName}" class="product-image"
-                                                 src="${pageContext.request.contextPath}/static/images/default-product.png">
+                                            <img alt="<c:out value='${product.productName}'/>" class="product-image"
+                                                 src="${pageContext.request.contextPath}/static/assets/images/default-product.png">
                                         </c:otherwise>
                                     </c:choose>
                                 </a>
@@ -461,28 +486,30 @@
                             <div class="product-body">
                                 <div class="product-content">
                                     <h3 class="product-title">
-                                        <a href="${pageContext.request.contextPath}/product/${product.productSlug}">
-                                                ${product.productName}
+                                        <a href="${pageContext.request.contextPath}/product/<c:out value='${product.productSlug}'/>">
+                                            <c:out value="${product.productName}"/>
                                         </a>
                                     </h3>
 
                                     <div class="product-small-details">
                                         <p>
-                                            <span>${product.brand != null ? product.brand.brandName : ''}</span>
+                                            <c:if test="${product.brand != null}">
+                                                <span><c:out value="${product.brand.brandName}"/></span>
+                                            </c:if>
                                             <c:if test="${product.category != null}">
-                                                &bull; <span>${product.category.categoryName}</span>
+                                                <span><c:if test="${product.brand != null}">&bull;</c:if> <c:out value="${product.category.categoryName}"/></span>
                                             </c:if>
                                             <c:if test="${not empty product.origin}">
-                                                &bull; <span>${product.origin}</span>
+                                                <span>&bull; <c:out value="${product.origin}"/></span>
                                             </c:if>
                                         </p>
                                     </div>
 
                                     <div class="product-rating">
-                                        <div class="rating-stars">
+                                        <div class="rating-stars" aria-hidden="true">
                                             <c:forEach begin="1" end="5" var="i">
                                                 <c:choose>
-                                                    <c:when test="${i <= product.averageRating}">
+                                                    <c:when test="${product.averageRating != null && i <= product.averageRating}">
                                                         <i class="fas fa-star"></i>
                                                     </c:when>
                                                     <c:otherwise>
@@ -530,7 +557,7 @@
 
                                 <div class="product-actions">
                                     <a class="btn btn-view"
-                                       href="${pageContext.request.contextPath}/product/${product.productSlug}">
+                                       href="${pageContext.request.contextPath}/product/<c:out value='${product.productSlug}'/>">
                                         Chi tiết
                                     </a>
 
@@ -553,18 +580,19 @@
             </c:when>
             <c:otherwise>
                 <div class="empty-state">
-                    <i class="fas fa-box-open"></i>
+                    <i class="fas fa-box-open" aria-hidden="true"></i>
                     <p>Chưa có sản phẩm nổi bật.</p>
                 </div>
             </c:otherwise>
         </c:choose>
     </section>
+
     <section class="brands-container section-animate" id="brands-container">
         <div class="section-head section-head-center">
-            <p class="section-kicker">Trusted Partners</p>
-            <h2 class="section-title">Thương hiệu đồng hành cùng HairGlow</h2>
+            <p class="section-kicker">Thương hiệu đồng hành</p>
+            <h2 class="section-title">Các brand chăm sóc tóc được HairGlow tuyển chọn</h2>
             <p class="section-subtitle">
-                Tuyển chọn các hãng chăm sóc tóc uy tín, đảm bảo chất lượng và nguồn gốc rõ ràng cho mọi sản phẩm.
+                Logo và tên thương hiệu được trình bày tối giản để khách hàng nhận diện nhanh, không làm rối trải nghiệm mua sắm.
             </p>
         </div>
 
@@ -575,18 +603,37 @@
                         <c:if test="${status.index < 12}">
                             <a class="brand-card"
                                href="${pageContext.request.contextPath}/products?brand=${brand.brandSlug}"
-                               title="Xem sản phẩm của ${brand.brandName}">
+                               title="Xem sản phẩm của ${fn:escapeXml(brand.brandName)}">
                                 <div class="brand-logo-wrap">
+                                    <c:set var="brandLogoUrl" value="${brand.logoUrl}"/>
+                                    <c:set var="brandLogoSrc" value=""/>
+                                    <c:if test="${not empty brandLogoUrl}">
+                                        <c:choose>
+                                            <c:when test="${fn:startsWith(brandLogoUrl, 'http://') || fn:startsWith(brandLogoUrl, 'https://')}">
+                                                <c:set var="brandLogoSrc" value="${brandLogoUrl}"/>
+                                            </c:when>
+                                            <c:when test="${fn:startsWith(brandLogoUrl, '/')}">
+                                                <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}${brandLogoUrl}"/>
+                                            </c:when>
+                                            <c:when test="${fn:contains(brandLogoUrl, '/')}">
+                                                <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}/${brandLogoUrl}"/>
+                                            </c:when>
+                                        </c:choose>
+                                    </c:if>
                                     <c:choose>
-                                        <c:when test="${not empty brand.logoUrl}">
+                                        <c:when test="${not empty brandLogoSrc}">
                                             <img class="brand-logo-img"
-                                                 src="${pageContext.request.contextPath}/static/${brand.logoUrl}"
-                                                 alt="Logo ${brand.brandName}"
-                                                 loading="lazy">
+                                                 src="${brandLogoSrc}"
+                                                 alt="Logo thương hiệu ${fn:escapeXml(brand.brandName)}"
+                                                 loading="lazy"
+                                                 onerror="this.classList.add('is-hidden'); this.closest('.brand-logo-wrap').classList.add('brand-logo-missing');">
+                                            <div class="stylized-brand-name brand-logo-fallback">
+                                                <span><c:out value="${brand.brandName}"/></span>
+                                            </div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="stylized-brand-name">
-                                                <span>${brand.brandName}</span>
+                                                <span><c:out value="${brand.brandName}"/></span>
                                             </div>
                                         </c:otherwise>
                                     </c:choose>
@@ -598,14 +645,14 @@
                 <c:if test="${brands.size() > 12}">
                     <div class="brands-view-more">
                         <a href="${pageContext.request.contextPath}/brands" class="btn btn-outline-primary">
-                            Khám phá tất cả thương hiệu <i class="fas fa-arrow-right" style="margin-left:6px"></i>
+                            Khám phá tất cả thương hiệu <i class="fas fa-arrow-right" aria-hidden="true"></i>
                         </a>
                     </div>
                 </c:if>
             </c:when>
             <c:otherwise>
                 <div class="empty-state">
-                    <i class="fas fa-industry"></i>
+                    <i class="fas fa-industry" aria-hidden="true"></i>
                     <p>Danh sách thương hiệu đang được cập nhật.</p>
                 </div>
             </c:otherwise>
@@ -615,14 +662,14 @@
     <section class="support-section section-animate">
         <div class="support-card">
             <div class="support-copy">
-                <p class="section-kicker">Hair Coaching</p>
-                <h2>HairGlow hỗ trợ bạn xây routine chăm tóc rõ ràng và dễ theo dõi</h2>
+                <p class="section-kicker">Beauty consultation</p>
+                <h2>Xây routine chăm tóc rõ ràng hơn cùng HairGlow</h2>
                 <p>
-                    Chia sẻ tình trạng tóc hiện tại để nhận gợi ý sản phẩm theo nhu cầu thật, tránh mua dàn trải.
+                    Chia sẻ tình trạng tóc hiện tại để nhận gợi ý sản phẩm phù hợp, tránh mua dàn trải và khó theo dõi hiệu quả.
                 </p>
             </div>
             <a class="support-action" href="${pageContext.request.contextPath}/support">
-                Liên hệ đội ngũ hỗ trợ <i class="fas fa-arrow-right"></i>
+                Nhận tư vấn ngay <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </a>
         </div>
     </section>
@@ -644,15 +691,21 @@
             }
 
             let currentSlide = 0;
-            let autoSlideInterval;
+            let autoSlideInterval = null;
             const totalSlides = slides.length;
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             dotsContainer.innerHTML = '';
             slides.forEach(function (_, index) {
                 const dot = document.createElement('button');
+                dot.type = 'button';
                 dot.classList.add('dot');
+                dot.setAttribute('aria-label', 'Chuyển đến slide ' + (index + 1));
                 if (index === 0) {
                     dot.classList.add('active');
+                    dot.setAttribute('aria-selected', 'true');
+                } else {
+                    dot.setAttribute('aria-selected', 'false');
                 }
                 dot.addEventListener('click', function () {
                     goToSlide(index);
@@ -662,11 +715,19 @@
             });
 
             const dots = dotsContainer.querySelectorAll('.dot');
+            if (totalSlides <= 1) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                dotsContainer.style.display = 'none';
+                return;
+            }
 
             function goToSlide(index) {
                 dots[currentSlide].classList.remove('active');
+                dots[currentSlide].setAttribute('aria-selected', 'false');
                 currentSlide = (index + totalSlides) % totalSlides;
                 dots[currentSlide].classList.add('active');
+                dots[currentSlide].setAttribute('aria-selected', 'true');
                 slidesContainer.style.transform = 'translateX(' + (-currentSlide * 100) + '%)';
             }
 
@@ -693,11 +754,12 @@
             }
 
             function resetAutoSlide() {
+                if (reduceMotion) return;
                 clearInterval(autoSlideInterval);
-                autoSlideInterval = setInterval(nextSlide, 4000);
+                autoSlideInterval = setInterval(nextSlide, 4500);
             }
 
-            autoSlideInterval = setInterval(nextSlide, 4000);
+            resetAutoSlide();
         })();
 
         (function initFlashSaleSlider() {
@@ -733,6 +795,7 @@
             }
 
             track.addEventListener('scroll', updateNavState, {passive: true});
+            window.addEventListener('resize', updateNavState);
 
             prevBtn.addEventListener('click', function () {
                 track.scrollBy({left: -getScrollStep(), behavior: 'smooth'});
@@ -778,6 +841,7 @@
                     cancelAnimationFrame(rafId);
                     rafId = null;
                 }
+                updateNavState();
             });
 
             updateNavState();

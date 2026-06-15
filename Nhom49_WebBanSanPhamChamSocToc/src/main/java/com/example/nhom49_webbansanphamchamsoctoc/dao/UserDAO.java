@@ -151,11 +151,15 @@ public class UserDAO implements IDAO<User> {
 
 
     public boolean updateActiveStatus(int userId, boolean isActive) {
+        return jdbi.withHandle(handle -> updateActiveStatus(handle, userId, isActive));
+    }
+
+    public boolean updateActiveStatus(Handle handle, int userId, boolean isActive) {
         String sql = "UPDATE users SET is_active = :isActive WHERE user_id = :userId";
-        int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)
+        int rowsAffected = handle.createUpdate(sql)
                 .bind("isActive", isActive)
                 .bind("userId", userId)
-                .execute());
+                .execute();
         return rowsAffected > 0;
     }
 

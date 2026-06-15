@@ -94,20 +94,28 @@
 <!-- Header -->
 <jsp:include page="/layout/header.jsp"/>
 
+<c:set var="brandLogoUrl" value="${brand.logoUrl}"/>
+<c:set var="brandLogoSrc" value=""/>
+<c:if test="${not empty brandLogoUrl}">
+    <c:choose>
+        <c:when test="${fn:startsWith(brandLogoUrl, 'http://') || fn:startsWith(brandLogoUrl, 'https://')}">
+            <c:set var="brandLogoSrc" value="${brandLogoUrl}"/>
+        </c:when>
+        <c:when test="${fn:startsWith(brandLogoUrl, '/')}">
+            <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}${brandLogoUrl}"/>
+        </c:when>
+        <c:when test="${fn:contains(brandLogoUrl, '/')}">
+            <c:set var="brandLogoSrc" value="${pageContext.request.contextPath}/${brandLogoUrl}"/>
+        </c:when>
+    </c:choose>
+</c:if>
+<c:set var="brandHeroBackgroundStyle" value="background-image: none;"/>
+<c:if test="${not empty brandLogoSrc}">
+    <c:set var="brandHeroBackgroundStyle" value="background-image: url('${brandLogoSrc}');"/>
+</c:if>
+
 <!-- Brand Banner -->
-<section class="brand-hero section-animate"
-        <c:choose>
-            <c:when test="${not empty brand.logoUrl && fn:startsWith(brand.logoUrl, 'http')}">
-                style="background-image: url('${brand.logoUrl}');"
-            </c:when>
-            <c:when test="${not empty brand.logoUrl}">
-                style="background-image: url('${pageContext.request.contextPath}/static/assets/${brand.logoUrl}');"
-            </c:when>
-            <c:otherwise>
-                style="background-image: none;"
-            </c:otherwise>
-        </c:choose>
->
+<section class="brand-hero section-animate" style="${brandHeroBackgroundStyle}">
     <div class="brand-hero-overlay"></div>
 
     <div class="brand-hero-particles">
@@ -125,25 +133,12 @@
         </nav>
         <div class="brand-hero-logo">
             <c:choose>
-                <c:when test="${not empty brand.logoUrl}">
-                    <div class="brand-hero-logo">
-                        <c:choose>
-                            <c:when test="${not empty brand.logoUrl && fn:startsWith(brand.logoUrl, 'http')}">
-                                <img src="${brand.logoUrl}"
-                                     alt="Logo ${brand.brandName}">
-                            </c:when>
-
-                            <c:when test="${not empty brand.logoUrl}">
-                                <img src="${pageContext.request.contextPath}/static/assets/${brand.logoUrl}"
-                                     alt="Logo ${brand.brandName}">
-                            </c:when>
-
-                            <c:otherwise>
-                                <div class="brand-hero-logo-fallback">
-                                    <i class="fas fa-gem"></i>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                <c:when test="${not empty brandLogoSrc}">
+                    <img src="${brandLogoSrc}"
+                         alt="Logo ${fn:escapeXml(brand.brandName)}"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="brand-hero-logo-fallback" style="display:none">
+                        <i class="fas fa-gem"></i>
                     </div>
                 </c:when>
                 <c:otherwise>
