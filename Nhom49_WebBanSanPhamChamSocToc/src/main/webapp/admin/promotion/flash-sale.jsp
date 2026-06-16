@@ -40,6 +40,7 @@
                     <input type="hidden"
                            name="action"
                            value="bulkDiscount">
+                    <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
 
                     <input type="number"
                            name="discountPercent"
@@ -143,6 +144,7 @@
                                       method="post" style="display:inline"
                                       onsubmit="return confirm('Xóa sản phẩm này khỏi Flash Sale?')">
                                     <input type="hidden" name="action" value="removeFromSale">
+                                    <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
                                     <input type="hidden" name="productId" value="${p.productId}">
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fas fa-times"></i> Xóa
@@ -177,6 +179,7 @@
 
         <form action="${pageContext.request.contextPath}/admin/flash-sale" method="post">
             <input type="hidden" name="action" value="addToSale">
+            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
             <div class="modal-body">
                 <c:choose>
                     <c:when test="${not empty nonSaleProducts}">

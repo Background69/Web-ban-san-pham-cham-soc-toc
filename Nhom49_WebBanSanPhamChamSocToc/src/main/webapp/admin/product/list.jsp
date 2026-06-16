@@ -109,10 +109,13 @@
 
                     <td class="action-cell">
                         <button class="action-btn edit" onclick="openEditModal(${p.productId})">Sửa</button>
-                        <button class="action-btn delete"
-                                onclick="if(confirm('Xoá sản phẩm?'))location.href='${pageContext.request.contextPath}/admin/products?action=delete&id=${p.productId}">
-                            Xoá
-                        </button>
+                        <form action="${pageContext.request.contextPath}/admin/products" method="post" style="display:inline"
+                              onsubmit="return confirm('Xoá sản phẩm?')">
+                            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id" value="${p.productId}">
+                            <button type="submit" class="action-btn delete">Xoá</button>
+                        </form>
                         <button class="action-btn stats"
                                 onclick="openStatsModal(${p.productId})">
                             Thống kê
@@ -141,6 +144,7 @@
 
         <form action="${pageContext.request.contextPath}/admin/products" method="post"
               enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
             <input type="hidden" name="action" value="create">
 
             <div class="modal-body">
@@ -258,6 +262,7 @@
               method="post"
               enctype="multipart/form-data">
 
+            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" id="editId">
 
@@ -457,7 +462,8 @@
                 '${pageContext.request.contextPath}/admin/products',
                 {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('#editForm input[name="_csrf"]').value }
                 }
             )
                 .then(res => res.json())

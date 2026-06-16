@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>Quản lý thương hiệu</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/branchmanagement.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/brandmanagement.css">
 </head>
 
 <body>
@@ -75,11 +75,12 @@
                             Sửa
                         </a>
 
-                        <a class="action-btn delete"
-                           href="${pageContext.request.contextPath}/admin/brands/delete?id=${b.brandId}"
-                           onclick="return confirm('Xóa thương hiệu này?')">
-                            Xóa
-                        </a>
+                        <form action="${pageContext.request.contextPath}/admin/brands/delete" method="post"
+                              style="display:inline" onsubmit="return confirm('Xóa thương hiệu này?')">
+                            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                            <input type="hidden" name="id" value="${b.brandId}">
+                            <button type="submit" class="action-btn delete">Xóa</button>
+                        </form>
                     </td>
                 </tr>
             </c:forEach>

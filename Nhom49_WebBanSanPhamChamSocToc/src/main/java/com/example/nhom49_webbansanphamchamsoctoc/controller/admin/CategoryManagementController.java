@@ -69,10 +69,6 @@ public class CategoryManagementController extends HttpServlet {
 
             case "/admin/category/delete":
             case "/admin/categories/delete":
-                int deleteId = parseIntSafe(request.getParameter("id"));
-                if (deleteId > 0) {
-                    categoryService.deleteCategory(deleteId);
-                }
                 response.sendRedirect(request.getContextPath() + "/admin/categories");
                 break;
 
@@ -87,10 +83,18 @@ public class CategoryManagementController extends HttpServlet {
             throws IOException {
 
         request.setCharacterEncoding("UTF-8");
+        String path = request.getServletPath();
 
-        if ("/admin/category/save".equals(request.getServletPath())
-                || "/admin/categories/save".equals(request.getServletPath())) {
+        if ("/admin/category/save".equals(path)
+                || "/admin/categories/save".equals(path)) {
             saveCategory(request, response);
+        } else if ("/admin/category/delete".equals(path)
+                || "/admin/categories/delete".equals(path)) {
+            int deleteId = parseIntSafe(request.getParameter("id"));
+            if (deleteId > 0) {
+                categoryService.deleteCategory(deleteId);
+            }
+            response.sendRedirect(request.getContextPath() + "/admin/categories");
         }
     }
 

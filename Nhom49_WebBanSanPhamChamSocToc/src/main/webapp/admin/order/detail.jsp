@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -526,11 +527,15 @@
                     </c:if>
                     <c:if test="${paymentTransaction.status == 'PENDING'}">
                         <div style="margin-top: 14px;">
-                            <a href="<c:url value='/admin/orders?action=confirmPayment&transactionId=${paymentTransaction.transactionId}'/>"
-                               class="btn btn-primary"
-                               onclick="return confirm('Xác nhận đã nhận tiền cho giao dịch này?')">
-                                Xác nhận đã nhận tiền
-                            </a>
+                            <form action="<c:url value='/admin/orders'/>" method="post" style="display:inline"
+                                  onsubmit="return confirm('Xác nhận đã nhận tiền cho giao dịch này?')">
+                                <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                                <input type="hidden" name="action" value="confirmPayment">
+                                <input type="hidden" name="transactionId" value="${paymentTransaction.transactionId}">
+                                <button type="submit" class="btn btn-primary">
+                                    Xác nhận đã nhận tiền
+                                </button>
+                            </form>
                         </div>
                     </c:if>
                 </div>
@@ -640,32 +645,48 @@
         <!-- Actions -->
         <div class="actions-bar">
             <c:if test="${order.orderStatus == 'pending' && (order.paymentMethod != 'bank_transfer' || (not empty paymentTransaction && paymentTransaction.status == 'SUCCESS'))}">
-                <a href="<c:url value='/admin/orders?action=updateStatus&id=${order.orderId}&status=confirmed&from=detail'/>"
-                   class="btn btn-primary">
-                    Xác nhận đơn
-                </a>
+                <form action="<c:url value='/admin/orders'/>" method="post" style="display:inline">
+                    <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                    <input type="hidden" name="action" value="updateStatus">
+                    <input type="hidden" name="id" value="${order.orderId}">
+                    <input type="hidden" name="status" value="confirmed">
+                    <input type="hidden" name="from" value="detail">
+                    <button type="submit" class="btn btn-primary">Xác nhận đơn</button>
+                </form>
             </c:if>
             <c:if test="${order.orderStatus == 'pending' && order.paymentMethod == 'bank_transfer' && (empty paymentTransaction || paymentTransaction.status != 'SUCCESS')}">
                 <span class="btn btn-secondary">Chờ xác nhận thanh toán chuyển khoản</span>
             </c:if>
             <c:if test="${order.orderStatus == 'confirmed'}">
-                <a href="<c:url value='/admin/orders?action=updateStatus&id=${order.orderId}&status=shipping&from=detail'/>"
-                   class="btn btn-primary">
-                    Giao hàng
-                </a>
+                <form action="<c:url value='/admin/orders'/>" method="post" style="display:inline">
+                    <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                    <input type="hidden" name="action" value="updateStatus">
+                    <input type="hidden" name="id" value="${order.orderId}">
+                    <input type="hidden" name="status" value="shipping">
+                    <input type="hidden" name="from" value="detail">
+                    <button type="submit" class="btn btn-primary">Giao hàng</button>
+                </form>
             </c:if>
             <c:if test="${order.orderStatus == 'shipping'}">
-                <a href="<c:url value='/admin/orders?action=updateStatus&id=${order.orderId}&status=completed&from=detail'/>"
-                   class="btn btn-primary">
-                    Hoàn thành
-                </a>
+                <form action="<c:url value='/admin/orders'/>" method="post" style="display:inline">
+                    <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                    <input type="hidden" name="action" value="updateStatus">
+                    <input type="hidden" name="id" value="${order.orderId}">
+                    <input type="hidden" name="status" value="completed">
+                    <input type="hidden" name="from" value="detail">
+                    <button type="submit" class="btn btn-primary">Hoàn thành</button>
+                </form>
             </c:if>
             <c:if test="${order.orderStatus != 'cancelled' && order.orderStatus != 'completed'}">
-                <a href="<c:url value='/admin/orders?action=updateStatus&id=${order.orderId}&status=cancelled&from=detail'/>"
-                   class="btn btn-danger"
-                   onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
-                    Hủy đơn
-                </a>
+                <form action="<c:url value='/admin/orders'/>" method="post" style="display:inline"
+                      onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
+                    <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                    <input type="hidden" name="action" value="updateStatus">
+                    <input type="hidden" name="id" value="${order.orderId}">
+                    <input type="hidden" name="status" value="cancelled">
+                    <input type="hidden" name="from" value="detail">
+                    <button type="submit" class="btn btn-danger">Hủy đơn</button>
+                </form>
             </c:if>
             <a href="javascript:window.print()" class="btn btn-secondary">
                 In đơn hàng

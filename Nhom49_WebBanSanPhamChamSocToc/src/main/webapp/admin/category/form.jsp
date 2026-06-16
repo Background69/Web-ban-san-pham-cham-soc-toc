@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -92,6 +93,7 @@
             </h2>
 
             <form action="${pageContext.request.contextPath}/admin/category/save" method="post">
+                <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
                 <c:if test="${not empty category}">
                     <input type="hidden" name="id" value="${category.categoryId}">
                 </c:if>

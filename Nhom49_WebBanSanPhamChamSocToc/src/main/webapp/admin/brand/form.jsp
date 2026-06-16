@@ -150,6 +150,7 @@
             </c:if>
 
             <form action="${pageContext.request.contextPath}/admin/brands/save" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
                 <!-- Hidden ID for edit -->
                 <c:if test="${brand != null}">
                     <input type="hidden" name="id" value="${brand.brandId}">
