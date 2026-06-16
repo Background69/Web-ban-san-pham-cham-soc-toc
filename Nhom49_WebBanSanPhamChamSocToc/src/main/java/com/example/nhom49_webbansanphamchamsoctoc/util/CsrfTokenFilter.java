@@ -50,6 +50,8 @@ public class CsrfTokenFilter implements Filter {
 
     /** Các path được miễn kiểm tra CSRF (callback bên ngoài, API, etc.) */
     private static final Set<String> EXEMPT_PATH_PREFIXES = Set.of(
+            "/auth/login",
+            "/auth/register",
             "/api/",
             "/vnpay/",
             "/auth/google/",
