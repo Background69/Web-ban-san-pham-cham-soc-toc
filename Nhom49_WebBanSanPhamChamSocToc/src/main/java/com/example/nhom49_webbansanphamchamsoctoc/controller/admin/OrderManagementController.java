@@ -39,27 +39,6 @@ public class OrderManagementController extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("updateStatus".equals(action)) {
-            handleUpdateStatus(request, response);
-            return;
-        }
-
-        if ("confirmPayment".equals(action)) {
-            handleConfirmPayment(request, response);
-            return;
-        }
-
-        if ("delete".equals(action)) {
-            Integer orderId = ValidationUtil.parseIntSafe(request.getParameter("id"));
-            if (orderId == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
-                return;
-            }
-            orderDAO.delete(orderId);
-            response.sendRedirect(request.getContextPath() + "/admin/orders");
-            return;
-        }
-
         if ("detail".equals(action)) {
             Integer orderId = ValidationUtil.parseIntSafe(request.getParameter("id"));
             if (orderId == null) {
@@ -95,7 +74,31 @@ public class OrderManagementController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+
+        String action = request.getParameter("action");
+
+        if ("updateStatus".equals(action)) {
+            handleUpdateStatus(request, response);
+            return;
+        }
+
+        if ("confirmPayment".equals(action)) {
+            handleConfirmPayment(request, response);
+            return;
+        }
+
+        if ("delete".equals(action)) {
+            Integer orderId = ValidationUtil.parseIntSafe(request.getParameter("id"));
+            if (orderId == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid ID");
+                return;
+            }
+            orderDAO.delete(orderId);
+            response.sendRedirect(request.getContextPath() + "/admin/orders");
+            return;
+        }
+
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown action");
     }
 
     private void handleUpdateStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {

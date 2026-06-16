@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -88,7 +89,8 @@
                     </td>
 
                     <td>
-                        <form action="${pageContext.request.contextPath}/admin/orders" method="get">
+                        <form action="${pageContext.request.contextPath}/admin/orders" method="post">
+                            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
                             <input type="hidden" name="action" value="updateStatus">
                             <input type="hidden" name="id" value="${o.orderId}">
                             <select name="status" onchange="this.form.submit()" class="status-select status-${o.orderStatus}">
@@ -120,12 +122,13 @@
                         <a href="${pageContext.request.contextPath}/admin/orders?action=detail&id=${o.orderId}" class="btn-action btn-detail">
                             Chi tiết
                         </a>
-                        <a href="${pageContext.request.contextPath}/admin/orders?action=delete&id=${o.orderId}"
-                                class="btn-action btn-delete"
-                                onclick="return confirm('Xóa đơn này?')">
-
-                            Xóa
-                        </a>
+                        <form action="${pageContext.request.contextPath}/admin/orders" method="post"
+                              style="display:inline" onsubmit="return confirm('Xóa đơn này?')">
+                            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id" value="${o.orderId}">
+                            <button type="submit" class="btn-action btn-delete">Xóa</button>
+                        </form>
                     </td>
                 </tr>
             </c:forEach>

@@ -45,17 +45,15 @@ public class CsrfTokenFilter implements Filter {
      * Chế độ hoạt động:
      * - true  = ENFORCE: block request thiếu/sai token (403)
      * - false = LOG_ONLY: chỉ log warning, không block
-     *
-     * Đặt false ban đầu để không gãy form hiện tại.
-     * Chuyển sang true sau khi đã thêm _csrf vào tất cả form.
      */
-    private static final boolean ENFORCE_MODE = false;
+    private static final boolean ENFORCE_MODE = true;
 
     /** Các path được miễn kiểm tra CSRF (callback bên ngoài, API, etc.) */
     private static final Set<String> EXEMPT_PATH_PREFIXES = Set.of(
             "/api/",
             "/vnpay/",
-            "/auth/google/"
+            "/auth/google/",
+            "/support/feedback"
     );
 
     private final SecureRandom secureRandom = new SecureRandom();
@@ -75,6 +73,7 @@ public class CsrfTokenFilter implements Filter {
         // Luôn đảm bảo token tồn tại trong session và request attribute
         String token = ensureToken(request);
         request.setAttribute(CSRF_REQUEST_ATTR, token);
+        request.setAttribute("csrfToken", token);
 
         // Chỉ kiểm tra với mutation methods
         String method = request.getMethod().toUpperCase();

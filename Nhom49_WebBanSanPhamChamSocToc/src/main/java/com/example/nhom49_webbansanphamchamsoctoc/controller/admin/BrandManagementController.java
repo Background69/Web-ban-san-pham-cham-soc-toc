@@ -55,7 +55,7 @@ public class BrandManagementController extends HttpServlet {
                 break;
 
             case "/admin/brands/delete":
-                deleteBrand(request, response);
+                response.sendRedirect(request.getContextPath() + "/admin/brands");
                 break;
         }
     }
@@ -65,8 +65,11 @@ public class BrandManagementController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if ("/admin/brands/save".equals(request.getServletPath())) {
+        String path = request.getServletPath();
+        if ("/admin/brands/save".equals(path)) {
             saveBrand(request, response);
+        } else if ("/admin/brands/delete".equals(path)) {
+            deleteBrand(request, response);
         }
     }
 

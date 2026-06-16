@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -55,10 +56,12 @@
                             Sửa
                         </button>
 
-                        <button class="action-btn delete"
-                                onclick="if(confirm('Xoá danh mục này?')) location.href='${pageContext.request.contextPath}/admin/category/delete?id=${c.categoryId}'">
-                            Xoá
-                        </button>
+                        <form action="${pageContext.request.contextPath}/admin/category/delete" method="post"
+                              style="display:inline" onsubmit="return confirm('Xoá danh mục này?')">
+                            <input type="hidden" name="_csrf" value="${fn:escapeXml(_csrf)}">
+                            <input type="hidden" name="id" value="${c.categoryId}">
+                            <button type="submit" class="action-btn delete">Xoá</button>
+                        </form>
 
                     </td>
                 </tr>
