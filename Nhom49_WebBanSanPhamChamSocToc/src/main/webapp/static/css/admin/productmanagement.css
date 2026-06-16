@@ -6,7 +6,7 @@
     width: 100%;
     margin-top: 25px;
     border-collapse: collapse;
-    table-layout: fixed;
+    table-layout: auto;
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
@@ -19,6 +19,10 @@
     text-align: center;
     font-size: 14px;
     vertical-align: middle;
+}
+.product-table th:last-child,
+.product-table td:last-child{
+    width:260px;
 }
 
 .product-table th {
@@ -94,11 +98,13 @@
    ACTION BUTTONS
    ========================= */
 
-.action-cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
+.action-cell{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    flex-wrap:nowrap;
+    white-space:nowrap;
 }
 
 .action-btn {
