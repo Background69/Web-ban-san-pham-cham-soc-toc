@@ -45,6 +45,8 @@
 
                 <form action="${pageContext.request.contextPath}/auth/verify-otp" method="post"
                       onsubmit="return combineOtp(event)">
+                    <input type="hidden" name="_csrf"
+                           value="${fn:escapeXml(_csrf)}"/>
                     <div class="otp-inputs">
                         <input type="text" id="otp1" maxlength="1" inputmode="numeric" autocomplete="one-time-code">
                         <input type="text" id="otp2" maxlength="1" inputmode="numeric">
@@ -61,6 +63,8 @@
                 <div id="resendCooldownTimer" class="timer"></div>
 
                 <form action="${pageContext.request.contextPath}/auth/resend-otp" method="post">
+                    <input type="hidden" name="_csrf"
+                           value="${fn:escapeXml(_csrf)}"/>
                     <button type="submit" id="resendBtn" class="btn-resend">Gửi lại OTP</button>
                 </form>
 
