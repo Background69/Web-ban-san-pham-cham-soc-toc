@@ -25,9 +25,30 @@
     <main class="content">
         <div class="flash-header">
             <h1> Quản lý Flash Sale</h1>
-            <button class="btn-add" onclick="openAddModal()">
-                <i class="fas fa-plus"></i> Thêm sản phẩm vào Sale
-            </button>
+            <div style="display:flex;gap:10px">
+                <form action="${pageContext.request.contextPath}/admin/flash-sale"
+                      method="post">
+
+                    <input type="hidden"
+                           name="action"
+                           value="bulkDiscount">
+
+                    <input type="number"
+                           name="discountPercent"
+                           min="1"
+                           max="90"
+                           placeholder="% giảm"
+                           required>
+
+                    <button type="submit" class="btn-add">
+                        Áp dụng hàng loạt
+                    </button>
+
+                </form>
+                <button class="btn-add" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> Thêm sản phẩm vào Sale
+                </button>
+            </div>
         </div>
 
         <div class="section-title">
@@ -148,7 +169,6 @@
 
         <form action="${pageContext.request.contextPath}/admin/flash-sale" method="post">
             <input type="hidden" name="action" value="addToSale">
-
             <div class="modal-body">
                 <c:choose>
                     <c:when test="${not empty nonSaleProducts}">

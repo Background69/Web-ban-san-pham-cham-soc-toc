@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 /**
  * Controller quản lý Flash Sale - các sản phẩm có isOnSale = true
@@ -99,6 +100,7 @@ public class FlashSaleManagementController extends HttpServlet {
             switch (action) {
                 case "addToSale" -> addToSale(request);
                 case "removeFromSale" -> removeFromSale(request);
+                case "bulkDiscount" ->bulkDiscount(request);
             }
         }
 
@@ -125,6 +127,43 @@ public class FlashSaleManagementController extends HttpServlet {
                 } catch (NumberFormatException ignored) {
                 }
             }
+        }
+    }
+    private void bulkDiscount(HttpServletRequest request) {
+
+        try {
+
+            int percent =
+                    Integer.parseInt(request.getParameter("discountPercent"));
+
+            List<Product> saleProducts =
+                    productDAO.findOnSale();
+
+            for (Product product : saleProducts) {
+
+                List<ProductVariant> variants =
+                        productVariantDAO.findByProductId(
+                                product.getProductId());
+
+                for (ProductVariant variant : variants) {
+
+                    BigDecimal originalPrice =
+                            variant.getOriginalPrice();
+
+                    BigDecimal salePrice =
+                            originalPrice
+                                    .multiply(BigDecimal.valueOf(100 - percent))
+                                    .divide(BigDecimal.valueOf(100));
+
+                    variant.setSalePrice(salePrice);
+                    variant.setDiscountPercent(percent);
+
+                    productVariantDAO.update(variant);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
