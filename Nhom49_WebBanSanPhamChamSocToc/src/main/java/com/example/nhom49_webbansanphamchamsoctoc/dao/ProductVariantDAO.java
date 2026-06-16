@@ -28,6 +28,7 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
     }
 
     public List<ProductVariant> findByProductId(int productId) {
+
         String sql = "SELECT * FROM product_variants WHERE product_id = :productId ORDER BY is_default DESC, variant_id ASC";
         return jdbi.withHandle(handle ->
                 handle.createQuery(sql)
@@ -154,6 +155,24 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
                         .execute()
         );
         return rowsAffected > 0;
+    }
+    public boolean updateDiscountByProductId(int productId, int discountPercent) {
+
+        String sql = """
+        UPDATE product_variants
+        SET discount_percent = :discount,
+            sale_price = original_price * (100 - :discount) / 100
+        WHERE product_id = :productId
+        """;
+
+        int rows = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("discount", discountPercent)
+                        .bind("productId", productId)
+                        .execute()
+        );
+
+        return rows > 0;
     }
 
     private ProductVariant mapVariant(java.sql.ResultSet rs) throws java.sql.SQLException {

@@ -23,6 +23,46 @@
     <main class="content">
         <div class="header">
             <h1>Quản lý đơn hàng</h1>
+            <div class="toolbar">
+                <form action="${pageContext.request.contextPath}/admin/orders" method="get">
+                    <input type="text"
+                           name="keyword"
+                           placeholder="Tìm theo mã đơn hoặc khách hàng..."
+                           value="${param.keyword}">
+
+                    <select name="status">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="pending"
+                        ${param.status == 'pending' ? 'selected' : ''}>
+                            Chờ xác nhận
+                        </option>
+
+                        <option value="confirmed"
+                        ${param.status == 'confirmed' ? 'selected' : ''}>
+                            Đã xác nhận
+                        </option>
+
+                        <option value="shipping"
+                        ${param.status == 'shipping' ? 'selected' : ''}>
+                            Đang giao
+                        </option>
+
+                        <option value="completed"
+                        ${param.status == 'completed' ? 'selected' : ''}>
+                            Hoàn thành
+                        </option>
+
+                        <option value="cancelled"
+                        ${param.status == 'cancelled' ? 'selected' : ''}>
+                            Đã hủy
+                        </option>
+                    </select>
+
+                    <button type="submit" class="btn-add">
+                        Tìm kiếm
+                    </button>
+                </form>
+            </div>
         </div>
 
         <table class="product-table">

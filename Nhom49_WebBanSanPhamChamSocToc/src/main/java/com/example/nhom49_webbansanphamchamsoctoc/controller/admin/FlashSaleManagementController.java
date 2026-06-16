@@ -2,8 +2,10 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.PromotionDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Promotion;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 import jakarta.servlet.ServletException;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 /**
  * Controller quản lý Flash Sale - các sản phẩm có isOnSale = true
@@ -26,12 +29,14 @@ public class FlashSaleManagementController extends HttpServlet {
     private ProductDAO productDAO;
     private ProductVariantDAO productVariantDAO;
     private ProductService productService;
+    private PromotionDAO promotionDAO;
 
     @Override
     public void init() {
         productDAO = new ProductDAO();
         productVariantDAO = new ProductVariantDAO();
         productService = new ProductService();
+        promotionDAO = new PromotionDAO();
     }
 
     @Override
@@ -78,12 +83,16 @@ public class FlashSaleManagementController extends HttpServlet {
         List<Product> nonSaleProducts = allProducts.stream()
                 .filter(p -> !p.isOnSale())
                 .collect(Collectors.toList());
-
+        for (Product p:nonSaleProducts) {
+            boolean conflict = promotionDAO.hasActivePromotion(p.getProductId());
+            request.setAttribute("promotionConflict_" +p.getProductId(),conflict);
+        }
+        List<Promotion> promotions=promotionDAO.findAll();
+        request.setAttribute("promotions",promotions);
         request.setAttribute("saleProducts", saleProducts);
         request.setAttribute("nonSaleProducts", nonSaleProducts);
         request.getRequestDispatcher("/admin/promotion/flash-sale.jsp").forward(request, response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
@@ -93,6 +102,7 @@ public class FlashSaleManagementController extends HttpServlet {
             switch (action) {
                 case "addToSale" -> addToSale(request);
                 case "removeFromSale" -> removeFromSale(request);
+                case "bulkDiscount" ->bulkDiscount(request);
             }
         }
 
@@ -110,12 +120,52 @@ public class FlashSaleManagementController extends HttpServlet {
                     int productId = Integer.parseInt(idStr);
                     Product p = productDAO.findById(productId);
                     if (p != null) {
+                        if(promotionDAO.hasActivePromotion(productId)){
+                            continue;
+                        }
                         p.setOnSale(true);
                         productDAO.update(p);
                     }
                 } catch (NumberFormatException ignored) {
                 }
             }
+        }
+    }
+    private void bulkDiscount(HttpServletRequest request) {
+
+        try {
+
+            int percent =
+                    Integer.parseInt(request.getParameter("discountPercent"));
+
+            List<Product> saleProducts =
+                    productDAO.findOnSale();
+
+            for (Product product : saleProducts) {
+
+                List<ProductVariant> variants =
+                        productVariantDAO.findByProductId(
+                                product.getProductId());
+
+                for (ProductVariant variant : variants) {
+
+                    BigDecimal originalPrice =
+                            variant.getOriginalPrice();
+
+                    BigDecimal salePrice =
+                            originalPrice
+                                    .multiply(BigDecimal.valueOf(100 - percent))
+                                    .divide(BigDecimal.valueOf(100));
+
+                    variant.setSalePrice(salePrice);
+                    variant.setDiscountPercent(percent);
+
+                    productVariantDAO.update(variant);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -12,263 +12,8 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/promotionmanagement.css">
 
-    <style>
-        .flash-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .flash-header h1 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .flash-header h1 i {
-            color: #ff5722;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 24px 0 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title .count {
-            background: #4caf50;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-
-        /* Product Table */
-        .sale-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-
-        .sale-table th,
-        .sale-table td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .sale-table th {
-            background: #f8f9fa;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .sale-table .thumb {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #eee;
-        }
-
-        .sale-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            background: #ff5722;
-            color: white;
-        }
-
-        .stock-low {
-            color: #f44336;
-            font-weight: 600;
-        }
-
-        .stock-ok {
-            color: #4caf50;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background: #fff;
-            width: min(700px, 92vw);
-            max-height: 80vh;
-            margin: 60px auto;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid #eee;
-            background: linear-gradient(135deg, #ff5722, #ff9800);
-            color: white;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .modal-close {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 20px 24px;
-            max-height: 50vh;
-            overflow-y: auto;
-        }
-
-        .modal-footer {
-            padding: 16px 24px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        /* Product checkbox list */
-        .product-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .product-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .product-item:hover {
-            background: #fff3e0;
-            border-color: #ff9800;
-        }
-
-        .product-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-        }
-
-        .product-item .thumb {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-
-        .product-item .info {
-            flex: 1;
-        }
-
-        .product-item .name {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .product-item .price {
-            font-size: 13px;
-            color: #666;
-        }
-
-        .btn {
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ff5722, #ff9800);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-danger {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        .btn-add {
-            background: linear-gradient(135deg, #ff5722, #ff9800);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            color: #ddd;
-            margin-bottom: 16px;
-        }
-
-        @media (max-width: 768px) {
-
-            .sale-table th:nth-child(4),
-            .sale-table td:nth-child(4),
-            .sale-table th:nth-child(5),
-            .sale-table td:nth-child(5) {
-                display: none;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -279,10 +24,39 @@
 
     <main class="content">
         <div class="flash-header">
+            <div class="campaign-box">
+                <h3>Chiến dịch khuyến mãi</h3>
+                <select>
+                    <c:forEach var="promotion" items="${promotions}">
+                        <option value="${promotion.promotionId}">${promotion.promotionName}</option>
+                    </c:forEach>
+                </select>
+            </div>
             <h1> Quản lý Flash Sale</h1>
-            <button class="btn-add" onclick="openAddModal()">
-                <i class="fas fa-plus"></i> Thêm sản phẩm vào Sale
-            </button>
+            <div style="display:flex;gap:10px">
+                <form action="${pageContext.request.contextPath}/admin/flash-sale"
+                      method="post">
+
+                    <input type="hidden"
+                           name="action"
+                           value="bulkDiscount">
+
+                    <input type="number"
+                           name="discountPercent"
+                           min="1"
+                           max="90"
+                           placeholder="% giảm"
+                           required>
+
+                    <button type="submit" class="btn-add">
+                        Áp dụng hàng loạt
+                    </button>
+
+                </form>
+                <button class="btn-add" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> Thêm sản phẩm vào Sale
+                </button>
+            </div>
         </div>
 
         <div class="section-title">
@@ -403,7 +177,6 @@
 
         <form action="${pageContext.request.contextPath}/admin/flash-sale" method="post">
             <input type="hidden" name="action" value="addToSale">
-
             <div class="modal-body">
                 <c:choose>
                     <c:when test="${not empty nonSaleProducts}">
@@ -435,6 +208,9 @@
                                     <div class="info">
                                         <div class="name">
                                             <c:out value="${p.productName}"/>
+                                            <c:if test="${requestScope['promotionConflict_'.concat(p.productId)]}">
+                                            <span class="conflict-badge">Có khuyến mãi khác</span>
+                                            </c:if>
                                         </div>
                                         <div class="price">
                                             <c:if

@@ -93,3 +93,26 @@
 .btn-delete:hover{
     background:#fecaca;
 }
+.toolbar {
+    margin-bottom: 20px;
+}
+
+.toolbar form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.toolbar input {
+    width: 320px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.toolbar select {
+    width: 180px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
