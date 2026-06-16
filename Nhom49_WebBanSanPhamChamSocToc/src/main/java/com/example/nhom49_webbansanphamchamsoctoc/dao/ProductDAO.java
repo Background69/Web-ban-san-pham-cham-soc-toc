@@ -295,6 +295,21 @@ public class ProductDAO implements IDAO<Product> {
                 .execute());
         return rowsAffected > 0;
     }
+    public int getTotalStockByProductId(int productId){
+
+        String sql = """
+        SELECT COALESCE(SUM(stock_quantity),0)
+        FROM product_variants
+        WHERE product_id = :productId
+    """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one()
+        );
+    }
 
     // Helper method
     private Product mapProduct(java.sql.ResultSet rs) throws java.sql.SQLException {

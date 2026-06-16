@@ -6,6 +6,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.CategoryDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductImgDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.OrderItemDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Brand;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Category;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
@@ -45,6 +46,7 @@ public class ProductManagementController extends HttpServlet {
     private final BrandDAO brandDAO = new BrandDAO();
     private final ProductImgDAO productImgDAO = new ProductImgDAO();
     private final ProductService productService = new ProductService();
+    private final OrderItemDAO orderItemDAO = new OrderItemDAO();
     private final Gson gson = new Gson();
 
     @Override
@@ -52,6 +54,43 @@ public class ProductManagementController extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        System.out.println("ACTION = " + action);
+
+        if ("stats".equals(action)) {
+
+            int id = parseIntSafe(request.getParameter("id"));
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            Map<String, Object> data = new LinkedHashMap<>();
+
+            Product product = productService.getProductById(id);
+
+            data.put("productName", product.getProductName());
+            int currentStock =
+                    productVariantDAO
+                            .getTotalStockByProductIds(List.of(id))
+                            .getOrDefault(id, 0);
+            int totalSold =
+                    orderItemDAO.getTotalSoldByProduct(id);
+
+            List<Integer> monthlySales =
+                    orderItemDAO.getSalesByMonth(id);
+
+            data.put("currentStock", currentStock);
+            data.put("totalSold", totalSold);
+
+            data.put("months", List.of(
+                    "T1","T2","T3","T4",
+                    "T5","T6","T7","T8",
+                    "T9","T10","T11","T12"
+            ));
+
+            data.put("quantities", monthlySales);
+            response.getWriter().write(gson.toJson(data));
+            return;
+        }
 
         if ("get".equals(action)) {
             writeProductJson(request, response);
@@ -196,6 +235,7 @@ public class ProductManagementController extends HttpServlet {
                 return;
             }
         }
+
 
         response.sendRedirect(request.getContextPath() + "/admin/products");
     }
