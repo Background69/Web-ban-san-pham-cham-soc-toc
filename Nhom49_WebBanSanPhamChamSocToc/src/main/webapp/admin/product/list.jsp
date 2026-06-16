@@ -59,7 +59,7 @@
 
                             <c:when test="${not empty p.primaryImageUrl}">
                                 <img class="thumb"
-                                     src="${pageContext.request.contextPath}/static/assets/images/products/${p.primaryImageUrl}">
+                                     src="${p.primaryImageUrl}">
                             </c:when>
 
                             <c:otherwise>
