@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/admin/inventory")
-public class InventoryManagementController extends HttpServlet {
+public class InventoryImportController extends HttpServlet {
 
     private InventoryService inventoryService;
 

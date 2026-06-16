@@ -17,7 +17,7 @@
 <div class="container">
 
     <jsp:include page="/admin/common/sidebar.jsp">
-        <jsp:param name="activeMenu" value="inventory"/>
+        <jsp:param name="activeMenu" value="import"/>
     </jsp:include>
 
     <main class="content">

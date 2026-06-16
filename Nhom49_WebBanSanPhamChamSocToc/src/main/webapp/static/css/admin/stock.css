@@ -1,0 +1,95 @@
+/* ===== PAGE ===== */
+.content {
+    padding: 20px;
+}
+
+/* ===== TITLE ===== */
+h1 {
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+/* ===== FILTER ===== */
+select {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    min-width: 220px;
+}
+
+/* ===== BUTTON ===== */
+.btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #2d6cdf;
+    color: white;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #1f56c4;
+}
+
+/* ===== TABLE ===== */
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.stock-table th {
+    background: #f5f6f8;
+    text-align: left;
+    padding: 12px;
+    font-weight: 600;
+}
+
+.stock-table td {
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+
+/* hover */
+.stock-table tr:hover {
+    background: #fafafa;
+}
+
+/* ===== STOCK STATUS (không tô số nữa) ===== */
+.stock-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+/* trạng thái nhẹ nhàng */
+.stock-low {
+    border-color: #ffb74d;
+    color: #e67e22;
+    background: #fff7ed;
+}
+
+.stock-out {
+    border-color: #ef5350;
+    color: #c62828;
+    background: #ffebee;
+}
+
+.stock-ok {
+    border-color: #81c784;
+    color: #2e7d32;
+    background: #e8f5e9;
+}
+
+/* ===== EMPTY ===== */
+.empty {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
