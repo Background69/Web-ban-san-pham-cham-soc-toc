@@ -23,48 +23,20 @@
     </jsp:include>
     <main class="content admin-support-page">
 
-        <div class="as-page-header">
-            <div class="as-badge"><i class="fas fa-leaf"></i> HAIRGLOW SUPPORT</div>
-            <h1>Quản lý hỗ trợ khách hàng</h1>
-            <p class="as-subtitle">Theo dõi, phản hồi và xử lý các yêu cầu hỗ trợ từ khách hàng HairGlow.</p>
-            <div class="as-quick-actions">
-                <a href="${pageContext.request.contextPath}/admin/support"
-                   class="as-quick-btn ${empty filterStatus ? 'active' : ''}">
-                    <i class="fas fa-list"></i> Tất cả ticket
-                </a>
-                <a href="${pageContext.request.contextPath}/admin/support?status=RECEIVED"
-                   class="as-quick-btn ${filterStatus == 'RECEIVED' ? 'active' : ''}">
-                    <i class="fas fa-inbox"></i> Chưa xử lý
-                </a>
-                <a href="${pageContext.request.contextPath}/admin/support?status=PROCESSING"
-                   class="as-quick-btn ${filterStatus == 'PROCESSING' ? 'active' : ''}">
-                    <i class="fas fa-spinner"></i> Đang xử lý
-                </a>
-            </div>
-        </div>
-
-        <div class="as-stats-grid">
-            <div class="as-stat-card">
-                <div class="as-stat-label">Tổng ticket</div>
-                <div class="as-stat-value">${stats.total}</div>
-            </div>
-            <div class="as-stat-card">
-                <div class="as-stat-label">Đã tiếp nhận</div>
-                <div class="as-stat-value as-stat-card--accent">${stats.received}</div>
-            </div>
-            <div class="as-stat-card">
-                <div class="as-stat-label">Đang xử lý</div>
-                <div class="as-stat-value">${stats.processing}</div>
-            </div>
-            <div class="as-stat-card">
-                <div class="as-stat-label">Đã giải quyết</div>
-                <div class="as-stat-value">${stats.resolved}</div>
-            </div>
-            <div class="as-stat-card">
-                <div class="as-stat-label">Đã đóng</div>
-                <div class="as-stat-value">${stats.closed}</div>
-            </div>
-        </div>
+        <c:url var="supportAllUrl" value="/admin/support">
+            <c:param name="keyword" value="${filterKeyword}"/>
+            <c:param name="category" value="${filterCategory}"/>
+        </c:url>
+        <c:url var="supportReceivedUrl" value="/admin/support">
+            <c:param name="status" value="RECEIVED"/>
+            <c:param name="keyword" value="${filterKeyword}"/>
+            <c:param name="category" value="${filterCategory}"/>
+        </c:url>
+        <c:url var="supportProcessingUrl" value="/admin/support">
+            <c:param name="status" value="PROCESSING"/>
+            <c:param name="keyword" value="${filterKeyword}"/>
+            <c:param name="category" value="${filterCategory}"/>
+        </c:url>
 
         <form class="as-filter-bar" method="get" action="${pageContext.request.contextPath}/admin/support" id="filterForm">
             <input type="text"
@@ -90,6 +62,21 @@
                 <option value="SHOPPING_GUIDE" ${filterCategory == 'SHOPPING_GUIDE' ? 'selected' : ''}>Hướng dẫn mua</option>
                 <option value="OTHER" ${filterCategory == 'OTHER' ? 'selected' : ''}>Khác</option>
             </select>
+
+            <div class="as-ticket-filter-tabs" aria-label="Lọc nhanh ticket">
+                <a href="${supportAllUrl}"
+                   class="as-filter-chip ${empty filterStatus ? 'active' : ''}">
+                    <i class="fas fa-list"></i> Tất cả ticket
+                </a>
+                <a href="${supportReceivedUrl}"
+                   class="as-filter-chip ${filterStatus == 'RECEIVED' ? 'active' : ''}">
+                    <i class="fas fa-inbox"></i> Chưa xử lý
+                </a>
+                <a href="${supportProcessingUrl}"
+                   class="as-filter-chip ${filterStatus == 'PROCESSING' ? 'active' : ''}">
+                    <i class="fas fa-spinner"></i> Đang xử lý
+                </a>
+            </div>
 
             <button type="submit" class="as-btn-reset" style="background:var(--support-primary);color:#fff;border-color:var(--support-primary);">
                 <i class="fas fa-search"></i> Tìm

@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @WebServlet(name = "AdminSupportController", urlPatterns = {"/admin/support"})
@@ -88,13 +87,11 @@ public class AdminSupportController extends HttpServlet {
             List<Feedback> tickets = feedbackService.findAll(keyword, status, category, page, PAGE_SIZE);
             int totalCount = feedbackService.countAll(keyword, status, category);
             int totalPages = (int) Math.ceil((double) totalCount / PAGE_SIZE);
-            Map<String, Integer> stats = feedbackService.getStats();
 
             request.setAttribute("tickets", tickets);
             request.setAttribute("totalCount", totalCount);
             request.setAttribute("totalPages", totalPages);
             request.setAttribute("currentPage", page);
-            request.setAttribute("stats", stats);
 
             // Giữ lại giá trị filter trên form
             request.setAttribute("filterKeyword", keyword);

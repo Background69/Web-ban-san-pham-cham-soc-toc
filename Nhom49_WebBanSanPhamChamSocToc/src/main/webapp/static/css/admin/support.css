@@ -39,128 +39,6 @@
     color: var(--support-text);
 }
 
-.as-page-header {
-    margin-bottom: 36px;
-}
-
-.as-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: var(--support-accent-light);
-    color: var(--support-primary);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    border-radius: var(--support-radius-pill);
-    margin-bottom: 14px;
-}
-
-.as-badge i { font-size: 10px; }
-
-.as-page-header h1 {
-    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--support-primary-strong);
-    margin: 0 0 8px 0;
-    line-height: 1.2;
-}
-
-.as-page-header .as-subtitle {
-    font-size: 15px;
-    color: var(--support-muted);
-    margin: 0 0 20px 0;
-    max-width: 600px;
-    line-height: 1.5;
-}
-
-.as-quick-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.as-quick-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 18px;
-    border-radius: var(--support-radius-sm);
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all var(--support-transition);
-    border: 1px solid var(--support-border);
-    background: var(--support-surface);
-    color: var(--support-text);
-}
-
-.as-quick-btn:hover {
-    border-color: var(--support-accent);
-    color: var(--support-primary);
-    transform: translateY(-1px);
-    box-shadow: var(--support-shadow);
-}
-
-.as-quick-btn.active,
-.as-quick-btn--primary {
-    background: var(--support-primary);
-    color: #fff;
-    border-color: var(--support-primary);
-}
-
-.as-quick-btn--primary:hover {
-    background: var(--support-primary-strong);
-    border-color: var(--support-primary-strong);
-    color: #fff;
-}
-
-.as-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.as-stat-card {
-    background: var(--support-surface);
-    border: 1px solid var(--support-border);
-    border-radius: var(--support-radius);
-    padding: 22px 24px;
-    transition: all var(--support-transition);
-    cursor: default;
-}
-
-.as-stat-card:hover {
-    box-shadow: var(--support-shadow-hover);
-    transform: translateY(-2px);
-}
-
-.as-stat-label {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--support-muted);
-    margin-bottom: 8px;
-}
-
-.as-stat-value {
-    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--support-primary-strong);
-    line-height: 1;
-}
-
-.as-stat-card--accent .as-stat-value {
-    color: var(--support-accent);
-}
-
 .as-filter-bar {
     background: var(--support-surface);
     border: 1px solid var(--support-border);
@@ -174,8 +52,8 @@
 }
 
 .as-filter-bar .as-search-input {
-    flex: 1;
-    min-width: 220px;
+    flex: 1 1 300px;
+    min-width: 240px;
     padding: 10px 16px;
     border: 1px solid var(--support-border);
     border-radius: var(--support-radius-sm);
@@ -214,7 +92,62 @@
     border-color: var(--support-accent);
 }
 
+.as-ticket-filter-tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+.as-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--support-border);
+    border-radius: var(--support-radius-pill);
+    background: var(--support-surface);
+    color: var(--support-muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color var(--support-transition),
+                border-color var(--support-transition),
+                color var(--support-transition),
+                transform var(--support-transition);
+}
+
+.as-filter-chip:hover {
+    border-color: var(--support-accent);
+    color: var(--support-primary);
+    background: var(--support-bg);
+    transform: translateY(-1px);
+}
+
+.as-filter-chip.active,
+.as-filter-chip.is-active {
+    border-color: var(--support-primary);
+    background: var(--support-primary);
+    color: #FFFFFF;
+}
+
+.as-filter-chip.active:hover,
+.as-filter-chip.is-active:hover {
+    color: #FFFFFF;
+    background: var(--support-primary-strong);
+}
+
 .as-btn-reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px;
     padding: 10px 18px;
     border: 1px solid var(--support-border);
     border-radius: var(--support-radius-sm);
@@ -223,6 +156,7 @@
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
     transition: all var(--support-transition);
     font-family: inherit;
 }
@@ -810,31 +744,11 @@
         grid-column: 1;
     }
 
-    .as-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 @media (max-width: 768px) {
     .admin-support-page {
         padding: 16px 12px;
-    }
-
-    .as-page-header h1 {
-        font-size: 24px;
-    }
-
-    .as-stats-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .as-stat-card {
-        padding: 16px 18px;
-    }
-
-    .as-stat-value {
-        font-size: 22px;
     }
 
     .as-filter-bar {
@@ -847,6 +761,15 @@
         min-width: unset;
     }
 
+    .as-ticket-filter-tabs {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .as-filter-chip {
+        flex: 1 1 auto;
+        min-width: 120px;
+    }
 
     .as-table-card {
         overflow-x: auto;
@@ -880,20 +803,6 @@
     .as-image-thumb {
         width: 90px;
         height: 90px;
-    }
-}
-
-@media (max-width: 480px) {
-    .as-stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .as-quick-actions {
-        flex-direction: column;
-    }
-
-    .as-quick-btn {
-        justify-content: center;
     }
 }
 
