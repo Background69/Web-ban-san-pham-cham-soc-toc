@@ -83,13 +83,8 @@ public class ProductManagementController extends HttpServlet {
         }
 
         List<Product> allProducts = productService.getAllProducts();
-        ProductStats stats = calculateStats(allProducts);
         List<Product> products = filterProducts(allProducts, request);
 
-        request.setAttribute("totalProducts", stats.total());
-        request.setAttribute("sellingProducts", stats.selling());
-        request.setAttribute("lowOrOutProducts", stats.lowOrOut());
-        request.setAttribute("hiddenProducts", productDAO.countDeleted());
         request.setAttribute("filteredProducts", products.size());
         request.setAttribute("lowStockThreshold", LOW_STOCK_THRESHOLD);
         request.setAttribute("selectedQuery", trim(request.getParameter("q")));
@@ -424,28 +419,6 @@ public class ProductManagementController extends HttpServlet {
         }
     }
 
-    private ProductStats calculateStats(List<Product> products) {
-        if (products == null || products.isEmpty()) {
-            return new ProductStats(0, 0, 0);
-        }
-
-        int total = products.size();
-        int selling = 0;
-        int lowOrOut = 0;
-
-        for (Product product : products) {
-            int stock = product.getRemainingStock();
-            if (stock > 0) {
-                selling++;
-            }
-            if (stock <= LOW_STOCK_THRESHOLD) {
-                lowOrOut++;
-            }
-        }
-
-        return new ProductStats(total, selling, lowOrOut);
-    }
-
     private List<Product> filterProducts(List<Product> products, HttpServletRequest request) {
         List<Product> filtered = new ArrayList<>();
         if (products == null || products.isEmpty()) {
@@ -606,6 +579,4 @@ public class ProductManagementController extends HttpServlet {
                 || "image/gif".equals(contentType);
     }
 
-    private record ProductStats(int total, int selling, int lowOrOut) {
-    }
 }

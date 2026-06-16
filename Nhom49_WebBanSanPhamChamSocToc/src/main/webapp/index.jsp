@@ -23,7 +23,6 @@
 <section class="hero-section section-animate">
     <div class="hero-shell">
         <div class="hero-copy">
-            <p class="hero-eyebrow">HairGlow Care Routine</p>
             <h1>Chăm tóc chuẩn salon, mua sắm tinh gọn tại HairGlow</h1>
             <p class="hero-description">
                 Khám phá dầu gội, dầu xả, serum, mặt nạ tóc và sản phẩm tạo kiểu được chọn lọc theo từng nhu cầu chăm sóc tóc.

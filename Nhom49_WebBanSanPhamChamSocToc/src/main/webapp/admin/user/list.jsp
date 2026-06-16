@@ -39,44 +39,6 @@
                 </c:if>
             </div>
         </c:if>
-        <section class="stats-grid" id="statsGrid" aria-label="Thống kê người dùng">
-            <article class="stat-card stat-card--total">
-                <div class="stat-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></div>
-                <div class="stat-body">
-                    <span class="stat-label">Tổng người dùng</span>
-                    <strong class="stat-number" id="statTotalUsers">${totalUsers}</strong>
-                    <span class="stat-note">${newUsersThisMonth} mới trong tháng</span>
-                </div>
-            </article>
-
-            <article class="stat-card stat-card--customer">
-                <div class="stat-icon"><i class="fa-solid fa-user" aria-hidden="true"></i></div>
-                <div class="stat-body">
-                    <span class="stat-label">Khách hàng</span>
-                    <strong class="stat-number" id="statCustomerUsers">${customerUsers}</strong>
-                    <span class="stat-note">Tài khoản mua sắm</span>
-                </div>
-            </article>
-
-            <article class="stat-card stat-card--admin">
-                <div class="stat-icon"><i class="fa-solid fa-user-shield" aria-hidden="true"></i></div>
-                <div class="stat-body">
-                    <span class="stat-label">Admin</span>
-                    <strong class="stat-number" id="statAdminUsers">${adminUsers}</strong>
-                    <span class="stat-note">Tài khoản quản trị</span>
-                </div>
-            </article>
-
-            <article class="stat-card stat-card--locked">
-                <div class="stat-icon"><i class="fa-solid fa-user-lock" aria-hidden="true"></i></div>
-                <div class="stat-body">
-                    <span class="stat-label">Bị khóa</span>
-                    <strong class="stat-number" id="statLockedUsers">${lockedUsers}</strong>
-                    <span class="stat-note">Cần kiểm tra</span>
-                </div>
-            </article>
-        </section>
-
         <div class="users-sticky-tools" id="usersStickyTools">
         <section class="filter-panel" aria-label="Bộ lọc người dùng">
             <div class="filter-panel__header">
@@ -677,21 +639,6 @@
         CUSTOMER_REQUEST_RESOLVED: 'Đã xử lý theo yêu cầu khách hàng',
         OTHER: 'Lý do khác'
     };
-    document.addEventListener('DOMContentLoaded', function() {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            return;
-        }
-        const statCards = document.querySelectorAll('.stats-grid .stat-card');
-        statCards.forEach(function(card, i) {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(14px)';
-            setTimeout(function() {
-                card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 70 + i * 80);
-        });
-    });
     function openStatusConfirmModal(button) {
         const action = button ? button.getAttribute('data-action') : '';
         const userId = button ? button.getAttribute('data-user-id') : '';

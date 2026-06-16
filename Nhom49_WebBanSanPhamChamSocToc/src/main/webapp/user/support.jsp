@@ -27,9 +27,6 @@
     <section class="sp-hero" id="supportHero">
         <div class="sp-hero-inner">
             <div class="sp-hero-content">
-                <div class="sp-badge">
-                    <i class="fas fa-leaf"></i> HAIRGLOW SUPPORT
-                </div>
                 <h1>Chúng tôi ở đây<br>để <em>hỗ trợ</em> bạn</h1>
                 <p class="sp-hero-desc">Tìm câu trả lời nhanh, gửi yêu cầu hỗ trợ và theo dõi phản hồi từ HairGlow trong một không gian rõ ràng, nhẹ nhàng.</p>
                 <div class="sp-hero-cta">
@@ -122,7 +119,6 @@
         </section>
         <section class="sp-section">
             <div class="sp-section-header">
-                <span class="sp-section-badge">SUPPORT TOPICS</span>
                 <h2>Chọn vấn đề bạn cần hỗ trợ</h2>
                 <p>Nhấn vào chủ đề để chuyển tới form gửi yêu cầu hoặc xem câu hỏi liên quan</p>
             </div>
@@ -174,7 +170,6 @@
         </section>
         <section id="faq" class="sp-section">
             <div class="sp-section-header">
-                <span class="sp-section-badge">FAQ</span>
                 <h2>Câu hỏi thường gặp</h2>
                 <p>Tìm câu trả lời nhanh cho các thắc mắc phổ biến</p>
             </div>
@@ -337,7 +332,6 @@
         </section>
         <section class="sp-section">
             <div class="sp-section-header">
-                <span class="sp-section-badge">CHÍNH SÁCH</span>
                 <h2>Chính sách hỗ trợ khách hàng</h2>
                 <p>Cam kết bảo vệ quyền lợi khách hàng tại HairGlow</p>
             </div>
@@ -367,7 +361,6 @@
         </section>
         <section id="feedbackForm" class="sp-section">
             <div class="sp-section-header">
-                <span class="sp-section-badge">GỬI YÊU CẦU</span>
                 <h2>Gửi yêu cầu hỗ trợ</h2>
                 <p>Mô tả vấn đề của bạn, HairGlow sẽ phản hồi sớm nhất có thể</p>
             </div>
@@ -447,22 +440,11 @@
                         </button>
                     </form>
                 </div>
-                <div class="sp-suggestions-card" id="suggestionsCard">
-                    <h4><i class="fas fa-lightbulb" style="color: var(--sp-accent); margin-right: 6px;"></i>Có thể bạn đang tìm...</h4>
-                    <p>Gợi ý từ FAQ dựa trên nội dung bạn nhập</p>
-                    <div class="suggestion-list" id="suggestionList">
-                        <div class="suggestions-empty">
-                            <i class="fas fa-search"></i>
-                            Nhập nội dung để nhận gợi ý
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </section>
         <section class="sp-section">
             <div class="sp-section-header">
-                <span class="sp-section-badge">TICKET</span>
                 <h2>Theo dõi phản hồi</h2>
                 <p>Xem trạng thái các yêu cầu hỗ trợ bạn đã gửi</p>
             </div>

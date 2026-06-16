@@ -161,43 +161,6 @@
     transform: rotate(45deg);
 }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-    margin-bottom: 18px;
-}
-
-.stat-card {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    min-height: 126px;
-    padding: 20px;
-    overflow: hidden;
-    background: var(--users-card);
-    border: 1px solid var(--users-border);
-    border-radius: var(--users-radius);
-    box-shadow: var(--users-shadow-soft);
-    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-}
-
-.stat-card:hover {
-    border-color: var(--users-border-strong);
-    box-shadow: var(--users-shadow);
-    transform: translateY(-1px);
-}
-
-.stat-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 4px;
-    background: var(--users-champagne);
-}
-
-.stat-icon,
 .metric-icon {
     display: inline-flex;
     align-items: center;
@@ -206,44 +169,6 @@
     border-radius: var(--users-radius);
 }
 
-.stat-icon {
-    width: 48px;
-    height: 48px;
-    color: var(--users-text);
-    background: var(--users-bg-warm);
-    border: 1px solid var(--users-border);
-    font-size: 18px;
-}
-
-.stat-card--customer::before,
-.stat-card--customer .stat-icon {
-    background: var(--users-mint-soft);
-    color: #2E6F52;
-}
-
-.stat-card--admin::before,
-.stat-card--admin .stat-icon {
-    background: var(--users-purple-soft);
-    color: var(--users-purple);
-}
-
-.stat-card--locked::before,
-.stat-card--locked .stat-icon {
-    background: var(--users-danger-soft);
-    color: var(--users-danger);
-}
-
-.stat-card--total::before {
-    background: var(--users-champagne);
-}
-
-.stat-body {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.stat-label,
 .metric-label {
     color: var(--users-muted);
     font-size: 12px;
@@ -252,16 +177,6 @@
     text-transform: uppercase;
 }
 
-.stat-number {
-    margin-top: 5px;
-    color: var(--users-text);
-    font-family: var(--font-heading);
-    font-size: 34px;
-    line-height: 1;
-    letter-spacing: 0;
-}
-
-.stat-note,
 .metric-sub {
     margin-top: 7px;
     color: var(--users-subtle);
@@ -1761,10 +1676,6 @@
 }
 
 @media (max-width: 1280px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .filter-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1821,7 +1732,6 @@
         padding: 16px;
     }
 
-    .stats-grid,
     .filter-grid {
         grid-template-columns: 1fr;
     }

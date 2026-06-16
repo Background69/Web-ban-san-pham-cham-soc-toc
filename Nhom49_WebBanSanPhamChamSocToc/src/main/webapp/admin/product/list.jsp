@@ -52,29 +52,6 @@
             </div>
         </c:if>
 
-        <section class="hg-kpi-grid" aria-label="Thống kê sản phẩm">
-            <article class="hg-kpi-card hg-kpi-card--total">
-                <span class="hg-kpi-card__label">Tổng sản phẩm</span>
-                <strong>${totalProducts}</strong>
-                <span>Đang quản lý trong HairGlow</span>
-            </article>
-            <article class="hg-kpi-card hg-kpi-card--selling">
-                <span class="hg-kpi-card__label">Đang bán</span>
-                <strong>${sellingProducts}</strong>
-                <span>Còn tồn kho khả dụng</span>
-            </article>
-            <article class="hg-kpi-card hg-kpi-card--warning">
-                <span class="hg-kpi-card__label">Hết / sắp hết</span>
-                <strong>${lowOrOutProducts}</strong>
-                <span>Ngưỡng thấp: ${lowStockThreshold} sản phẩm</span>
-            </article>
-            <article class="hg-kpi-card hg-kpi-card--hidden">
-                <span class="hg-kpi-card__label">Tạm dừng / ẩn</span>
-                <strong>${hiddenProducts}</strong>
-                <span>Sản phẩm soft-delete</span>
-            </article>
-        </section>
-
         <section class="hg-toolbar-panel" aria-label="Bộ lọc sản phẩm">
             <div class="hg-toolbar-panel__header">
                 <div>

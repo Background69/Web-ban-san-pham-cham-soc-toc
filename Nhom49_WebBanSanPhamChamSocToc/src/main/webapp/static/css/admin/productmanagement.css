@@ -186,73 +186,6 @@
     color: #FFFFFF;
 }
 
-.hg-kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.hg-kpi-card {
-    position: relative;
-    display: grid;
-    gap: 7px;
-    min-height: 128px;
-    padding: 20px;
-    overflow: hidden;
-    border: 1px solid var(--hg-border);
-    border-radius: var(--hg-radius);
-    background: var(--hg-surface);
-    box-shadow: var(--hg-shadow-soft);
-    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-}
-
-.hg-kpi-card:hover {
-    border-color: var(--hg-border-strong);
-    box-shadow: var(--hg-shadow);
-    transform: translateY(-1px);
-}
-
-.hg-kpi-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 4px;
-    background: var(--hg-accent);
-}
-
-.hg-kpi-card--selling::before {
-    background: var(--hg-success);
-}
-
-.hg-kpi-card--warning::before {
-    background: var(--hg-warning);
-}
-
-.hg-kpi-card--hidden::before {
-    background: var(--hg-plum);
-}
-
-.hg-kpi-card__label {
-    color: var(--hg-muted);
-    font-size: 12px;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.hg-kpi-card strong {
-    color: var(--hg-text);
-    font-family: var(--hg-font-heading);
-    font-size: 36px;
-    line-height: 1;
-}
-
-.hg-kpi-card span:last-child {
-    color: var(--hg-subtle);
-    font-size: 13px;
-    line-height: 1.45;
-}
-
 .hg-toolbar-panel,
 .hg-table-card {
     border: 1px solid var(--hg-border);
@@ -1326,10 +1259,6 @@
 }
 
 @media (max-width: 1280px) {
-    .hg-kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .hg-filter-form {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1358,7 +1287,6 @@
         padding: 16px;
     }
 
-    .hg-kpi-grid,
     .hg-filter-form,
     .hg-form-grid,
     .hg-seo-box {
@@ -1504,10 +1432,6 @@
 }
 
 @media (max-width: 560px) {
-    .hg-kpi-card strong {
-        font-size: 30px;
-    }
-
     .hg-variant-row {
         grid-template-columns: 1fr;
     }
