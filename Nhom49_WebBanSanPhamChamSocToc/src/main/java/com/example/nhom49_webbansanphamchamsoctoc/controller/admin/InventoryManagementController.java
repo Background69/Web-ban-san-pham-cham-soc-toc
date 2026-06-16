@@ -1,11 +1,10 @@
 package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.InventoryReceiptDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.InventoryReceiptDetailDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ImportItem;
-import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
-import com.example.nhom49_webbansanphamchamsoctoc.services.InventoryReceiptDetailDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.services.InventoryService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -37,19 +36,11 @@ public class InventoryManagementController extends HttpServlet {
                          HttpServletResponse resp)
             throws ServletException, IOException {
 
-        req.setAttribute(
-                "variants",
-                inventoryService.getAllVariants()
-        );
+        req.setAttribute("variants", inventoryService.getAllVariants());
 
-        req.setAttribute(
-                "receipts",
-                inventoryService.getAllReceipts()
-        );
+        req.setAttribute("receipts", inventoryService.getAllReceipts());
 
-        req.getRequestDispatcher(
-                "/admin/inventory/inventory-list.jsp"
-        ).forward(req, resp);
+        req.getRequestDispatcher("/admin/inventory/inventory-list.jsp").forward(req, resp);
     }
 
     @Override

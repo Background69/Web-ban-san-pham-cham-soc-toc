@@ -1,4 +1,4 @@
-package com.example.nhom49_webbansanphamchamsoctoc.services;
+package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.InventoryReceiptDetail;
@@ -52,6 +52,7 @@ public class InventoryReceiptDetailDAO {
                             d.setDetailId(rs.getInt("detail_id"));
                             d.setReceiptId(rs.getInt("receipt_id"));
                             d.setProductId(rs.getInt("variant_id"));
+                            d.setProductName(rs.getString("variant_name"));
                             d.setQuantity(rs.getInt("quantity"));
                             d.setUnitCost(rs.getBigDecimal("unit_cost"));
                             return d;

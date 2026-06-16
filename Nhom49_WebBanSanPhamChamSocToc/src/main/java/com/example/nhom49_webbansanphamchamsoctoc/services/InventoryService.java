@@ -1,6 +1,7 @@
 package com.example.nhom49_webbansanphamchamsoctoc.services;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.InventoryReceiptDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.InventoryReceiptDetailDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ImportItem;
 import com.example.nhom49_webbansanphamchamsoctoc.model.InventoryReceipt;

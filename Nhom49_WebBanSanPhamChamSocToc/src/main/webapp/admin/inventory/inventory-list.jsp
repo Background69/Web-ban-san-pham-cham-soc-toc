@@ -206,6 +206,10 @@
         });
     }
 
+    function closeModal() {
+        document.getElementById("inventoryModal").style.display = "none";
+    }
+
     function openModal() {
         document.getElementById("inventoryModal").style.display = "block";
 
@@ -235,23 +239,37 @@
                 let html = `
                 <table class="table">
                     <tr>
-                        <th>Variant ID</th>
+                        <th>Sản phẩm</th>
                         <th>Số lượng</th>
                         <th>Đơn giá</th>
+                        <th>Thành tiền</th>
                     </tr>
             `;
 
+                let total = 0;
+
                 data.forEach(d => {
+                    const lineTotal = d.quantity * d.unitCost;
+                    total += lineTotal;
+
                     html += `
                     <tr>
-                        <td>${d.variantId}</td>
-                        <td>${d.quantity}</td>
-                        <td>${d.unitCost}</td>
+                        <td>\${d.variantName}</td>
+                        <td>\${d.quantity}</td>
+                        <td>\${Number(d.unitCost).toLocaleString("vi-VN")} đ</td>
+                        <td>\${lineTotal.toLocaleString("vi-VN")} đ</td>
                     </tr>
                 `;
                 });
 
                 html += `</table>`;
+
+                html += `
+                <div style="margin-top: 15px; padding: 12px; background: #f5f5f5; border-radius: 8px;">
+                    <strong>Tổng cộng:</strong>
+                    <span>\${total.toLocaleString("vi-VN")} đ</span>
+                </div>
+            `;
 
                 content.innerHTML = html;
             })

@@ -4,7 +4,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.InventoryReceiptDetail;
 import com.example.nhom49_webbansanphamchamsoctoc.services.InventoryService;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.InventoryReceiptDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
-import com.example.nhom49_webbansanphamchamsoctoc.services.InventoryReceiptDetailDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.InventoryReceiptDetailDAO;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,6 +45,7 @@ public class InventoryDetailController extends HttpServlet {
 
                 json.append("{")
                         .append("\"variantId\":").append(d.getProductId()).append(",")
+                        .append("\"variantName\":\"").append(escapeJson(d.getProductName())).append("\",")
                         .append("\"quantity\":").append(d.getQuantity()).append(",")
                         .append("\"unitCost\":").append(d.getUnitCost())
                         .append("}");
@@ -60,5 +61,10 @@ public class InventoryDetailController extends HttpServlet {
             resp.setStatus(500);
             resp.getWriter().write("{\"error\":\"Server error\"}");
         }
+    }
+
+    private String escapeJson(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 }
