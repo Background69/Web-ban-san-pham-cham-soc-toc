@@ -106,6 +106,25 @@ public class PromotionDAO implements IDAO<Promotion> {
         );
         return rows > 0;
     }
+    public boolean hasActivePromotion(int productId) {
+        String sql = """
+        SELECT COUNT(*)
+        FROM product_promotions pp
+        JOIN promotions p
+            ON pp.promotion_id = p.promotion_id
+        WHERE pp.product_id = :productId
+        AND p.is_active = true
+        """;
+
+        Integer count = jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .one()
+        );
+
+        return count > 0;
+    }
 
     private Promotion mapPromotion(ResultSet rs) throws SQLException {
         Promotion p = new Promotion();

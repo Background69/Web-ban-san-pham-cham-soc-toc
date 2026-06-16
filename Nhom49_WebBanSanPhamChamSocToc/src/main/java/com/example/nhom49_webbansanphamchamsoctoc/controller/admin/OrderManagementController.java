@@ -70,8 +70,24 @@ public class OrderManagementController extends HttpServlet {
             return;
         }
 
-        List<Order> orders = orderDAO.findAll();
+        String keyword = request.getParameter("keyword");
+        String status = request.getParameter("status");
+        System.out.println("keyword = [" + keyword + "]");
+        System.out.println("status = [" + status + "]");
+
+        List<Order> orders;
+
+        if ((keyword != null && !keyword.isBlank())
+                || (status != null && !status.isBlank())) {
+
+            orders = orderDAO.searchOrders(keyword, status);
+        } else {
+            orders = orderDAO.findAll();
+        }
+        System.out.println("orders found = " + orders.size());
         request.setAttribute("orders", orders);
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("status", status);
         request.getRequestDispatcher("/admin/order/list.jsp")
                 .forward(request, response);
     }

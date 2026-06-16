@@ -317,6 +317,44 @@ public class OrderDAO implements IDAO<Order> {
                         .orElse(List.of(0, 0, 0))
         );
     }
+    public List<Order> searchOrders(String keyword, String status) {
+        StringBuilder sql = new StringBuilder("""
+        SELECT *
+        FROM orders
+        WHERE 1 = 1
+        """);
+
+        if (keyword != null && !keyword.isBlank()) {
+            sql.append("""
+            AND (
+                order_code LIKE :keyword
+                OR shipping_full_name LIKE :keyword
+            )
+            """);
+        }
+
+        if (status != null && !status.isBlank()) {
+            sql.append(" AND order_status = :status ");
+        }
+
+        sql.append(" ORDER BY created_at DESC ");
+
+        return jdbi.withHandle(handle -> {
+            var query = handle.createQuery(sql.toString());
+
+            if (keyword != null && !keyword.isBlank()) {
+                query.bind("keyword", "%" + keyword.trim() + "%");
+            }
+
+            if (status != null && !status.isBlank()) {
+                query.bind("status", status);
+            }
+
+            return query
+                    .map((rs, ctx) -> mapOrder(rs))
+                    .list();
+        });
+    }
 
     // Helper method
     private Order mapOrder(java.sql.ResultSet rs) throws java.sql.SQLException {

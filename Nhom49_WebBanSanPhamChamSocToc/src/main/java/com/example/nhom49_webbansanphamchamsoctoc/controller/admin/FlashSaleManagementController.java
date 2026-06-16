@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.controller.admin;
 
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
+import com.example.nhom49_webbansanphamchamsoctoc.dao.PromotionDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
@@ -26,12 +27,14 @@ public class FlashSaleManagementController extends HttpServlet {
     private ProductDAO productDAO;
     private ProductVariantDAO productVariantDAO;
     private ProductService productService;
+    private PromotionDAO promotionDAO;
 
     @Override
     public void init() {
         productDAO = new ProductDAO();
         productVariantDAO = new ProductVariantDAO();
         productService = new ProductService();
+        promotionDAO = new PromotionDAO();
     }
 
     @Override
@@ -78,7 +81,10 @@ public class FlashSaleManagementController extends HttpServlet {
         List<Product> nonSaleProducts = allProducts.stream()
                 .filter(p -> !p.isOnSale())
                 .collect(Collectors.toList());
-
+        for (Product p:nonSaleProducts) {
+            boolean conflict = promotionDAO.hasActivePromotion(p.getProductId());
+            request.setAttribute("promotionConflict_" +p.getProductId(),conflict);
+        }
         request.setAttribute("saleProducts", saleProducts);
         request.setAttribute("nonSaleProducts", nonSaleProducts);
         request.getRequestDispatcher("/admin/promotion/flash-sale.jsp").forward(request, response);
@@ -110,6 +116,9 @@ public class FlashSaleManagementController extends HttpServlet {
                     int productId = Integer.parseInt(idStr);
                     Product p = productDAO.findById(productId);
                     if (p != null) {
+                        if(promotionDAO.hasActivePromotion(productId)){
+                            continue;
+                        }
                         p.setOnSale(true);
                         productDAO.update(p);
                     }
