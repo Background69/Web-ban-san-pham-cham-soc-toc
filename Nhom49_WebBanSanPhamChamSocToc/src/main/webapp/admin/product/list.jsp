@@ -463,7 +463,12 @@
                 {
                     method: 'POST',
                     body: formData,
-                    headers: { 'X-CSRF-TOKEN': document.querySelector('#editForm input[name="_csrf"]').value }
+                    headers: {
+                        'X-CSRF-TOKEN':
+                        document.querySelector('#editForm input[name="_csrf"]').value,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
                 }
             )
                 .then(res => res.json())

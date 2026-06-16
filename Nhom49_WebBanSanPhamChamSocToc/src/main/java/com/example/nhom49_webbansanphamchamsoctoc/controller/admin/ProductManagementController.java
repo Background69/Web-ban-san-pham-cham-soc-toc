@@ -54,7 +54,6 @@ public class ProductManagementController extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
-        System.out.println("ACTION = " + action);
 
         if ("stats".equals(action)) {
 
