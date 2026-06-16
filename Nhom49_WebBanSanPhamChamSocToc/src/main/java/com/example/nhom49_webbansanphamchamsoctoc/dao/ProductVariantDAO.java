@@ -139,9 +139,7 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Hoàn trả stock khi hủy đơn hàng
-     */
+
     public boolean incrementStock(int variantId, int quantity) {
         if (quantity <= 0) {
             return true;
