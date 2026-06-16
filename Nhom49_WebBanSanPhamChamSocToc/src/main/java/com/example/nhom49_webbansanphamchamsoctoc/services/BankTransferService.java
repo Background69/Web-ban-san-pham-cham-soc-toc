@@ -7,13 +7,15 @@ import com.example.nhom49_webbansanphamchamsoctoc.database.DBProperties;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Order;
 import com.example.nhom49_webbansanphamchamsoctoc.model.OrderStatusHistory;
 import com.example.nhom49_webbansanphamchamsoctoc.model.PaymentTransaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 public class BankTransferService {
-    private static final int QR_CODE_URL_COLUMN_LIMIT = 1000;
+    private static final Logger log = LoggerFactory.getLogger(BankTransferService.class);
 
     private final PaymentTransactionDAO paymentTransactionDAO;
     private final OrderDAO orderDAO;
@@ -101,14 +103,21 @@ public class BankTransferService {
 
         if (!qrResult.isSuccess()) {
             lastError = vietQRService.getLastError();
+            log.warn("VietQR generateQr failed for transaction {}: {}", transaction.getTransactionId(), lastError);
             return false;
         }
 
         String qrCodeUrl = selectPersistableQrCode(qrResult);
         if (isBlank(qrCodeUrl)) {
-            lastError = "Mã QR VietQR vượt quá giới hạn lưu trữ hiện tại. Vui lòng chuyển khoản thủ công theo thông tin hiển thị.";
+            lastError = "VietQR không trả về dữ liệu QR khả dụng. Vui lòng chuyển khoản thủ công theo thông tin hiển thị.";
+            log.warn("VietQR returned no usable QR data for transaction {}", transaction.getTransactionId());
             return false;
         }
+
+        log.info("Saving QR to transaction {}: type={}, length={}",
+                transaction.getTransactionId(),
+                qrCodeUrl.startsWith("data:image") ? "base64-image" : "raw-qr-data",
+                qrCodeUrl.length());
 
         transaction.setQrCodeUrl(qrCodeUrl);
         boolean updated;
@@ -117,6 +126,7 @@ public class BankTransferService {
         } catch (RuntimeException e) {
             transaction.setQrCodeUrl(null);
             lastError = "Không thể lưu mã QR vào giao dịch: " + e.getMessage();
+            log.error("Failed to persist QR for transaction {}", transaction.getTransactionId(), e);
             return false;
         }
 
@@ -134,20 +144,21 @@ public class BankTransferService {
         }
 
         String qrDataUrl = qrResult.getQrDataUrl();
-        if (fitsQrColumn(qrDataUrl)) {
+        if (!isBlank(qrDataUrl)) {
+            if (!qrDataUrl.startsWith("data:") && !qrDataUrl.startsWith("http")) {
+                qrDataUrl = "data:image/png;base64," + qrDataUrl;
+            }
+            log.debug("Using qrDataUrl (base64 image), length={}", qrDataUrl.length());
             return qrDataUrl;
         }
 
         String qrCode = qrResult.getQrCode();
-        if (fitsQrColumn(qrCode)) {
+        if (!isBlank(qrCode)) {
+            log.debug("Using qrCode (raw data), length={}", qrCode.length());
             return qrCode;
         }
 
         return null;
-    }
-
-    private boolean fitsQrColumn(String value) {
-        return !isBlank(value) && value.length() <= QR_CODE_URL_COLUMN_LIMIT;
     }
 
     public PaymentTransaction getTransactionForUser(int transactionId, int userId) {

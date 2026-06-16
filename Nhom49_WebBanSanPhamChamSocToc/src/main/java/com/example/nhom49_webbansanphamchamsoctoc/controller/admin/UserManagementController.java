@@ -106,29 +106,7 @@ public class UserManagementController extends HttpServlet {
 
         List<User> users = userService.getAllUsers();
 
-        int totalUsers = users.size();
-        int adminUsers = (int) users.stream().filter(this::isAdminRole).count();
-        int customerUsers = totalUsers - adminUsers;
-        int lockedUsers = (int) users.stream().filter(u -> !u.isActive()).count();
-
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
-        cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        cal.set(java.util.Calendar.MINUTE, 0);
-        cal.set(java.util.Calendar.SECOND, 0);
-        cal.set(java.util.Calendar.MILLISECOND, 0);
-        java.util.Date startOfMonth = cal.getTime();
-
-        int newUsersThisMonth = (int) users.stream()
-                .filter(u -> u.getCreatedAt() != null && u.getCreatedAt().after(startOfMonth))
-                .count();
-
         request.setAttribute("users", users);
-        request.setAttribute("totalUsers", totalUsers);
-        request.setAttribute("customerUsers", customerUsers);
-        request.setAttribute("adminUsers", adminUsers);
-        request.setAttribute("newUsersThisMonth", newUsersThisMonth);
-        request.setAttribute("lockedUsers", lockedUsers);
         request.getRequestDispatcher("/admin/user/list.jsp")
                 .forward(request, response);
     }

@@ -28,8 +28,10 @@
         <li class="${param.activeMenu == 'flash-sale' ? 'active' : ''}">
             <a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm giá</a>
         </li>
+        <li class="${param.activeMenu == 'support' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/admin/support">Hỗ trợ khách hàng</a>
+        </li>
     </ul>
-
     <a class="view-site" href="${pageContext.request.contextPath}/">
         Quay lại Website
     </a>

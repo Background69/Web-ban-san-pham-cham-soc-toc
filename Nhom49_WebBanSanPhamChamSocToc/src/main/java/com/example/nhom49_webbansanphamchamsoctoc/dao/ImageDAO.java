@@ -1,9 +1,8 @@
 package com.example.nhom49_webbansanphamchamsoctoc.dao;
-
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Image;
 import org.jdbi.v3.core.Jdbi;
-
+import java.util.List;
 public class ImageDAO {
     private final Jdbi jdbi;
 
@@ -35,6 +34,18 @@ public class ImageDAO {
                         ))
                         .findFirst()
                         .orElse(null)
+        );
+    }
+
+    public List<Image> findHomeBanners() {
+        return jdbi.withHandle(handle ->
+                handle.createQuery("SELECT id, title, image_url FROM image WHERE title LIKE 'banner-%' ORDER BY id ASC")
+                        .map((rs, ctx) -> new Image(
+                                rs.getInt("id"),
+                                rs.getString("title"),
+                                rs.getString("image_url")
+                        ))
+                        .list()
         );
     }
 

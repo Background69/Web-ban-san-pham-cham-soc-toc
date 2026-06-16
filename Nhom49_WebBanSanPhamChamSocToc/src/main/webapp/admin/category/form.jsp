@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
             background: #f6f7fb;
             margin: 0
         }

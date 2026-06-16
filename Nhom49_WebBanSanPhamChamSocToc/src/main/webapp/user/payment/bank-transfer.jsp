@@ -90,6 +90,38 @@
             background: #fff;
         }
 
+        .bank-transfer-qr-image {
+            display: block;
+            width: 280px;
+            height: 280px;
+            max-width: 100%;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .bank-transfer-qr-render {
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bank-transfer-qr-render canvas,
+        .bank-transfer-qr-render img {
+            display: block;
+            width: 280px;
+            height: 280px;
+            max-width: 100%;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .qr-empty-message {
+            color: #b4444e;
+            font-weight: 700;
+            text-align: center;
+        }
+
         .demo-note {
             border: 1px dashed #f0ad4e;
             background: #fff9ed;
@@ -102,6 +134,22 @@
         .transfer-content {
             font-weight: 700;
             color: #1f2937;
+        }
+
+        .qr-debug-details {
+            margin-top: 12px;
+            text-align: left;
+        }
+
+        .qr-debug-details summary {
+            cursor: pointer;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .qr-debug-details textarea {
+            margin-top: 6px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -206,24 +254,25 @@
                             <c:when test="${not empty paymentTransaction.qrCodeUrl
                                 && (fn:startsWith(paymentTransaction.qrCodeUrl, 'data:image')
                                 || fn:startsWith(paymentTransaction.qrCodeUrl, 'http'))}">
-                                <img src="${paymentTransaction.qrCodeUrl}" alt="QR thanh toán">
+                                <img class="bank-transfer-qr-image"
+                                     src="${paymentTransaction.qrCodeUrl}"
+                                     alt="Mã QR chuyển khoản đơn hàng ${not empty order ? order.orderCode : paymentTransaction.transactionId}">
                                 <div class="mt-2 text-muted">Quét mã QR để chuyển khoản</div>
                             </c:when>
                             <c:when test="${not empty paymentTransaction.qrCodeUrl}">
-                                <div class="text-start">
-                                    <div class="text-center">
-                                        <canvas id="rawQrCanvas" width="300" height="300"></canvas>
-                                        <div class="mt-2 text-muted">Quét mã QR để chuyển khoản</div>
-                                    </div>
-                                    <div id="rawQrFallback" class="mt-3">
-                                        <p class="mb-1"><strong>Dữ liệu QR:</strong></p>
-                                        <textarea id="rawQrData" class="form-control" rows="6"
-                                                  readonly><c:out value="${paymentTransaction.qrCodeUrl}"/></textarea>
-                                    </div>
+                                <div id="qrCodeContainer"
+                                     class="bank-transfer-qr-render"
+                                     data-qr="${fn:escapeXml(paymentTransaction.qrCodeUrl)}">
                                 </div>
+                                <div class="mt-2 text-muted">Quét mã QR để chuyển khoản</div>
+                                <details class="qr-debug-details">
+                                    <summary>Xem dữ liệu QR (debug)</summary>
+                                    <textarea class="form-control" rows="4"
+                                              readonly><c:out value="${paymentTransaction.qrCodeUrl}"/></textarea>
+                                </details>
                             </c:when>
                             <c:otherwise>
-                                <div class="text-muted">Chưa tạo được ảnh QR. Bạn vẫn có thể chuyển khoản thủ công bằng thông tin bên trái.</div>
+                                <p class="qr-empty-message">Không tạo được mã QR. Vui lòng chuyển khoản thủ công theo thông tin bên trái.</p>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -234,25 +283,31 @@
 </main>
 
 <jsp:include page="/layout/footer.jsp"/>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/qrcode.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var qrData = document.getElementById('rawQrData');
-        var qrCanvas = document.getElementById('rawQrCanvas');
-        var qrFallback = document.getElementById('rawQrFallback');
+        var qrContainer = document.getElementById('qrCodeContainer');
+        if (!qrContainer) return;
 
-        if (!qrData || !qrCanvas || !window.QRCode) {
+        var qrData = qrContainer.dataset.qr;
+        if (!qrData || !qrData.trim()) {
+            qrContainer.innerHTML = '<p class="qr-empty-message">Không có dữ liệu QR.</p>';
             return;
         }
 
-        QRCode.toCanvas(qrCanvas, qrData.value, {width: 300, margin: 1}, function (error) {
-            if (error) {
-                qrCanvas.style.display = 'none';
-                return;
-            }
-            if (qrFallback) {
-                qrFallback.style.display = 'none';
-            }
+        if (typeof QRCode === 'undefined') {
+            qrContainer.innerHTML = '<p class="qr-empty-message">Thiếu thư viện tạo mã QR.</p>';
+            console.error('QRCode library is missing');
+            return;
+        }
+
+        qrContainer.innerHTML = '';
+
+        new QRCode(qrContainer, {
+            text: qrData.trim(),
+            width: 280,
+            height: 280,
+            correctLevel: QRCode.CorrectLevel.M
         });
     });
 </script>
