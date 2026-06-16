@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,6 +21,7 @@ import java.util.Deque;
 import java.util.Map;
 
 public class VietQRService {
+    private static final Logger log = LoggerFactory.getLogger(VietQRService.class);
     private static final String VIETQR_API_URL = "https://api.vietqr.io/v2/generate";
 
     private final DBProperties dbProperties;
@@ -99,14 +102,21 @@ public class VietQRService {
             String qrCode = extractJsonString(body, "qrCode");
             String desc = extractJsonString(body, "desc");
 
+            log.info("VietQR response: code={}, desc={}, qrDataURL length={}, qrCode length={}",
+                    code, desc,
+                    qrDataUrl != null ? qrDataUrl.length() : 0,
+                    qrCode != null ? qrCode.length() : 0);
+
             if (isBlank(qrDataUrl) && isBlank(qrCode)) {
                 lastError = "VietQR không trả về dữ liệu QR";
+                log.warn("VietQR returned no QR data. Full response body length: {}", body.length());
                 return QrGenerationResult.failed(lastError);
             }
 
             return QrGenerationResult.success(qrDataUrl, qrCode, desc);
         } catch (Exception e) {
             lastError = "Không thể kết nối đến VietQR API: " + e.getMessage();
+            log.error("VietQR API call failed", e);
             return QrGenerationResult.failed(lastError);
         }
     }
