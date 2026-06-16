@@ -129,6 +129,7 @@
         previewImg.style.display = "none";
 
         fileInfo.textContent = "";
+        document.getElementById("modalTitle").textContent = "Thêm thương hiệu";
 
         modal.style.display = "flex";
     };
@@ -205,14 +206,27 @@
 
                     previewImg.style.display = "block";
                 }
+                btn.addEventListener("click", () => {
 
+                    modal.style.display = "flex";
+
+                    document.getElementById("modalTitle").textContent = "Cập nhật thương hiệu";
+
+                    document.getElementById("brandId").value = btn.dataset.id;
+                    document.getElementById("brandName").value = btn.dataset.name;
+                    document.getElementById("brandSlug").value = btn.dataset.slug;
+                    document.getElementById("origin").value = btn.dataset.origin;
+                    document.getElementById("shortDescription").value = btn.dataset.short;
+                    document.getElementById("fullDescription").value = btn.dataset.full;
+
+                    if (btn.dataset.logo) {
+                        previewImg.src = btn.dataset.logo;
+                        previewImg.style.display = "block";
+                    }
+                });
             });
 
         });
-    document.getElementById("modalTitle").textContent =
-        "Thêm thương hiệu";
-    document.getElementById("modalTitle").textContent =
-        "Cập nhật thương hiệu";
 </script>
 </body>
 
