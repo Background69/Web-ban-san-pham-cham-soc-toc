@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/form.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/admin/productmanagement.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div class="container">
@@ -43,7 +44,6 @@
                 <th>Danh mục</th>
                 <th>Xuất xứ</th>
                 <th>Giá</th>
-                <th>Tồn kho</th>
                 <th>Hành động</th>
             </tr>
             </thead>
@@ -106,16 +106,6 @@
                             <c:otherwise>-</c:otherwise>
                         </c:choose>
                     </td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${p.remainingStock > 0}">
-                                <span class="stock-ok">${p.remainingStock} sản phẩm</span>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="stock-empty">${p.remainingStock} Hết hàng </span>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
 
                     <td class="action-cell">
                         <button class="action-btn edit" onclick="openEditModal(${p.productId})">Sửa</button>
@@ -123,13 +113,18 @@
                                 onclick="if(confirm('Xoá sản phẩm?'))location.href='${pageContext.request.contextPath}/admin/products?action=delete&id=${p.productId}">
                             Xoá
                         </button>
+                        <button class="action-btn stats"
+                                onclick="openStatsModal(${p.productId})">
+                            Thống kê
+                        </button>
+                    </td>
                     </td>
                 </tr>
             </c:forEach>
 
             <c:if test="${empty products}">
                 <tr>
-                    <td colspan="10" style="text-align:center">Không có sản phẩm</td>
+                    <td colspan="9" style="text-align:center">Không có sản phẩm</td>
                 </tr>
             </c:if>
             </tbody>
@@ -345,6 +340,33 @@
         </form>
     </div>
 </div>
+<div id="statsModal" class="modal">
+    <div class="modal-content stats-modal">
+        <button class="close" type="button" onclick="closeStatsModal()">&times;</button>
+        <div class="modal-body">
+
+            <h3 id="productName" class="product-title"></h3>
+
+            <div class="stats-summary">
+
+                <div class="stat-card">
+                    <span class="stat-label">Tồn kho hiện tại</span>
+                    <span class="stat-value" id="currentStock">0</span>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Đã bán</span>
+                    <span class="stat-value" id="totalSold">0</span>
+                </div>
+
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function openModal() {
         document.getElementById("productModal").style.display = "block";
@@ -424,6 +446,7 @@
         } else {
             alert('Phải có ít nhất 1 biến thể!');
         }
+    }
         document.getElementById("editForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
@@ -458,7 +481,68 @@
                     alert("Lỗi server");
                 });
         });
+    let salesChart = null;
+
+    function openStatsModal(productId){
+
+        fetch(
+            '${pageContext.request.contextPath}/admin/products?action=stats&id=' + productId
+        )
+            .then(res => res.json())
+            .then(data => {
+
+                document.getElementById("statsModal").style.display = "block";
+
+                document.getElementById("productName").innerText =
+                    data.productName;
+
+                document.getElementById("currentStock").innerText =
+                    data.currentStock;
+
+                document.getElementById("totalSold").innerText =
+                    data.totalSold;
+
+                const ctx = document.getElementById("salesChart");
+
+                if(salesChart){
+                    salesChart.destroy();
+                }
+
+                salesChart = new Chart(ctx,{
+                    type:'line',
+                    data:{
+                        labels:data.months,
+                        datasets:[{
+                            label:'Số lượng bán',
+                            data:data.quantities,
+                            tension:0.4,
+                            fill:true,
+                            borderWidth:3
+                        }]
+                    },
+                    options:{
+                        responsive:true,
+                        maintainAspectRatio:false,
+                        plugins:{
+                            legend:{
+                                position:'top'
+                            }
+                        }
+                    }
+                });
+
+            })
+            .catch(err=>{
+                console.error(err);
+            });
     }
+
+    function closeStatsModal(){
+        document.getElementById("statsModal").style.display="none";
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeStatsModal();
+    });
 </script>
 
 </body>

@@ -71,6 +71,62 @@ public class OrderItemDAO implements IDAO<OrderItem> {
                 .findFirst()
                 .orElse(-1));
     }
+    public int getTotalSoldByProduct(int productId) {
+
+        String sql = """
+        SELECT COALESCE(SUM(oi.quantity),0)
+        FROM order_items oi
+        JOIN orders o
+            ON oi.order_id = o.order_id
+        WHERE oi.product_id = :productId
+          AND o.order_status = 'completed'
+        """;
+
+        return jdbi.withHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .findFirst()
+                        .orElse(0)
+        );
+    }
+    public List<Integer> getSalesByMonth(int productId) {
+
+        String sql = """
+        SELECT MONTH(o.created_at) month,
+               SUM(oi.quantity) total
+        FROM order_items oi
+        JOIN orders o
+             ON oi.order_id = o.order_id
+        WHERE oi.product_id = :productId
+          AND o.order_status = 'completed'
+        GROUP BY MONTH(o.created_at)
+        ORDER BY MONTH(o.created_at)
+        """;
+
+        List<Integer> result =
+                new java.util.ArrayList<>(
+                        java.util.Collections.nCopies(12, 0)
+                );
+
+        jdbi.useHandle(handle ->
+                handle.createQuery(sql)
+                        .bind("productId", productId)
+                        .mapToMap()
+                        .forEach(row -> {
+
+                            int month =
+                                    ((Number) row.get("month")).intValue();
+
+                            int total =
+                                    ((Number) row.get("total")).intValue();
+
+                            result.set(month - 1, total);
+                        })
+        );
+
+        return result;
+    }
 
     @Override
     public boolean update(OrderItem item) {
