@@ -15,6 +15,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 import com.example.nhom49_webbansanphamchamsoctoc.util.CloudinaryConfig;
 import com.example.nhom49_webbansanphamchamsoctoc.util.SlugUtil;
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,17 +27,18 @@ import jakarta.servlet.http.Part;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Map;
-import java.util.List;
-import java.util.UUID;
-
-import com.google.gson.Gson;
-
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 @MultipartConfig
 @WebServlet(name = "ProductManagementController", urlPatterns = "/admin/products")
 public class ProductManagementController extends HttpServlet {
+    private static final int LOW_STOCK_THRESHOLD = 10;
 
     private final ProductDAO productDAO = new ProductDAO();
     private final ProductVariantDAO productVariantDAO = new ProductVariantDAO();
@@ -91,48 +93,12 @@ public class ProductManagementController extends HttpServlet {
         }
 
         if ("get".equals(action)) {
-            int id = parseIntSafe(request.getParameter("id"));
-
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-
-            if (id <= 0) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\":\"Invalid product id\"}");
-                return;
-            }
-
-            Product product = productService.getProductById(id);
-
-            if (product == null) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().write("{\"error\":\"Product not found\"}");
-                return;
-            }
-
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("id", product.getProductId());
-            data.put("productId", product.getProductId());
-            data.put("name", product.getProductName());
-            data.put("slug", product.getProductSlug());
-            data.put("origin", product.getOrigin());
-            data.put("categoryId", product.getCategoryId());
-            data.put("brandId", product.getBrandId());
-            data.put("shortDescription", product.getShortDescription());
-            data.put("fullDescription", product.getFullDescription());
-            data.put("ingredients", product.getIngredients());
-            data.put("usageInstructions", product.getUsageInstructions());
-
-            response.getWriter().write(gson.toJson(data));
+            writeProductJson(request, response);
             return;
         }
 
-        if ("delete".equals(action)) {
-            int id = parseIntSafe(request.getParameter("id"));
-            if (id > 0) {
-                productDAO.softDelete(id);
-            }
-            response.sendRedirect(request.getContextPath() + "/admin/products");
+        if ("delete".equals(action) || "bulkDelete".equals(action)) {
+            response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
             return;
         }
 
@@ -155,7 +121,17 @@ public class ProductManagementController extends HttpServlet {
             return;
         }
 
-        List<Product> products = productService.getAllProducts();
+        List<Product> allProducts = productService.getAllProducts();
+        List<Product> products = filterProducts(allProducts, request);
+
+        request.setAttribute("filteredProducts", products.size());
+        request.setAttribute("lowStockThreshold", LOW_STOCK_THRESHOLD);
+        request.setAttribute("selectedQuery", trim(request.getParameter("q")));
+        request.setAttribute("selectedStatus", trim(request.getParameter("status")));
+        request.setAttribute("selectedCategoryId", trim(request.getParameter("categoryId")));
+        request.setAttribute("selectedBrandId", trim(request.getParameter("brandId")));
+        request.setAttribute("selectedStock", trim(request.getParameter("stock")));
+        request.setAttribute("selectedAlpha", trim(request.getParameter("alpha")).toUpperCase(Locale.ROOT));
         request.setAttribute("products", products);
 
         request.getRequestDispatcher("/admin/product/list.jsp").forward(request, response);
@@ -166,6 +142,32 @@ public class ProductManagementController extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+
+        if ("delete".equals(action)) {
+            int id = parseIntSafe(request.getParameter("id"));
+            if (id > 0) {
+                productDAO.softDelete(id);
+                response.sendRedirect(request.getContextPath() + "/admin/products?deleted=1");
+                return;
+            }
+            response.sendRedirect(request.getContextPath() + "/admin/products?err=1");
+            return;
+        }
+
+        if ("bulkDelete".equals(action)) {
+            String[] ids = request.getParameterValues("selectedProductIds");
+            int deletedCount = 0;
+            if (ids != null) {
+                for (String rawId : ids) {
+                    int id = parseIntSafe(rawId);
+                    if (id > 0 && productDAO.softDelete(id)) {
+                        deletedCount++;
+                    }
+                }
+            }
+            response.sendRedirect(request.getContextPath() + "/admin/products?deleted=" + deletedCount);
+            return;
+        }
 
         if ("create".equals(action)) {
             try {
@@ -180,7 +182,7 @@ public class ProductManagementController extends HttpServlet {
                 saveVariantsFromRequest(request, newId);
                 saveImageIfPresent(request, newId);
 
-                response.sendRedirect(request.getContextPath() + "/admin/products");
+                response.sendRedirect(request.getContextPath() + "/admin/products?created=1");
                 return;
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -191,7 +193,6 @@ public class ProductManagementController extends HttpServlet {
 
         if ("edit".equals(action)) {
             try {
-
                 int id = parseIntSafe(request.getParameter("id"));
 
                 Product p = productFromRequest(request);
@@ -204,37 +205,116 @@ public class ProductManagementController extends HttpServlet {
 
                 saveImageIfPresent(request, id);
 
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-
-                response.getWriter().write("""
-            {
-                "success": true
-            }
-        """);
-
+                if (isJsonRequest(request)) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("""
+                            {
+                                "success": true
+                            }
+                            """);
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/admin/products?updated=1");
+                }
                 return;
-
             } catch (Exception ex) {
-
                 ex.printStackTrace();
 
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-
-                response.getWriter().write("""
-            {
-                "success": false,
-                "message": "Lỗi cập nhật sản phẩm"
-            }
-        """);
-
+                if (isJsonRequest(request)) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("""
+                            {
+                                "success": false,
+                                "message": "Lỗi cập nhật sản phẩm"
+                            }
+                            """);
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/admin/products?err=1");
+                }
                 return;
             }
         }
 
 
         response.sendRedirect(request.getContextPath() + "/admin/products");
+    }
+
+    private void writeProductJson(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = parseIntSafe(request.getParameter("id"));
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        if (id <= 0) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Invalid product id\"}");
+            return;
+        }
+
+        Product product = productService.getProductById(id);
+
+        if (product == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.getWriter().write("{\"error\":\"Product not found\"}");
+            return;
+        }
+
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("id", product.getProductId());
+        data.put("productId", product.getProductId());
+        data.put("name", product.getProductName());
+        data.put("slug", product.getProductSlug());
+        data.put("origin", product.getOrigin());
+        data.put("categoryId", product.getCategoryId());
+        data.put("brandId", product.getBrandId());
+        data.put("shortDescription", product.getShortDescription());
+        data.put("fullDescription", product.getFullDescription());
+        data.put("ingredients", product.getIngredients());
+        data.put("usageInstructions", product.getUsageInstructions());
+        data.put("isFeatured", product.isFeatured());
+        data.put("isOnSale", product.isOnSale());
+        data.put("primaryImageUrl", product.getPrimaryImageUrl());
+        data.put("variants", buildVariantJson(product));
+        data.put("images", buildImageJson(product));
+
+        response.getWriter().write(gson.toJson(data));
+    }
+
+    private List<Map<String, Object>> buildVariantJson(Product product) {
+        List<Map<String, Object>> items = new ArrayList<>();
+        if (product.getVariants() == null) {
+            return items;
+        }
+
+        for (ProductVariant variant : product.getVariants()) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("variantId", variant.getVariantId());
+            item.put("variantName", variant.getVariantName());
+            item.put("sku", variant.getSku());
+            item.put("originalPrice", variant.getOriginalPrice());
+            item.put("salePrice", variant.getSalePrice());
+            item.put("stockQuantity", variant.getStockQuantity());
+            item.put("isDefault", variant.isDefault());
+            items.add(item);
+        }
+        return items;
+    }
+
+    private List<Map<String, Object>> buildImageJson(Product product) {
+        List<Map<String, Object>> items = new ArrayList<>();
+        if (product.getImages() == null) {
+            return items;
+        }
+
+        for (ProductImage image : product.getImages()) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("imageId", image.getImageId());
+            item.put("imageUrl", image.getImageUrl());
+            item.put("isPrimary", image.isPrimary());
+            items.add(item);
+        }
+        return items;
     }
 
     private void saveImageIfPresent(HttpServletRequest request, int productId) throws Exception {
@@ -325,7 +405,7 @@ public class ProductManagementController extends HttpServlet {
         if (names == null || names.length == 0) {
             ProductVariant v = new ProductVariant();
             v.setProductId(productId);
-            v.setVariantName("Mac dinh");
+            v.setVariantName("Mặc định");
             v.setOriginalPrice(BigDecimal.ONE);
             v.setSalePrice(null);
             v.setDiscountPercent(0);
@@ -338,7 +418,7 @@ public class ProductManagementController extends HttpServlet {
         for (int i = 0; i < names.length; i++) {
             String name = trim(names[i]);
             if (name.isEmpty()) {
-                name = "Mac dinh";
+                name = "Mặc định";
             }
 
             String sku = trim(skus != null && i < skus.length ? skus[i] : null);
@@ -377,6 +457,97 @@ public class ProductManagementController extends HttpServlet {
 
             productVariantDAO.insert(v);
         }
+    }
+
+    private List<Product> filterProducts(List<Product> products, HttpServletRequest request) {
+        List<Product> filtered = new ArrayList<>();
+        if (products == null || products.isEmpty()) {
+            return filtered;
+        }
+
+        String keyword = trim(request.getParameter("q"));
+        String status = trim(request.getParameter("status"));
+        String stockFilter = trim(request.getParameter("stock"));
+        String alpha = trim(request.getParameter("alpha"));
+        int categoryId = parseIntSafe(request.getParameter("categoryId"));
+        int brandId = parseIntSafe(request.getParameter("brandId"));
+
+        for (Product product : products) {
+            if (!matchesKeyword(product, keyword)) {
+                continue;
+            }
+            if (categoryId > 0 && (product.getCategoryId() == null || product.getCategoryId().intValue() != categoryId)) {
+                continue;
+            }
+            if (brandId > 0 && (product.getBrandId() == null || product.getBrandId().intValue() != brandId)) {
+                continue;
+            }
+            if (!matchesStatus(product, status)) {
+                continue;
+            }
+            if (!matchesStock(product, stockFilter)) {
+                continue;
+            }
+            if (!matchesAlpha(product, alpha)) {
+                continue;
+            }
+            filtered.add(product);
+        }
+
+        return filtered;
+    }
+
+    private boolean matchesKeyword(Product product, String keyword) {
+        if (keyword.isEmpty()) {
+            return true;
+        }
+
+        ProductVariant variant = product.getDefaultVariant();
+        String haystack = String.join(" ",
+                safe(product.getProductName()),
+                safe(product.getProductSlug()),
+                safe(product.getBrandName()),
+                safe(product.getCategoryName()),
+                variant != null ? safe(variant.getSku()) : "");
+        return normalizeForSearch(haystack).contains(normalizeForSearch(keyword));
+    }
+
+    private boolean matchesStatus(Product product, String status) {
+        if (status.isEmpty()) {
+            return true;
+        }
+
+        return switch (status) {
+            case "selling" -> product.getRemainingStock() > 0;
+            case "out" -> product.getRemainingStock() <= 0;
+            case "sale" -> product.isOnSale();
+            default -> true;
+        };
+    }
+
+    private boolean matchesStock(Product product, String stockFilter) {
+        if (stockFilter.isEmpty()) {
+            return true;
+        }
+
+        int stock = product.getRemainingStock();
+        return switch (stockFilter) {
+            case "low" -> stock > 0 && stock <= LOW_STOCK_THRESHOLD;
+            case "out" -> stock <= 0;
+            default -> true;
+        };
+    }
+
+    private boolean matchesAlpha(Product product, String alpha) {
+        if (alpha.isEmpty()) {
+            return true;
+        }
+
+        String normalizedName = normalizeForSearch(product.getProductName());
+        if (normalizedName.isEmpty()) {
+            return false;
+        }
+        return normalizedName.substring(0, 1).equals(alpha.substring(0, 1).toUpperCase(Locale.ROOT));
     }
 
     private int parseIntSafe(String s) {
@@ -422,10 +593,30 @@ public class ProductManagementController extends HttpServlet {
         return s == null ? "" : s.trim();
     }
 
+    private String safe(String value) {
+        return value == null ? "" : value;
+    }
+
+    private String normalizeForSearch(String value) {
+        String normalized = Normalizer.normalize(safe(value), Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replace('đ', 'd')
+                .replace('Đ', 'D');
+        return normalized.toLowerCase(Locale.ROOT).trim();
+    }
+
+    private boolean isJsonRequest(HttpServletRequest request) {
+        String requestedWith = request.getHeader("X-Requested-With");
+        String accept = request.getHeader("Accept");
+        return "XMLHttpRequest".equalsIgnoreCase(requestedWith)
+                || (accept != null && accept.toLowerCase(Locale.ROOT).contains("application/json"));
+    }
+
     private boolean isAllowedImageType(String contentType) {
         return "image/jpeg".equals(contentType)
                 || "image/png".equals(contentType)
                 || "image/webp".equals(contentType)
                 || "image/gif".equals(contentType);
     }
+
 }

@@ -278,6 +278,14 @@ public class ProductDAO implements IDAO<Product> {
                 .orElse(0));
     }
 
+    public int countDeleted() {
+        String sql = "SELECT COUNT(*) FROM products WHERE is_deleted = TRUE";
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .mapTo(Integer.class)
+                .findFirst()
+                .orElse(0));
+    }
+
     public boolean updateRating(int productId, double avgRating, int reviewCount) {
         String sql = "UPDATE products SET average_rating = :averageRating, review_count = :reviewCount WHERE product_id = :productId";
         int rowsAffected = jdbi.withHandle(handle -> handle.createUpdate(sql)

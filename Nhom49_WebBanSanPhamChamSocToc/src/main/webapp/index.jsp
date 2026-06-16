@@ -23,7 +23,6 @@
 <section class="hero-section section-animate">
     <div class="hero-shell">
         <div class="hero-copy">
-            <p class="hero-eyebrow">HairGlow Care Routine</p>
             <h1>Chăm tóc chuẩn salon, mua sắm tinh gọn tại HairGlow</h1>
             <p class="hero-description">
                 Khám phá dầu gội, dầu xả, serum, mặt nạ tóc và sản phẩm tạo kiểu được chọn lọc theo từng nhu cầu chăm sóc tóc.
@@ -57,25 +56,28 @@
 
         <div class="hero-visual-stack">
             <div class="banner-container">
-                <div class="slider" id="banner-slider">
+                <c:set var="bannerCount" value="${fn:length(requestScope.activeBanners)}"/>
+                <div class="slider" id="homeBannerSlider" data-autoplay="true" data-interval="4500" tabindex="0">
                     <div class="banner-slides">
                         <c:choose>
-                            <c:when test="${not empty requestScope.activeBanners}">
+                            <c:when test="${bannerCount > 0}">
                                 <c:forEach var="banner" items="${requestScope.activeBanners}" varStatus="status">
-                                    <div class="item ${status.first ? 'active' : ''}" id="slide-${status.index + 1}">
+                                    <div class="item ${status.first ? 'active' : ''}">
                                         <img
                                                 alt="<c:out value='${banner.title}'/>"
                                                 class="banner-image"
-                                                src="<c:out value='${banner.imageUrl}'/>">
+                                                src="<c:out value='${banner.imageUrl}'/>"
+                                                loading="eager">
                                     </div>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
-                                <div class="item active hero-fallback-slide" id="slide-fallback">
+                                <div class="item active hero-fallback-slide">
                                     <img
                                             alt="HairGlow routine chăm sóc tóc"
                                             class="banner-image"
-                                            src="${pageContext.request.contextPath}/static/assets/images/banner2.png">
+                                            src="${pageContext.request.contextPath}/static/assets/images/banner2.png"
+                                            loading="eager">
                                     <div class="hero-fallback-copy">
                                         <span>Routine Lab</span>
                                         <strong>Chọn đúng sản phẩm cho từng tình trạng tóc</strong>
@@ -85,13 +87,24 @@
                             </c:otherwise>
                         </c:choose>
                     </div>
-                    <button aria-label="Slide trước" class="nav prev" type="button">
-                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
-                    </button>
-                    <button aria-label="Slide sau" class="nav next" type="button">
-                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                    </button>
-                    <div aria-label="Chuyển slide" class="slider-dots" role="tablist"></div>
+                    <c:if test="${bannerCount > 1}">
+                        <button aria-label="Banner trước" class="nav prev" type="button">
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <button aria-label="Banner tiếp theo" class="nav next" type="button">
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                        <div aria-label="Chọn banner" class="slider-dots">
+                            <c:forEach var="banner" items="${requestScope.activeBanners}" varStatus="status">
+                                <button type="button"
+                                        class="dot ${status.index == 0 ? 'active' : ''}"
+                                        data-slide="${status.index}"
+                                        aria-label="Chuyển đến banner ${status.index + 1}"
+                                        aria-current="${status.index == 0 ? 'true' : 'false'}">
+                                </button>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </div>
             </div>
 
@@ -680,86 +693,124 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         (function initBannerSlider() {
-            const slidesContainer = document.querySelector('.banner-slides');
-            const slides = document.querySelectorAll('.banner-slides .item');
-            const dotsContainer = document.querySelector('.slider-dots');
-            const prevBtn = document.querySelector('.slider .nav.prev');
-            const nextBtn = document.querySelector('.slider .nav.next');
-
-            if (!slidesContainer || !dotsContainer || slides.length === 0) {
+            const slider = document.getElementById('homeBannerSlider');
+            if (!slider) {
                 return;
             }
 
-            let currentSlide = 0;
-            let autoSlideInterval = null;
-            const totalSlides = slides.length;
+            const track = slider.querySelector('.banner-slides');
+            const slides = Array.from(slider.querySelectorAll('.banner-slides .item'));
+            const prevBtn = slider.querySelector('.nav.prev');
+            const nextBtn = slider.querySelector('.nav.next');
+            const dots = Array.from(slider.querySelectorAll('.slider-dots .dot'));
+
+            if (!track || slides.length <= 1) {
+                return;
+            }
+
+            let current = 0;
+            let timer = null;
+            let touchStartX = 0;
+            const interval = Number(slider.dataset.interval || 4500);
             const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            dotsContainer.innerHTML = '';
-            slides.forEach(function (_, index) {
-                const dot = document.createElement('button');
-                dot.type = 'button';
-                dot.classList.add('dot');
-                dot.setAttribute('aria-label', 'Chuyển đến slide ' + (index + 1));
-                if (index === 0) {
-                    dot.classList.add('active');
-                    dot.setAttribute('aria-selected', 'true');
-                } else {
-                    dot.setAttribute('aria-selected', 'false');
+            function goTo(index) {
+                current = (index + slides.length) % slides.length;
+                track.style.transform = 'translateX(-' + (current * 100) + '%)';
+                slides.forEach(function (slide, i) {
+                    slide.classList.toggle('active', i === current);
+                });
+                dots.forEach(function (dot, i) {
+                    dot.classList.toggle('active', i === current);
+                    dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+                });
+            }
+
+            function next() {
+                goTo(current + 1);
+            }
+
+            function prev() {
+                goTo(current - 1);
+            }
+
+            function stop() {
+                if (timer) {
+                    window.clearInterval(timer);
+                    timer = null;
                 }
-                dot.addEventListener('click', function () {
-                    goToSlide(index);
-                    resetAutoSlide();
-                });
-                dotsContainer.appendChild(dot);
-            });
-
-            const dots = dotsContainer.querySelectorAll('.dot');
-            if (totalSlides <= 1) {
-                if (prevBtn) prevBtn.style.display = 'none';
-                if (nextBtn) nextBtn.style.display = 'none';
-                dotsContainer.style.display = 'none';
-                return;
             }
 
-            function goToSlide(index) {
-                dots[currentSlide].classList.remove('active');
-                dots[currentSlide].setAttribute('aria-selected', 'false');
-                currentSlide = (index + totalSlides) % totalSlides;
-                dots[currentSlide].classList.add('active');
-                dots[currentSlide].setAttribute('aria-selected', 'true');
-                slidesContainer.style.transform = 'translateX(' + (-currentSlide * 100) + '%)';
-            }
-
-            function nextSlide() {
-                goToSlide(currentSlide + 1);
-            }
-
-            function prevSlide() {
-                goToSlide(currentSlide - 1);
-            }
-
-            if (prevBtn) {
-                prevBtn.addEventListener('click', function () {
-                    prevSlide();
-                    resetAutoSlide();
-                });
+            function start() {
+                if (reduceMotion || slider.dataset.autoplay === 'false') {
+                    return;
+                }
+                stop();
+                timer = window.setInterval(next, interval);
             }
 
             if (nextBtn) {
                 nextBtn.addEventListener('click', function () {
-                    nextSlide();
-                    resetAutoSlide();
+                    next();
+                    start();
                 });
             }
 
-            function resetAutoSlide() {
-                if (reduceMotion) return;
-                clearInterval(autoSlideInterval);
-                autoSlideInterval = setInterval(nextSlide, 4500);
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function () {
+                    prev();
+                    start();
+                });
             }
 
-            resetAutoSlide();
+            dots.forEach(function (dot, index) {
+                dot.addEventListener('click', function () {
+                    goTo(index);
+                    start();
+                });
+            });
+
+            slider.addEventListener('mouseenter', stop);
+            slider.addEventListener('mouseleave', start);
+            slider.addEventListener('focusin', stop);
+            slider.addEventListener('focusout', function (event) {
+                if (!slider.contains(event.relatedTarget)) {
+                    start();
+                }
+            });
+
+            slider.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    prev();
+                    start();
+                } else if (event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    next();
+                    start();
+                }
+            });
+
+            slider.addEventListener('touchstart', function (event) {
+                touchStartX = event.changedTouches[0].clientX;
+                stop();
+            }, {passive: true});
+
+            slider.addEventListener('touchend', function (event) {
+                const touchEndX = event.changedTouches[0].clientX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) >= 45) {
+                    if (diff > 0) {
+                        next();
+                    } else {
+                        prev();
+                    }
+                }
+                start();
+            }, {passive: true});
+
+            goTo(0);
+            start();
         })();
 
         (function initFlashSaleSlider() {

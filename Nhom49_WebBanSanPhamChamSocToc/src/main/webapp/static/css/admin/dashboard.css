@@ -1,13 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 body {
     background: #f5f6fa;
+    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 .container {
@@ -339,7 +341,7 @@ body {
 /* Reset nhẹ */
 * {
     box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, sans-serif;
+    font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 /* Wrapper ngoài */
