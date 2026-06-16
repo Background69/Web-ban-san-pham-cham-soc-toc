@@ -1,0 +1,145 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.btn-add {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    background: #4b6b3c;
+    color: #fff;
+}
+
+.btn-add:hover {
+    opacity: 0.9;
+}
+
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.category-table thead th {
+    text-align: left;
+    padding: 14px 12px;
+    background: #f3f3f3;
+    font-weight: 800;
+}
+
+.category-table tbody td {
+    padding: 12px;
+    border-top: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.actions a {
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.actions a.edit {
+    color: #1a73e8;
+}
+
+.actions a.delete {
+    color: #d93025;
+}
+
+.actions a + a {
+    margin-left: 10px;
+}
+
+.slug-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    font-weight: 700;
+    font-size: 12px;
+}
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.category-btn-add {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    background: #8bae60;
+    color: #fff;
+    cursor: pointer;
+}
+
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.category-table th {
+    padding: 14px;
+    background: #f3f3f3;
+    text-align: left;
+}
+
+.category-table td {
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+
+.category-action-cell {
+    display: flex;
+    gap: 10px;
+}
+
+.category-btn-edit {
+    background: #8bae60;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-btn-edit:hover {
+    background: #73964d;
+    transform: translateY(-2px);
+}
+.category-btn-delete {
+    background: #e74c3c;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-btn-delete:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+.category-empty {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}

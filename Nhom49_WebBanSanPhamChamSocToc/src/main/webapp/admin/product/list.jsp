@@ -54,15 +54,21 @@
                     <td>#P${p.productId}</td>
 
                     <td>
-                        <c:if test="${not empty p.primaryImageUrl}">
-                            <c:choose>
-                                <c:when test="${not empty p.primaryImageUrl}">
-                                    <img class="thumb" src="${p.primaryImageUrl}" alt="thumb">
-                                </c:when>
-                            </c:choose>
-                        </c:if>
-                    </td>
 
+                        <c:choose>
+
+                            <c:when test="${not empty p.primaryImageUrl}">
+                                <img class="thumb"
+                                     src="${pageContext.request.contextPath}/static/assets/images/products/${p.primaryImageUrl}">
+                            </c:when>
+
+                            <c:otherwise>
+                                <div class="thumb-placeholder"></div>
+                            </c:otherwise>
+
+                        </c:choose>
+
+                    </td>
                     <td>
                         <div class="product-name">
                             <c:out value="${p.productName}"/>
