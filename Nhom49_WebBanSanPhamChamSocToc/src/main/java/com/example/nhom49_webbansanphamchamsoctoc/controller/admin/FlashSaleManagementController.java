@@ -5,6 +5,7 @@ import com.example.nhom49_webbansanphamchamsoctoc.dao.ProductVariantDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.dao.PromotionDAO;
 import com.example.nhom49_webbansanphamchamsoctoc.model.Product;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
+import com.example.nhom49_webbansanphamchamsoctoc.model.Promotion;
 import com.example.nhom49_webbansanphamchamsoctoc.model.User;
 import com.example.nhom49_webbansanphamchamsoctoc.services.ProductService;
 import jakarta.servlet.ServletException;
@@ -86,11 +87,12 @@ public class FlashSaleManagementController extends HttpServlet {
             boolean conflict = promotionDAO.hasActivePromotion(p.getProductId());
             request.setAttribute("promotionConflict_" +p.getProductId(),conflict);
         }
+        List<Promotion> promotions=promotionDAO.findAll();
+        request.setAttribute("promotions",promotions);
         request.setAttribute("saleProducts", saleProducts);
         request.setAttribute("nonSaleProducts", nonSaleProducts);
         request.getRequestDispatcher("/admin/promotion/flash-sale.jsp").forward(request, response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");

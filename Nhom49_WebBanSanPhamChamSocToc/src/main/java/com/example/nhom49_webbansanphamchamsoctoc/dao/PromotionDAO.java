@@ -125,7 +125,21 @@ public class PromotionDAO implements IDAO<Promotion> {
 
         return count > 0;
     }
+    public boolean applyPromotion(int productId, int promotionId) {
+        String sql = """
+            INSERT INTO product_promotions (product_id, promotion_id)
+            VALUES (:productId, :promotionId)
+            """;
 
+        int rows = jdbi.withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind("productId", productId)
+                        .bind("promotionId", promotionId)
+                        .execute()
+        );
+
+        return rows > 0;
+    }
     private Promotion mapPromotion(ResultSet rs) throws SQLException {
         Promotion p = new Promotion();
         p.setPromotionId(rs.getInt("promotion_id"));

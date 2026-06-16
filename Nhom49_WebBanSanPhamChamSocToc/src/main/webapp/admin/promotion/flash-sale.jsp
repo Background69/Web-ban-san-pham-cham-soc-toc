@@ -24,6 +24,14 @@
 
     <main class="content">
         <div class="flash-header">
+            <div class="campaign-box">
+                <h3>Chiến dịch khuyến mãi</h3>
+                <select>
+                    <c:forEach var="promotion" items="${promotions}">
+                        <option value="${promotion.promotionId}">${promotion.promotionName}</option>
+                    </c:forEach>
+                </select>
+            </div>
             <h1> Quản lý Flash Sale</h1>
             <div style="display:flex;gap:10px">
                 <form action="${pageContext.request.contextPath}/admin/flash-sale"
