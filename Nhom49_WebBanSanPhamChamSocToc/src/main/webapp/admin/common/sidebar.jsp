@@ -28,6 +28,12 @@
         <li class="${param.activeMenu == 'flash-sale' ? 'active' : ''}">
             <a href="${pageContext.request.contextPath}/admin/flash-sale">Quản lý giảm giá</a>
         </li>
+        <li class="${param.activeMenu == 'inventory' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/admin/stock">Tồn kho</a>
+        </li>
+        <li class="${param.activeMenu == 'import' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/admin/inventory">Nhập kho</a>
+        </li>
         <li class="view-site-item">
             <a href="${pageContext.request.contextPath}/home"> Quay lại Website</a>
         </li>

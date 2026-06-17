@@ -1,6 +1,7 @@
 ﻿<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -119,6 +120,9 @@
 
                                         <div class="cart-reco-card-footer">
                                             <form action="${pageContext.request.contextPath}/cart/add" method="post" class="cart-reco-form">
+                                                <input type="hidden"
+                                                       name="_csrf"
+                                                       value="${fn:escapeXml(_csrf)}"/>
                                                 <input type="hidden" name="productId" value="${product.productId}"/>
                                                 <input type="hidden" name="quantity" value="1"/>
                                                 <button type="submit" class="cart-reco-add-btn">
@@ -143,6 +147,9 @@
                             <span class="cart-items-title">Sản phẩm trong giỏ</span>
                             <form action="${pageContext.request.contextPath}/cart/clear" method="post"
                                   style="display: inline;" id="clearCartForm">
+                                <input type="hidden"
+                                       name="_csrf"
+                                       value="${fn:escapeXml(_csrf)}"/>
                                 <button type="submit" class="cart-clear-btn">
                                     <i class="fas fa-trash-alt"></i> Xóa tất cả
                                 </button>
@@ -230,6 +237,9 @@
                                     </div>
                                     <form action="${pageContext.request.contextPath}/cart/remove"
                                           method="post" style="display: inline;" class="js-remove-form">
+                                        <input type="hidden"
+                                               name="_csrf"
+                                               value="${fn:escapeXml(_csrf)}">
                                         <input type="hidden" name="variantId"
                                                value="${item.variant.variantId}">
                                         <button type="button" class="cart-item-remove js-remove-btn"
@@ -459,6 +469,15 @@
         var form = document.createElement('form');
         form.method = 'POST';
         form.action = contextPath + '/cart/update';
+
+        const csrfToken = '${fn:escapeXml(_csrf)}';
+
+        var csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_csrf';
+        csrfInput.value = csrfToken;
+
+        form.appendChild(csrfInput);
 
         var variantInput = document.createElement('input');
         variantInput.type = 'hidden';

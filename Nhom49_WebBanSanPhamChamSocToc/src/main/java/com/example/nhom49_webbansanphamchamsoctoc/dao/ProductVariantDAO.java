@@ -2,6 +2,7 @@ package com.example.nhom49_webbansanphamchamsoctoc.dao;
 
 import com.example.nhom49_webbansanphamchamsoctoc.database.JDBIConnector;
 import com.example.nhom49_webbansanphamchamsoctoc.model.ProductVariant;
+import com.example.nhom49_webbansanphamchamsoctoc.model.StockProduct;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -139,9 +140,7 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         return rowsAffected > 0;
     }
 
-    /**
-     * Hoàn trả stock khi hủy đơn hàng
-     */
+
     public boolean incrementStock(int variantId, int quantity) {
         if (quantity <= 0) {
             return true;
@@ -173,6 +172,35 @@ public class ProductVariantDAO implements IDAO<ProductVariant> {
         );
 
         return rows > 0;
+    }
+
+    public List<StockProduct> getAllStock() {
+
+        String sql = """
+        SELECT 
+            v.variant_id,
+            p.product_name,
+            v.variant_name,
+            v.stock_quantity,
+            v.sale_price
+        FROM product_variants v
+        JOIN products p ON p.product_id = v.product_id
+        ORDER BY p.product_name, v.variant_name
+    """;
+
+        return jdbi.withHandle(h ->
+                h.createQuery(sql)
+                        .map((rs, ctx) -> {
+                            StockProduct s = new StockProduct();
+                            s.setVariantId(rs.getInt("variant_id"));
+                            s.setProductName(rs.getString("product_name"));
+                            s.setVariantName(rs.getString("variant_name"));
+                            s.setStock(rs.getInt("stock_quantity"));
+                            s.setPrice(rs.getBigDecimal("sale_price"));
+                            return s;
+                        })
+                        .list()
+        );
     }
 
     private ProductVariant mapVariant(java.sql.ResultSet rs) throws java.sql.SQLException {
